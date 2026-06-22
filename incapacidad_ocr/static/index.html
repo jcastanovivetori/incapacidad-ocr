@@ -97,6 +97,33 @@
   .error { display: none; margin-top: 16px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;
            padding: 12px 16px; border-radius: 10px; font-size: 14px; }
   .error.show { display: block; }
+
+  /* Formulario de revisión editable (campos obligatorios) */
+  .frow { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: 10px; padding: 6px 0; }
+  .frow label { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .frow input, .frow select {
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit;
+    background: #fff; width: 100%; min-width: 0;
+  }
+  .frow input.missing, .frow select.missing { border-color: #f59e0b; background: #fffbeb; }
+  .frow input:focus, .frow select:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+  .erp-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .btn.ok { background: var(--ok); } .btn.ok:hover { background: #15803d; }
+  .btn.ghost { background: #f1f5f9; color: var(--ink); border: 1px solid var(--line); }
+  .btn.ghost:hover { background: #e2e8f0; }
+  .btn.danger { background: #dc2626; } .btn.danger:hover { background: #b91c1c; }
+  .btn.sm { min-width: auto; padding: 7px 14px; font-size: 13px; }
+
+  /* Bandeja de revisión */
+  table.bandeja { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.bandeja th, table.bandeja td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  table.bandeja th { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
+  table.bandeja td.acts { white-space: nowrap; }
+  .estado { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .estado.PENDIENTE_REVISION { background: #fef3c7; color: #92400e; }
+  .estado.APROBADO { background: #dcfce7; color: #166534; }
+  .estado.RECHAZADO { background: #fee2e2; color: #b91c1c; }
+  .bandeja-scroll { overflow-x: auto; }
   footer { color: #64748b; font-size: 12px; text-align: center; margin-top: 26px; }
 </style>
 </head>
@@ -177,17 +204,64 @@
       <pre id="ocrText"></pre>
     </details>
 
-    <!-- Registro ERP: mapeo a la tabla staging lp_ausentismos_ia -->
+    <!-- Registro ERP: revisión humana → staging lp_ausentismos_ia -->
     <div class="erp" id="erp" style="display:none; margin-top:18px; border-top:1px solid var(--line); padding-top:16px;">
       <div class="res-head" style="margin-bottom:10px;">
-        <h2 style="font-size:16px;">Registro ERP <small style="color:var(--muted);font-weight:400;">→ staging <code>lp_ausentismos_ia</code> (ASTGU)</small></h2>
+        <h2 style="font-size:16px;">Registro ERP <small style="color:var(--muted);font-weight:400;">→ staging <code>lp_ausentismos_ia</code></small></h2>
         <span class="pill" id="pillRevision"></span>
-        <button class="btn" id="registrar" style="margin-left:auto; min-width:auto; padding:10px 18px;">Registrar en revisión</button>
       </div>
-      <div class="grid" id="erpGrid"></div>
+      <p class="hint" style="margin-top:0">Revisa y <b>completa los campos obligatorios</b> que el OCR no pudo leer (resaltados). Luego <b>Recalcular</b> para resolver los IDs y <b>Aprobar</b>, dejar <b>en revisión</b> o <b>Rechazar</b>.</p>
+      <div class="grid">
+        <div class="sec">
+          <h3>Datos para el ERP — editable</h3>
+          <div class="frow"><label for="ovCedula">Cédula</label><input id="ovCedula" inputmode="numeric" /></div>
+          <div class="frow"><label for="ovPaciente">Paciente</label><input id="ovPaciente" /></div>
+          <div class="frow"><label for="ovCie">CIE-10</label><input id="ovCie" placeholder="p.ej. J06.9" /></div>
+          <div class="frow"><label for="ovEps">EPS / Entidad</label><input id="ovEps" /></div>
+          <div class="frow"><label for="ovInicio">Fecha inicio</label><input id="ovInicio" type="date" /></div>
+          <div class="frow"><label for="ovDias">Días</label><input id="ovDias" type="number" min="1" max="540" /></div>
+          <div class="frow"><label for="ovTipo">Tipo ausentismo</label>
+            <select id="ovTipo">
+              <option value="">(automático)</option>
+              <option value="2">2 · Accidente de trabajo</option>
+              <option value="3">3 · Enfermedad general</option>
+              <option value="5">5 · Licencia maternidad</option>
+              <option value="8">8 · Enfermedad laboral</option>
+              <option value="9">9 · Licencia paternidad</option>
+              <option value="10">10 · Prelicencia</option>
+              <option value="11">11 · Tránsito no laboral</option>
+            </select>
+          </div>
+          <button class="dl" id="recalcular" style="margin-top:8px;">↻ Recalcular IDs</button>
+        </div>
+        <div class="sec">
+          <h3>Resuelto (columnas del ERP)</h3>
+          <div id="erpResolved"></div>
+        </div>
+      </div>
       <div id="erpProblemas" style="display:none; margin-top:12px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; padding:10px 14px; border-radius:10px; font-size:13.5px;"></div>
+      <div class="erp-actions">
+        <button class="btn ok sm" id="aprobar">✓ Aprobar</button>
+        <button class="btn ghost sm" id="guardar">Guardar para revisión</button>
+        <button class="btn danger sm" id="rechazar">✗ Rechazar</button>
+      </div>
       <div id="erpResultado" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; font-size:14px;"></div>
     </div>
+  </div>
+
+  <!-- Bandeja de revisión: cola de registros del auxiliar -->
+  <div class="panel" id="bandeja">
+    <div class="res-head">
+      <h2 style="font-size:18px;">Bandeja de revisión</h2>
+      <select id="filtroEstado" style="min-width:160px;">
+        <option value="PENDIENTE_REVISION" selected>Pendientes</option>
+        <option value="APROBADO">Aprobados</option>
+        <option value="RECHAZADO">Rechazados</option>
+        <option value="">Todos</option>
+      </select>
+      <button class="dl" id="refrescar">↻ Actualizar</button>
+    </div>
+    <div class="bandeja-scroll"><div id="bandejaBody"><p class="hint">Pulsa «Actualizar» para ver los registros.</p></div></div>
   </div>
 
   <footer>incapacidad-ocr · OCR local + extractor híbrido · staging <code>lp_ausentismos_ia</code> · PII tratado localmente (Ley 1581)</footer>
@@ -308,28 +382,67 @@ function render(data) {
   $("results").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// Campos del registro staging a mostrar (etiqueta amigable ← columna del ERP).
-const ERP_FIELDS = [
+// Columnas del registro staging que se muestran como "Resuelto" (etiqueta ← columna ERP).
+const ERP_RESOLVED = [
   ["ID empleado (← cédula)", "idlpempleado"],
   ["ID diagnóstico (← CIE-10)", "idlpdiagnosticos"],
   ["ID entidad/EPS", "idlpentidad"],
   ["Tipo ausentismo", "idlptipoausentismo"],
   ["Estado recepción", "idlpestadosrecepausentismos"],
   ["Fecha registro", "fecharegistro"],
-  ["Fecha inicio", "fechainicio"],
-  ["Días", "Numerodias"],
   ["Fecha vencimiento", "fechavencimiento"],
   ["Original", "original"],
   ["Documentación", "documentacion_estado"],
-  ["Observaciones", "observaciones"],
 ];
+
+let lastStaging = null;        // último mapeo recibido del backend
+let lastRegistroId = null;     // id si ya se insertó en la BD
+
+// Recoge las correcciones manuales del formulario editable.
+function overrides() {
+  return {
+    cedula: $("ovCedula").value.trim(),
+    paciente: $("ovPaciente").value.trim(),
+    cie10: $("ovCie").value.trim(),
+    eps: $("ovEps").value.trim(),
+    fecha_inicio: $("ovInicio").value.trim(),
+    dias: $("ovDias").value.trim(),
+    tipo: $("ovTipo").value.trim(),
+  };
+}
+
+// Rellena el formulario editable a partir del mapeo (solo la primera vez / al procesar).
+function fillForm(staging) {
+  const row = staging.row || {};
+  $("ovCedula").value = row.cedula_leida || "";
+  $("ovPaciente").value = staging.paciente_ocr || row.paciente_leido || "";
+  $("ovCie").value = row.codigo_diagnostico_leido || "";
+  $("ovEps").value = row.eps_leida || "";
+  $("ovInicio").value = row.fechainicio || "";
+  $("ovDias").value = row.Numerodias != null ? row.Numerodias : "";
+  $("ovTipo").value = "";  // automático por defecto
+}
+
+// Marca en rojo los campos obligatorios que faltan.
+function markMissing(staging) {
+  const map = { cedula: "ovCedula", cie10: "ovCie", eps: "ovEps", fecha_inicio: "ovInicio", dias: "ovDias" };
+  Object.values(map).forEach((id) => $(id).classList.remove("missing"));
+  (staging.campos_faltantes || []).forEach((c) => { if (map[c.campo]) $(map[c.campo]).classList.add("missing"); });
+}
 
 function renderStaging(staging) {
   const box = $("erp");
   if (!staging || !staging.row) { box.style.display = "none"; return; }
   box.style.display = "block";
-  const row = staging.row;
+  lastStaging = staging; lastRegistroId = null;
+  fillForm(staging);
+  renderResolved(staging);
+}
 
+// Pinta el panel "Resuelto" + la píldora + los problemas (se vuelve a llamar al recalcular).
+function renderResolved(staging) {
+  lastStaging = staging;
+  const row = staging.row || {};
   const pill = $("pillRevision");
   if (staging.requiere_revision) {
     pill.textContent = "⚠ Requiere revisión"; pill.style.background = "#fef3c7"; pill.style.color = "#92400e";
@@ -337,17 +450,26 @@ function renderStaging(staging) {
     pill.textContent = "✓ Listo para aprobar"; pill.style.background = "#dcfce7"; pill.style.color = "#166534";
   }
 
-  const g = $("erpGrid"); g.innerHTML = "";
-  const sec = document.createElement("div"); sec.className = "sec";
-  let html = "<h3>lp_ausentismos_ia</h3>";
-  for (const [label, key] of ERP_FIELDS) {
+  let html = "";
+  if (staging.paciente_catalogo) {
+    html += `<div class="kv"><span class="k">Paciente (catálogo)</span>` +
+            `<span class="v">${escapeHtml(staging.paciente_catalogo)}</span></div>`;
+  }
+  html += `<div class="kv"><span class="k">Fecha inicio</span>` +
+          `<span class="v ${row.fechainicio ? "" : "null"}">${row.fechainicio ? escapeHtml(row.fechainicio) : "—"}` +
+          (staging.fecha_inicio_calculada ? ' <small style="color:#b45309">(calculada: fin − días)</small>' : "") +
+          `</span></div>`;
+  html += `<div class="kv"><span class="k">Días</span>` +
+          `<span class="v ${row.Numerodias ? "" : "null"}">${row.Numerodias != null ? row.Numerodias : "—"}</span></div>`;
+  for (const [label, key] of ERP_RESOLVED) {
     let val = row[key];
     if (key === "original") val = val ? "Sí" : "No";
     const isNull = val === null || val === undefined || val === "";
     html += `<div class="kv"><span class="k">${label}</span>` +
             `<span class="v ${isNull ? "null" : ""}">${isNull ? "—" : escapeHtml(String(val))}</span></div>`;
   }
-  sec.innerHTML = html; g.appendChild(sec);
+  $("erpResolved").innerHTML = html;
+  markMissing(staging);
 
   const prob = $("erpProblemas");
   if (staging.problemas && staging.problemas.length) {
@@ -357,8 +479,7 @@ function renderStaging(staging) {
   } else { prob.style.display = "none"; }
 
   $("erpResultado").style.display = "none";
-  $("registrar").disabled = false;
-  $("registrar").textContent = "Registrar en revisión";
+  ["aprobar", "guardar", "rechazar"].forEach((id) => { $(id).disabled = false; });
 }
 
 function escapeHtml(s) {
@@ -374,31 +495,119 @@ $("download").addEventListener("click", () => {
   a.click();
 });
 
-$("registrar").addEventListener("click", async () => {
-  if (!lastResult) return;
-  const btn = $("registrar");
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Registrando…';
+function erpMsg(ok, html) {
   const out = $("erpResultado");
+  out.style.display = "block";
+  out.style.background = ok ? "#dcfce7" : "#fef2f2";
+  out.style.border = ok ? "1px solid #86efac" : "1px solid #fecaca";
+  out.style.color = ok ? "#166534" : "#b91c1c";
+  out.innerHTML = html;
+}
+
+// Recalcular: vuelve a resolver IDs/fechas con las correcciones manuales (sin escribir en BD).
+$("recalcular").addEventListener("click", async () => {
+  if (!lastResult) return;
+  const btn = $("recalcular");
+  btn.disabled = true; btn.textContent = "Recalculando…";
   try {
-    const resp = await fetch("/api/registrar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ resultado: lastResult, estado_recepcion: $("recepcion").value }),
+    const resp = await fetch("/api/mapear", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resultado: lastResult, estado_recepcion: $("recepcion").value, campos: overrides() }),
     });
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
-    out.style.display = "block";
-    out.style.background = "#dcfce7"; out.style.border = "1px solid #86efac"; out.style.color = "#166534";
-    out.innerHTML = `✓ Registrado en <code>lp_ausentismos_ia</code> con <b>id = ${data.id}</b> · estado <b>${data.estado}</b>` +
-      (data.requiere_revision ? " (queda para revisión del auxiliar)" : " (listo para aprobar en el ERP)");
+    renderResolved(data);
   } catch (err) {
-    out.style.display = "block";
-    out.style.background = "#fef2f2"; out.style.border = "1px solid #fecaca"; out.style.color = "#b91c1c";
-    out.textContent = "❌ " + err.message;
+    erpMsg(false, "❌ " + escapeHtml(err.message));
   } finally {
-    btn.disabled = false; btn.textContent = "Registrar en revisión";
+    btn.disabled = false; btn.textContent = "↻ Recalcular IDs";
   }
 });
+
+// Aprobar / Guardar para revisión / Rechazar → insertan en staging con el estado del flujo.
+async function registrarFlujo(estado, motivo) {
+  if (!lastResult) return;
+  const btns = ["aprobar", "guardar", "rechazar"]; btns.forEach((id) => ($(id).disabled = true));
+  try {
+    const resp = await fetch("/api/registrar", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        resultado: lastResult, estado_recepcion: $("recepcion").value,
+        campos: overrides(), estado, motivo: motivo || null,
+      }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
+    lastRegistroId = data.id;
+    const etq = { APROBADO: "APROBADO ✓", PENDIENTE_REVISION: "en revisión", RECHAZADO: "RECHAZADO" }[data.estado] || data.estado;
+    erpMsg(true, `Registrado en <code>lp_ausentismos_ia</code> con <b>id = ${data.id}</b> · estado <b>${escapeHtml(etq)}</b>.`);
+    cargarBandeja();
+  } catch (err) {
+    erpMsg(false, "❌ " + escapeHtml(err.message));
+  } finally {
+    btns.forEach((id) => ($(id).disabled = false));
+  }
+}
+
+$("aprobar").addEventListener("click", () => registrarFlujo("APROBADO"));
+$("guardar").addEventListener("click", () => registrarFlujo("PENDIENTE_REVISION"));
+$("rechazar").addEventListener("click", () => {
+  const motivo = prompt("Motivo del rechazo (opcional):", "");
+  if (motivo === null) return;  // canceló
+  registrarFlujo("RECHAZADO", motivo);
+});
+
+// ----------------------------- Bandeja de revisión ------------------------------
+async function cargarBandeja() {
+  const body = $("bandejaBody");
+  body.innerHTML = '<p class="hint"><span class="spinner" style="border-color:#cbd5e1;border-top-color:#0d9488"></span>Cargando…</p>';
+  try {
+    const estado = $("filtroEstado").value;
+    const resp = await fetch("/api/staging" + (estado ? "?estado=" + encodeURIComponent(estado) : ""));
+    const data = await resp.json();
+    if (!data.db_disponible) { body.innerHTML = '<p class="hint">Base de datos no disponible.</p>'; return; }
+    if (!data.registros.length) { body.innerHTML = '<p class="hint">Sin registros para este filtro.</p>'; return; }
+    let html = '<table class="bandeja"><thead><tr><th>ID</th><th>Estado</th><th>Paciente</th><th>Cédula</th>' +
+               '<th>Inicio</th><th>Días</th><th>Empl.</th><th>Dx</th><th>Pendiente</th><th></th></tr></thead><tbody>';
+    for (const r of data.registros) {
+      const pend = r.problemas ? escapeHtml(r.problemas) : "—";
+      const acts = r.estado === "PENDIENTE_REVISION"
+        ? `<button class="btn ok sm" data-ap="${r.id}">✓</button> <button class="btn danger sm" data-rc="${r.id}">✗</button>`
+        : "—";
+      html += `<tr><td>${r.id}</td><td><span class="estado ${r.estado}">${escapeHtml(r.estado)}</span></td>` +
+              `<td>${escapeHtml(r.paciente_leido || "—")}</td><td>${escapeHtml(r.cedula_leida || "—")}</td>` +
+              `<td>${escapeHtml(r.fechainicio || "—")}</td><td>${r.Numerodias != null ? r.Numerodias : "—"}</td>` +
+              `<td>${r.idlpempleado != null ? r.idlpempleado : "—"}</td><td>${r.idlpdiagnosticos != null ? r.idlpdiagnosticos : "—"}</td>` +
+              `<td style="max-width:240px">${pend}</td><td class="acts">${acts}</td></tr>`;
+    }
+    html += "</tbody></table>";
+    body.innerHTML = html;
+    body.querySelectorAll("[data-ap]").forEach((b) => b.addEventListener("click", () => accionBandeja(b.dataset.ap, "aprobar")));
+    body.querySelectorAll("[data-rc]").forEach((b) => b.addEventListener("click", () => accionBandeja(b.dataset.rc, "rechazar")));
+  } catch (err) {
+    body.innerHTML = '<p class="hint">❌ ' + escapeHtml(err.message) + "</p>";
+  }
+}
+
+async function accionBandeja(id, accion) {
+  let motivo = null;
+  if (accion === "rechazar") { motivo = prompt("Motivo del rechazo (opcional):", ""); if (motivo === null) return; }
+  try {
+    const resp = await fetch("/api/revisar", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: Number(id), accion, motivo }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
+    cargarBandeja();
+  } catch (err) {
+    alert("No se pudo " + accion + ": " + err.message);
+  }
+}
+
+$("refrescar").addEventListener("click", cargarBandeja);
+$("filtroEstado").addEventListener("change", cargarBandeja);
+cargarBandeja();
 </script>
 </body>
 </html>

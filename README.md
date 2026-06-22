@@ -2,9 +2,9 @@
 
 Convierte una **imagen/escaneo de una incapacidad médica** (Colombia) en **texto plano** y luego en **JSON estructurado**.
 
-**100% local — sin APIs pagas.** El OCR corre con **RapidOCR** (ONNX/CPU) o con un **modelo de visión en Ollama**. Es el mismo enfoque de dos pasos del `invoice-processor` de `SiesaTeams/quality-business-scripts`, adaptado a incapacidades.
+**100% local — sin APIs pagas.** El OCR corre con **RapidOCR** (ONNX/CPU) o con un **modelo de visión en Ollama**. Sigue un enfoque de **dos pasos** (imagen → texto plano → JSON estructurado), adaptado a incapacidades médicas.
 
-> 📄 **Contexto completo** (origen, hallazgos en repos SIESA, decisiones, evidencia de pruebas, cómo encaja en nómina, pendientes): [`CONTEXT.md`](CONTEXT.md).
+> 📄 **Contexto completo** (origen, decisiones, evidencia de pruebas, cómo encaja en nómina, pendientes): [`CONTEXT.md`](CONTEXT.md). Guía para trabajar el repo: [`CLAUDE.md`](CLAUDE.md).
 
 ```
 imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [mapeo ERP] ─► staging lp_ausentismos_ia (MySQL)
@@ -47,21 +47,41 @@ docker compose down       # detener (los modelos quedan en el volumen)
 
 Lo que pidió Diana (Gruppo): la IA lee → extrae → **inserta en la BD**; el auxiliar **revisa y aprueba**, no digita. Este servicio mapea el JSON extraído a la tabla **staging** `lp_ausentismos_ia` (BD **ASTGU**, MySQL) — **no** escribe en `lpausentismos` directo (eso se saltaría la lógica del ERP); el ERP **promueve** el registro al aprobar.
 
-El mapeo resuelve lo que faltaba en la prueba de la Sesión 1:
-- **Lookups:** cédula → `idlpempleado` · CIE-10 → `idlpdiagnosticos` · EPS → `idlpentidad` (contra catálogos en MySQL).
+El mapeo resuelve los datos clave:
+- **Lookups:** cédula → `idlpempleado` · CIE-10 → `idlpdiagnosticos` · EPS → `idlpentidad` (contra catálogos en MySQL). Si la cédula no resuelve, se intenta por **nombre** como respaldo.
+- **Nombre canónico:** cuando la cédula resuelve, el **nombre del catálogo** es autoritativo → corrige los nombres que el OCR deja **pegados** (`HERNANDEZSANDOVAL` → `HERNANDEZ SANDOVAL`).
 - **Homologación** de tipo de ausentismo (texto → código `2/3/5/8/9/10/11`, default 3).
 - **Estado de recepción** (Original/WhatsApp/Correo → `idlpestadosrecepausentismos`), `fecharegistro = hoy`, `fechavencimiento = fechainicio + Numerodias`.
-- Si falta un dato **crítico** (empleado/diagnóstico/EPS/fecha/días) → queda **`PENDIENTE_REVISION`** con los problemas listados.
+- **Fecha de inicio:** se toma la rotulada "Fecha Inicia/Inicial"; si no se detecta, se **calcula** `inicio = fin − (días − 1)` (se marca como calculada para que el revisor la confirme).
+- Si falta un dato **obligatorio** (empleado/diagnóstico/EPS/fecha/días) → queda **`PENDIENTE_REVISION`** con los campos faltantes señalados.
 
-En la UI: procesa el documento, revisa la sección **«Registro ERP»** y pulsa **«Registrar en revisión»**. El stack ya incluye un **MySQL** con catálogos y datos de prueba que coinciden con los documentos de `../Ejemplos`.
+### Revisión humana: completar, aprobar o rechazar
+
+En la UI, tras procesar, la sección **«Registro ERP»** es un **formulario editable**: los campos obligatorios que el OCR no pudo leer salen **resaltados**; el auxiliar los **completa a mano**, pulsa **«Recalcular IDs»** (re-resuelve lookups y fechas) y luego:
+
+- **✓ Aprobar** → inserta como `APROBADO` (se bloquea si aún faltan datos obligatorios).
+- **Guardar para revisión** → inserta como `PENDIENTE_REVISION`.
+- **✗ Rechazar** → inserta como `RECHAZADO` (con motivo).
+
+La **«Bandeja de revisión»** (abajo) lista los registros por estado y permite **aprobar/rechazar** los pendientes directamente. El ERP **promueve** a `lpausentismos` solo cuando el registro queda `APROBADO`. El stack ya incluye un **MySQL** con catálogos y datos de prueba que coinciden con los documentos de `../Ejemplos`.
 
 ```bash
-# API:
+# Procesar (incluye .staging = preview con IDs resueltos, NO inserta):
 curl -s -F "archivo=@../Ejemplos/incapacidad.pdf" -F "extractor=hibrido" -F "estado_recepcion=WHATSAPP" \
-     http://localhost:8000/api/procesar | python -m json.tool          # incluye .staging (preview, no inserta)
+     http://localhost:8000/api/procesar | python -m json.tool
 
-# Ver los registros en revisión:
-curl -s http://localhost:8000/api/staging | python -m json.tool
+# Recalcular con correcciones manuales (sin escribir en BD):
+curl -s -X POST http://localhost:8000/api/mapear -H "Content-Type: application/json" \
+     -d '{"resultado": {...}, "campos": {"cedula":"13742111","cie10":"K42.9"}}'
+
+# Registrar (estado: PENDIENTE_REVISION | APROBADO | RECHAZADO):
+curl -s -X POST http://localhost:8000/api/registrar -H "Content-Type: application/json" \
+     -d '{"resultado": {...}, "estado":"APROBADO", "campos":{...}}'
+
+# Bandeja / aprobar-rechazar / ver uno:
+curl -s "http://localhost:8000/api/staging?estado=PENDIENTE_REVISION" | python -m json.tool
+curl -s -X POST http://localhost:8000/api/revisar -H "Content-Type: application/json" -d '{"id":1,"accion":"aprobar"}'
+curl -s http://localhost:8000/api/staging/1 | python -m json.tool
 ```
 
 > Los datos de prueba (`sql/init.sql`) son catálogos mínimos. En producción se apunta a la BD ASTGU real (variables `DB_*`).
@@ -71,8 +91,10 @@ curl -s http://localhost:8000/api/staging | python -m json.tool
 | Capa | Opciones | Notas |
 |---|---|---|
 | **OCR** (`incapacidad_ocr/ocr.py`) | `RapidOCRBackend` · `OllamaVisionOCR` · `StubOCR` | RapidOCR = local, sin servicios; Ollama = modelo de visión local; Stub = pruebas |
-| **Extractor** (`incapacidad_ocr/extract.py`) | `RuleBasedExtractor` · `OllamaLLMExtractor` | reglas = determinista (impreso limpio); LLM = textos ruidosos/manuscritos |
-| **Orquestador** (`incapacidad_ocr/processor.py`) | `process()` / `IncapacidadProcessor` | une OCR + extractor |
+| **Extractor** (`incapacidad_ocr/extract.py`) | `RuleBasedExtractor` · `OllamaLLMExtractor` · `HybridExtractor` | reglas = determinista (impreso limpio); LLM = ruidoso/manuscrito; **híbrido = reglas + LLM fusionados (recomendado)** |
+| **Orquestador** (`incapacidad_ocr/processor.py`) | `process()` / `IncapacidadProcessor` | une OCR + extractor; reconcilia fechas/días (regla de fecha de inicio) |
+| **Mapeo ERP** (`incapacidad_ocr/erp.py`) | `mapear_a_staging()` · `Lookups` | lookups + homologación + `overrides` (correcciones manuales) → fila staging |
+| **BD** (`incapacidad_ocr/db.py`) | MySQL (BD ASTGU) | INSERT/UPDATE en `lp_ausentismos_ia`, flujo `PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO` |
 
 ## Esquema de salida
 
@@ -165,7 +187,7 @@ uvicorn incapacidad_ocr.webapp:app --host 0.0.0.0 --port 8000
 
 Opcional (mejor lectura de manuscritos): instala [Ollama](https://ollama.com) y baja modelos:
 ```bash
-ollama pull moondream      # visión (OCR)
+ollama pull qwen2.5vl:3b   # visión (OCR) — modelo que SÍ transcribe (no usar moondream)
 ollama pull gemma3:4b      # texto (estructuración)
 ```
 
@@ -212,7 +234,7 @@ con etiqueta legible. Los fallos se concentran en 2 fotos con OCR muy degradado
 ## Notas
 
 - **Imagen → texto plano** = `OllamaVisionOCR.read_text()` / `RapidOCRBackend.read_text()`
-  (paso 1). Reutilizable tal cual; es lo equivalente al `_call_ollama_ocr` del invoice-processor.
+  (paso 1). Reutilizable tal cual.
 - El `RuleBasedExtractor` funciona bien con **texto impreso**. Para incapacidades
   **manuscritas o con sellos**, usa el OCR de Ollama con un modelo de visión más
   fuerte (`llama3.2-vision`, `qwen2.5vl`) y/o el `OllamaLLMExtractor`.

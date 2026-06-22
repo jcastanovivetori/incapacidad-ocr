@@ -186,6 +186,88 @@ _NAME_STOP = re.compile(
     r"registro|reg\.?\s*med|especialidad)\b"
 )
 
+# --- Separación de nombres pegados por el OCR ("HERNANDEZSANDOVAL"). -----------
+# El OCR a veces une dos palabras de un nombre. Con un léxico de nombres/apellidos
+# frecuentes en Colombia partimos un token largo en sus palabras (word-break por DP,
+# minimizando el nº de segmentos). El catálogo de empleados (en erp.py) sigue siendo
+# la fuente AUTORITATIVA del nombre cuando la cédula resuelve; esto es el respaldo
+# genérico para médicos/pacientes no encontrados.
+_NAME_LEX = {
+    # apellidos frecuentes
+    "GARCIA", "RODRIGUEZ", "MARTINEZ", "LOPEZ", "GONZALEZ", "HERNANDEZ", "PEREZ",
+    "SANCHEZ", "RAMIREZ", "TORRES", "FLOREZ", "FLORES", "RIVERA", "GOMEZ", "DIAZ",
+    "REYES", "MORALES", "JIMENEZ", "RUIZ", "ALVAREZ", "MORENO", "MUNOZ", "ROJAS",
+    "MEDINA", "CASTRO", "ORTIZ", "RAMOS", "SUAREZ", "VARGAS", "CASTILLO", "ROMERO",
+    "HERRERA", "MENDOZA", "GUERRERO", "SANDOVAL", "CHAPARRO", "LANCHEROS", "AFANADOR",
+    "VELANDIA", "LINARES", "RICARDO", "GARNICA", "CONTRERAS", "ARDILA", "NAVARRO",
+    "ACOSTA", "CARDENAS", "PARRA", "CARDONA", "RINCON", "OSORIO", "BERMUDEZ", "BELTRAN",
+    "VILLAMIZAR", "QUINTERO", "PINEDA", "SALAZAR", "AGUILAR", "PENA", "LEON", "GALLEGO",
+    "ARIAS", "CABRERA", "CARDOZO", "ESCOBAR", "FRANCO", "FUENTES", "GUTIERREZ", "MEJIA",
+    "MOLINA", "OCHOA", "PARDO", "PRIETO", "RUEDA", "SERRANO", "SOTO", "VALENCIA",
+    "VELASQUEZ", "ZAPATA", "AMAYA", "ANGULO", "BARRERA", "BAUTISTA", "BUSTOS", "CAMACHO",
+    "CARO", "CASAS", "CORTES", "DUARTE", "DURAN", "FORERO", "GALVIS", "GAMBOA", "GUZMAN",
+    "IBARRA", "LOZANO", "MARIN", "MONTOYA", "NINO", "OSPINA", "PATINO", "PORRAS",
+    "QUIROGA", "RANGEL", "RIOS", "SIERRA", "TOVAR", "URIBE", "VEGA", "VERA", "VILLA",
+    "GELVEZ", "NORIEGA", "MANTILLA", "CARRILLO", "ESPINOSA", "FAJARDO", "ORTEGA", "ROA",
+    "SOLANO", "TELLEZ", "ZAMBRANO", "BARRIOS", "CESPEDES", "CHACON", "DELGADO", "ESTUPINAN",
+    # nombres de pila frecuentes
+    "JUAN", "CARLOS", "LUIS", "JOSE", "JORGE", "MIGUEL", "ANDRES", "DAVID", "DANIEL",
+    "FERNANDO", "ALEJANDRO", "JAIME", "CESAR", "ARMANDO", "MICHAEL", "ALEXIZ", "ALIX",
+    "YARITZA", "JAIDER", "SEBASTIAN", "ISAAC", "LEONARDO", "MARIA", "ANA", "LUISA",
+    "PAULA", "LAURA", "CAMILA", "VALENTINA", "SARA", "SOFIA", "DIANA", "CLAUDIA",
+    "SANDRA", "PATRICIA", "MARTHA", "ANGELA", "LILIANA", "OSCAR", "JAVIER", "MAURICIO",
+    "GERMAN", "GUSTAVO", "HERNAN", "EDGAR", "NELSON", "WILSON", "FABIAN", "FELIPE",
+    "SANTIAGO", "NICOLAS", "MATEO", "SAMUEL", "GABRIEL", "EDUARDO", "RAFAEL", "ROBERTO",
+    "PEDRO", "PABLO", "FRANCISCO", "ANTONIO", "MANUEL", "ALBERTO", "ALFONSO", "ALFREDO",
+    "RUBEN", "RAUL", "VICTOR", "HECTOR", "MARCO", "ENRIQUE", "ARTURO", "ESTEBAN", "IVAN",
+    "JULIAN", "KEVIN", "BRAYAN", "JEISON", "YEISON", "MARIANA", "DANIELA", "NATALIA",
+    "CAROLINA", "ANDREA", "JOHANA", "YESICA", "KAREN", "TATIANA", "ALEXANDRA", "VIVIANA",
+    "ADRIANA", "MONICA", "ELIANA", "GLORIA", "ROCIO", "ESPERANZA", "CONSUELO", "BLANCA",
+    "AMANDA", "EDWIN", "JESUS", "OMAR", "WILLIAM", "YENNY", "YINETH",
+}
+# Traducción length-preserving para comparar sin tildes/Ñ (mantiene los índices).
+_UPPER_ASCII = str.maketrans("ÁÉÍÓÚÜÑ", "AEIOUUN")
+
+
+def _ascii_upper(s: str) -> str:
+    return s.upper().translate(_UPPER_ASCII)
+
+
+def _wordbreak(token: str, lex: set[str]) -> list[str] | None:
+    """Parte ``token`` en palabras del léxico (DP, mín. nº de segmentos). None si no cubre."""
+    n = len(token)
+    best: list[list[str] | None] = [None] * (n + 1)
+    best[n] = []
+    for i in range(n - 1, -1, -1):
+        cand = None
+        for j in range(i + 3, n + 1):  # palabras de ≥3 letras
+            if token[i:j] in lex and best[j] is not None:
+                seg = [token[i:j]] + best[j]
+                if cand is None or len(seg) < len(cand):
+                    cand = seg
+        best[i] = cand
+    return best[0]
+
+
+def _split_glued_name(name: str | None) -> str | None:
+    """Separa tokens largos pegados ("HERNANDEZSANDOVAL" → "HERNANDEZ SANDOVAL")."""
+    if not name:
+        return name
+    parts: list[str] = []
+    for tok in name.split():
+        norm = _ascii_upper(tok)
+        # Solo intentamos partir tokens largos que NO sean ya una palabra conocida.
+        if len(norm) >= 9 and norm not in _NAME_LEX:
+            seg = _wordbreak(norm, _NAME_LEX)
+            if seg and len(seg) >= 2:
+                idx = 0
+                for w in seg:  # aplica los cortes al token ORIGINAL (misma longitud)
+                    parts.append(tok[idx:idx + len(w)])
+                    idx += len(w)
+                continue
+        parts.append(tok)
+    return " ".join(parts)
+
 
 def _clean_name(raw: str | None) -> str | None:
     if not raw:
@@ -193,6 +275,7 @@ def _clean_name(raw: str | None) -> str | None:
     name = _NAME_STOP.split(raw)[0]
     name = re.sub(r"\s{2,}", " ", name).strip(" .:-")
     name = re.sub(r"\s+[A-ZÑ]$", "", name).strip()  # quita letra suelta final (p.ej. "R" de Registro)
+    name = _split_glued_name(name)  # separa nombres pegados por el OCR
     return name or None
 
 
@@ -247,6 +330,26 @@ class RuleBasedExtractor:
         dias_val = int(dias) if dias and dias.isdigit() else None
         dias_calc = _days_between(rec["incapacidad"]["fecha_inicio"], rec["incapacidad"]["fecha_fin"])
         rec["incapacidad"]["dias"] = dias_val if dias_val is not None else dias_calc
+
+        # Layout de formulario (AM-Sistemas y similares): el rótulo "Dias Fecha Inicia" precede al valor
+        # "<días><dd/mm/aaaa>" (a veces pegados: "511/06/2026" = 5 días + 11/06/2026).
+        # Es el ancla MÁS fiable de la fecha de inicio (lo que pide el cliente: tomar
+        # la que sea "Fecha Inicia / Fecha inicial").
+        anc = re.search(r"(?i)d[ií]as?\s+fecha\s+inic\w+", t)
+        if anc:
+            seg = t[anc.end():anc.end() + 160]
+            dm = re.search(_DATE, seg)
+            if dm:
+                fi = _norm_date(dm.group(0))
+                if fi:
+                    rec["incapacidad"]["fecha_inicio"] = fi
+                    rec["incapacidad"]["_inicio_anclada"] = True
+                    # dígitos pegados justo delante de la fecha → nº de días
+                    pre = re.search(r"(\d{1,3})$", seg[:dm.start()])
+                    if pre and dias_val is None:
+                        d = int(pre.group(1))
+                        if 1 <= d <= 540:
+                            rec["incapacidad"]["dias"] = d
 
         # tipo: preferir "Tipo (de) Incapacidad"; el respaldo genérico excluye
         # "Tipo de Usuario/DX/Atención" (lookahead negativo) para no capturar basura.
@@ -442,54 +545,87 @@ def _merge_records(rule_rec: dict[str, Any], llm_rec: dict[str, Any], text: str 
     rinc = rule_rec.get("incapacidad") or {}
     linc = (llm_rec.get("incapacidad") or {}) if isinstance(llm_rec, dict) else {}
 
-    # --- Fechas: preferir LLM, luego reglas, pero SOLO si la fecha aparece en el
-    #     texto OCR (anclaje anti-alucinación). Resuelve también el caso en que un
-    #     rótulo roto por el OCR hace que las reglas mal-asignen una fecha.
+    # --- Fechas: SOLO se ELIGEN aquí los mejores candidatos (anclaje anti-alucinación);
+    #     la RECONCILIACIÓN (derivar inicio/fin/días con la regla del cliente) la hace
+    #     normalizar_fechas() de forma única para todos los extractores.
     text_dates = _dates_in_text(text) if text else None
 
-    def _resolve_date(key: str) -> str | None:
-        for cand in (linc.get(key), rinc.get(key)):
-            if cand and (text_dates is None or cand in text_dates):
-                return cand
+    def grounded(*cands: Any) -> str | None:
+        for c in cands:
+            if c and (text_dates is None or c in text_dates):
+                return c
         return None
 
-    inc["fecha_inicio"] = _resolve_date("fecha_inicio")
-    inc["fecha_fin"] = _resolve_date("fecha_fin")
-    inc["fecha_expedicion"] = _resolve_date("fecha_expedicion")
+    # La fecha de inicio anclada al rótulo "Fecha Inicia/Inicial" (reglas) MANDA: es
+    # justo lo que pide el cliente. Si no la hay, preferimos LLM y luego reglas (grounded).
+    if rinc.get("_inicio_anclada"):
+        inc["fecha_inicio"] = rinc.get("fecha_inicio")
+        inc["_inicio_anclada"] = True
+    else:
+        inc["fecha_inicio"] = grounded(linc.get("fecha_inicio"), rinc.get("fecha_inicio"))
+    inc["fecha_fin"] = grounded(linc.get("fecha_fin"), rinc.get("fecha_fin"))
+    inc["fecha_expedicion"] = grounded(linc.get("fecha_expedicion"), rinc.get("fecha_expedicion"))
 
-    # Rango imposible (negativo o > 540 días) → descarta el inicio (probable error).
-    di, df = _safe_date(inc["fecha_inicio"]), _safe_date(inc["fecha_fin"])
-    if di and df and not (0 <= (df - di).days <= 540):
-        inc["fecha_inicio"] = None
-        di = None
-
-    # --- Días: recalcular desde el rango si es válido (lo más fiable); si no,
-    #     usar el valor del LLM o, en su defecto, el de reglas.
-    if di and df and 0 <= (df - di).days <= 540:
-        inc["dias"] = (df - di).days + 1
+    # Días: si el inicio está anclado, confiamos en los días de reglas (mismo origen);
+    #       si no, preferimos LLM y luego reglas.
+    if rinc.get("_inicio_anclada") and not _empty(rinc.get("dias")):
+        inc["dias"] = rinc.get("dias")
     else:
         lv, rv = linc.get("dias"), rinc.get("dias")
         inc["dias"] = lv if not _empty(lv) else rv
 
-    # --- Deriva la fecha faltante desde 'dias' + la otra fecha, SOLO si el
-    #     resultado aparece en el texto OCR (anclaje): recupera, p.ej.,
-    #     inicio = fin - (dias-1) cuando el OCR rompió el rótulo de inicio.
-    from datetime import timedelta
-    n = inc["dias"]
-    if isinstance(n, int) and 1 <= n <= 540 and text_dates:
-        di, df = _safe_date(inc["fecha_inicio"]), _safe_date(inc["fecha_fin"])
-        if df and not di:
-            cand = (df - timedelta(days=n - 1)).isoformat()
-            if cand in text_dates:
-                inc["fecha_inicio"] = cand
-        elif di and not df:
-            cand = (di + timedelta(days=n - 1)).isoformat()
-            if cand in text_dates:
-                inc["fecha_fin"] = cand
-
     # --- Origen: saneado a valores conocidos (el LLM a veces devuelve basura).
     inc["origen"] = _clean_origen(inc["origen"]) or _clean_origen(rinc.get("origen"))
     return out
+
+
+def normalizar_fechas(rec: dict[str, Any]) -> dict[str, Any]:
+    """Reconciliación ÚNICA de fechas/días (aplica a TODOS los extractores).
+
+    Regla del cliente:
+      • Tomar la fecha similar a "Fecha Inicia / Fecha inicial Incapacidad".
+      • Si no se está seguro de la fecha de inicio → inicio = fin − (días − 1).
+    Y, simétricamente, completa fin o días cuando faltan y se pueden derivar.
+    Marca ``fecha_inicio_calculada`` cuando la fecha de inicio fue DERIVADA (no leída),
+    para que el revisor lo vea.
+    """
+    from datetime import timedelta
+
+    inc = rec.get("incapacidad")
+    if not isinstance(inc, dict):
+        return rec
+    anclada = bool(inc.pop("_inicio_anclada", False))
+    di, df = _safe_date(inc.get("fecha_inicio")), _safe_date(inc.get("fecha_fin"))
+    raw_n = inc.get("dias")
+    n = int(raw_n) if (isinstance(raw_n, int) or (isinstance(raw_n, str) and str(raw_n).isdigit())) else None
+    if n is not None and not (1 <= n <= 540):
+        n = None
+    inc["fecha_inicio_calculada"] = False
+
+    if di and n:
+        # Inicio + días confiables → (re)derivar fin si falta o es inconsistente.
+        if not df or df < di or (df - di).days + 1 != n:
+            df = di + timedelta(days=n - 1)
+            inc["fecha_fin"] = df.isoformat()
+    elif df and n and not di:
+        # Regla del cliente: fin + días, sin inicio → inicio = fin − (días − 1).
+        di = df - timedelta(days=n - 1)
+        inc["fecha_inicio"] = di.isoformat()
+        inc["fecha_inicio_calculada"] = True
+    elif di and df and not n:
+        d = (df - di).days + 1
+        if 1 <= d <= 540:
+            inc["dias"] = d
+
+    # Saneo final: rango imposible y sin días para arreglarlo → conservamos el dato
+    # más fiable (el inicio si venía anclado al rótulo).
+    di, df = _safe_date(inc.get("fecha_inicio")), _safe_date(inc.get("fecha_fin"))
+    if di and df and not (0 <= (df - di).days <= 540):
+        if anclada:
+            inc["fecha_fin"] = None
+        else:
+            inc["fecha_inicio"] = None
+    return rec
 
 
 class HybridExtractor:

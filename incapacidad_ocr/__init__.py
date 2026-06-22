@@ -2,8 +2,8 @@
 incapacidad_ocr — imagen de incapacidad médica → texto plano → JSON estructurado.
 
 100% local: el OCR corre con RapidOCR (ONNX/CPU) o con un modelo de visión en
-Ollama. NO usa ninguna API paga. Patrón inspirado en el invoice-processor de
-SiesaTeams/quality-business-scripts, adaptado a incapacidades (Colombia).
+Ollama. NO usa ninguna API paga. Patrón de dos pasos (imagen→texto→JSON)
+adaptado a incapacidades médicas (Colombia).
 """
 from .processor import process, IncapacidadProcessor
 from .ocr import get_ocr_backend, StubOCR, RapidOCRBackend, OllamaVisionOCR

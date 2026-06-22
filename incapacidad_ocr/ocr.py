@@ -1,7 +1,7 @@
 """Backends de OCR: imagen → texto plano. Pluggables e intercambiables.
 
 - ``RapidOCRBackend``  : OCR local con rapidocr-onnxruntime (ONNX/CPU, sin servicios externos).
-- ``OllamaVisionOCR``  : OCR con un modelo de visión local en Ollama (mismo enfoque que el invoice-processor).
+- ``OllamaVisionOCR``  : OCR con un modelo de visión local en Ollama.
 - ``StubOCR``          : devuelve un texto fijo (para pruebas deterministas).
 
 Ningún backend usa una API paga. ``httpx`` y ``rapidocr`` se importan de forma

@@ -1,46 +1,20 @@
 # CONTEXT — incapacidad-ocr (fuente única de contexto)
 
-**Última actualización:** 2026-06-17 · **Autor:** Julian Castaño (DevOps) · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1) y con Ollama (IA local) habilitado para casos difíciles (§5.2).
+**Última actualización:** 2026-06-22 · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1), Ollama (IA local) habilitado para casos difíciles (§5.2), integración a BD/staging (§5.4) y **flujo de revisión humana — completar/aprobar/rechazar** (§5.5).
 
-Este documento es el **contexto completo** del proyecto: por qué existe, qué se investigó en los repos de SIESA, qué se construyó, cómo se probó y cómo encaja en la plataforma. Para *cómo usarlo* → [`README.md`](README.md).
+Este documento es el **contexto completo** del proyecto: por qué existe, qué se construyó, cómo se probó y cómo encaja en la plataforma de nómina. Para *cómo usarlo* → [`README.md`](README.md); para *cómo trabajar el repo* → [`CLAUDE.md`](CLAUDE.md).
 
 ---
 
 ## 1. Origen y objetivo
 
-**Necesidad:** una lógica que **traduzca incapacidades médicas (imágenes/escaneos) a texto plano** y de ahí a datos estructurados, para alimentar nómina sin digitación manual.
+**Necesidad:** una lógica que **traduzca incapacidades médicas (imágenes/escaneos) a texto plano** y de ahí a datos estructurados, para alimentar nómina **sin digitación manual** (el cliente Gruppo recibe ~7000 incapacidades/mes por WhatsApp y correo, de ~20 EPS con formatos distintos).
 
-La búsqueda arrancó por dos pistas que resultaron ser **cosas distintas**:
+**Objetivo de este repo:** una versión **limpia, local y funcional** de un pipeline de **dos pasos** — imagen → texto plano → JSON — **adaptado a incapacidades (Colombia)**, sin API paga, que además **mapea el resultado a una tabla staging del ERP** para que un auxiliar revise y apruebe.
 
-| Pista | Qué resultó ser | ¿Sirve para OCR de incapacidades? |
-|---|---|---|
-| **"Generic Transfer"** | Integrador **Connekta**: transferencia de **datos en archivos planos** hacia/desde el ERP | ❌ No es OCR — es integración de datos |
-| **imagen → texto plano** | Patrón del **invoice-processor** (`quality-business-scripts`): OCR + estructuración con IA local | ✅ Sí — es el patrón base de este proyecto |
+### Enfoque base (patrón de dos pasos)
 
-**Objetivo de este repo:** una versión **limpia, local y funcional** del patrón imagen→texto→JSON, **adaptada a incapacidades (Colombia)**, sin API paga.
-
----
-
-## 2. Lo que se encontró en los repos de SIESA (hallazgos verificados)
-
-### 2.1 "Generic Transfer" = Connekta (NO es OCR)
-Vive en la familia de repos **Connekta**:
-- `connekta-integration-manager-services-cloud-sqlserver` → `src/Connekta/GenericTransfer/CoreApp.Servicios/GenericTransfer.cs`
-- `connekta-integration-manager-api-on-premise-sqlserver` → `Api/GenericTransfer/Plano.cs`, `Estructura.cs`
-- `connekta-integration-manager-services-cloud-postgresql` → `Compartida/LogicaNegocio/Connekta/GenericTransfer/PlanoEstandar.cs`
-- `connekta-integrador-v200` / `connekta-integrador-v300`
-
-Hace **transferencia genérica de datos en archivos planos** (`Plano`/`PlanoEstandar`) entre sistemas y el ERP. El "texto plano" aquí = formato del archivo de intercambio (datos estructurados), **no** salida de OCR.
-
-### 2.2 imagen → texto plano = invoice-processor
-- Repo: **`SiesaTeams/quality-business-scripts`** (rama `Carlos_Diaz_QA`), ruta `Apps/invoice-processor/`
-- Núcleo: `services/ai_processor.py` → `process_image()` / `_call_ollama_ocr()` / `_call_ollama_text()`
-- **Enfoque de 2 pasos:** (1) modelo de **visión (Ollama)** transcribe TODO el texto de la imagen → texto plano; (2) modelo de **texto (Ollama)** estructura a JSON.
-- **100% local, sin API paga** (Ollama). Las APIs externas (Google Sheets / OneDrive) son solo para **guardar** el resultado, no para la IA. `requirements.txt` sin SDK de OpenAI/Gemini/Anthropic.
-- Nota: su `info.md` menciona "Tesseract" pero el **código real usa el modelo de visión de Ollama** (diagrama desactualizado).
-
-### 2.3 No existe lógica de incapacidad→texto en la org
-Se buscó `incapac` en todos los repos: lo único que aparece es **procesamiento de incapacidades en nómina legacy** (SQL/`NomLiqProCruceIncapacidadesController.cs`, reportes), **no** conversión de imágenes. → Este proyecto cubre ese vacío reutilizando el patrón 2.2.
+El patrón es estándar para documentos: (1) un motor de **OCR/visión** transcribe TODO el texto de la imagen → texto plano; (2) un **extractor** (reglas o LLM) lo estructura a JSON. Aquí ambos pasos corren **100% local** (RapidOCR/ONNX o un modelo de visión en Ollama para el paso 1; regex o un LLM local para el paso 2) — sin SDK de OpenAI/Gemini/Anthropic ni APIs de pago. La salida JSON se mapea luego a la fila de staging del ERP (§5.4).
 
 ---
 
@@ -57,11 +31,13 @@ imagen ──► [OCR backend] ──► texto plano ──► [extractor] ─�
 |---|---|---|
 | Preprocesado | `preprocess.py` | carga imagen/PDF, **PDF→imágenes (PDFium)**, resize ≤1600px, PNG→base64 |
 | OCR (imagen/PDF→texto) | `ocr.py` | `RapidOCRBackend` (ONNX/CPU local, **acepta PDF multipágina**) · `OllamaVisionOCR` (visión local) · `StubOCR` (pruebas) |
-| Extractor (texto→JSON) | `extract.py` | `RuleBasedExtractor` (regex, determinista) · `OllamaLLMExtractor` (LLM local) |
-| Orquestador | `processor.py` | `process()` / `IncapacidadProcessor` |
+| Extractor (texto→JSON) | `extract.py` | `RuleBasedExtractor` (regex, determinista) · `OllamaLLMExtractor` (LLM local) · `HybridExtractor` (reglas+LLM fusionados) · `normalizar_fechas()` (regla de fecha de inicio) |
+| Orquestador | `processor.py` | `process()` / `IncapacidadProcessor` (OCR + extractor + reconciliación de fechas) |
+| **Mapeo ERP** | `erp.py` | `mapear_a_staging()` (lookups + homologación + `overrides` manuales + `campos_faltantes`), `Lookups` (cédula/CIE/EPS + nombre canónico del catálogo) |
+| **BD (MySQL/ASTGU)** | `db.py` + `sql/init.sql` | INSERT/UPDATE en `lp_ausentismos_ia`; flujo `PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO` |
 | CLI | `cli.py` | `python -m incapacidad_ocr.cli foto.jpg [--ocr ollama --extractor ollama]` |
-| **Servicio web** | `webapp.py` + `static/index.html` | API FastAPI (`POST /api/procesar`, `/api/health`, `/docs`) + UI moderna (drag&drop, JSON, descarga). RapidOCR cargado una vez; uploads procesados en temporal y **borrados** (PII). |
-| **Docker** | `Dockerfile` · `docker-compose.yml` | `docker compose up --build` → `http://localhost:8000`. Instala todo desde `requirements.txt`. Probado OK (python:3.12-slim). |
+| **Servicio web** | `webapp.py` + `static/index.html` | API FastAPI (`/api/procesar`, `/api/mapear`, `/api/registrar`, `/api/revisar`, `/api/staging`) + UI moderna (drag&drop, **formulario de revisión editable**, **bandeja** aprobar/rechazar). RapidOCR cargado una vez; uploads procesados en temporal y **borrados** (PII). |
+| **Docker** | `Dockerfile` · `docker-compose.yml` | `docker compose up --build` → `http://localhost:8000`. 3 servicios (web + ollama + db). Instala todo desde `requirements.txt`. |
 
 **Esquema de salida** (incapacidad Colombia): `paciente{nombre, documento_tipo, documento_numero}`, `entidad{eps, ips_prestador}`, `incapacidad{fecha_inicio, fecha_fin, dias, fecha_expedicion, tipo, origen}`, `diagnostico{cie10, descripcion}`, `medico{nombre, registro}`.
 
@@ -148,40 +124,53 @@ Observación de uso: para varios documentos (p.ej. `incapacidad___.jpeg`) **Rapi
 
 ### 5.4 Integración al ERP — tabla STAGING `lp_ausentismos_ia` (2026-06-18)
 
-Para cerrar la brecha con lo que pide Diana (extraer → **insertar en BD** → el auxiliar aprueba), se añadió la capa que faltaba, alineada con la solución de referencia `middleware-ia-gruppo`:
+Para cerrar la brecha con lo que pide el cliente (extraer → **insertar en BD** → el auxiliar aprueba), se añadió la capa de integración al ERP:
 
 - **`erp.py`** — homologación de tipo (texto → `2/3/5/8/9/10/11`, default 3), **lookups** cédula→`idlpempleado` · CIE-10→`idlpdiagnosticos` (sin punto) · EPS→`idlpentidad` (match por contención), estado de recepción (1/2/3), `fecharegistro=hoy`, `fechavencimiento=inicio+días`, y `mapear_a_staging()` que arma la fila + lista `problemas`/`requiere_revision`. Degrada a `LookupsNulos` sin BD.
 - **`db.py`** — conexión MySQL por env (`DB_*`) + `insertar_staging()` + `listar_staging()`.
 - **`sql/init.sql`** — catálogos mínimos + `lp_ausentismos_ia` (mismos nombres de columna del ERP) + `lp_alertas_documentacion` + **datos de prueba que coinciden con `../Ejemplos`** (cédulas, CIE, EPS) para que los lookups resuelvan en la demo.
-- **Web/UI** — `POST /api/procesar` ahora incluye `staging` (preview, no inserta); `POST /api/registrar` hace el **INSERT** (estado `PENDIENTE_REVISION`); `GET /api/staging` lista lo pendiente. La UI tiene selector de **recepción**, sección **«Registro ERP»** (muestra los IDs resueltos + problemas) y botón **«Registrar en revisión»**.
-- **Compose** — nuevo servicio `db` (mysql:8) que carga `sql/init.sql` al primer arranque.
+- **Web/UI** — `POST /api/procesar` incluye `staging` (preview, no inserta); `POST /api/registrar` hace el **INSERT**; `GET /api/staging` lista lo pendiente. La UI tiene selector de **recepción** y la sección **«Registro ERP»** (los IDs resueltos + problemas).
+- **Compose** — servicio `db` (mysql:8) que carga `sql/init.sql` al primer arranque.
 
 **Decisión clave respetada:** NO se inserta en `lpausentismos`; se escribe en **staging** y el ERP promueve al aprobar (preserva división de novedades, validación de cotización, etc.). Pendiente para producción: apuntar a la BD ASTGU real (catálogos reales de empleados/CIE/EPS), `numero_orden`, score de confianza OCR real, y el envío de alertas documentales.
 
+### 5.5 Revisión humana + reglas de fecha/nombre (2026-06-22)
+
+Sobre la base de §5.4 se cerró el **flujo de revisión humana** y se afinaron tres reglas pedidas por el cliente:
+
+1. **Fecha de inicio.** El extractor por reglas reconoce el layout `Dias Fecha Inicia` (formularios tipo AM-Sistemas) donde el nº de días viene **pegado** a la fecha (`5 11/06/2026`) y **ancla** esa fecha como inicio. Si no hay fecha de inicio rotulada, se aplica la **regla de respaldo**: `inicio = fin − (días − 1)`, marcando el campo como **calculado** (aviso no bloqueante en la UI). Toda la reconciliación de fechas/días vive en `extract.normalizar_fechas()` (corre para todos los extractores) y se reaplica al corregir días/fin a mano. *Verificado:* `incapacidad.jpeg` pasó de `inicio/días = None` a `inicio 2026-06-11, fin 2026-06-15, días 5` correctos, incluso en modo solo-reglas.
+2. **Campos obligatorios faltantes → revisión humana.** `mapear_a_staging()` devuelve `campos_faltantes` (estructurado) además de `problemas`. La UI muestra un **formulario editable** con los obligatorios (cédula, paciente, CIE-10, EPS, fecha inicio, días, tipo) resaltando los que faltan; el auxiliar los completa, pulsa **«Recalcular IDs»** (`POST /api/mapear`, re-resuelve lookups sin escribir en BD) y luego **Aprobar** / **Guardar para revisión** / **Rechazar**. Estados del flujo: `PENDIENTE_REVISION` / `APROBADO` / `RECHAZADO` (no se aprueba con obligatorios faltantes → 409). La **«Bandeja de revisión»** lista por estado y permite aprobar/rechazar (`POST /api/revisar`); `GET /api/staging/{id}` trae uno.
+3. **Nombres pegados por el OCR.** Cuando la cédula resuelve, el **nombre del catálogo es autoritativo** → `ALIX HERNANDEZSANDOVAL` se corrige a `ALIX HERNANDEZ SANDOVAL`. Como respaldo genérico (médicos / sin match), `extract._split_glued_name()` separa tokens largos con un léxico de nombres/apellidos frecuentes (word-break por DP). Si la cédula no resuelve, se intenta recuperar `idlpempleado` **por nombre**.
+
+Nuevos endpoints: `POST /api/mapear` (preview con correcciones), `POST /api/revisar` (aprobar/rechazar/guardar), `GET /api/staging/{id}`; `POST /api/registrar` acepta `campos` (overrides) y `estado`.
+
 ---
 
-## 6. Cómo encaja en SIESA
+## 6. Cómo encaja en el flujo de nómina / ERP
 
 ```
 [Foto/escaneo incapacidad] → incapacidad-ocr (OCR local + estructuración) → JSON
-        → (opcional) archivo plano vía GenericTransfer/Connekta → carga a NÓMINA (ERP)
+        → mapeo a staging lp_ausentismos_ia (lookups + homologación) → revisión humana
+        → el ERP PROMUEVE a lpausentismos al APROBAR
 ```
 
-- **incapacidad-ocr = la pieza de OCR** que hoy NO existe en la org.
-- **GenericTransfer (Connekta) = la pieza que metería el resultado al ERP** como archivo plano (si el flujo objetivo es cargar a nómina).
-- Verticales relacionadas: `business-nomina-payroll-*`, `business-payroll-*` (procesan incapacidades hoy de forma manual/legacy).
+- **incapacidad-ocr = la pieza de OCR + estructuración + staging** que automatiza la digitación.
+- El **auxiliar revisa y aprueba** (no digita): completa lo que el OCR no leyó, aprueba o rechaza.
+- El **ERP** mantiene su lógica: promueve el registro aprobado a `lpausentismos` (división de novedades, validación de cotización, etc.).
 
 ---
 
 ## 7. Estado y pendientes
 
-**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido sobre documentos reales; **evaluación con 8 incapacidades reales = 80% campos núcleo** (§5.1); CLI, README, tests.
+**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido + **híbrido (reglas+LLM)**; **evaluación con 8 incapacidades reales = 80% campos núcleo** (§5.1); **integración a BD/staging** (§5.4); **flujo de revisión humana — completar/aprobar/rechazar + bandeja** (§5.5); regla de fecha de inicio y separación de nombres pegados; CLI, README, CLAUDE.md, tests.
 
 **Pendiente / próximos pasos:**
 - ✅ *(hecho)* Probar con **incapacidades reales** → ver §5.1 (80% con reglas, 100% en CIE-10/documento legibles).
-- ✅ *(hecho)* **Ollama habilitado** como contenedor Docker con `gemma3:4b` (§5.2): mejora los casos difíciles (recupera documento/nombre/EPS/origen que las reglas no pueden). Pendiente subir el techo con modelo de **visión fuerte** (`qwen2.5vl`/`llama3.2-vision`) y/o **GPU** (CPU es lento y el 4B alucina fechas ocasionalmente).
-- Ampliar el esquema/validaciones (tipos de incapacidad: enfermedad general / laboral / licencia maternidad; prórrogas; validación de CIE-10 contra catálogo).
-- Definir la **entrada** real (carpeta vigilada, endpoint que reciba las fotos) y la **salida** (archivo plano para GenericTransfer o API de nómina).
+- ✅ *(hecho)* **Ollama habilitado** como contenedor Docker con `gemma3:4b` (§5.2): mejora los casos difíciles. Pendiente subir el techo con modelo de **visión fuerte** (`qwen2.5vl`/`llama3.2-vision`) y/o **GPU** (CPU es lento y el 4B alucina fechas ocasionalmente).
+- ✅ *(hecho)* **Integración a BD + revisión humana** (§5.4, §5.5): mapeo a staging, completar a mano, aprobar/rechazar.
+- Apuntar a la **BD ASTGU real** (catálogos reales de empleados/CIE/EPS) en vez de los datos de prueba; `numero_orden` y score de confianza OCR real; envío de **alertas documentales** (`lp_alertas_documentacion`).
+- Ampliar validaciones (prórrogas; validación de CIE-10 contra catálogo completo).
+- Definir la **entrada** real (carpeta vigilada / endpoint / bot de WhatsApp-correo que reciba las fotos).
 - Gobernanza de datos: confirmar manejo de PII (Ley 1581), retención y borrado de las imágenes/uploads.
 
 ---

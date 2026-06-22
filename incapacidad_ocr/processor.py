@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .extract import Extractor, RuleBasedExtractor, empty_record
+from .extract import Extractor, RuleBasedExtractor, empty_record, normalizar_fechas
 from .ocr import OCRBackend, get_ocr_backend
 
 # Mínimo de caracteres de OCR para intentar estructurar. Por debajo, NO se llama al
@@ -37,7 +37,10 @@ class IncapacidadProcessor:
                 "imagen/escaneo más nítido."
             )
             return out
-        out["incapacidad"] = self.extractor.extract(texto_plano)
+        # extract() devuelve el registro completo (paciente/entidad/incapacidad/…).
+        rec = self.extractor.extract(texto_plano)
+        normalizar_fechas(rec)  # reconciliación única de fechas/días (regla del cliente)
+        out["incapacidad"] = rec
         return out
 
 
