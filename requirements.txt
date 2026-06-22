@@ -1,0 +1,18 @@
+# incapacidad-ocr — 100% local, sin APIs pagas.
+Pillow>=10            # carga/preprocesado de imágenes + generación de muestras
+pypdfium2>=4         # renderiza PDF → imagen (PDFium, local, sin Poppler ni servicios)
+
+# --- OCR local (elige uno) ---
+rapidocr-onnxruntime>=1.2   # OCR ONNX en CPU, modelos embebidos, sin servicios externos
+# Ollama: NO requiere paquete pip; se instala aparte (ollama.com) y se llama por HTTP.
+
+# --- Solo si usas los backends de Ollama (visión/LLM) ---
+httpx>=0.27
+
+# --- Servicio web (UI + API) — usado por el contenedor Docker ---
+fastapi>=0.110          # API REST + validación
+uvicorn[standard]>=0.27 # servidor ASGI
+python-multipart>=0.0.18 # subida de archivos (multipart/form-data); >=0.0.18 corrige CVE-2024-53981
+
+# --- Integración ERP (insert a tabla staging en MySQL/ASTGU) ---
+mysql-connector-python>=9.0  # driver MySQL (mismo que la solución de referencia)

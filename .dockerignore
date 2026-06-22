@@ -1,0 +1,12 @@
+# Mantén el contexto de build pequeño y sin PII.
+.venv/
+**/__pycache__/
+*.pyc
+.git/
+.gitignore
+tests/
+*.md
+_eval_out.txt
+_explore_ocr.py
+tests/sample_incapacidad.png
+uploads/

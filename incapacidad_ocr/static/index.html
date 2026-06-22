@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>incapacidad-ocr · Demo</title>
+<style>
+  :root {
+    --bg: #0f172a; --bg2: #1e293b; --card: #ffffff; --ink: #0f172a; --muted: #64748b;
+    --line: #e2e8f0; --accent: #0d9488; --accent-d: #0f766e; --accent-soft: #ccfbf1;
+    --ok: #16a34a; --warn: #b45309; --null: #94a3b8; --shadow: 0 10px 30px rgba(2,6,23,.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); background: linear-gradient(160deg, #0f172a 0%, #134e4a 100%); min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { display: flex; align-items: center; gap: 14px; color: #fff; margin-bottom: 6px; }
+  header .logo {
+    width: 44px; height: 44px; border-radius: 12px; background: var(--accent);
+    display: grid; place-items: center; font-size: 22px; box-shadow: var(--shadow);
+  }
+  header h1 { font-size: 22px; margin: 0; letter-spacing: -.3px; }
+  header p { margin: 2px 0 0; color: #94a3b8; font-size: 13px; }
+  .badge-local {
+    margin-left: auto; background: rgba(204,251,241,.12); color: #5eead4;
+    border: 1px solid rgba(94,234,212,.35); padding: 6px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+  }
+  .panel { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; margin-top: 22px; }
+
+  .drop {
+    border: 2px dashed var(--line); border-radius: 14px; padding: 34px 20px; text-align: center;
+    cursor: pointer; transition: .15s; background: #f8fafc;
+  }
+  .drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+  .drop .ic { font-size: 40px; }
+  .drop b { color: var(--accent-d); }
+  .drop small { display: block; color: var(--muted); margin-top: 6px; }
+
+  .file-row { display: none; align-items: center; gap: 14px; margin-top: 16px; }
+  .file-row.show { display: flex; }
+  .thumb {
+    width: 56px; height: 56px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line);
+    background: #f1f5f9; display: grid; place-items: center; font-size: 24px; flex: 0 0 auto;
+  }
+  .file-meta { flex: 1; min-width: 0; }
+  .file-meta .name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-meta .size { color: var(--muted); font-size: 13px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; margin-top: 18px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  select {
+    appearance: none; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px;
+    font: inherit; background: #fff; min-width: 190px; cursor: pointer;
+  }
+  .btn {
+    margin-left: auto; background: var(--accent); color: #fff; border: 0; border-radius: 10px;
+    padding: 12px 24px; font: inherit; font-weight: 600; cursor: pointer; transition: .15s; min-width: 150px;
+  }
+  .btn:hover { background: var(--accent-d); }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+  .hint { font-size: 12px; color: var(--muted); margin-top: 12px; }
+
+  /* Resultados */
+  #results { display: none; }
+  #results.show { display: block; }
+  .res-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .res-head h2 { font-size: 18px; margin: 0; }
+  .pill { font-size: 12px; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
+  .pill.engine { background: #eef2ff; color: #4338ca; }
+  .pill.cie { background: var(--accent-soft); color: var(--accent-d); font-variant-numeric: tabular-nums; }
+  .dl { margin-left: auto; background: #f1f5f9; color: var(--ink); border: 1px solid var(--line);
+        border-radius: 9px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+  .dl:hover { background: #e2e8f0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+  .sec { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .sec h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--accent-d); }
+  .kv { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px dashed #f1f5f9; font-size: 14px; }
+  .kv:last-child { border-bottom: 0; }
+  .kv .k { color: var(--muted); }
+  .kv .v { font-weight: 600; text-align: right; word-break: break-word; }
+  .kv .v.null { color: var(--null); font-weight: 400; }
+
+  details.ocr { margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  details.ocr summary { cursor: pointer; padding: 12px 16px; font-weight: 600; background: #f8fafc; user-select: none; }
+  details.ocr pre { margin: 0; padding: 16px; background: #0f172a; color: #cbd5e1; font-size: 12.5px;
+                    line-height: 1.5; overflow: auto; max-height: 340px; white-space: pre-wrap; word-break: break-word; }
+
+  .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff;
+             border-radius: 50%; display: inline-block; vertical-align: -3px; margin-right: 8px; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error { display: none; margin-top: 16px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;
+           padding: 12px 16px; border-radius: 10px; font-size: 14px; }
+  .error.show { display: block; }
+  footer { color: #64748b; font-size: 12px; text-align: center; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🩺</div>
+    <div>
+      <h1>incapacidad-ocr</h1>
+      <p>Imagen o PDF de incapacidad médica → texto plano → JSON estructurado</p>
+    </div>
+    <span class="badge-local">● 100% local · sin APIs pagas</span>
+  </header>
+
+  <div class="panel">
+    <div class="drop" id="drop">
+      <div class="ic">📄</div>
+      <div>Arrastra aquí una incapacidad o <b>haz clic para elegir</b></div>
+      <small>PDF, JPG, PNG, WEBP, TIFF — máx. 25 MB · se procesa y se borra (no se guarda)</small>
+      <input type="file" id="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" hidden />
+    </div>
+
+    <div class="file-row" id="fileRow">
+      <div class="thumb" id="thumb">📄</div>
+      <div class="file-meta">
+        <div class="name" id="fileName">—</div>
+        <div class="size" id="fileSize"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="ocr">Motor OCR</label>
+        <select id="ocr">
+          <option value="rapidocr">RapidOCR (local, recomendado)</option>
+          <option value="ollama">Ollama visión (OCR por IA · lento en CPU)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="extractor">Estructurador</label>
+        <select id="extractor">
+          <option value="hibrido" selected>Híbrido: reglas + IA (recomendado)</option>
+          <option value="rule">Reglas (determinista, rápido)</option>
+          <option value="ollama">LLM Ollama (solo IA)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="recepcion">Recepción</label>
+        <select id="recepcion">
+          <option value="WHATSAPP" selected>WhatsApp</option>
+          <option value="CORREO">Correo</option>
+          <option value="ORIGINAL">Original (físico)</option>
+        </select>
+      </div>
+      <button class="btn" id="go" disabled>Procesar</button>
+    </div>
+    <div class="hint" id="ollamaHint" style="display:none">
+      💡 <b>Recomendado:</b> Motor OCR = <b>RapidOCR</b> + Estructurador = <b>Híbrido</b>. Combina reglas
+      (fechas/documento, deterministas) con IA (nombre/EPS/diagnóstico) sobre el texto rápido de RapidOCR.
+      Si Ollama no está disponible, usa solo reglas automáticamente.<br>
+      Los modelos de Ollama se bajan <b>una sola vez</b>: <code>… ollama pull gemma3:4b</code> (texto, usado por Híbrido y LLM) ·
+      <code>… ollama pull qwen2.5vl:3b</code> (visión/OCR). <b>Ollama visión</b> es <b>lento en CPU</b> (1-4 min) — úsalo solo si RapidOCR no lee bien el documento.
+    </div>
+    <div class="error" id="error"></div>
+  </div>
+
+  <div class="panel" id="results">
+    <div class="res-head">
+      <h2>Resultado</h2>
+      <span class="pill engine" id="pillEngine"></span>
+      <span class="pill cie" id="pillCie" style="display:none"></span>
+      <button class="dl" id="download">⬇ Descargar JSON</button>
+    </div>
+    <div id="aviso" style="display:none; margin-top:14px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; padding:12px 16px; border-radius:10px; font-size:14px;"></div>
+    <div class="grid" id="grid"></div>
+    <details class="ocr">
+      <summary>Ver texto OCR (paso 1: imagen → texto plano)</summary>
+      <pre id="ocrText"></pre>
+    </details>
+
+    <!-- Registro ERP: mapeo a la tabla staging lp_ausentismos_ia -->
+    <div class="erp" id="erp" style="display:none; margin-top:18px; border-top:1px solid var(--line); padding-top:16px;">
+      <div class="res-head" style="margin-bottom:10px;">
+        <h2 style="font-size:16px;">Registro ERP <small style="color:var(--muted);font-weight:400;">→ staging <code>lp_ausentismos_ia</code> (ASTGU)</small></h2>
+        <span class="pill" id="pillRevision"></span>
+        <button class="btn" id="registrar" style="margin-left:auto; min-width:auto; padding:10px 18px;">Registrar en revisión</button>
+      </div>
+      <div class="grid" id="erpGrid"></div>
+      <div id="erpProblemas" style="display:none; margin-top:12px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; padding:10px 14px; border-radius:10px; font-size:13.5px;"></div>
+      <div id="erpResultado" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; font-size:14px;"></div>
+    </div>
+  </div>
+
+  <footer>incapacidad-ocr · OCR local + extractor híbrido · staging <code>lp_ausentismos_ia</code> · PII tratado localmente (Ley 1581)</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const drop = $("drop"), fileInput = $("file"), goBtn = $("go");
+let currentFile = null, lastResult = null;
+
+const FIELD_LABELS = {
+  paciente:    { _title: "Paciente",    nombre: "Nombre", documento_tipo: "Tipo doc.", documento_numero: "Número doc." },
+  entidad:     { _title: "Entidad",     eps: "EPS / Administradora", ips_prestador: "IPS prestador" },
+  incapacidad: { _title: "Incapacidad", fecha_inicio: "Fecha inicio", fecha_fin: "Fecha fin", dias: "Días",
+                 fecha_expedicion: "Expedición", tipo: "Tipo", origen: "Origen" },
+  diagnostico: { _title: "Diagnóstico", cie10: "CIE-10", descripcion: "Descripción" },
+  medico:      { _title: "Médico",      nombre: "Nombre", registro: "Registro" },
+};
+
+function fmtSize(b) {
+  if (b < 1024) return b + " B";
+  if (b < 1048576) return (b / 1024).toFixed(1) + " KB";
+  return (b / 1048576).toFixed(1) + " MB";
+}
+
+function setFile(f) {
+  currentFile = f;
+  $("fileRow").classList.add("show");
+  $("fileName").textContent = f.name;
+  $("fileSize").textContent = fmtSize(f.size);
+  const thumb = $("thumb");
+  if (f.type.startsWith("image/")) {
+    const url = URL.createObjectURL(f);
+    thumb.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" />`;
+  } else {
+    thumb.textContent = "📄";
+  }
+  goBtn.disabled = false;
+  $("error").classList.remove("show");
+}
+
+drop.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", (e) => { if (e.target.files[0]) setFile(e.target.files[0]); });
+["dragover", "dragenter"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", (e) => { if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); });
+
+function toggleHint() {
+  const ex = $("extractor").value;
+  const on = $("ocr").value === "ollama" || ex === "ollama" || ex === "hibrido";
+  $("ollamaHint").style.display = on ? "block" : "none";
+}
+$("ocr").addEventListener("change", toggleHint);
+$("extractor").addEventListener("change", toggleHint);
+toggleHint();  // híbrido es el predeterminado → mostrar el aviso al cargar
+
+goBtn.addEventListener("click", async () => {
+  if (!currentFile) return;
+  goBtn.disabled = true;
+  goBtn.innerHTML = '<span class="spinner"></span>Procesando…';
+  $("error").classList.remove("show");
+  $("results").classList.remove("show");
+
+  const fd = new FormData();
+  fd.append("archivo", currentFile);
+  fd.append("ocr", $("ocr").value);
+  fd.append("extractor", $("extractor").value);
+  fd.append("estado_recepcion", $("recepcion").value);
+
+  try {
+    const resp = await fetch("/api/procesar", { method: "POST", body: fd });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
+    lastResult = data;
+    render(data);
+  } catch (err) {
+    const e = $("error");
+    e.textContent = "❌ " + err.message;
+    e.classList.add("show");
+  } finally {
+    goBtn.disabled = false;
+    goBtn.textContent = "Procesar";
+  }
+});
+
+function render(data) {
+  $("pillEngine").textContent = `OCR: ${data.ocr_backend} · ${data.extractor}`;
+  const inc = data.incapacidad || {};
+  const cie = inc.diagnostico && inc.diagnostico.cie10;
+  const pillCie = $("pillCie");
+  if (cie) { pillCie.textContent = "CIE-10: " + cie; pillCie.style.display = ""; }
+  else { pillCie.style.display = "none"; }
+
+  const aviso = $("aviso");
+  if (data.aviso) { aviso.textContent = "⚠️ " + data.aviso; aviso.style.display = "block"; }
+  else { aviso.style.display = "none"; }
+
+  const grid = $("grid");
+  grid.innerHTML = "";
+  for (const [group, labels] of Object.entries(FIELD_LABELS)) {
+    const obj = inc[group] || {};
+    const sec = document.createElement("div");
+    sec.className = "sec";
+    let html = `<h3>${labels._title}</h3>`;
+    for (const [key, label] of Object.entries(labels)) {
+      if (key === "_title") continue;
+      const val = obj[key];
+      const isNull = val === null || val === undefined || val === "";
+      html += `<div class="kv"><span class="k">${label}</span>` +
+              `<span class="v ${isNull ? "null" : ""}">${isNull ? "—" : escapeHtml(String(val))}</span></div>`;
+    }
+    sec.innerHTML = html;
+    grid.appendChild(sec);
+  }
+  $("ocrText").textContent = data.texto_plano || "(sin texto)";
+  renderStaging(data.staging);
+  $("results").classList.add("show");
+  $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// Campos del registro staging a mostrar (etiqueta amigable ← columna del ERP).
+const ERP_FIELDS = [
+  ["ID empleado (← cédula)", "idlpempleado"],
+  ["ID diagnóstico (← CIE-10)", "idlpdiagnosticos"],
+  ["ID entidad/EPS", "idlpentidad"],
+  ["Tipo ausentismo", "idlptipoausentismo"],
+  ["Estado recepción", "idlpestadosrecepausentismos"],
+  ["Fecha registro", "fecharegistro"],
+  ["Fecha inicio", "fechainicio"],
+  ["Días", "Numerodias"],
+  ["Fecha vencimiento", "fechavencimiento"],
+  ["Original", "original"],
+  ["Documentación", "documentacion_estado"],
+  ["Observaciones", "observaciones"],
+];
+
+function renderStaging(staging) {
+  const box = $("erp");
+  if (!staging || !staging.row) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  const row = staging.row;
+
+  const pill = $("pillRevision");
+  if (staging.requiere_revision) {
+    pill.textContent = "⚠ Requiere revisión"; pill.style.background = "#fef3c7"; pill.style.color = "#92400e";
+  } else {
+    pill.textContent = "✓ Listo para aprobar"; pill.style.background = "#dcfce7"; pill.style.color = "#166534";
+  }
+
+  const g = $("erpGrid"); g.innerHTML = "";
+  const sec = document.createElement("div"); sec.className = "sec";
+  let html = "<h3>lp_ausentismos_ia</h3>";
+  for (const [label, key] of ERP_FIELDS) {
+    let val = row[key];
+    if (key === "original") val = val ? "Sí" : "No";
+    const isNull = val === null || val === undefined || val === "";
+    html += `<div class="kv"><span class="k">${label}</span>` +
+            `<span class="v ${isNull ? "null" : ""}">${isNull ? "—" : escapeHtml(String(val))}</span></div>`;
+  }
+  sec.innerHTML = html; g.appendChild(sec);
+
+  const prob = $("erpProblemas");
+  if (staging.problemas && staging.problemas.length) {
+    prob.innerHTML = "⚠️ <b>Pendiente:</b> " + staging.problemas.map(escapeHtml).join(" · ") +
+      (staging.db_disponible === false ? "<br><small>(BD no disponible: los IDs no se resolvieron)</small>" : "");
+    prob.style.display = "block";
+  } else { prob.style.display = "none"; }
+
+  $("erpResultado").style.display = "none";
+  $("registrar").disabled = false;
+  $("registrar").textContent = "Registrar en revisión";
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+$("download").addEventListener("click", () => {
+  if (!lastResult) return;
+  const blob = new Blob([JSON.stringify(lastResult, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (lastResult.fuente || "incapacidad").replace(/\.[^.]+$/, "") + ".json";
+  a.click();
+});
+
+$("registrar").addEventListener("click", async () => {
+  if (!lastResult) return;
+  const btn = $("registrar");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Registrando…';
+  const out = $("erpResultado");
+  try {
+    const resp = await fetch("/api/registrar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resultado: lastResult, estado_recepcion: $("recepcion").value }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
+    out.style.display = "block";
+    out.style.background = "#dcfce7"; out.style.border = "1px solid #86efac"; out.style.color = "#166534";
+    out.innerHTML = `✓ Registrado en <code>lp_ausentismos_ia</code> con <b>id = ${data.id}</b> · estado <b>${data.estado}</b>` +
+      (data.requiere_revision ? " (queda para revisión del auxiliar)" : " (listo para aprobar en el ERP)");
+  } catch (err) {
+    out.style.display = "block";
+    out.style.background = "#fef2f2"; out.style.border = "1px solid #fecaca"; out.style.color = "#b91c1c";
+    out.textContent = "❌ " + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = "Registrar en revisión";
+  }
+});
+</script>
+</body>
+</html>

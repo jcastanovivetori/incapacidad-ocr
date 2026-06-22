@@ -1,0 +1,74 @@
+# Levanta TODO (servicio web + Ollama local):  docker compose up --build
+# Luego abre:  http://localhost:8000
+#
+# Tras el primer arranque, baja los modelos de Ollama (una sola vez):
+#   docker compose exec ollama ollama pull gemma3:4b     # estructurador (texto→JSON)
+#   docker compose exec ollama ollama pull moondream     # OCR de visión (opcional, lento en CPU)
+services:
+  incapacidad-ocr:
+    build: .
+    image: incapacidad-ocr:latest
+    container_name: incapacidad-ocr
+    ports:
+      # Enlazado SOLO a localhost (no expuesto a la LAN): los documentos contienen PII.
+      - "127.0.0.1:8000:8000"
+    environment:
+      # El servicio web alcanza a Ollama por el nombre de servicio en la red de compose.
+      - OLLAMA_URL=http://ollama:11434
+      # Modelos de Ollama (fijados por el servidor; el cliente no puede elegirlos).
+      - OCR_MODEL=qwen2.5vl:3b   # VLM que transcribe (OCR de visión); moondream NO sirve
+      - LLM_MODEL=gemma3:4b
+      - OLLAMA_TIMEOUT=900       # visión en CPU es lenta → timeout amplio (s)
+      # - VISION_MAX_DIM=1200    # (opcional) px del lado mayor enviado al VLM
+      # - MAX_UPLOAD_BYTES=26214400   # (opcional) tope de subida en bytes
+      # Conexión a la BD ASTGU (tabla staging lp_ausentismos_ia).
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=ASTGU
+      - DB_USER=ocr
+      - DB_PASSWORD=ocr
+    depends_on:
+      - ollama
+      - db
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama-models:/root/.ollama   # persiste los modelos descargados
+    # SIN puertos publicados al host: Ollama no tiene autenticación, así que solo es
+    # accesible desde la red interna de compose (el contenedor web). Para usarlo desde
+    # el host, descomenta y enlázalo a localhost:  ports: ["127.0.0.1:11434:11434"]
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+  db:
+    image: mysql:8
+    container_name: ocr-db
+    environment:
+      - MYSQL_DATABASE=ASTGU
+      - MYSQL_USER=ocr
+      - MYSQL_PASSWORD=ocr
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - db-data:/var/lib/mysql
+      # Carga catálogos + tabla staging + datos de prueba en el PRIMER arranque.
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+    # Sin puerto al host por defecto (solo red interna). Para inspeccionar con un cliente,
+    # descomenta:  ports: ["127.0.0.1:3306:3306"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ollama-models:
+  db-data:
