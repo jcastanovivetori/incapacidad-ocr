@@ -74,11 +74,51 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
 - **Nombres pegados** (`HERNANDEZSANDOVAL`): el **nombre del catálogo** (vía cédula→empleado) es
   autoritativo; `_split_glued_name()` es solo respaldo genérico. Si la cédula no resuelve, intentar por nombre.
 - **Lookups:** cédula→`idlpempleado`, CIE-10→`idlpdiagnosticos` (compara **sin punto**), EPS→`idlpentidad`
-  (match por contención **sin espacios**). Tipo ausentismo: códigos **2/3/5/8/9/10/11** (default 3).
+  (match por contención **sin espacios**). Tipo ausentismo: códigos **2/3/5/7/8/9/10/11/12** (default 3).
   Recepción: ORIGINAL=1 / WHATSAPP=2 / CORREO=3.
 - **CIE-10:** normalización robusta a OCR (`0↔O`, `1↔I/l`), exige ≥1 dígito real (evita falsos como `FOSCAL`→F05).
+- **SOAT (tránsito):** si la EPS leída contiene "soat" → tipo **11 TRANSITO NO LABORAL** siempre, y la EPS a
+  asignar es la del EMPLEADO en catálogo (una aseguradora SOAT nunca es la EPS real del paciente).
+- **EPS no clara → EPS del empleado:** si el texto del documento no trae EPS o no matchea el catálogo (y sí
+  hay cédula resuelta), se usa la EPS registrada del empleado como respaldo (aviso `eps_de_empleado`, no bloquea).
+- **PERMISOS** (`FORMATO SOLICITUD DE PERMISO`, detectado por texto en `extract.es_formato_permiso`): tipo de
+  documento distinto a la incapacidad — **sin diagnóstico ni EPS**. Tipo **7 LICENCIA NO REMUNERADA** /
+  **12 LICENCIA REMUNERADA** según el checkbox marcado (heurística de orden de texto, no de coordenadas — el
+  pipeline no expone cajas OCR hoy). Ver `erp.mapear_a_staging` (`es_permiso`) y `extract._extraer_permiso`.
 - **Staging, no directo:** NUNCA insertar en `lpausentismos`. Se escribe en `lp_ausentismos_ia`
   (`estado=PENDIENTE_REVISION`); el ERP promueve al APROBAR. No se aprueba con obligatorios faltantes (→ 409).
+- **Nivel de incapacidad** (`idlpnivelincapacidad`, FK a `lpnivelincapacidad`): estudiado contra el histórico
+  real (`lpausentismos`) — **ni los días ni el diagnóstico predicen el nivel de forma limpia** (el mismo
+  CIE-10 aparece con niveles distintos; los rangos de días se solapan entre niveles), es un juicio clínico
+  del analista. Se asigna un **default fijo por tipo de ausentismo** (`erp.NIVEL_INCAPACIDAD_DEFAULT`), que
+  el auxiliar corrige en revisión si el caso lo amerita: **2 Accidente trabajo→2 LEVE · 3 Enfermedad
+  general→9 NO CRITICA · 5 Licencia maternidad→12 NO APLICA · 8 Enfermedad laboral→7 NO CALIFICADA ·
+  9 Licencia paternidad→13 NO APLICA. · 10 Prelicencia→14 NO APLICA.. · 11 Tránsito no laboral→11 NO
+  CRITICO**. Los permisos y vacaciones (tipo 7/12/13) no tienen niveles definidos en el ERP → queda `NULL`.
+- **VACACIONES** (carta "Notificación Periodo de Vacaciones", detectada por texto en
+  `extract.es_formato_vacaciones`): tipo de documento distinto a la incapacidad — **sin diagnóstico, EPS ni
+  nivel**, tipo fijo **13 VACACIONES** (sin ambigüedad que resolver, a diferencia de permisos). Es una CARTA en
+  prosa (no un formulario de casillas): las fechas salen escritas en palabras con el número real entre
+  paréntesis ("...a partir del veintinueve (29) de mayo... (2026)... hasta el seis (6) de julio... (2026)"),
+  puede traer VARIOS periodos consecutivos — se toma la primera fecha tras "a partir del" y la última tras
+  "hasta el". Los días NO se buscan por etiqueta en este formato (frases tipo "el día siete (07) de julio"
+  romperían el patrón de días) — se calculan siempre por diferencia de fechas. Ver `erp.mapear_a_staging`
+  (`es_vacaciones`) y `extract._fechas_vacaciones`/`extract.es_formato_vacaciones`.
+- **PDFs multi-página**: cuando el mismo PDF trae la incapacidad JUNTO con otras páginas del trámite
+  (certificado de nacido vivo, epicrisis, cédula escaneada...), el OCR se hace página por página y solo se
+  usa el texto de la(s) página(s) que traen el ausentismo en sí (`extract.es_pagina_relevante`, ancla por
+  "incapacidad medica"/"certificado de incapacidad"/"detalle de la incapacidad" o los formatos de
+  permiso/vacaciones) — si ninguna página matchea, se concatenan todas como antes (sin cambios). Ver
+  `ocr._combinar_paginas` (usado por ambos backends).
+- **Variantes de etiquetas de fecha/días vistas en documentos reales** (todas en `RuleBasedExtractor.extract`):
+  "Fecha de Emisión" (Clínica Medical Duarte) también cuenta como fecha de inicio en licencias de maternidad de
+  ese formato; "Fecha de Terminación" (a veces el OCR la pega: "Fecha Determinacion") como fecha fin; "Duración"
+  como días (el patrón tolera que el valor quede en la línea siguiente). "Diagnostico(s):" es una variante más
+  del ancla de diagnóstico (además de "Diagnostico principal").
+- **Tabla "DETALLE DE LA INCAPACIDAD"** (formato Clínica del Cesar): 5 columnas (Causa Externa/Diagnóstico/Días
+  Inc./Inicio/Finalización) seguidas de sus 5 valores en bloque — se parsea aparte
+  (`extract._extraer_detalle_incapacidad`) porque es más fiable que las heurísticas genéricas y evita falsos
+  positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.).
 
 ## Restricciones / convenciones
 
@@ -90,6 +130,12 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
 - **Imports perezosos** de `httpx`/`rapidocr`/`mysql.connector` (el módulo importa aunque falte la dependencia).
 - **`moondream` NO sirve** para OCR (captioning); usar `qwen2.5vl:3b` para visión.
 - **Híbrido** es el extractor por defecto (RapidOCR + LLM fusionados, degrada a solo reglas si Ollama no está).
+- **Permisos manuscritos → usar `ocr=ollama` (visión), no RapidOCR.** Validado contra 12 documentos reales de
+  `H:\Gruppo\archivos\Ausentismos`: RapidOCR (texto impreso) lee muy mal la letra manuscrita en los formularios
+  de permiso (nombre/cédula/fechas quedan irreconocibles); Ollama visión (`qwen2.5vl`) mejora sustancialmente
+  esos campos. Aun así, **el checkbox Remunerado/No Remunerado no se detecta de forma confiable con NINGUNO
+  de los dos motores** (a veces el modelo de visión ni transcribe la marca) → queda pendiente de revisión y
+  el auxiliar elige el tipo (7/12) a mano en la UI; es el comportamiento esperado, no un bug a corregir.
 
 ## Gotchas del entorno
 

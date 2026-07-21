@@ -83,8 +83,8 @@ def listar_staging(cx, limite: int = 20, estado: Optional[str] = None) -> list[d
     cur = cx.cursor(dictionary=True)
     base = (
         "SELECT id, creado_en, estado, cedula_leida, paciente_leido, idlpempleado, "
-        "fechainicio, Numerodias, fechavencimiento, idlpdiagnosticos, idlpentidad, "
-        "idlptipoausentismo, documentacion_estado, problemas, archivo_origen "
+        "fechainicio, Numerodias, fechavencimiento, idlpdiagnosticos, codigo_diagnostico_leido, idlpentidad, "
+        "idlptipoausentismo, idlpnivelincapacidad, documentacion_estado, problemas, archivo_origen "
         f"FROM {STAGING_TABLE} "
     )
     try:
@@ -115,7 +115,7 @@ def obtener_staging(cx, registro_id: int) -> Optional[dict[str, Any]]:
 _COLS_ACTUALIZABLES = {
     "fechainicio", "Numerodias", "fechavencimiento", "fechaaccidente", "numeroorden",
     "observaciones", "original", "idlpdiagnosticos", "idlpempleado", "idlptipoausentismo",
-    "idlpentidad", "tipoentidad", "idlpestadosrecepausentismos", "cedula_leida",
+    "idlpnivelincapacidad", "idlpentidad", "tipoentidad", "idlpestadosrecepausentismos", "cedula_leida",
     "codigo_diagnostico_leido", "eps_leida", "paciente_leido", "problemas",
     "documentacion_estado", "documentos_faltantes",
 }

@@ -5,3 +5,4 @@ tests/sample_incapacidad.png
 uploads/
 _eval_out.txt
 _explore_ocr.py
+.env

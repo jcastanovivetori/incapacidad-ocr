@@ -4,7 +4,9 @@ Replica lo confirmado con Diana (mentoría Gruppo, 11 jun 2026):
   • NO se inserta en `lpausentismos` directo → se escribe en STAGING y el ERP promueve al aprobar.
   • Lookups que faltaban en la prueba de la Sesión 1:
       cédula → idlpempleado · CIE-10 → idlpdiagnosticos · EPS → idlpentidad
-  • Homologación de tipo de ausentismo (texto → código 2/3/5/8/9/10/11), default 3.
+  • Homologación de tipo de ausentismo (texto → código 2/3/5/7/8/9/10/11/12), default 3.
+  • PERMISOS (FORMATO SOLICITUD DE PERMISO): tipo 7 (no remunerada) / 12 (remunerada),
+    sin diagnóstico ni EPS — ver ``es_permiso`` en ``mapear_a_staging``.
   • fecha_registro = hoy · fechavencimiento = fecha_inicio + Numerodias.
   • Si falta un dato CRÍTICO (empleado/diagnóstico/EPS/fecha/días) → `requiere_revision`.
 
@@ -23,8 +25,9 @@ ESTADO_RECEPCION = {"ORIGINAL": 1, "WHATSAPP": 2, "CORREO": 3}
 # Etiquetas de tipo de ausentismo (códigos entregados por Diana).
 ETIQUETAS_TIPO = {
     2: "ACCIDENTE DE TRABAJO", 3: "ENFERMEDAD GENERAL", 5: "LICENCIA MATERNIDAD",
-    8: "ENFERMEDAD LABORAL", 9: "LICENCIA PATERNIDAD", 10: "PRELICENCIA",
-    11: "TRANSITO NO LABORAL",
+    7: "LICENCIA NO REMUNERADA", 8: "ENFERMEDAD LABORAL", 9: "LICENCIA PATERNIDAD",
+    10: "PRELICENCIA", 11: "TRANSITO NO LABORAL", 12: "LICENCIA REMUNERADA",
+    13: "VACACIONES",
 }
 # Reglas palabra-clave → código (orden: de más específica a más general). Default 3.
 _REGLAS_TIPO = [
@@ -37,6 +40,30 @@ _REGLAS_TIPO = [
     (r"enfermedad general|enfermedad comun|comun", 3),
 ]
 _TIPO_DEFAULT = 3
+
+# Nivel de incapacidad por defecto según tipo de ausentismo (Diana, 17-jul-2026).
+# Estudiado contra el histórico real (lpausentismos + lpnivelincapacidad): ni los días
+# ni el diagnóstico predicen el nivel de forma limpia (el mismo CIE-10 aparece en
+# niveles distintos, y los rangos de días se solapan entre niveles) → es un juicio
+# clínico del analista, no derivable del documento. Se deja un nivel por defecto por
+# tipo (el más común/neutral en el histórico) y el auxiliar lo corrige en revisión si
+# el caso lo amerita. Los permisos (tipo 7/12) no tienen niveles definidos en el ERP.
+NIVEL_INCAPACIDAD_DEFAULT = {
+    2: 2,    # ACCIDENTE DE TRABAJO -> LEVE
+    3: 9,    # ENFERMEDAD GENERAL -> NO CRITICA
+    5: 12,   # LICENCIA MATERNIDAD -> NO APLICA
+    8: 7,    # ENFERMEDAD LABORAL -> NO CALIFICADA
+    9: 13,   # LICENCIA PATERNIDAD -> NO APLICA.
+    10: 14,  # PRELICENCIA -> NO APLICA..
+    11: 11,  # TRANSITO NO LABORAL -> NO CRITICO
+}
+# Catálogo completo de `lpnivelincapacidad` (para mostrar la etiqueta en la UI y permitir
+# que el auxiliar escoja otro nivel a mano, ej. escalar un accidente de LEVE a GRAVE).
+ETIQUETAS_NIVEL = {
+    1: "INDEFINIDO", 2: "LEVE", 3: "SEVERO", 4: "GRAVE", 5: "MORTAL",
+    6: "CALIFICADA", 7: "NO CALIFICADA", 8: "CRITICA", 9: "NO CRITICA",
+    10: "CRITICO", 11: "NO CRITICO", 12: "NO APLICA", 13: "NO APLICA.", 14: "NO APLICA..",
+}
 
 
 def _norm(texto: str) -> str:
@@ -69,10 +96,10 @@ def _safe_date(s: Any) -> Optional[date]:
 class Lookups:
     def __init__(self, conexion) -> None:
         self._cx = conexion
-        self._cache_emp: dict[str, tuple[Optional[int], Optional[str]]] = {}
+        self._cache_emp: dict[str, tuple[Optional[int], Optional[str], Optional[str]]] = {}
         self._cache_dx: dict[str, tuple[Optional[int], Optional[str]]] = {}
-        self._entidades: Optional[list[tuple[int, str, int]]] = None  # (id, nombre_norm, tipo)
-        self._empleados_nombre: Optional[list[tuple[int, str, str]]] = None  # (id, nombre, clave)
+        self._entidades: Optional[list[tuple[int, str, int, str]]] = None  # (id, nombre_norm, tipo, nombre)
+        self._empleados_nombre: Optional[list[tuple[int, str, str, str]]] = None  # (id, nombre, eps, clave)
 
     def _query(self, sql: str, params: tuple):
         cur = self._cx.cursor()
@@ -82,40 +109,43 @@ class Lookups:
         finally:
             cur.close()
 
-    def empleado_por_cedula(self, cedula: Optional[str]) -> tuple[Optional[int], Optional[str]]:
-        """(idlpempleado, nombre_catalogo). El nombre del catálogo es AUTORITATIVO
-        (corrige los nombres que el OCR deja pegados, p.ej. 'HERNANDEZSANDOVAL')."""
+    def empleado_por_cedula(self, cedula: Optional[str]) -> tuple[Optional[int], Optional[str], Optional[str]]:
+        """(idlpempleado, nombre_catalogo, eps_catalogo). El nombre del catálogo es AUTORITATIVO
+        (corrige los nombres que el OCR deja pegados, p.ej. 'HERNANDEZSANDOVAL'). ``eps_catalogo``
+        es la EPS asignada al empleado en `vlpempleados` (para la regla SOAT: la EPS real del
+        empleado, no la aseguradora de tránsito que emite la incapacidad)."""
         if not cedula:
-            return None, None
+            return None, None, None
         ced = re.sub(r"\D", "", str(cedula))
         if not ced:
-            return None, None
+            return None, None, None
         if ced in self._cache_emp:
             return self._cache_emp[ced]
         filas = self._query(
-            "SELECT idlpempleado, nombre FROM lpempleados WHERE cedula = %s LIMIT 1", (ced,)
+            "SELECT idlpempleado, nombrecompleto, nombreeps FROM vlpempleados "
+            "WHERE nroidentificacion = %s LIMIT 1", (ced,)
         )
-        res = (int(filas[0][0]), filas[0][1]) if filas else (None, None)
+        res = (int(filas[0][0]), filas[0][1], filas[0][2]) if filas else (None, None, None)
         self._cache_emp[ced] = res
         return res
 
     def id_empleado_por_cedula(self, cedula: Optional[str]) -> Optional[int]:
         return self.empleado_por_cedula(cedula)[0]
 
-    def empleado_por_nombre(self, nombre: Optional[str]) -> tuple[Optional[int], Optional[str]]:
+    def empleado_por_nombre(self, nombre: Optional[str]) -> tuple[Optional[int], Optional[str], Optional[str]]:
         """Respaldo cuando la cédula no resuelve: busca por nombre (sin espacios/tildes)."""
         if not nombre:
-            return None, None
+            return None, None, None
         leido = _norm(nombre).replace(" ", "")
         if len(leido) < 8:  # evita matches espurios con nombres muy cortos
-            return None, None
+            return None, None, None
         if self._empleados_nombre is None:
-            filas = self._query("SELECT idlpempleado, nombre FROM lpempleados", ())
-            self._empleados_nombre = [(int(i), nm, _norm(nm).replace(" ", "")) for (i, nm) in filas]
-        for idp, nm, clave in self._empleados_nombre:
+            filas = self._query("SELECT idlpempleado, nombrecompleto, nombreeps FROM vlpempleados", ())
+            self._empleados_nombre = [(int(i), nm, eps, _norm(nm).replace(" ", "")) for (i, nm, eps) in filas]
+        for idp, nm, eps_cat, clave in self._empleados_nombre:
             if clave and (clave == leido or clave in leido or leido in clave):
-                return idp, nm
-        return None, None
+                return idp, nm, eps_cat
+        return None, None, None
 
     def diagnostico_por_codigo(self, codigo: Optional[str]) -> tuple[Optional[int], Optional[str]]:
         if not codigo:
@@ -126,34 +156,40 @@ class Lookups:
         # Comparación sin punto en ambos lados (J06.9 == J069).
         filas = self._query(
             "SELECT idlpdiagnosticos, descripcion FROM lpdiagnosticos "
-            "WHERE REPLACE(codigo_cie10, '.', '') = %s LIMIT 1",
+            "WHERE REPLACE(codigo, '.', '') = %s LIMIT 1",
             (key,),
         )
         res = (int(filas[0][0]), filas[0][1]) if filas else (None, None)
         self._cache_dx[key] = res
         return res
 
-    def id_entidad_por_nombre(self, nombre: Optional[str]) -> tuple[Optional[int], Optional[int]]:
-        """Match por CONTENCIÓN: la palabra clave del catálogo dentro del nombre leído."""
+    def id_entidad_por_nombre(self, nombre: Optional[str]) -> tuple[Optional[int], Optional[int], Optional[str]]:
+        """Match por CONTENCIÓN: la palabra clave del catálogo dentro del nombre leído.
+        Devuelve también el nombre TAL COMO está en el catálogo, para mostrarlo en la UI."""
         if not nombre:
-            return None, None
+            return None, None, None
         if self._entidades is None:
-            filas = self._query("SELECT idlpentidad, nombre, tipoentidad FROM lpentidades", ())
+            filas = self._query("SELECT idlpeps, nombre, tipoentidad FROM vlpentidades_ss", ())
             # guardamos la clave sin espacios (el OCR suele pegar "SALUD TOTAL" → "SALUDTOTAL")
-            self._entidades = [(int(i), _norm(n).replace(" ", ""), int(t)) for (i, n, t) in filas]
+            self._entidades = [(int(i), _norm(n).replace(" ", ""), int(t), n) for (i, n, t) in filas]
         leido = _norm(nombre).replace(" ", "")
-        for id_ent, clave, tipo in self._entidades:
+        for id_ent, clave, tipo, nombre_catalogo in self._entidades:
             if clave and clave in leido:
-                return id_ent, tipo
-        return None, None
+                return id_ent, tipo, nombre_catalogo
+        return None, None, None
 
     def documentos_requeridos(self, id_entidad: Optional[int], id_tipo: Optional[int]) -> list[str]:
         if id_entidad is None or id_tipo is None:
             return []
-        filas = self._query(
-            "SELECT documento FROM lprequisitos_eps WHERE idlpentidad = %s AND idlptipoausentismo = %s",
-            (id_entidad, id_tipo),
-        )
+        try:
+            filas = self._query(
+                "SELECT documento FROM lprequisitos_eps WHERE idlpentidad = %s AND idlptipoausentismo = %s",
+                (id_entidad, id_tipo),
+            )
+        except Exception:
+            # `lprequisitos_eps` no existe todavía en algunos entornos (p.ej. BD de
+            # pruebas con el esquema real del ERP) — degrada a "sin requisitos".
+            return []
         return [f[0] for f in filas]
 
 
@@ -161,10 +197,10 @@ class LookupsNulos:
     """Sin BD: todo None (la validación marcará los IDs como pendientes de revisión)."""
 
     def empleado_por_cedula(self, cedula):  # noqa: ARG002
-        return None, None
+        return None, None, None
 
     def empleado_por_nombre(self, nombre):  # noqa: ARG002
-        return None, None
+        return None, None, None
 
     def id_empleado_por_cedula(self, cedula):  # noqa: ARG002
         return None
@@ -173,7 +209,7 @@ class LookupsNulos:
         return None, None
 
     def id_entidad_por_nombre(self, nombre):  # noqa: ARG002
-        return None, None
+        return None, None, None
 
     def documentos_requeridos(self, id_entidad, id_tipo):  # noqa: ARG002
         return []
@@ -192,8 +228,34 @@ def _observaciones(etiqueta_tipo, cie, desc, inca) -> str:
         partes.append(f"DX {cie}")
     elif desc:
         partes.append(desc)
+    if inca.get("tipo_licencia"):
+        partes.append(f"Tipo licencia: {inca['tipo_licencia']}")
     if inca.get("fecha_expedicion"):
         partes.append(f"Exp {inca['fecha_expedicion']}")
+    return " | ".join(partes)[:500]
+
+
+def _observaciones_permiso(etiqueta_tipo: Optional[str], perm: dict[str, Any]) -> str:
+    partes = []
+    if etiqueta_tipo:
+        partes.append(etiqueta_tipo)
+    if perm.get("empresa"):
+        partes.append(f"Empresa: {perm['empresa']}")
+    if perm.get("cargo"):
+        partes.append(f"Cargo: {perm['cargo']}")
+    if perm.get("detalle"):
+        partes.append(f"Detalle: {perm['detalle']}")
+    if perm.get("autorizado_por"):
+        aut = perm["autorizado_por"]
+        if perm.get("autorizado_cargo"):
+            aut += f" ({perm['autorizado_cargo']})"
+        partes.append(f"Autorizado por: {aut}")
+    if perm.get("horas_total") or (perm.get("horas_desde") and perm.get("horas_hasta")):
+        rango = f"{perm.get('horas_desde') or '?'}-{perm.get('horas_hasta') or '?'}"
+        total = f" ({perm['horas_total']}h)" if perm.get("horas_total") else ""
+        partes.append(f"Horas: {rango}{total}")
+    if perm.get("fecha_solicitud"):
+        partes.append(f"Solicitado {perm['fecha_solicitud']}")
     return " | ".join(partes)[:500]
 
 
@@ -226,6 +288,12 @@ def mapear_a_staging(
     ent = inc.get("entidad", {}) or {}
     inca = inc.get("incapacidad", {}) or {}
     diag = inc.get("diagnostico", {}) or {}
+    perm = inc.get("permiso", {}) or {}
+    # PERMISO (licencia remunerada/no remunerada): no lleva diagnóstico ni EPS.
+    es_permiso = inc.get("tipo_documento") == "permiso"
+    # VACACIONES (carta de notificación de periodo): tampoco lleva diagnóstico, EPS
+    # ni nivel de incapacidad — tipo de ausentismo fijo 13, sin ambigüedad a resolver.
+    es_vacaciones = inc.get("tipo_documento") == "vacaciones"
 
     # Valores efectivos: el override del auxiliar manda sobre lo leído por el OCR.
     cedula = overrides.get("cedula") or pac.get("documento_numero")
@@ -236,6 +304,14 @@ def mapear_a_staging(
     num_dias = _num_dias(overrides.get("dias")) if "dias" in overrides else _num_dias(inca.get("dias"))
     nombre_ocr = overrides.get("paciente") or pac.get("nombre")
     fecha_inicio_calculada = bool(inca.get("fecha_inicio_calculada")) and "fecha_inicio" not in overrides
+
+    # Nunca se escribe una fecha inválida en la fila (protege el INSERT contra un
+    # día/mes imposible que se cuele del OCR, del LLM o de un tecleo manual — MySQL
+    # rechaza el registro completo con un 500 si llega algo como "2016-06-54").
+    if fecha_inicio and not _safe_date(fecha_inicio):
+        fecha_inicio = None
+    if fecha_fin and not _safe_date(fecha_fin):
+        fecha_fin = None
     estado = (estado_recepcion or "WHATSAPP").upper()
     if estado not in ESTADO_RECEPCION:
         estado = "WHATSAPP"
@@ -254,22 +330,44 @@ def mapear_a_staging(
     def _faltan(campo: str, etiqueta: str, valor: Any) -> None:
         faltantes_campos.append({"campo": campo, "etiqueta": etiqueta, "valor": valor})
 
+    # Regla de negocio (Diana, 16-17 jul 2026): toda incapacidad emitida por una
+    # aseguradora SOAT (accidente de tránsito) se marca como tránsito no laboral,
+    # independientemente de la causa/origen que diga el documento; y la EPS a
+    # asignar es la propia del empleado en el catálogo (`vlpempleados`), no la
+    # aseguradora de tránsito que emitió la incapacidad.
+    es_soat = bool(eps) and "soat" in _norm(eps)
+
     # Homologación de tipo (override manual de código si llega; si no, texto del doc).
     if _num_dias(overrides.get("tipo")) in ETIQUETAS_TIPO:
         id_tipo = _num_dias(overrides.get("tipo"))
         etiqueta_tipo = ETIQUETAS_TIPO[id_tipo]
+    elif es_permiso:
+        # Checkbox "Remunerado" / "No Remunerado" del FORMATO SOLICITUD DE PERMISO.
+        id_tipo = {"REMUNERADO": 12, "NO_REMUNERADO": 7}.get(perm.get("tipo_remunerado"))
+        etiqueta_tipo = ETIQUETAS_TIPO.get(id_tipo)
+    elif es_vacaciones:
+        id_tipo, etiqueta_tipo = 13, ETIQUETAS_TIPO[13]
+    elif es_soat:
+        id_tipo, etiqueta_tipo = 11, ETIQUETAS_TIPO[11]
     else:
         texto_tipo = " ".join(filter(None, [
             inca.get("tipo"), inca.get("origen"), diag.get("descripcion"),
             (resultado.get("texto_plano") or "")[:2000],
         ]))
         id_tipo, etiqueta_tipo = homologar_tipo(texto_tipo)
+    if es_permiso and id_tipo is None:
+        problemas.append("No se identificó si el permiso es remunerado o no remunerado")
+        _faltan("tipo", "Tipo de permiso", None)
+
+    id_nivel = _num_dias(overrides.get("nivel"))
+    if id_nivel is None:
+        id_nivel = NIVEL_INCAPACIDAD_DEFAULT.get(id_tipo) if id_tipo is not None else None
 
     # --- Empleado: por cédula (nombre del catálogo es AUTORITATIVO). Si la cédula no
     #     resuelve, intentamos por NOMBRE como respaldo (recupera un campo obligatorio).
-    id_empleado, nombre_catalogo = lookups.empleado_por_cedula(cedula)
+    id_empleado, nombre_catalogo, eps_empleado = lookups.empleado_por_cedula(cedula)
     if id_empleado is None and nombre_ocr:
-        id_empleado, nombre_catalogo = lookups.empleado_por_nombre(nombre_ocr)
+        id_empleado, nombre_catalogo, eps_empleado = lookups.empleado_por_nombre(nombre_ocr)
     if not cedula and id_empleado is None:
         problemas.append("No se detectó la cédula del paciente")
         _faltan("cedula", "Cédula del paciente", None)
@@ -279,19 +377,41 @@ def mapear_a_staging(
     # El nombre del catálogo corrige los nombres pegados por el OCR (HERNANDEZSANDOVAL).
     paciente_final = nombre_catalogo or nombre_ocr
 
-    id_dx, desc_dx = lookups.diagnostico_por_codigo(cie)
-    if not cie:
-        problemas.append("No se detectó el código de diagnóstico (CIE-10)")
-        _faltan("cie10", "Código CIE-10", None)
-    elif id_dx is None:
-        problemas.append(f"Diagnóstico {cie} no está en el catálogo CIE-10")
-        _faltan("cie10", "Código CIE-10", cie)
+    if es_permiso or es_vacaciones:
+        # Los permisos y las vacaciones no llevan diagnóstico.
+        id_dx, desc_dx = None, None
+    else:
+        id_dx, desc_dx = lookups.diagnostico_por_codigo(cie)
+        if not cie:
+            problemas.append("No se detectó el código de diagnóstico (CIE-10)")
+            _faltan("cie10", "Código CIE-10", None)
+        elif id_dx is None:
+            problemas.append(f"Diagnóstico {cie} no está en el catálogo CIE-10")
+            _faltan("cie10", "Código CIE-10", cie)
 
-    id_ent, tipo_ent = lookups.id_entidad_por_nombre(eps)
-    if id_ent is None:
-        id_ent, tipo_ent = 1, 1  # default + aviso
-        problemas.append("EPS no identificada en el documento")
-        _faltan("eps", "EPS / Entidad", eps)
+    eps_de_empleado = False
+    if es_permiso or es_vacaciones:
+        # Los permisos y las vacaciones no llevan EPS/entidad — no aplica ni se pide.
+        id_ent, tipo_ent, nombre_entidad = None, None, None
+    else:
+        # EPS: para SOAT (aseguradora de tránsito, nunca es la EPS real del paciente)
+        # vamos directo a la EPS del empleado en el catálogo. En cualquier otro caso,
+        # probamos primero lo leído en el documento; si no es claro (vacío o no matchea
+        # ningún nombre del catálogo), también respaldamos con la EPS del empleado.
+        if es_soat:
+            id_ent, tipo_ent, nombre_entidad = None, None, None
+        else:
+            id_ent, tipo_ent, nombre_entidad = lookups.id_entidad_por_nombre(eps)
+        if id_ent is None and eps_empleado:
+            id_ent, tipo_ent, nombre_entidad = lookups.id_entidad_por_nombre(eps_empleado)
+            eps_de_empleado = id_ent is not None
+        if id_ent is None:
+            id_ent, tipo_ent = 1, 1  # default + aviso
+            if es_soat:
+                problemas.append("SOAT: no se pudo determinar la EPS del empleado en el catálogo")
+            else:
+                problemas.append("EPS no identificada en el documento")
+            _faltan("eps", "EPS / Entidad", eps)
 
     # Fechas / días (campos obligatorios). Una fecha de inicio CALCULADA (fin − días)
     # es un valor válido según la regla del cliente: NO bloquea, pero se avisa en la UI
@@ -312,13 +432,26 @@ def mapear_a_staging(
         fecha_venc = (di + timedelta(days=num_dias)).isoformat()  # inicio + dias
 
     # "Confianza": completitud de los campos núcleo (no tenemos score de OCR aún).
-    nucleo = [cedula, cie, fecha_inicio, num_dias]
+    # Los permisos y vacaciones no llevan CIE-10, así que no cuenta para su completitud.
+    nucleo = [cedula, fecha_inicio, num_dias] if (es_permiso or es_vacaciones) \
+        else [cedula, cie, fecha_inicio, num_dias]
     confianza = round(sum(1 for x in nucleo if x) / len(nucleo), 3)
 
-    # Requisitos documentales → faltantes (asume que llegó la INCAPACIDAD).
+    # Requisitos documentales → faltantes (asume que llegó la INCAPACIDAD). No aplica
+    # a permisos (id_ent es None ahí, así que ya no devuelve nada igual).
     requeridos = lookups.documentos_requeridos(id_ent, id_tipo)
     faltantes = [d for d in requeridos if d != "INCAPACIDAD"]
     doc_estado = "COMPLETA" if not faltantes else "INCOMPLETA"
+
+    observaciones = (
+        _observaciones_permiso(etiqueta_tipo, perm) if es_permiso
+        else _observaciones(
+            etiqueta_tipo,
+            None if es_vacaciones else cie,
+            None if es_vacaciones else (desc_dx or diag.get("descripcion")),
+            inca,
+        )
+    )
 
     row = {
         "fecharegistro": hoy.isoformat(),
@@ -327,17 +460,18 @@ def mapear_a_staging(
         "Numerodias": num_dias,
         "fechavencimiento": fecha_venc,
         "numeroorden": overrides.get("numeroorden"),
-        "observaciones": _observaciones(etiqueta_tipo, cie, desc_dx or diag.get("descripcion"), inca),
+        "observaciones": observaciones,
         "original": 1 if estado == "ORIGINAL" else 0,
         "idlpdiagnosticos": id_dx,
         "idlpempleado": id_empleado,
         "idlptipoausentismo": id_tipo,
+        "idlpnivelincapacidad": id_nivel,
         "idlpentidad": id_ent,
         "tipoentidad": tipo_ent,
         "idlpestadosrecepausentismos": ESTADO_RECEPCION[estado],
         "cedula_leida": cedula,
-        "codigo_diagnostico_leido": cie,
-        "eps_leida": eps,
+        "codigo_diagnostico_leido": None if (es_permiso or es_vacaciones) else cie,
+        "eps_leida": None if (es_permiso or es_vacaciones) else eps,
         "paciente_leido": paciente_final,
         "confianza_ocr": confianza,
         "ocr_backend": resultado.get("ocr_backend"),
@@ -354,9 +488,12 @@ def mapear_a_staging(
         "problemas": problemas,
         "campos_faltantes": faltantes_campos,
         "tipo_ausentismo": etiqueta_tipo,
+        "nivel_incapacidad": ETIQUETAS_NIVEL.get(id_nivel),
         "estado_recepcion": estado,
         "documentos_faltantes": faltantes,
         "paciente_catalogo": nombre_catalogo,
         "paciente_ocr": nombre_ocr,
+        "entidad_catalogo": nombre_entidad,
+        "eps_de_empleado": eps_de_empleado,
         "fecha_inicio_calculada": fecha_inicio_calculada,
     }

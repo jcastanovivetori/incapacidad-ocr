@@ -216,8 +216,8 @@
           <h3>Datos para el ERP — editable</h3>
           <div class="frow"><label for="ovCedula">Cédula</label><input id="ovCedula" inputmode="numeric" /></div>
           <div class="frow"><label for="ovPaciente">Paciente</label><input id="ovPaciente" /></div>
-          <div class="frow"><label for="ovCie">CIE-10</label><input id="ovCie" placeholder="p.ej. J06.9" /></div>
-          <div class="frow"><label for="ovEps">EPS / Entidad</label><input id="ovEps" /></div>
+          <div class="frow" id="frowCie"><label for="ovCie">CIE-10</label><input id="ovCie" placeholder="p.ej. J06.9" /></div>
+          <div class="frow" id="frowEps"><label for="ovEps">EPS / Entidad</label><input id="ovEps" /></div>
           <div class="frow"><label for="ovInicio">Fecha inicio</label><input id="ovInicio" type="date" /></div>
           <div class="frow"><label for="ovDias">Días</label><input id="ovDias" type="number" min="1" max="540" /></div>
           <div class="frow"><label for="ovTipo">Tipo ausentismo</label>
@@ -226,10 +226,32 @@
               <option value="2">2 · Accidente de trabajo</option>
               <option value="3">3 · Enfermedad general</option>
               <option value="5">5 · Licencia maternidad</option>
+              <option value="7">7 · Licencia no remunerada</option>
               <option value="8">8 · Enfermedad laboral</option>
               <option value="9">9 · Licencia paternidad</option>
               <option value="10">10 · Prelicencia</option>
               <option value="11">11 · Tránsito no laboral</option>
+              <option value="12">12 · Licencia remunerada</option>
+              <option value="13">13 · Vacaciones</option>
+            </select>
+          </div>
+          <div class="frow" id="frowNivel"><label for="ovNivel">Nivel incapacidad</label>
+            <select id="ovNivel">
+              <option value="">(automático)</option>
+              <option value="1">1 · Indefinido</option>
+              <option value="2">2 · Leve (accidente trabajo)</option>
+              <option value="3">3 · Severo (accidente trabajo)</option>
+              <option value="4">4 · Grave (accidente trabajo)</option>
+              <option value="5">5 · Mortal (accidente trabajo)</option>
+              <option value="6">6 · Calificada (enfermedad laboral)</option>
+              <option value="7">7 · No calificada (enfermedad laboral)</option>
+              <option value="8">8 · Crítica (enfermedad general)</option>
+              <option value="9">9 · No crítica (enfermedad general)</option>
+              <option value="10">10 · Crítico (tránsito)</option>
+              <option value="11">11 · No crítico (tránsito)</option>
+              <option value="12">12 · No aplica (licencia maternidad)</option>
+              <option value="13">13 · No aplica. (licencia paternidad)</option>
+              <option value="14">14 · No aplica.. (prelicencia)</option>
             </select>
           </div>
           <button class="dl" id="recalcular" style="margin-top:8px;">↻ Recalcular IDs</button>
@@ -280,6 +302,50 @@ const FIELD_LABELS = {
   diagnostico: { _title: "Diagnóstico", cie10: "CIE-10", descripcion: "Descripción" },
   medico:      { _title: "Médico",      nombre: "Nombre", registro: "Registro" },
 };
+
+// Permiso (FORMATO SOLICITUD DE PERMISO): sin diagnóstico/EPS, secciones propias
+// armadas a mano (los campos viven repartidos entre inc.paciente/incapacidad/permiso).
+const TIPO_REMUNERADO_TXT = { REMUNERADO: "Sí (remunerado)", NO_REMUNERADO: "No (no remunerado)" };
+
+// Espejo de ETIQUETAS_TIPO en erp.py (códigos de tipo de ausentismo → etiqueta legible).
+const ETIQUETAS_TIPO = {
+  2: "Accidente de trabajo", 3: "Enfermedad general", 5: "Licencia maternidad",
+  7: "Licencia no remunerada", 8: "Enfermedad laboral", 9: "Licencia paternidad",
+  10: "Prelicencia", 11: "Tránsito no laboral", 12: "Licencia remunerada",
+  13: "Vacaciones",
+};
+
+// Tipos de documento que no llevan CIE-10/EPS/nivel de incapacidad.
+function sinDiagnosticoNiEps(tipoDocumento) {
+  return tipoDocumento === "permiso" || tipoDocumento === "vacaciones";
+}
+
+function seccionesIncapacidad(inc) {
+  return Object.entries(FIELD_LABELS).map(([group, labels]) => {
+    const obj = inc[group] || {};
+    const campos = Object.entries(labels).filter(([k]) => k !== "_title").map(([k, label]) => [label, obj[k]]);
+    return { titulo: labels._title, campos };
+  });
+}
+
+function seccionesPermiso(inc) {
+  const pac = inc.paciente || {}, perm = inc.permiso || {}, dur = inc.incapacidad || {};
+  return [
+    { titulo: "Solicitante", campos: [
+      ["Nombre", pac.nombre], ["Tipo doc.", pac.documento_tipo], ["Número doc.", pac.documento_numero],
+    ] },
+    { titulo: "Permiso", campos: [
+      ["Empresa", perm.empresa], ["Cargo", perm.cargo], ["Fecha solicitud", perm.fecha_solicitud],
+      ["Remunerado", TIPO_REMUNERADO_TXT[perm.tipo_remunerado] || null], ["Detalle", perm.detalle],
+    ] },
+    { titulo: "Duración", campos: [
+      ["Fecha inicio", dur.fecha_inicio], ["Fecha fin", dur.fecha_fin], ["Días", dur.dias],
+    ] },
+    { titulo: "Autoriza", campos: [
+      ["Nombre", perm.autorizado_por], ["Cargo", perm.autorizado_cargo],
+    ] },
+  ];
+}
 
 function fmtSize(b) {
   if (b < 1024) return b + " B";
@@ -348,9 +414,12 @@ goBtn.addEventListener("click", async () => {
 });
 
 function render(data) {
-  $("pillEngine").textContent = `OCR: ${data.ocr_backend} · ${data.extractor}`;
   const inc = data.incapacidad || {};
-  const cie = inc.diagnostico && inc.diagnostico.cie10;
+  const esPermiso = inc.tipo_documento === "permiso";
+  const tipoDocBadge = inc.tipo_documento && inc.tipo_documento !== "incapacidad"
+    ? " · " + inc.tipo_documento.toUpperCase() : "";
+  $("pillEngine").textContent = `OCR: ${data.ocr_backend} · ${data.extractor}` + tipoDocBadge;
+  const cie = !sinDiagnosticoNiEps(inc.tipo_documento) && inc.diagnostico && inc.diagnostico.cie10;
   const pillCie = $("pillCie");
   if (cie) { pillCie.textContent = "CIE-10: " + cie; pillCie.style.display = ""; }
   else { pillCie.style.display = "none"; }
@@ -361,14 +430,11 @@ function render(data) {
 
   const grid = $("grid");
   grid.innerHTML = "";
-  for (const [group, labels] of Object.entries(FIELD_LABELS)) {
-    const obj = inc[group] || {};
+  for (const { titulo, campos } of (esPermiso ? seccionesPermiso(inc) : seccionesIncapacidad(inc))) {
     const sec = document.createElement("div");
     sec.className = "sec";
-    let html = `<h3>${labels._title}</h3>`;
-    for (const [key, label] of Object.entries(labels)) {
-      if (key === "_title") continue;
-      const val = obj[key];
+    let html = `<h3>${titulo}</h3>`;
+    for (const [label, val] of campos) {
       const isNull = val === null || val === undefined || val === "";
       html += `<div class="kv"><span class="k">${label}</span>` +
               `<span class="v ${isNull ? "null" : ""}">${isNull ? "—" : escapeHtml(String(val))}</span></div>`;
@@ -388,6 +454,7 @@ const ERP_RESOLVED = [
   ["ID diagnóstico (← CIE-10)", "idlpdiagnosticos"],
   ["ID entidad/EPS", "idlpentidad"],
   ["Tipo ausentismo", "idlptipoausentismo"],
+  ["Nivel incapacidad", "idlpnivelincapacidad"],
   ["Estado recepción", "idlpestadosrecepausentismos"],
   ["Fecha registro", "fecharegistro"],
   ["Fecha vencimiento", "fechavencimiento"],
@@ -408,24 +475,31 @@ function overrides() {
     fecha_inicio: $("ovInicio").value.trim(),
     dias: $("ovDias").value.trim(),
     tipo: $("ovTipo").value.trim(),
+    nivel: $("ovNivel").value.trim(),
   };
 }
 
 // Rellena el formulario editable a partir del mapeo (solo la primera vez / al procesar).
 function fillForm(staging) {
   const row = staging.row || {};
+  const tipoDoc = lastResult && lastResult.incapacidad && lastResult.incapacidad.tipo_documento;
+  // CIE-10/EPS/Nivel no aplican a permisos ni vacaciones — se ocultan para no confundir.
+  $("frowCie").style.display = sinDiagnosticoNiEps(tipoDoc) ? "none" : "";
+  $("frowEps").style.display = sinDiagnosticoNiEps(tipoDoc) ? "none" : "";
+  $("frowNivel").style.display = sinDiagnosticoNiEps(tipoDoc) ? "none" : "";
   $("ovCedula").value = row.cedula_leida || "";
   $("ovPaciente").value = staging.paciente_ocr || row.paciente_leido || "";
   $("ovCie").value = row.codigo_diagnostico_leido || "";
   $("ovEps").value = row.eps_leida || "";
   $("ovInicio").value = row.fechainicio || "";
   $("ovDias").value = row.Numerodias != null ? row.Numerodias : "";
-  $("ovTipo").value = "";  // automático por defecto
+  $("ovTipo").value = "";   // automático por defecto (se ve resuelto en el panel derecho)
+  $("ovNivel").value = ""; // idem: automático según el tipo (ver erp.NIVEL_INCAPACIDAD_DEFAULT)
 }
 
 // Marca en rojo los campos obligatorios que faltan.
 function markMissing(staging) {
-  const map = { cedula: "ovCedula", cie10: "ovCie", eps: "ovEps", fecha_inicio: "ovInicio", dias: "ovDias" };
+  const map = { cedula: "ovCedula", cie10: "ovCie", eps: "ovEps", fecha_inicio: "ovInicio", dias: "ovDias", tipo: "ovTipo" };
   Object.values(map).forEach((id) => $(id).classList.remove("missing"));
   (staging.campos_faltantes || []).forEach((c) => { if (map[c.campo]) $(map[c.campo]).classList.add("missing"); });
 }
@@ -455,15 +529,32 @@ function renderResolved(staging) {
     html += `<div class="kv"><span class="k">Paciente (catálogo)</span>` +
             `<span class="v">${escapeHtml(staging.paciente_catalogo)}</span></div>`;
   }
+  if (staging.entidad_catalogo) {
+    html += `<div class="kv"><span class="k">EPS (catálogo)</span>` +
+            `<span class="v">${escapeHtml(staging.entidad_catalogo)}` +
+            (staging.eps_de_empleado ? ' <small style="color:#b45309">(no clara en el documento: EPS del empleado)</small>' : "") +
+            `</span></div>`;
+  }
   html += `<div class="kv"><span class="k">Fecha inicio</span>` +
           `<span class="v ${row.fechainicio ? "" : "null"}">${row.fechainicio ? escapeHtml(row.fechainicio) : "—"}` +
           (staging.fecha_inicio_calculada ? ' <small style="color:#b45309">(calculada: fin − días)</small>' : "") +
           `</span></div>`;
   html += `<div class="kv"><span class="k">Días</span>` +
           `<span class="v ${row.Numerodias ? "" : "null"}">${row.Numerodias != null ? row.Numerodias : "—"}</span></div>`;
-  for (const [label, key] of ERP_RESOLVED) {
+  const tipoDocResuelto = lastResult && lastResult.incapacidad && lastResult.incapacidad.tipo_documento;
+  // Un permiso/vacaciones no tiene diagnóstico, EPS ni nivel: esas filas solo confundirían (siempre "—").
+  const resolvedFiltrado = sinDiagnosticoNiEps(tipoDocResuelto)
+    ? ERP_RESOLVED.filter(([, key]) => key !== "idlpdiagnosticos" && key !== "idlpentidad" && key !== "idlpnivelincapacidad")
+    : ERP_RESOLVED;
+  for (const [label, key] of resolvedFiltrado) {
     let val = row[key];
     if (key === "original") val = val ? "Sí" : "No";
+    if (key === "idlptipoausentismo" && val != null && staging.tipo_ausentismo) {
+      val = `${val} · ${staging.tipo_ausentismo}`;
+    }
+    if (key === "idlpnivelincapacidad" && val != null && staging.nivel_incapacidad) {
+      val = `${val} · ${staging.nivel_incapacidad}`;
+    }
     const isNull = val === null || val === undefined || val === "";
     html += `<div class="kv"><span class="k">${label}</span>` +
             `<span class="v ${isNull ? "null" : ""}">${isNull ? "—" : escapeHtml(String(val))}</span></div>`;
@@ -567,17 +658,20 @@ async function cargarBandeja() {
     const data = await resp.json();
     if (!data.db_disponible) { body.innerHTML = '<p class="hint">Base de datos no disponible.</p>'; return; }
     if (!data.registros.length) { body.innerHTML = '<p class="hint">Sin registros para este filtro.</p>'; return; }
-    let html = '<table class="bandeja"><thead><tr><th>ID</th><th>Estado</th><th>Paciente</th><th>Cédula</th>' +
-               '<th>Inicio</th><th>Días</th><th>Empl.</th><th>Dx</th><th>Pendiente</th><th></th></tr></thead><tbody>';
+    let html = '<table class="bandeja"><thead><tr><th>ID</th><th>Estado</th><th>Tipo</th><th>Paciente</th><th>Cédula</th>' +
+               '<th>Inicio</th><th>Fin</th><th>Días</th><th>Dx</th><th>Pendiente</th><th></th></tr></thead><tbody>';
     for (const r of data.registros) {
       const pend = r.problemas ? escapeHtml(r.problemas) : "—";
+      const tipo = r.idlptipoausentismo != null
+        ? `${r.idlptipoausentismo} · ${ETIQUETAS_TIPO[r.idlptipoausentismo] || "?"}` : "—";
       const acts = r.estado === "PENDIENTE_REVISION"
         ? `<button class="btn ok sm" data-ap="${r.id}">✓</button> <button class="btn danger sm" data-rc="${r.id}">✗</button>`
         : "—";
       html += `<tr><td>${r.id}</td><td><span class="estado ${r.estado}">${escapeHtml(r.estado)}</span></td>` +
+              `<td>${escapeHtml(tipo)}</td>` +
               `<td>${escapeHtml(r.paciente_leido || "—")}</td><td>${escapeHtml(r.cedula_leida || "—")}</td>` +
-              `<td>${escapeHtml(r.fechainicio || "—")}</td><td>${r.Numerodias != null ? r.Numerodias : "—"}</td>` +
-              `<td>${r.idlpempleado != null ? r.idlpempleado : "—"}</td><td>${r.idlpdiagnosticos != null ? r.idlpdiagnosticos : "—"}</td>` +
+              `<td>${escapeHtml(r.fechainicio || "—")}</td><td>${escapeHtml(r.fechavencimiento || "—")}</td>` +
+              `<td>${r.Numerodias != null ? r.Numerodias : "—"}</td><td>${escapeHtml(r.codigo_diagnostico_leido || "—")}</td>` +
               `<td style="max-width:240px">${pend}</td><td class="acts">${acts}</td></tr>`;
     }
     html += "</tbody></table>";

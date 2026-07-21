@@ -52,6 +52,23 @@ class OCRBackend(Protocol):
         ...
 
 
+def _combinar_paginas(textos: list[str]) -> str:
+    """Combina el texto OCR de varias páginas de un mismo documento.
+
+    Los PDFs reales suelen traer la incapacidad/permiso/vacaciones JUNTO con otras
+    páginas del mismo trámite (certificado de nacido vivo, epicrisis, cédula
+    escaneada...). Si se concatenan todas tal cual, sus cédulas/diagnósticos/fechas
+    se mezclan con los del ausentismo real y confunden al extractor. Si alguna
+    página trae el documento de ausentismo en sí (``es_pagina_relevante``), se usa
+    SOLO esa — si ninguna la trae (documento de una sola página o formato no
+    reconocido), se concatenan todas como antes (comportamiento sin cambios).
+    """
+    from .extract import es_pagina_relevante
+
+    relevantes = [t for t in textos if es_pagina_relevante(t)]
+    return "\n".join(relevantes if relevantes else textos).strip()
+
+
 class StubOCR:
     """Backend determinista para pruebas: devuelve el texto que se le pasa."""
 
@@ -91,7 +108,7 @@ class RapidOCRBackend:
         from .preprocess import load_pages
 
         pages = load_pages(image_path)
-        return "\n".join(self._ocr_one(page) for page in pages).strip()
+        return _combinar_paginas([self._ocr_one(page) for page in pages])
 
 
 class OllamaVisionOCR:
@@ -142,7 +159,7 @@ class OllamaVisionOCR:
                 except (httpx.HTTPStatusError, httpx.RequestError) as e:
                     raise translate_ollama_error(e, self.model, "visión") from e
                 out.append(resp.json()["message"]["content"])
-        return "\n".join(out).strip()
+        return _combinar_paginas(out)
 
 
 def get_ocr_backend(name: str, **kwargs) -> OCRBackend:

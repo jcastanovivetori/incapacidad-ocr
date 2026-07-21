@@ -16,6 +16,7 @@ from typing import Any, Protocol
 def empty_record() -> dict[str, Any]:
     """Esquema objetivo de una incapacidad (campos en None por defecto)."""
     return {
+        "tipo_documento": "incapacidad",  # o "permiso" (FORMATO SOLICITUD DE PERMISO)
         "paciente": {"nombre": None, "documento_tipo": None, "documento_numero": None},
         "entidad": {"eps": None, "ips_prestador": None},
         "incapacidad": {
@@ -25,9 +26,27 @@ def empty_record() -> dict[str, Any]:
             "fecha_expedicion": None,
             "tipo": None,
             "origen": None,
+            # Certificados EPS de licencia de maternidad (tipo Sura): "Tipo de
+            # Licencia" (PARTO VIABLE / PARTO NO VIABLE) no es un campo del ERP,
+            # se lleva como nota en observaciones (ver erp._observaciones).
+            "tipo_licencia": None,
         },
         "diagnostico": {"cie10": None, "descripcion": None},
         "medico": {"nombre": None, "registro": None},
+        # Solo se llena cuando tipo_documento == "permiso" (licencia remunerada/no
+        # remunerada). No aplica diagnóstico ni EPS para este tipo de ausentismo.
+        "permiso": {
+            "empresa": None,
+            "cargo": None,
+            "fecha_solicitud": None,
+            "tipo_remunerado": None,  # "REMUNERADO" | "NO_REMUNERADO"
+            "detalle": None,
+            "horas_desde": None,
+            "horas_hasta": None,
+            "horas_total": None,
+            "autorizado_por": None,
+            "autorizado_cargo": None,
+        },
     }
 
 
@@ -59,17 +78,33 @@ def _first(text: str, pattern: str, group: int = 1, flags: int = re.I) -> str | 
     return out or None
 
 
+def _fecha_valida(y: int, mo: int, d: int) -> bool:
+    """True si (y, mo, d) es una fecha de calendario real (rechaza día 54, mes 13,
+    31 de febrero, etc.) — el OCR a veces deja pasar dígitos imposibles."""
+    from datetime import date as _date
+    try:
+        _date(y, mo, d)
+        return True
+    except ValueError:
+        return False
+
+
 def _norm_date(value: str | None) -> str | None:
-    """Normaliza a YYYY-MM-DD desde dd/mm/yyyy, yyyy-mm-dd o dd-mmm-yy(yy)."""
+    """Normaliza a YYYY-MM-DD desde dd/mm/yyyy, yyyy-mm-dd o dd-mmm-yy(yy).
+    Devuelve None si el resultado no es una fecha de calendario válida (nunca se
+    fabrica ni se deja pasar un día/mes imposible)."""
     if not value:
         return None
     value = value.strip()
     m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", value)
     if m:
-        return value
+        y, mo, d = m.groups()
+        return value if _fecha_valida(int(y), int(mo), int(d)) else None
     m = re.fullmatch(r"(\d{1,2})[/-](\d{1,2})[/-](\d{4})", value)
     if m:
         d, mo, y = m.groups()
+        if not _fecha_valida(int(y), int(mo), int(d)):
+            return None
         return f"{y}-{int(mo):02d}-{int(d):02d}"
     # dd-mmm-yy(yy): 10-jun-26, 10-jun26, 10 Jun.2026
     m = re.fullmatch(r"(\d{1,2})[\s.\-]*([A-Za-zÁÉÍÓÚáéíóú]{3})[a-z]*[\s.\-]*(\d{2,4})", value)
@@ -78,12 +113,111 @@ def _norm_date(value: str | None) -> str | None:
         mo = _MONTHS_ES.get(mon[:3].lower())
         if mo:
             year = y if len(y) == 4 else f"20{y}"
+            if not _fecha_valida(int(year), int(mo), int(d)):
+                return None
             return f"{year}-{mo}-{int(d):02d}"
     return None
 
 
 # Patrón de fecha que tolera los tres formatos vistos en documentos reales.
 _DATE = r"(\d{4}-\d{2}-\d{2}|\d{1,2}[/-]\d{1,2}[/-]\d{4}|\d{1,2}[\s.\-]*[A-Za-z]{3}[a-z]*[\s.\-]*\d{2,4})"
+
+# --- Fecha "escrita" en español, sin año (certificados EPS tipo Sura) ------------
+# "VIERNES 10 DEJULIO" / "JUEVES23DEJULIO": día de la semana opcional + día + "DE"
+# + mes, todo pegado sin espacios por el OCR. El AÑO en este formato sale del OCR
+# DESPUÉS, aparte ("DE 2026"), una vez por cada fecha, en el MISMO orden en que
+# aparecen las fechas — por eso se emparejan por posición, no por cercanía.
+_MESES_ES = {
+    "enero": "01", "febrero": "02", "marzo": "03", "abril": "04", "mayo": "05", "junio": "06",
+    "julio": "07", "agosto": "08", "septiembre": "09", "setiembre": "09", "octubre": "10",
+    "noviembre": "11", "diciembre": "12",
+}
+_FECHA_DM_ESCRITA = re.compile(
+    r"(?i)(\d{1,2})\s*DE\s*(" + "|".join(_MESES_ES) + r")\w*"
+)
+
+
+def _fecha_inicio_fin_escrita(text: str) -> tuple[str | None, str | None]:
+    """(inicio, fin) para certificados EPS con fecha escrita (sin año pegado): sólo
+    se activa si el documento trae la etiqueta "Fecha Inicio" en algún lado (evita
+    falsos positivos con otras fechas escritas del documento), pero NO se acota a
+    un bloque cerca de esa etiqueta — la posición de "Tipo Generación" respecto a
+    "Fecha Inicio" varía de un documento a otro (a veces antes, a veces después),
+    así que se buscan las DOS parejas día+mes / año en TODO el texto, en orden de
+    aparición (1ª = inicio, 2ª = fin)."""
+    if not re.search(r"(?i)fecha\s*[il]nici\w*", text):
+        return None, None
+
+    dm = _FECHA_DM_ESCRITA.findall(text)
+    years = re.findall(r"(?i)\bDE\s*(\d{4})\b", text)
+    if len(dm) < 2 or len(years) < 2:
+        return None, None
+    fechas: list[str | None] = []
+    for (dia, mes), anio in zip(dm[:2], years[:2]):
+        mo = _MESES_ES.get(mes.lower())
+        if mo and _fecha_valida(int(anio), int(mo), int(dia)):
+            fechas.append(f"{anio}-{mo}-{int(dia):02d}")
+        else:
+            fechas.append(None)
+    inicio = fechas[0] if fechas else None
+    fin = fechas[1] if len(fechas) > 1 else None
+    return inicio, fin
+
+
+# --- Carta de "Notificación Periodo de Vacaciones" (tipo ausentismo 13) ----------
+# No es un formulario de casillas sino una CARTA en prosa: las fechas salen
+# escritas en palabras con el número real entre paréntesis, p.ej. "...a partir del
+# veintinueve (29) de mayo de dos mil veintiseis (2026)...". No lleva diagnóstico
+# ni EPS (ver es_vacaciones en erp.mapear_a_staging) — el nombre/cédula del
+# empleado SÍ se extraen con las reglas genéricas de paciente (mismo patrón "CC:").
+_VACACIONES_ANCHOR = re.compile(r"(?i)notificaci[oó]n\s*(?:de\s*)?periodos?\s*de\s*vacaciones")
+
+
+def es_formato_vacaciones(text: str) -> bool:
+    return bool(_VACACIONES_ANCHOR.search(text))
+
+
+def _fecha_parentesis(text: str, pos: int, window: int = 60) -> str | None:
+    """Fecha escrita en prosa con el número real entre paréntesis: '...veintinueve
+    (29) de mayo de dos mil veintiseis (2026)...'. Busca desde `pos` hacia adelante."""
+    seg = text[pos: pos + window]
+    m = re.search(
+        r"(?i)\((\d{1,2})\)\s*de\s*(" + "|".join(_MESES_ES) + r")\w*\s*de\s*[^(]{0,40}?\((\d{4})\)",
+        seg,
+    )
+    if not m:
+        return None
+    d, mes, y = m.groups()
+    mo = _MESES_ES.get(mes.lower())
+    if mo and _fecha_valida(int(y), int(mo), int(d)):
+        return f"{y}-{mo}-{int(d):02d}"
+    return None
+
+
+def _fechas_vacaciones(text: str) -> tuple[str | None, str | None]:
+    """(inicio, fin): toma la PRIMERA fecha tras "a partir del" y la ÚLTIMA tras
+    "hasta el" — la carta puede asignar varios periodos consecutivos seguidos."""
+    inicios = [_fecha_parentesis(text, m.end()) for m in re.finditer(r"(?i)a\s*partir\s*del?\b", text)]
+    fines = [_fecha_parentesis(text, m.end()) for m in re.finditer(r"(?i)\bhasta\s*el\b", text)]
+    inicios = [f for f in inicios if f]
+    fines = [f for f in fines if f]
+    return (inicios[0] if inicios else None), (fines[-1] if fines else None)
+
+
+# "Tipo de Licencia" (maternidad): enumeración conocida del ERP/EPS, glued por el
+# OCR ("PARTONOVIABLE") — se normaliza solo para los valores conocidos; cualquier
+# otro se deja tal cual (se muestra igual como observación, sin bloquear nada).
+_TIPO_LICENCIA_CONOCIDOS = {
+    "PARTOVIABLE": "PARTO VIABLE",
+    "PARTONOVIABLE": "PARTO NO VIABLE",
+}
+
+
+def _norm_tipo_licencia(valor: str | None) -> str | None:
+    if not valor:
+        return None
+    clave = re.sub(r"[^A-ZÑ]", "", valor.upper())
+    return _TIPO_LICENCIA_CONOCIDOS.get(clave, valor.strip())
 
 
 def _find_date(text: str, label_pattern: str) -> str | None:
@@ -100,7 +234,16 @@ def _find_date(text: str, label_pattern: str) -> str | None:
         return _norm_date(after.group(1))
     # Si no, justo antes del rótulo (sólo separadores/saltos, sin cruzar letras).
     before = re.search(rf"(?i){_DATE}[\s).:\-]{{0,4}}{label_pattern}", text)
-    return _norm_date(before.group(1)) if before else None
+    if not before:
+        return None
+    # PERO: si esa fecha ya está pegada a SU PROPIA etiqueta justo antes
+    # ("...Fecha Fin:2026-06-11\nFecha Inicio:"), es el valor de OTRO campo que
+    # quedó ahí por el desorden del OCR de tabla — no es un valor suelto para
+    # el rótulo que buscamos. Se descarta en vez de robarle el dato al campo vecino.
+    previo = text[max(0, before.start() - 20): before.start()]
+    if re.search(r"(?i)[a-záéíóúñ]\s*:\s*$", previo):
+        return None
+    return _norm_date(before.group(1))
 
 
 def _days_between(inicio: str | None, fin: str | None) -> int | None:
@@ -279,20 +422,323 @@ def _clean_name(raw: str | None) -> str | None:
     return name or None
 
 
+# --------------------------------------------------------------------------- #
+# Formato "SOLICITUD DE PERMISO" (licencia remunerada/no remunerada) — un tipo de
+# ausentismo distinto a la incapacidad médica: no lleva diagnóstico ni EPS. Es un
+# formulario de casillas (X), no de texto libre, así que se trata aparte.
+# --------------------------------------------------------------------------- #
+# \s* (no \s+): el RapidOCR real pega las palabras de los rótulos sin espacio
+# ("SOLICITUDDEPERMISO"), así que la tolerancia debe ser CERO-o-más, no una-o-más.
+_PERMISO_ANCHOR = re.compile(r"(?i)solicitud\s*de\s*permiso")
+
+# Triplete D M A suelto (celdas de tabla que el OCR separa: "06 06 26"), como
+# respaldo cuando la fecha NO sale ya unida en un solo token (dd/mm/aaaa).
+_DMA_TRIPLET = r"(\d{1,2})[\s/\-]+(\d{1,2})[\s/\-]+(\d{2,4})"
+
+# Nombre/razón social en Título ("Mishell Dayana Gamarra Gómez", "Indulacteos de
+# Colombia"): primera palabra Capitalizada+minúsculas (así NO matchea encabezados
+# en MAYÚSCULA sostenida como "DOCUMENTO"/"CARGO"/"EMPRESA"), y admite conectores
+# en minúscula (de/del/la/...) entre palabras siguientes.
+_NOMBRE_PROPIO = (
+    r"([A-ZÑÁÉÍÓÚ][a-zñáéíóúü]+(?:\s+(?:[A-ZÑÁÉÍÓÚ][a-zñáéíóúü]+|de|del|la|las|los|y))"
+    r"{0,5})"
+)
+# Nombre de PERSONA: 2-4 palabras en Título, SIN conectores (evita que se fusione
+# con lo que venga justo después, p.ej. el nombre de la empresa en la misma fila).
+_NOMBRE_PERSONA = r"([A-ZÑÁÉÍÓÚ][a-zñáéíóúü]+(?:\s+[A-ZÑÁÉÍÓÚ][a-zñáéíóúü]+){1,3})"
+
+
+def _valores_tras_etiqueta(text: str, label_pattern: str, window: int = 60) -> list[str]:
+    """Para CADA aparición de la etiqueta, la primera línea no vacía que sigue.
+
+    Sirve para rótulos que se repiten (p.ej. "NOMBRE"/"CARGO" salen dos veces en
+    la sección de aprobación: solicitante y quien autoriza, en ese orden).
+    """
+    out = []
+    for m in re.finditer(rf"(?i){label_pattern}", text):
+        seg = re.sub(r"^\s*[:\-]?\s*", "", text[m.end():m.end() + window])
+        for line in seg.split("\n"):
+            line = line.strip()
+            if line:
+                out.append(line)
+                break
+    return out
+
+
+def es_formato_permiso(text: str) -> bool:
+    """Detecta el FORMATO SOLICITUD DE PERMISO (vs. certificado de incapacidad)."""
+    return bool(_PERMISO_ANCHOR.search(text))
+
+
+# PDFs reales suelen traer la incapacidad JUNTO con otras páginas del mismo trámite
+# clínico (certificado de nacido vivo, epicrisis, cédula escaneada...) que si se
+# mezclan en el mismo texto confunden al extractor (otras cédulas/diagnósticos/
+# fechas que no son los del ausentismo). Estos anclajes identifican la página que
+# SÍ trae el certificado de incapacidad en sí (título/encabezado de esa página).
+_INCAPACIDAD_PAGE_ANCHOR = re.compile(
+    r"(?i)incapacidad\s*medica\b|certificado\s*de\s*incapacidad|detalle\s*de\s*la\s*incapacidad"
+)
+
+
+def es_pagina_relevante(text: str) -> bool:
+    """True si esta PÁGINA (de un documento multi-página) trae el ausentismo en sí
+    (incapacidad/permiso/vacaciones), no una página acompañante del mismo trámite."""
+    return bool(
+        _INCAPACIDAD_PAGE_ANCHOR.search(text)
+        or es_formato_permiso(text)
+        or es_formato_vacaciones(text)
+    )
+
+
+def _find_date_or_triplet(text: str, label_pattern: str) -> str | None:
+    """Como ``_find_date``, pero además tolera un D/M/A separado por espacios
+    (celdas de tabla) cuando la fecha no viene en un solo token dd/mm/aaaa."""
+    d = _find_date(text, label_pattern)
+    if d:
+        return d
+    m = re.search(rf"(?i){label_pattern}[^\d]{{0,60}}?{_DMA_TRIPLET}", text)
+    if not m:
+        return None
+    dd, mo, yy = m.groups()
+    yy = yy if len(yy) == 4 else f"20{yy}"
+    try:
+        d1, m1, y1 = int(dd), int(mo), int(yy)
+    except ValueError:
+        return None
+    if not _fecha_valida(y1, m1, d1):
+        return None
+    return f"{yy}-{m1:02d}-{d1:02d}"
+
+
+def _near_label(text: str, label_pattern: str, value_pattern: str, window: int = 80) -> str | None:
+    """Valor que aparece dentro de ``window`` caracteres después de la etiqueta
+    (tolera que etiqueta y valor queden en filas distintas de una tabla OCR'd)."""
+    m = re.search(rf"(?i){label_pattern}", text)
+    if not m:
+        return None
+    seg = text[m.end():m.end() + window]
+    mv = re.search(value_pattern, seg)
+    return mv.group(1).strip() if mv else None
+
+
+def _extraer_tipo_remunerado(text: str) -> str | None:
+    """'X'/'✓' junto a la casilla de Remunerado / No Remunerado.
+
+    Heurística de ORDEN DE TEXTO (no de coordenadas: RapidOCR no las expone hoy):
+    en este formato la fila es "[X] Remunerado   [ ] No Remunerado", así que la
+    marca queda pegada -antes o después- de la etiqueta de SU PROPIA casilla.
+    """
+    if re.search(
+        r"(?i)(?:[X✓]\s*[.)\-]?\s*No\s*Remunerado|No\s*Remunerado\s*[.)\-]?\s*[X✓])", text
+    ):
+        return "NO_REMUNERADO"
+    for m in re.finditer(r"(?i)Remunerado\b", text):
+        antes = text[max(0, m.start() - 12):m.start()]
+        despues = text[m.end():m.end() + 4]
+        if re.search(r"(?i)\bno\b", antes):
+            continue  # es la casilla "No Remunerado", ya descartada arriba
+        if re.search(r"[X✓]", antes) or re.search(r"[X✓]", despues):
+            return "REMUNERADO"
+    return None
+
+
+def _extraer_permiso(text: str) -> dict[str, Any]:
+    rec = empty_record()
+    rec["tipo_documento"] = "permiso"
+    perm = rec["permiso"]
+    t = text
+
+    # --- 1. Datos de la solicitud: fecha, nombre, documento, empresa ---
+    # OJO: en documentos reales el OCR NO respeta el orden de columnas (el nombre
+    # puede salir ANTES que la fecha, y la empresa partida en dos por los dígitos
+    # de la fecha en medio). Por eso NO se consume secuencialmente: cada campo se
+    # busca en TODO el bloque, con un patrón lo bastante específico para no cruzarse
+    # con los demás (dígitos largos = documento; texto Título = nombre/empresa).
+    m1 = re.search(r"(?i)datos\s*de\s*la\s*solicitud", t)
+    m2 = re.search(r"(?i)tipo\s*de\s*permiso", t)
+    bloque = t[m1.end():m2.start()] if (m1 and m2) else (t[m1.end():] if m1 else t)
+
+    fm = re.search(_DATE, bloque)
+    if fm:
+        perm["fecha_solicitud"] = _norm_date(fm.group(0))
+    else:
+        tm = re.search(_DMA_TRIPLET, bloque)
+        if tm:
+            dd, mo, yy = tm.groups()
+            yy = yy if len(yy) == 4 else f"20{yy}"
+            try:
+                if _fecha_valida(int(yy), int(mo), int(dd)):
+                    perm["fecha_solicitud"] = f"{yy}-{int(mo):02d}-{int(dd):02d}"
+            except ValueError:
+                pass
+
+    # El nombre de la persona se aísla con un patrón ESTRICTO (2-4 palabras, sin
+    # conectores en minúscula) para que NO se fusione con lo que venga justo
+    # después en la misma fila (p.ej. el nombre de la empresa: "Mishell Dayana
+    # Gamarra Gomez" + "Indulacteos de" se verían como un solo nombre de 6
+    # palabras si se usara el patrón permisivo de razón social).
+    nm = re.search(_NOMBRE_PERSONA, bloque)
+    if nm:
+        rec["paciente"]["nombre"] = _clean_name(nm.group(1))
+        resto = bloque[:nm.start()] + bloque[nm.end():]  # el resto, sin el nombre
+    else:
+        resto = bloque
+    # La empresa queda en los tramos de texto-Título restantes (a veces partida en
+    # dos, p.ej. "Indulacteos de" ... "Colombia" con la fecha/documento en medio).
+    frag_empresa = [re.sub(r"\s+", " ", m.group(1)).strip() for m in re.finditer(_NOMBRE_PROPIO, resto)]
+    if frag_empresa:
+        perm["empresa"] = " ".join(frag_empresa)
+
+    dm = re.search(r"(\d{6,12})", bloque)
+    if dm:
+        rec["paciente"]["documento_numero"] = dm.group(1)
+        rec["paciente"]["documento_tipo"] = "CC"
+
+    # Respaldo genérico si el bloque no se pudo acotar (p.ej. no se detectó "2. TIPO
+    # DE PERMISO"): intenta por etiqueta directa antes de dejarlo vacío.
+    if not rec["paciente"]["nombre"]:
+        rec["paciente"]["nombre"] = _clean_name(_near_label(
+            t, r"nombre\s*completo\s*(?:del\s*solicitante)?\s*[:\-]?", _NOMBRE_PROPIO, window=250
+        ))
+    if not rec["paciente"]["documento_numero"]:
+        doc = _near_label(t, r"documento\s*(?:de\s*identidad)?", r"(\d{6,12})", window=250)
+        if doc:
+            rec["paciente"]["documento_numero"] = doc
+            rec["paciente"]["documento_tipo"] = "CC"
+
+    # --- 2. Tipo de permiso: casilla remunerado / no remunerado ---
+    perm["tipo_remunerado"] = _extraer_tipo_remunerado(t)
+    rec["incapacidad"]["tipo"] = {
+        "REMUNERADO": "LICENCIA REMUNERADA", "NO_REMUNERADO": "LICENCIA NO REMUNERADA",
+    }.get(perm["tipo_remunerado"])
+    perm["detalle"] = _first(
+        t, r"(?is)detalle\s*[:\-]?\s*(.*?)(?:\n\s*\n|(?:\d+\.\s*)?duraci[oó]n\s*del\s*permiso|$)"
+    )
+
+    # --- 3. Duración: días (desde/hasta) u horas, si es un permiso parcial ---
+    # Las DOS fechas (desde/hasta) salen del OCR una detrás de otra, DESPUÉS de
+    # todos los rótulos de esta sección — por eso se toman en orden de aparición
+    # (la primera = desde, la segunda = hasta) en vez de buscar cada una "cerca"
+    # de su etiqueta (ambas etiquetas quedan pegadas juntas, lejos de sus fechas).
+    m3 = re.search(r"(?i)duraci[oó]n\s*del\s*permiso", t)
+    m4 = re.search(r"(?i)aprobaci[oó]n\s*de\s*la\s*solicitud", t)
+    bloque_dur = t[m3.end():m4.start()] if (m3 and m4) else (t[m3.end():] if m3 else "")
+    fechas = [_norm_date(m.group(0)) for m in re.finditer(_DATE, bloque_dur)]
+    if len(fechas) < 2:
+        for m in re.finditer(_DMA_TRIPLET, bloque_dur):
+            dd, mo, yy = m.groups()
+            yy = yy if len(yy) == 4 else f"20{yy}"
+            try:
+                if _fecha_valida(int(yy), int(mo), int(dd)):
+                    fechas.append(f"{yy}-{int(mo):02d}-{int(dd):02d}")
+            except ValueError:
+                pass
+    fechas = [f for f in fechas if f][:2]
+    if fechas:
+        rec["incapacidad"]["fecha_inicio"] = fechas[0]
+    if len(fechas) > 1:
+        rec["incapacidad"]["fecha_fin"] = fechas[1]
+    elif fechas:
+        rec["incapacidad"]["fecha_fin"] = fechas[0]  # un solo día: desde == hasta
+    rec["incapacidad"]["dias"] = _days_between(
+        rec["incapacidad"]["fecha_inicio"], rec["incapacidad"]["fecha_fin"]
+    )
+    _TIME = r"(\d{1,2}:\d{2}\s*(?:[ap]\.?\s*m\.?)?)"
+    perm["horas_desde"] = _near_label(t, r"horas?[^\n]{0,20}\bdesde\b", _TIME, window=20)
+    perm["horas_hasta"] = _near_label(t, r"\bhasta\b[^\n]{0,20}horas?", _TIME, window=20)
+    perm["horas_total"] = _first(t, r"(?i)n[uú]mero\s*total\s*de\s*horas\s*[:\-]?\s*(\d{1,3})")
+
+    # --- 4. Aprobación: cargo del solicitante / nombre y cargo de quien autoriza ---
+    # "SOLICITADO POR" y "AUTORIZADO POR" suelen salir del OCR PEGADOS uno al otro
+    # (dos encabezados de columna juntos), seguidos de "NOMBRE"/"CARGO" que TAMBIÉN
+    # se repiten dos veces (solicitante primero, autorizador después) — por eso se
+    # toman por POSICIÓN (1ª aparición = solicitante, 2ª = quien autoriza) en vez
+    # de intentar acotar un segmento de texto por etiqueta.
+    m_sol = re.search(r"(?i)solicitado\s*por", t)
+    seg_aprob = t[m_sol.start():] if m_sol else t
+    cargos = _valores_tras_etiqueta(seg_aprob, r"\bcargo\b\s*[:\-]?")
+    nombres = _valores_tras_etiqueta(seg_aprob, r"\bnombre\b\s*[:\-]?")
+    if cargos:
+        perm["cargo"] = cargos[0]
+    if len(cargos) > 1:
+        perm["autorizado_cargo"] = cargos[1]
+    if len(nombres) > 1:
+        perm["autorizado_por"] = _clean_name(nombres[1])
+
+    return rec
+
+
+# --------------------------------------------------------------------------- #
+# Tabla "DETALLE DE LA INCAPACIDAD" (formato Clínica del Cesar y similares): 5
+# encabezados de columna seguidos de sus 5 valores, en el MISMO orden — mucho más
+# fiable que las heurísticas genéricas cuando este bloque está presente (evita
+# falsos positivos como tomar un CIE-10 de otra parte de la página o confundir
+# "Dias Inc." con la descripción del diagnóstico).
+# --------------------------------------------------------------------------- #
+def _extraer_detalle_incapacidad(text: str) -> dict[str, Any] | None:
+    m = re.search(
+        r"(?i)detalle\s*de\s*la\s*incapacidad\s*"
+        r"causa\s*externa\s*diagnostico\s*dias\s*inc\.?\s*inicio\s*finalizaci[oó]n\s*"
+        r"([^\n]+)\n([^\n]+)\n(\d{1,3})\n(\d{1,2}/\d{1,2}/\d{4})\n(\d{1,2}/\d{1,2}/\d{4})",
+        text,
+    )
+    if not m:
+        return None
+    origen, dx, dias, fi, ff = (g.strip() for g in m.groups())
+    dxm = re.match(r"([A-Za-z0-9]{3,4})\s*(.*)$", dx)
+    cie_raw = dxm.group(1).upper() if dxm else None
+    desc = (dxm.group(2).strip() if dxm else dx) or None
+    code, _fixes = _normalize_cie10(cie_raw) if cie_raw else (None, 99)
+    dias_val = int(dias) if dias.isdigit() and 1 <= int(dias) <= 540 else None
+    return {
+        "origen": origen.replace("_", " ") or None,
+        "cie10": code or cie_raw,  # cruda si el OCR perdió la letra inicial (p.ej. "0820")
+        "descripcion": desc,
+        "dias": dias_val,
+        "fecha_inicio": _norm_date(fi),
+        "fecha_fin": _norm_date(ff),
+    }
+
+
 class RuleBasedExtractor:
     """Extrae los campos con expresiones regulares ajustadas a incapacidades reales."""
 
     name = "rule-based"
 
     def extract(self, text: str) -> dict[str, Any]:
+        if es_formato_permiso(text):
+            return _extraer_permiso(text)
         rec = empty_record()
         t = text
+        if es_formato_vacaciones(t):
+            rec["tipo_documento"] = "vacaciones"
 
         # --- Paciente: documento (primer CC/TI/CE/PA/RC del paciente, evitando NITs
         #     de proveedor/empleador) + nombre inline justo después si lo hay. ---
-        doc = re.search(r"(?<![A-Za-z])(CC|TI|CE|PA|RC)[\s.\-:]*(\d{6,12})", t)
+        # Certificados EPS tipo Sura traen VARIOS "CC-######" en el mismo documento
+        # (médico, tercero...) y el primero en aparecer no siempre es el paciente
+        # (visto en un caso real: el 1º era ruido de OCR, el del paciente salía
+        # después). "...IPS Afiliado" es la señal más fiable de cuál es el correcto
+        # en ese formato — se prueba primero y, si no aparece, cae al genérico.
+        # "C.C" con punto (historias clínicas tipo FCV): también es válido como CC.
+        _TIPO_DOC = r"(?:C\.?C\.?|TI|CE|PA|RC)"
+        doc = re.search(
+            rf"(?<![A-Za-z])({_TIPO_DOC})[\s.\-:]*(\d{{6,12}})(?=[A-ZÑÁÉÍÓÚ\s]{{0,60}}I{{1,2}}PS\s*Afiliado)",
+            t, re.I,
+        )
+        if not doc:
+            doc = re.search(rf"(?<![A-Za-z])({_TIPO_DOC})[\s.\-:]*(\d{{6,12}})", t)
+        if not doc:
+            # "Cedula_Ciudadania Numero:1003391273" (historias clínicas tipo Clínica
+            # del Cesar): tipo de documento escrito completo, no como sigla CC.
+            m_ced = re.search(
+                r"(?i)cedula[_\s]*(?:de\s*)?ciudadania\s*n[uú]mero\s*[:\-]?\s*(\d{6,12})", t
+            )
+            if m_ced:
+                rec["paciente"]["documento_tipo"] = "CC"
+                rec["paciente"]["documento_numero"] = m_ced.group(1)
         if doc:
-            rec["paciente"]["documento_tipo"] = doc.group(1).upper()
+            rec["paciente"]["documento_tipo"] = doc.group(1).upper().replace(".", "")
             rec["paciente"]["documento_numero"] = doc.group(2)
             after = t[doc.end():doc.end() + 60]
             mname = re.match(r"\s*([A-ZÑÁÉÍÓÚ][A-ZÑÁÉÍÓÚ ]{4,40})", after)
@@ -313,20 +759,51 @@ class RuleBasedExtractor:
 
         # --- Fechas (3 formatos) ---
         rec["incapacidad"]["fecha_expedicion"] = _find_date(t, r"expedici[oó]n")
-        # 'inic\w?(?:o|al|a)' tolera errores de OCR en "inicio/inicial/inicia/iniclal".
+        # '[il]nic\w?(?:o|al|a)' tolera errores de OCR en "inicio/inicial/inicia/iniclal"
+        # e incluso la I inicial leída como l minúscula ("lnicio", visualmente idéntica).
+        # "Fecha de Emision" (formato Clínica Medical Duarte y similares): en licencias
+        # de maternidad de ese formato la fecha de inicio es la de emisión del certificado.
         rec["incapacidad"]["fecha_inicio"] = _find_date(
-            t, r"(?:fecha\s*(?:de\s*)?inic\w?(?:o|al|a)|inic\w?(?:o|al|a)\s*incapacidad|desde)"
+            t, r"(?:fecha\s*(?:de\s*)?[il]nic\w?(?:o|al|a)|[il]nic\w?(?:o|al|a)\s*incapacidad|"
+               r"fecha\s*de\s*emisi[oó]n|desde)"
         )
         rec["incapacidad"]["fecha_fin"] = _find_date(
             t, r"(?:fecha\s*(?:de\s*)?(?:termina|final|fin)|"
                r"(?:final|fin|termina\w*)\s*incapacidad|hasta)"
         )
+        # Respaldo: fecha "escrita" en español sin año pegado (certificados EPS tipo
+        # Sura, licencias de maternidad — ver _fecha_inicio_fin_escrita).
+        if not rec["incapacidad"]["fecha_inicio"] or not rec["incapacidad"]["fecha_fin"]:
+            fi_esc, ff_esc = _fecha_inicio_fin_escrita(t)
+            if not rec["incapacidad"]["fecha_inicio"] and fi_esc:
+                rec["incapacidad"]["fecha_inicio"] = fi_esc
+                rec["incapacidad"]["_inicio_anclada"] = True  # viene del rótulo "Fecha Inicio"
+            if not rec["incapacidad"]["fecha_fin"] and ff_esc:
+                rec["incapacidad"]["fecha_fin"] = ff_esc
+        # Respaldo: carta de notificación de vacaciones (fechas en prosa, ver arriba).
+        if rec["tipo_documento"] == "vacaciones" and (
+            not rec["incapacidad"]["fecha_inicio"] or not rec["incapacidad"]["fecha_fin"]
+        ):
+            fi_vac, ff_vac = _fechas_vacaciones(t)
+            if not rec["incapacidad"]["fecha_inicio"] and fi_vac:
+                rec["incapacidad"]["fecha_inicio"] = fi_vac
+            if not rec["incapacidad"]["fecha_fin"] and ff_vac:
+                rec["incapacidad"]["fecha_fin"] = ff_vac
 
         # --- Días: etiqueta o, como respaldo fiable, calculado desde las fechas ---
-        dias = _first(t, r"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{0,15}(\d{1,3})")
-        if not dias:
-            dias = _first(t, r"(?i)(\d{1,3})\s*[\(\-]?\s*(?:un|dos|tres|cuatro|cinco|"
-                             r"seis|siete|ocho|nueve|diez|quince|veinte|treinta)\w*\s*d[ií]as?")
+        # "Duracion" + nº (a veces seguido de las letras redundantes: "14-CATORCE").
+        # Las cartas de vacaciones son prosa libre: "el dia siete (07) de julio" (un
+        # DÍA DEL MES, no una duración) engañaría a estos patrones — para ese tipo de
+        # documento se confía solo en la diferencia de fechas (ver más abajo).
+        dias = None
+        if rec["tipo_documento"] != "vacaciones":
+            # (sin excluir \n: el valor suele quedar en la línea siguiente, "Duracion:\n126").
+            dias = _first(t, r"(?i)duraci[oó]n\b[^\d]{0,10}(\d{1,3})")
+            if not dias:
+                dias = _first(t, r"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{0,15}(\d{1,3})")
+            if not dias:
+                dias = _first(t, r"(?i)(\d{1,3})\s*[\(\-]?\s*(?:un|dos|tres|cuatro|cinco|"
+                                 r"seis|siete|ocho|nueve|diez|quince|veinte|treinta)\w*\s*d[ií]as?")
         dias_val = int(dias) if dias and dias.isdigit() else None
         dias_calc = _days_between(rec["incapacidad"]["fecha_inicio"], rec["incapacidad"]["fecha_fin"])
         rec["incapacidad"]["dias"] = dias_val if dias_val is not None else dias_calc
@@ -335,7 +812,7 @@ class RuleBasedExtractor:
         # "<días><dd/mm/aaaa>" (a veces pegados: "511/06/2026" = 5 días + 11/06/2026).
         # Es el ancla MÁS fiable de la fecha de inicio (lo que pide el cliente: tomar
         # la que sea "Fecha Inicia / Fecha inicial").
-        anc = re.search(r"(?i)d[ií]as?\s+fecha\s+inic\w+", t)
+        anc = re.search(r"(?i)d[ií]as?\s+fecha\s+[il]nic\w+", t)
         if anc:
             seg = t[anc.end():anc.end() + 160]
             dm = re.search(_DATE, seg)
@@ -364,12 +841,32 @@ class RuleBasedExtractor:
 
         # --- Diagnóstico (CIE-10 + descripción) ---
         rec["diagnostico"]["cie10"] = _extract_cie10(t)
+        if not rec["diagnostico"]["cie10"]:
+            # Respaldo anclado a "Diagnostico principal" / "Diagnostico(s):": a veces
+            # el OCR pierde POR COMPLETO la letra inicial del código (queda solo
+            # dígitos, p.ej. "0039" en vez de "O039"). Se deja el valor CRUDO (sin
+            # adivinar la letra) para que el auxiliar lo corrija — nunca se fabrica.
+            raw_dx = _near_label(
+                t, r"diagn[oó]stico(?:\s*principal|\(s\))?\s*[:\-]?", r"([A-Za-z0-9]{3,6})", window=20
+            )
+            if raw_dx:
+                code, _fixes = _normalize_cie10(raw_dx)
+                rec["diagnostico"]["cie10"] = code or raw_dx.upper()
         diag_line = _first(t, r"(?im)^.*(?:diagn[oó]stico|dx\s*p\w*|diag\.?\s*ppal)\s*[:\-]?\s*(.+)$")
         if diag_line:
             # quita un posible código (con o sin punto decimal) al inicio de la descripción
             desc = re.sub(r"^\s*[A-Za-z][0-9OoIiLlZzSs|]{2,3}(?:[.,][0-9OoIiLlZzSs|])?\s*[:\-]?\s*",
                           "", diag_line).strip(" :-")
-            rec["diagnostico"]["descripcion"] = desc or None
+            # "Diagnostico principal"/"relacionado"/"(s):" son encabezados de sección
+            # en algunos formatos EPS (Sura, Medical Duarte), no una descripción real.
+            if desc and desc.strip().lower() not in ("principal", "relacionado", "ppal", "(s)", "(s):"):
+                rec["diagnostico"]["descripcion"] = desc
+
+        # --- Tipo de Licencia (maternidad: PARTO VIABLE / PARTO NO VIABLE) — no es
+        #     un campo del ERP, se lleva como observación (ver erp._observaciones).
+        rec["incapacidad"]["tipo_licencia"] = _norm_tipo_licencia(
+            _near_label(t, r"tipo\s*de\s*licencia\s*[:\-]?", r"([A-ZÑ][A-ZÑ .]{2,40})", window=60)
+        )
 
         # --- Médico (límites de palabra: "dr" NO debe casar dentro de "alejanDRo") ---
         rec["medico"]["nombre"] = _clean_name(_first(
@@ -380,6 +877,26 @@ class RuleBasedExtractor:
             t, r"(?i)(?:registro(?:\s*m[eé]dico)?|reg\.?\s*med|r\.?\s*m\.?|tarjeta\s+profesional)"
                r"\s*[:\-.]?\s*([A-Z]*\d[\d\-]*)"
         )
+
+        # --- Tabla "DETALLE DE LA INCAPACIDAD" (Clínica del Cesar y similares): si
+        # está presente, sus valores son más fiables que las heurísticas genéricas de
+        # arriba (evita el CIE-10/fecha que las reglas genéricas adivinaron mal).
+        detalle = _extraer_detalle_incapacidad(t)
+        if detalle:
+            if detalle["cie10"]:
+                rec["diagnostico"]["cie10"] = detalle["cie10"]
+            if detalle["descripcion"]:
+                rec["diagnostico"]["descripcion"] = detalle["descripcion"]
+            if detalle["origen"]:
+                rec["incapacidad"]["origen"] = detalle["origen"]
+            if detalle["fecha_inicio"]:
+                rec["incapacidad"]["fecha_inicio"] = detalle["fecha_inicio"]
+                rec["incapacidad"]["_inicio_anclada"] = True
+            if detalle["fecha_fin"]:
+                rec["incapacidad"]["fecha_fin"] = detalle["fecha_fin"]
+            if detalle["dias"]:
+                rec["incapacidad"]["dias"] = detalle["dias"]
+
         return rec
 
 
@@ -642,6 +1159,11 @@ class HybridExtractor:
 
     def extract(self, text: str) -> dict[str, Any]:
         rule_rec = self.rule.extract(text)
+        # Los PERMISOS son un formulario de casillas de layout fijo (no texto libre
+        # médico): las reglas ya son deterministas y el LLM (prompt de incapacidad,
+        # fusión con el esquema de incapacidad) no aporta ni aplica aquí.
+        if rule_rec.get("tipo_documento") == "permiso":
+            return rule_rec
         if self.llm is None:
             return rule_rec
         try:

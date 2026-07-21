@@ -43,7 +43,7 @@ VALID_RECEPCION = {"ORIGINAL", "WHATSAPP", "CORREO"}
 # Estados del flujo de revisión humana.
 ESTADO_PENDIENTE, ESTADO_APROBADO, ESTADO_RECHAZADO = "PENDIENTE_REVISION", "APROBADO", "RECHAZADO"
 # Campos que el auxiliar puede corregir/llenar a mano (overrides de la revisión).
-CAMPOS_OVERRIDE = {"cedula", "cie10", "eps", "fecha_inicio", "fecha_fin", "dias", "paciente", "tipo", "numeroorden"}
+CAMPOS_OVERRIDE = {"cedula", "cie10", "eps", "fecha_inicio", "fecha_fin", "dias", "paciente", "tipo", "nivel", "numeroorden"}
 
 
 def _limpiar_overrides(campos) -> dict:

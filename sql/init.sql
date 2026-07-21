@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS lp_ausentismos_ia (
   idlpdiagnosticos             INT           NULL,
   idlpempleado                 INT           NULL,
   idlptipoausentismo           INT           NULL,
+  idlpnivelincapacidad         INT           NULL,   -- default por tipo, ver erp.NIVEL_INCAPACIDAD_DEFAULT
   idlpentidad                  INT           NULL,
   tipoentidad                  INT           NULL,
   idlpestadosrecepausentismos  INT           NULL,

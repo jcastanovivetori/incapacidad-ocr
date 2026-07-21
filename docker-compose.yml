@@ -22,11 +22,12 @@ services:
       # - VISION_MAX_DIM=1200    # (opcional) px del lado mayor enviado al VLM
       # - MAX_UPLOAD_BYTES=26214400   # (opcional) tope de subida en bytes
       # Conexión a la BD ASTGU (tabla staging lp_ausentismos_ia).
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_NAME=ASTGU
-      - DB_USER=ocr
-      - DB_PASSWORD=ocr
+      # Valores reales en .env (no versionado); si falta, cae al servicio local `db`.
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-ASTGU}
+      - DB_USER=${DB_USER:-ocr}
+      - DB_PASSWORD=${DB_PASSWORD:-ocr}
     depends_on:
       - ollama
       - db
