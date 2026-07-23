@@ -1,6 +1,6 @@
 # CONTEXT — incapacidad-ocr (fuente única de contexto)
 
-**Última actualización:** 2026-06-22 · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1), Ollama (IA local) habilitado para casos difíciles (§5.2), integración a BD/staging (§5.4) y **flujo de revisión humana — completar/aprobar/rechazar** (§5.5).
+**Última actualización:** 2026-07-23 · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1), Ollama (IA local) para casos difíciles (§5.2), integración a BD/staging (§5.4), **flujo de revisión humana — completar/aprobar/rechazar** (§5.5) e **ingesta masiva por lotes (carpetas + nomenclatura) con corrida programada** (§5.6).
 
 Este documento es el **contexto completo** del proyecto: por qué existe, qué se construyó, cómo se probó y cómo encaja en la plataforma de nómina. Para *cómo usarlo* → [`README.md`](README.md); para *cómo trabajar el repo* → [`CLAUDE.md`](CLAUDE.md).
 
@@ -144,6 +144,16 @@ Sobre la base de §5.4 se cerró el **flujo de revisión humana** y se afinaron 
 
 Nuevos endpoints: `POST /api/mapear` (preview con correcciones), `POST /api/revisar` (aprobar/rechazar/guardar), `GET /api/staging/{id}`; `POST /api/registrar` acepta `campos` (overrides) y `estado`.
 
+### 5.6 Ingesta masiva por lotes + corrida programada (2026-07-23)
+
+Para procesar **volumen** (no de a un documento), se añadió un **runner por lotes** que toma los documentos de una estructura de carpetas y los registra en staging para revisión. Diseño técnico completo en [`PLAN_INGESTA_MASIVA.md`](PLAN_INGESTA_MASIVA.md).
+
+- **Nomenclatura de archivos (contrato de entrada).** Los documentos llegan **separados** (uno por archivo), nombrados `cedula_AAAAMMDD_TIPODOC[_NN].ext`. La **llave de caso** `cedula_AAAAMMDD` agrupa el trámite; `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`, y los adjuntos (`FURAT`/`FURIPS`/`EPICRISIS`/`HISTORIA`/`NACIDOVIVO`/`REGISTROCIVIL`/…) **solo se verifican por nombre**. RH puede estructurar el `inbox` en subcarpetas (escaneo recursivo).
+- **`batch.py`** — escanea `INGESTA_ROOT/inbox`, agrupa por nomenclatura, **OCR solo del documento base** (de ahí sale el tipo de ausentismo), **valida los soportes requeridos según el tipo** (`erp.validar_documentacion`: `lprequisitos_eps` o `REQUISITOS_DEFAULT`, con **grupos de equivalencia** — p.ej. epicrisis satisface "historia clínica"), inserta en `lp_ausentismos_ia` (`PENDIENTE_REVISION`), crea **alerta** (`lp_alertas_documentacion`) si falta un soporte, y **mueve** los archivos a `procesados/`/`incompletos/`/`cuarentena/` organizados por **`<Nombre persona>/AAAA/MM/DD`** (nombre = primer nombre + primer apellido del catálogo; fecha = inicio de la incapacidad), para que RH revise el historial de un empleado fácilmente. Permisos y vacaciones no exigen incapacidad; el cotejo cédula-nombre↔OCR marca `requiere_revision` ante discrepancia; nunca se cruzan cédulas distintas; los mal nombrados van a `inbox/sin_nomenclatura/`.
+- **Documentos pesados** — el PDF se rasteriza **página a página en streaming** (`preprocess.load_pages` es generador → una página en RAM), con topes configurables (`MAX_UPLOAD_BYTES=50MB`, `MAX_PDF_PAGES`, `OCR_MAX_PIXELS`, `MAX_IMAGE_PIXELS`, `PDF_RENDER_SCALE`).
+- **UI + API** — panel **«Procesar todos»** + `POST /api/lote/procesar`, `GET /api/lote/pendientes`, `GET /api/lote/estado`. La carpeta `ingesta/` es un **bind mount** (`./ingesta:/data/ingesta`); sus documentos **no** se versionan (PII, Ley 1581), solo la estructura. El escenario de demo se reproduce con `python scripts/sembrar_demo.py` (5 casos: enf. general, accidente+FURAT, vacaciones, permiso + 1 sin nomenclatura).
+- **Corrida programada** — scheduler **in-process** (APScheduler) dentro del contenedor web, activado por `INGESTA_CRON` (vacío = desactivado; p.ej. `0 2 * * *`). Comparte un **lock** con la corrida manual (no se solapan). **Depende de que el servicio esté levantado** (el contenedor sube solo con `restart: unless-stopped` mientras Docker arranque en el boot: `systemctl enable docker` en Linux / Docker Engine como servicio en Windows Server). Para un servidor **Windows headless** sin login, la alternativa robusta es el Programador de tareas del SO disparando `docker compose exec … batch --once` (modo B del plan §5, no implementado por ahora).
+
 ---
 
 ## 6. Cómo encaja en el flujo de nómina / ERP
@@ -162,16 +172,18 @@ Nuevos endpoints: `POST /api/mapear` (preview con correcciones), `POST /api/revi
 
 ## 7. Estado y pendientes
 
-**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido + **híbrido (reglas+LLM)**; **evaluación con 8 incapacidades reales = 80% campos núcleo** (§5.1); **integración a BD/staging** (§5.4); **flujo de revisión humana — completar/aprobar/rechazar + bandeja** (§5.5); regla de fecha de inicio y separación de nombres pegados; CLI, README, CLAUDE.md, tests.
+**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido + **híbrido (reglas+LLM)**; **evaluación con 8 incapacidades reales = 80% campos núcleo** (§5.1); **integración a BD/staging** (§5.4); **flujo de revisión humana — completar/aprobar/rechazar + bandeja** (§5.5); **ingesta masiva por lotes (carpetas + nomenclatura), organización por persona/fecha, corrida programada y robustez con documentos pesados** (§5.6); regla de fecha de inicio y separación de nombres pegados; CLI, README, CLAUDE.md, tests.
 
 **Pendiente / próximos pasos:**
 - ✅ *(hecho)* Probar con **incapacidades reales** → ver §5.1 (80% con reglas, 100% en CIE-10/documento legibles).
 - ✅ *(hecho)* **Ollama habilitado** como contenedor Docker con `gemma3:4b` (§5.2): mejora los casos difíciles. Pendiente subir el techo con modelo de **visión fuerte** (`qwen2.5vl`/`llama3.2-vision`) y/o **GPU** (CPU es lento y el 4B alucina fechas ocasionalmente).
 - ✅ *(hecho)* **Integración a BD + revisión humana** (§5.4, §5.5): mapeo a staging, completar a mano, aprobar/rechazar.
-- Apuntar a la **BD ASTGU real** (catálogos reales de empleados/CIE/EPS) en vez de los datos de prueba; `numero_orden` y score de confianza OCR real; envío de **alertas documentales** (`lp_alertas_documentacion`).
+- ✅ *(hecho)* **Entrada por carpetas (ingesta por lotes) + nomenclatura + corrida programada** (§5.6). Guía ejecutiva para el punto de recepción: [`GUIA_RECEPCION_INCAPACIDADES.md`](GUIA_RECEPCION_INCAPACIDADES.md).
+- **Acordar con el negocio la nomenclatura y el punto de recepción** (WhatsApp/correo → carpeta): compartir la guía de recepción y validar con una muestra que los archivos llegan bien nombrados.
+- Apuntar a la **BD ASTGU real** (catálogos reales de empleados/CIE/EPS) en vez de los datos de prueba; `numero_orden` y score de confianza OCR real.
+- **Corrida programada en Windows headless** (modo B: Programador de tareas del SO) si el servidor no mantiene Docker activo sin login (§5.6 / plan §5). Escalar concurrencia (ledger/lock en BD) si el volumen lo exige.
 - Ampliar validaciones (prórrogas; validación de CIE-10 contra catálogo completo).
-- Definir la **entrada** real (carpeta vigilada / endpoint / bot de WhatsApp-correo que reciba las fotos).
-- Gobernanza de datos: confirmar manejo de PII (Ley 1581), retención y borrado de las imágenes/uploads.
+- Gobernanza de datos: confirmar manejo de PII (Ley 1581), retención y borrado de imágenes/uploads.
 
 ---
 

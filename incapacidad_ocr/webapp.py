@@ -14,6 +14,7 @@ import contextlib
 import logging
 import os
 import tempfile
+import threading
 from pathlib import Path
 
 from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
@@ -41,6 +42,40 @@ LLM_MODEL = os.environ.get("LLM_MODEL", "gemma3:4b")
 VALID_OCR = {"rapidocr", "ollama"}
 VALID_EXTRACTOR = {"rule", "ollama", "hibrido"}
 VALID_RECEPCION = {"ORIGINAL", "WHATSAPP", "CORREO"}
+
+# --- Corrida programada de la ingesta por lotes (cron in-process, opcional).
+#     INGESTA_CRON vacío = desactivada. La lógica corre en contenedores Linux, así que
+#     este scheduler funciona igual en Windows y Linux (Docker nivela el SO).
+INGESTA_CRON = os.environ.get("INGESTA_CRON", "").strip()          # p.ej. "0 2 * * *" (diario 02:00)
+BATCH_TZ = os.environ.get("BATCH_TZ", "America/Bogota")
+INGESTA_EXTRACTOR = os.environ.get("INGESTA_EXTRACTOR", "rule")
+# Un único lock protege TODA corrida del lote (manual o programada) → nunca se solapan.
+_lote_lock = threading.Lock()
+_scheduler = None
+
+
+def _correr_lote(extractor: str) -> dict:
+    """Ejecuta el lote bajo el lock (no reentrante). Si ya hay una corrida en curso,
+    devuelve ``{"en_curso": True}`` en vez de solaparse."""
+    if not _lote_lock.acquire(blocking=False):
+        return {"en_curso": True, "error": "Ya hay una corrida del lote en curso."}
+    try:
+        return batch.procesar_todo(_get_rapidocr(), extractor_name=extractor)
+    finally:
+        _lote_lock.release()
+
+
+def _job_programado() -> None:
+    """Trabajo del scheduler: corre el lote y registra el resumen (sin PII)."""
+    if not db.db_disponible():
+        logger.warning("Lote programado: BD no disponible; se omite esta corrida.")
+        return
+    try:
+        r = _correr_lote(INGESTA_EXTRACTOR if INGESTA_EXTRACTOR in VALID_EXTRACTOR else "rule")
+        logger.info("Lote programado: %s", {k: r.get(k) for k in
+                    ("procesados", "incompletos", "cuarentena", "sin_nomenclatura", "en_curso")})
+    except Exception:
+        logger.exception("Error en la corrida programada del lote")
 # Estados del flujo de revisión humana.
 ESTADO_PENDIENTE, ESTADO_APROBADO, ESTADO_RECHAZADO = "PENDIENTE_REVISION", "APROBADO", "RECHAZADO"
 # Campos que el auxiliar puede corregir/llenar a mano (overrides de la revisión).
@@ -83,7 +118,27 @@ async def lifespan(app: FastAPI):
     # Pre-carga los modelos ONNX al arrancar para que la primera petición sea rápida.
     with contextlib.suppress(Exception):
         _get_rapidocr()
+    # Corrida programada (opcional): si INGESTA_CRON está definido, arranca el scheduler.
+    global _scheduler
+    if INGESTA_CRON:
+        try:
+            from apscheduler.schedulers.background import BackgroundScheduler
+            from apscheduler.triggers.cron import CronTrigger
+
+            _scheduler = BackgroundScheduler(timezone=BATCH_TZ)
+            _scheduler.add_job(
+                _job_programado, CronTrigger.from_crontab(INGESTA_CRON, timezone=BATCH_TZ),
+                id="ingesta_lote", max_instances=1, coalesce=True, misfire_grace_time=3600,
+            )
+            _scheduler.start()
+            logger.info("Corrida programada ACTIVA (cron=%r tz=%s)", INGESTA_CRON, BATCH_TZ)
+        except Exception:
+            logger.exception("No se pudo iniciar el scheduler de ingesta (cron=%r)", INGESTA_CRON)
+            _scheduler = None
     yield
+    if _scheduler is not None:
+        with contextlib.suppress(Exception):
+            _scheduler.shutdown(wait=False)
 
 
 app = FastAPI(
@@ -390,11 +445,28 @@ def lote_procesar(extractor: str = Body("rule", embed=True)) -> JSONResponse:
     if not db.db_disponible():
         raise HTTPException(status_code=503, detail="Base de datos no disponible.")
     try:
-        resumen = batch.procesar_todo(_get_rapidocr(), extractor_name=extr)
+        resumen = _correr_lote(extr)
     except Exception:
         logger.exception("Error en el procesamiento por lotes")
         raise HTTPException(status_code=500, detail="Error en el procesamiento por lotes.") from None
+    if resumen.get("en_curso"):
+        raise HTTPException(status_code=409, detail=resumen["error"])
     return JSONResponse(resumen)
+
+
+@app.get("/api/lote/estado")
+def lote_estado() -> JSONResponse:
+    """Estado de la corrida programada (para la UI): si está activa, cron y próxima ejecución."""
+    prox = None
+    if _scheduler is not None:
+        with contextlib.suppress(Exception):
+            job = _scheduler.get_job("ingesta_lote")
+            if job is not None and job.next_run_time is not None:
+                prox = job.next_run_time.isoformat()
+    return JSONResponse({
+        "programado": bool(INGESTA_CRON), "cron": INGESTA_CRON or None, "tz": BATCH_TZ,
+        "proxima_ejecucion": prox, "en_curso": _lote_lock.locked(),
+    })
 
 
 @app.get("/")

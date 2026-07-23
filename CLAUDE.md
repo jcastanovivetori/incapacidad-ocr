@@ -32,7 +32,7 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 **Endpoints:** `POST /api/procesar` (multipart) · `POST /api/mapear` (preview con correcciones) ·
 `POST /api/registrar` (INSERT con `estado`) · `POST /api/revisar` (aprobar/rechazar/guardar) ·
 `GET /api/staging[?estado=]` · `GET /api/staging/{id}` · **`GET /api/lote/pendientes`** (cuenta la carpeta) ·
-**`POST /api/lote/procesar`** (procesa todo el `inbox`) · `GET /api/health`.
+**`POST /api/lote/procesar`** (procesa todo el `inbox`) · **`GET /api/lote/estado`** (corrida programada) · `GET /api/health`.
 
 ## Comandos
 
@@ -91,6 +91,12 @@ python scripts/sembrar_demo.py
 #   1098757631 PERMISO               -> licencia remunerada COMPLETO    (sintético)
 #   documento_suelto.jpeg            -> sin nomenclatura (se omite)
 # Los reales salen de ../Ejemplos; los sintéticos son imágenes de texto (RapidOCR las lee).
+
+# Corrida PROGRAMADA (cron in-process, APScheduler). Vacío = desactivada.
+INGESTA_CRON='0 2 * * *' docker compose up -d incapacidad-ocr    # procesa el inbox cada día 02:00
+INGESTA_CRON='*/5 * * * *' docker compose up -d incapacidad-ocr  # cada 5 min (demo)
+docker compose up -d incapacidad-ocr                             # sin INGESTA_CRON -> desactivada
+curl.exe -s http://localhost:8000/api/lote/estado                # {programado, cron, proxima_ejecucion, en_curso}
 ```
 
 ## Reglas de dominio (no romper)
@@ -195,6 +201,11 @@ python scripts/sembrar_demo.py
   cada página se acota a `OCR_MAX_PIXELS` (40 MP) antes del OCR, y `MAX_IMAGE_PIXELS` (200 MP) frena bombas de
   descompresión. Si un doc pesado falla, subir esos topes por env o bajar `PDF_RENDER_SCALE`. NO volver a materializar
   todas las páginas en una lista (era la causa del pico de RAM).
+- **Corrida programada** (`webapp.py`, APScheduler in-process): se activa solo si `INGESTA_CRON` está
+  definido; corre en el contenedor web (1 worker uvicorn). Un `threading.Lock` (`_lote_lock`) es compartido
+  por la corrida manual (`/api/lote/procesar`) y la programada → **nunca se solapan** (manual ocupada → 409;
+  programada ocupada → se omite). Es un MVP: para multi-worker/multi-instancia habría que mover el lock a la
+  BD (`GET_LOCK`, ver `PLAN_INGESTA_MASIVA.md` §5/§9.5) y/o usar el servicio `ocr-worker` dedicado del plan.
 - La carpeta **`ingesta/` es un bind mount** (`./ingesta:/data/ingesta`, env `INGESTA_ROOT`); editar su contenido
   desde el host se ve al instante en el contenedor (no requiere reconstruir). El contenedor (usuario no-root)
   **escribe** ahí para mover archivos — en Docker Desktop Windows el bind mount lo permite. La ingesta por lotes

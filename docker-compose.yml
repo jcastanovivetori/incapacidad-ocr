@@ -1,9 +1,13 @@
 # Levanta TODO (servicio web + Ollama local):  docker compose up --build
 # Luego abre:  http://localhost:8000
 #
-# Tras el primer arranque, baja los modelos de Ollama (una sola vez):
+# Tras el primer arranque, baja los modelos de Ollama (una sola vez, opcional):
 #   docker compose exec ollama ollama pull gemma3:4b     # estructurador (texto→JSON)
-#   docker compose exec ollama ollama pull moondream     # OCR de visión (opcional, lento en CPU)
+#   docker compose exec ollama ollama pull qwen2.5vl:3b  # OCR de visión (opcional, lento en CPU)
+#
+# Ingesta por lotes: deja los documentos en ./ingesta/inbox/ con la nomenclatura
+#   cedula_AAAAMMDD_TIPODOC.ext  (ver GUIA_RECEPCION_INCAPACIDADES.md). Corrida programada:
+#   INGESTA_CRON="0 2 * * *" docker compose up -d incapacidad-ocr
 services:
   incapacidad-ocr:
     build: .
@@ -31,6 +35,11 @@ services:
       # Carpeta de ingesta masiva (bind mount abajo). Los feeders dejan aquí los documentos
       # con la nomenclatura cedula_AAAAMMDD_TIPODOC.ext; el runner los procesa y los mueve.
       - INGESTA_ROOT=/data/ingesta
+      # Corrida PROGRAMADA de la ingesta (cron in-process). Vacío = desactivada.
+      # Ej.: INGESTA_CRON="0 2 * * *" procesa la carpeta cada día a las 02:00 (zona BATCH_TZ).
+      - INGESTA_CRON=${INGESTA_CRON:-}
+      - BATCH_TZ=${BATCH_TZ:-America/Bogota}
+      - INGESTA_EXTRACTOR=${INGESTA_EXTRACTOR:-rule}
     volumes:
       - ./ingesta:/data/ingesta
     depends_on:

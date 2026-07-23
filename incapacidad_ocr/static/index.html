@@ -276,6 +276,7 @@
     <div class="res-head">
       <h2 style="font-size:18px;">Procesamiento por lotes <small style="color:var(--muted);font-weight:400;">carpeta «sin procesar»</small></h2>
       <span class="pill" id="lotePend" style="background:#eef2ff;color:#4338ca;">—</span>
+      <span class="pill" id="loteProg" style="background:#f1f5f9;color:#475569;">⏱ programación: —</span>
       <button class="btn ok" id="procesarTodos" style="margin-left:auto;">⚙ Procesar todos</button>
     </div>
     <p class="hint">Los documentos se dejan en la carpeta de ingesta con la nomenclatura <code>cedula_AAAAMMDD_TIPODOC.ext</code> (p.ej. <code>13742111_20260609_INCAPACIDAD.pdf</code>, <code>..._EPICRISIS.pdf</code>). «Procesar todos» los agrupa por trámite, OCR-ea la incapacidad, valida los soportes requeridos por tipo, los registra en <code>lp_ausentismos_ia</code> y los mueve a <code>procesados/</code> o <code>incompletos/</code>.</p>
@@ -721,6 +722,17 @@ async function cargarPendientes() {
     $("lotePend").textContent = `${d.con_nomenclatura} pend. · ${d.casos} casos` +
       (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura` : "");
   } catch { $("lotePend").textContent = "—"; }
+  try {
+    const e = await (await fetch("/api/lote/estado")).json();
+    const p = $("loteProg");
+    if (e.programado) {
+      const prox = e.proxima_ejecucion ? new Date(e.proxima_ejecucion).toLocaleString() : "—";
+      p.textContent = `⏱ programado: ${e.cron} · próxima ${prox}`;
+      p.style.background = "#dcfce7"; p.style.color = "#166534";
+    } else {
+      p.textContent = "⏱ programación: desactivada"; p.style.background = "#f1f5f9"; p.style.color = "#475569";
+    }
+  } catch {}
 }
 
 $("procesarTodos").addEventListener("click", async () => {

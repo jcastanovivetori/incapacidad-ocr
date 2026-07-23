@@ -137,6 +137,12 @@ En `procesados/` e `incompletos/` los documentos quedan organizados por **person
 - **UI:** en el panel **«Procesamiento por lotes»** pulsa **«⚙ Procesar todos»** → agrupa, procesa y registra todo lo del `inbox`; el resumen muestra completos/incompletos y la **bandeja** de abajo lista los registros para revisar/aprobar.
 - **API:** `POST /api/lote/procesar` (equivale al botón) · `GET /api/lote/pendientes` (cuenta la carpeta).
 - **CLI:** `docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --dry-run` (reporta sin escribir) · `... python -m incapacidad_ocr.batch` (procesa).
+- **Programada (cron):** define `INGESTA_CRON` para que el lote corra solo (p.ej. cada día a las 2am). Desactivada si la variable está vacía. La corrida manual y la programada comparten un lock (no se solapan).
+  ```bash
+  INGESTA_CRON="0 2 * * *" docker compose up -d incapacidad-ocr   # diario 02:00 (zona BATCH_TZ)
+  INGESTA_CRON="*/5 * * * *" docker compose up -d incapacidad-ocr # cada 5 min (demo)
+  curl -s http://localhost:8000/api/lote/estado                   # ver si está programada y la próxima ejecución
+  ```
 
 Los archivos base se OCR-ean con RapidOCR + reglas; los adjuntos **no** se OCR-ean (se cuentan por su nombre). Todo entra a staging como `PENDIENTE_REVISION`; el auxiliar revisa/aprueba. Diseño técnico completo en [`PLAN_INGESTA_MASIVA.md`](PLAN_INGESTA_MASIVA.md).
 

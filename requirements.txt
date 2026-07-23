@@ -16,3 +16,7 @@ python-multipart>=0.0.18 # subida de archivos (multipart/form-data); >=0.0.18 co
 
 # --- Integración ERP (insert a tabla staging en MySQL/ASTGU) ---
 mysql-connector-python>=9.0  # driver MySQL (mismo que la solución de referencia)
+
+# --- Corrida programada (cron) de la ingesta por lotes ---
+apscheduler>=3.10   # scheduler in-process (CronTrigger) para la ingesta masiva
+tzdata>=2024.1      # base de zonas horarias (America/Bogota) en imágenes slim

@@ -56,7 +56,7 @@ def render(lines: list[str], path: Path) -> None:
 def main() -> None:
     INBOX.mkdir(parents=True, exist_ok=True)
     for f in INBOX.glob("*"):
-        if f.is_file():
+        if f.is_file() and f.name != ".gitkeep":  # preserva el marcador de estructura versionado
             f.unlink()
 
     # --- Casos con documentos REALES (../Ejemplos) ---
