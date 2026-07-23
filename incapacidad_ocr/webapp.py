@@ -19,7 +19,7 @@ from pathlib import Path
 from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 
-from . import db, erp
+from . import batch, db, erp
 from .extract import HybridExtractor, OllamaLLMExtractor, RuleBasedExtractor
 from .ocr import OllamaError, OllamaVisionOCR, get_ocr_backend
 from .processor import IncapacidadProcessor
@@ -28,7 +28,8 @@ logger = logging.getLogger("incapacidad_ocr.webapp")
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 ALLOWED_SUFFIXES = {".pdf", ".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff"}
-MAX_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", 25 * 1024 * 1024))  # 25 MB por defecto
+MAX_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", 50 * 1024 * 1024))  # 50 MB por defecto
+MAX_MB = MAX_BYTES // (1024 * 1024)
 
 # --- Configuración de Ollama: SOLO desde el entorno del servidor (no del cliente).
 #     El cliente NO puede elegir la URL ni el modelo → evita SSRF (que un atacante
@@ -122,12 +123,12 @@ async def procesar(
     # Límite de tamaño ANTES de leer todo a memoria (DoS): UploadFile.size viene del
     # Content-Length / multipart; el chequeo post-lectura queda como respaldo.
     if archivo.size is not None and archivo.size > MAX_BYTES:
-        raise HTTPException(status_code=413, detail="Archivo demasiado grande (máx. 25 MB).")
+        raise HTTPException(status_code=413, detail=f"Archivo demasiado grande (máx. {MAX_MB} MB).")
     data = await archivo.read()
     if not data:
         raise HTTPException(status_code=400, detail="Archivo vacío.")
     if len(data) > MAX_BYTES:
-        raise HTTPException(status_code=413, detail="Archivo demasiado grande (máx. 25 MB).")
+        raise HTTPException(status_code=413, detail=f"Archivo demasiado grande (máx. {MAX_MB} MB).")
 
     # Selección de motores. La URL/modelo de Ollama vienen del SERVIDOR (env), no del
     # cliente → sin SSRF ni modelos arbitrarios.
@@ -366,6 +367,34 @@ def staging_uno(registro_id: int) -> JSONResponse:
     if not fila:
         raise HTTPException(status_code=404, detail=f"Registro {registro_id} no encontrado.")
     return JSONResponse(fila)
+
+
+@app.get("/api/lote/pendientes")
+def lote_pendientes() -> JSONResponse:
+    """Cuenta lo que hay en la carpeta de ingesta 'sin procesar' (para el botón de la UI)."""
+    try:
+        return JSONResponse(batch.contar_pendientes())
+    except Exception:
+        logger.exception("Error contando la carpeta de ingesta")
+        raise HTTPException(status_code=500, detail="Error al leer la carpeta de ingesta.") from None
+
+
+@app.post("/api/lote/procesar")
+def lote_procesar(extractor: str = Body("rule", embed=True)) -> JSONResponse:
+    """Procesa TODOS los documentos de la carpeta 'sin procesar' (ingesta masiva por lotes).
+
+    Agrupa por nomenclatura, OCR-ea el documento base, valida requisitos por tipo, registra
+    en staging (`PENDIENTE_REVISION`) y mueve los archivos a procesados/incompletos/cuarentena.
+    """
+    extr = extractor if extractor in VALID_EXTRACTOR else "rule"
+    if not db.db_disponible():
+        raise HTTPException(status_code=503, detail="Base de datos no disponible.")
+    try:
+        resumen = batch.procesar_todo(_get_rapidocr(), extractor_name=extr)
+    except Exception:
+        logger.exception("Error en el procesamiento por lotes")
+        raise HTTPException(status_code=500, detail="Error en el procesamiento por lotes.") from None
+    return JSONResponse(resumen)
 
 
 @app.get("/")

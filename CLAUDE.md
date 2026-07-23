@@ -22,15 +22,17 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 | `ocr.py` | backends OCR: `RapidOCRBackend` (ONNX/CPU), `OllamaVisionOCR` (visión local), `StubOCR` (tests). `OllamaError` + `translate_ollama_error` |
 | `extract.py` | extractores: `RuleBasedExtractor`, `OllamaLLMExtractor`, `HybridExtractor`; `normalizar_fechas()` (regla de fecha de inicio); `_split_glued_name()` (nombres pegados) |
 | `processor.py` | `IncapacidadProcessor` une OCR+extractor y llama `normalizar_fechas()`. Guarda `MIN_OCR_CHARS` (no estructurar texto vacío → anti-fabricación de PII) |
-| `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo |
-| `db.py` | MySQL (BD ASTGU): `insertar_staging`, `listar_staging`, `obtener_staging`, `actualizar_revision`, `actualizar_estado` |
-| `webapp.py` | API FastAPI + estado del flujo (`PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO`) |
-| `static/index.html` | UI de una sola página (vanilla JS): procesar, formulario de revisión editable, bandeja |
-| `cli.py` | `python -m incapacidad_ocr.cli foto.jpg [--ocr ollama --extractor ollama]` |
+| `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo, **validación documental** (`REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion`, `canon_doc`) |
+| `db.py` | MySQL (BD ASTGU): `insertar_staging`, `insertar_alerta`, `listar_staging`, `obtener_staging`, `actualizar_revision`, `actualizar_estado` |
+| `batch.py` | **Ingesta masiva por lotes**: escanea `INGESTA_ROOT/inbox`, agrupa por nomenclatura del nombre, OCR-ea solo el doc base, valida requisitos por tipo, inserta en staging + alerta, mueve a `procesados/`/`incompletos/`/`cuarentena/`. `parse_nombre`, `procesar_todo`, `contar_pendientes` |
+| `webapp.py` | API FastAPI + estado del flujo (`PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO`) + endpoints de lote |
+| `static/index.html` | UI de una sola página (vanilla JS): procesar, formulario de revisión editable, bandeja, **panel "Procesar todos"** (lote) |
+| `cli.py` · `python -m incapacidad_ocr.batch` | CLI de un doc (`cli`) · CLI del lote (`batch [--extractor rule\|hibrido] [--dry-run]`) |
 
 **Endpoints:** `POST /api/procesar` (multipart) · `POST /api/mapear` (preview con correcciones) ·
 `POST /api/registrar` (INSERT con `estado`) · `POST /api/revisar` (aprobar/rechazar/guardar) ·
-`GET /api/staging[?estado=]` · `GET /api/staging/{id}` · `GET /api/health`.
+`GET /api/staging[?estado=]` · `GET /api/staging/{id}` · **`GET /api/lote/pendientes`** (cuenta la carpeta) ·
+**`POST /api/lote/procesar`** (procesa todo el `inbox`) · `GET /api/health`.
 
 ## Comandos
 
@@ -63,6 +65,32 @@ En **PowerShell 5.1 `Invoke-RestMethod` NO tiene `-Form`** → usa `curl.exe`:
 ```bash
 curl.exe -s -X POST http://localhost:8000/api/procesar \
   -F "archivo=@../Ejemplos/incapacidad.jpeg" -F "ocr=rapidocr" -F "extractor=hibrido" -F "estado_recepcion=WHATSAPP"
+```
+
+### Ingesta masiva por lotes
+
+La carpeta `ingesta/` (raíz del repo) se monta en el contenedor como `/data/ingesta` (bind mount en
+`docker-compose.yml`). Los feeders dejan los documentos en `ingesta/inbox/<whatsapp|correo|original>/`
+con la **nomenclatura** `cedula_AAAAMMDD_TIPODOC[_NN].ext` (ver §Reglas de dominio).
+
+```bash
+# Botón "Procesar todos" de la UI == este endpoint:
+curl.exe -s http://localhost:8000/api/lote/pendientes                                   # cuenta el inbox
+curl.exe -s -X POST http://localhost:8000/api/lote/procesar -H "Content-Type: application/json" -d '{"extractor":"rule"}'
+
+# CLI equivalente (dentro del contenedor):
+docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --dry-run           # reporta sin insertar/mover
+docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --extractor rule    # procesa de verdad
+
+# Sembrar el escenario de prueba (5 casos + 1 mal nombrado, con nomenclatura) — correr en el HOST:
+python scripts/sembrar_demo.py
+#   13742111  INCAPACIDAD+EPICRISIS  -> enf. general COMPLETO
+#   63523940  INCAPACIDAD            -> enf. general INCOMPLETO (falta HISTORIA_CLINICA -> alerta)
+#   1005542119 INCAPACIDAD+FURAT     -> accidente de trabajo COMPLETO   (sintético)
+#   1095912481 VACACIONES            -> vacaciones COMPLETO             (sintético)
+#   1098757631 PERMISO               -> licencia remunerada COMPLETO    (sintético)
+#   documento_suelto.jpeg            -> sin nomenclatura (se omite)
+# Los reales salen de ../Ejemplos; los sintéticos son imágenes de texto (RapidOCR las lee).
 ```
 
 ## Reglas de dominio (no romper)
@@ -119,6 +147,23 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
   Inc./Inicio/Finalización) seguidas de sus 5 valores en bloque — se parsea aparte
   (`extract._extraer_detalle_incapacidad`) porque es más fiable que las heurísticas genéricas y evita falsos
   positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.).
+- **Ingesta por lotes — nomenclatura de archivos** (`batch.py`): los documentos llegan **separados**, uno por
+  archivo, nombrados `cedula_AAAAMMDD_TIPODOC[_NN].ext` (`parse_nombre`). **Llave de caso** = `cedula_AAAAMMDD`
+  (agrupa el trámite). `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`; adjuntos
+  (solo se verifican por nombre, no se OCR-ean) = `FURAT`/`FURIPS`/`EPICRISIS`/`HISTORIA`/`NACIDOVIVO`/
+  `REGISTROCIVIL`/`DEFUNCION`/`CEDULA`/`FORMULA`/`ORDEN`/`OTRO`. La cédula del nombre se **coteja** con la que
+  el OCR lee de la incapacidad (mismatch → se anota en `problemas`); **nunca se cruzan cédulas distintas**. Los
+  mal nombrados van a `inbox/sin_nomenclatura/` (se omiten). El `inbox` puede tener subcarpetas de RH (escaneo
+  recursivo). Los casos se mueven a `procesados/`/`incompletos/` **organizados por `<Nombre persona>/AAAA/MM/DD`**
+  — nombre = primer nombre + primer apellido del catálogo (`extract.primer_nombre_apellido` sobre el nombre
+  canónico resuelto por cédula); fecha = inicio de la incapacidad. La cédula/diagnóstico NO van en la ruta.
+  Diseño completo en `PLAN_INGESTA_MASIVA.md`.
+- **Validación documental por tipo** (`erp.validar_documentacion`): el conjunto de `TIPODOC` presentes del caso
+  se cruza contra los requeridos por el tipo — `lprequisitos_eps` (por `idlpentidad+idlptipoausentismo`,
+  `obligatorio=1`) prevalece; si no hay filas, `erp.REQUISITOS_DEFAULT`. Se aplican **grupos de equivalencia**
+  (`EQUIVALENCIAS_DOC`): p.ej. una `EPICRISIS` satisface el requisito de `HISTORIA_CLINICA` (soporte clínico), y
+  `NACIDO_VIVO`≡`REGISTRO_CIVIL`. Caso incompleto → `documentacion_estado=INCOMPLETA` + fila en
+  `lp_alertas_documentacion`; igual entra a staging como `PENDIENTE_REVISION` (el auxiliar decide).
 
 ## Restricciones / convenciones
 
@@ -145,3 +190,13 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
 - Tras editar Python/HTML hay que **reconstruir la imagen web** (`up -d --build incapacidad-ocr`) — el código
   va dentro de la imagen, no montado.
 - Los datos de `sql/init.sql` (cédulas/CIE/EPS) **coinciden con `../Ejemplos`** para que la demo resuelva lookups.
+- **Documentos pesados:** subida hasta **50 MB** (`MAX_UPLOAD_BYTES`). El PDF se rasteriza **página a página en
+  streaming** (`preprocess.load_pages` es un GENERADOR → una página en RAM a la vez), hasta `MAX_PDF_PAGES` (30);
+  cada página se acota a `OCR_MAX_PIXELS` (40 MP) antes del OCR, y `MAX_IMAGE_PIXELS` (200 MP) frena bombas de
+  descompresión. Si un doc pesado falla, subir esos topes por env o bajar `PDF_RENDER_SCALE`. NO volver a materializar
+  todas las páginas en una lista (era la causa del pico de RAM).
+- La carpeta **`ingesta/` es un bind mount** (`./ingesta:/data/ingesta`, env `INGESTA_ROOT`); editar su contenido
+  desde el host se ve al instante en el contenedor (no requiere reconstruir). El contenedor (usuario no-root)
+  **escribe** ahí para mover archivos — en Docker Desktop Windows el bind mount lo permite. La ingesta por lotes
+  **no tiene ledger/dedup ni concurrencia** todavía (es la Fase 2 del plan): reprocesar es seguro solo porque los
+  archivos se mueven fuera del `inbox` al terminar.

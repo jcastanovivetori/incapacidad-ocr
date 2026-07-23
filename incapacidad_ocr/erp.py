@@ -66,6 +66,71 @@ ETIQUETAS_NIVEL = {
 }
 
 
+# --------------------------------------------------------------------------- #
+# Validación documental: qué soportes exige cada tipo de ausentismo.
+# --------------------------------------------------------------------------- #
+# Normaliza el token de tipo de documento (del nombre del archivo o de la
+# clasificación por OCR) al código canónico usado por los requisitos.
+DOC_CANON = {
+    "INCAPACIDAD": "INCAPACIDAD", "PERMISO": "PERMISO", "VACACIONES": "VACACIONES",
+    "FURAT": "FURAT", "FURIPS": "FURIPS",
+    "EPICRISIS": "EPICRISIS",
+    "HISTORIA": "HISTORIA_CLINICA", "HISTORIACLINICA": "HISTORIA_CLINICA",
+    "HISTORIA_CLINICA": "HISTORIA_CLINICA", "RESUMEN": "RESUMEN_ATENCION",
+    "RESUMEN_ATENCION": "RESUMEN_ATENCION",
+    "NACIDOVIVO": "CERTIFICADO_NACIDO_VIVO", "CERTIFICADO_NACIDO_VIVO": "CERTIFICADO_NACIDO_VIVO",
+    "REGISTROCIVIL": "REGISTRO_CIVIL_NACIMIENTO", "REGISTRO_CIVIL_NACIMIENTO": "REGISTRO_CIVIL_NACIMIENTO",
+    "DEFUNCION": "CERTIFICADO_DEFUNCION", "CEDULA": "CEDULA",
+    "FORMULA": "FORMULA_MEDICA", "ORDEN": "ORDEN_MEDICA", "OTRO": "OTRO",
+}
+# Grupos de equivalencia: un documento requerido se satisface si hay algún
+# documento presente del mismo grupo (p.ej. una EPICRISIS satisface "historia clínica").
+EQUIVALENCIAS_DOC = [
+    {"EPICRISIS", "HISTORIA_CLINICA", "RESUMEN_ATENCION"},
+    {"CERTIFICADO_NACIDO_VIVO", "REGISTRO_CIVIL_NACIMIENTO"},
+]
+# Requisitos por tipo de ausentismo (default; `lprequisitos_eps` prevalece si tiene filas).
+REQUISITOS_DEFAULT = {
+    2: ["INCAPACIDAD", "FURAT"],
+    3: ["INCAPACIDAD", "EPICRISIS"],  # soporte clínico (epicrisis/historia por equivalencia)
+    5: ["INCAPACIDAD", "HISTORIA_CLINICA", "CERTIFICADO_NACIDO_VIVO"],
+    7: ["PERMISO"], 8: ["INCAPACIDAD", "FURAT"],
+    9: ["INCAPACIDAD", "REGISTRO_CIVIL_NACIMIENTO"], 10: ["INCAPACIDAD"],
+    11: ["INCAPACIDAD", "FURIPS"], 12: ["PERMISO"], 13: ["VACACIONES"],
+}
+
+
+def canon_doc(token: Optional[str]) -> Optional[str]:
+    """Token de tipo de documento → código canónico (o el token en mayúsculas si no mapea)."""
+    if not token:
+        return None
+    clave = re.sub(r"[^A-Z_]", "", str(token).upper())
+    return DOC_CANON.get(clave, clave or None)
+
+
+def _grupo_doc(doc: str) -> set:
+    for g in EQUIVALENCIAS_DOC:
+        if doc in g:
+            return g
+    return {doc}
+
+
+def validar_documentacion(presentes, id_tipo: Optional[int],
+                          requeridos_tabla=None) -> tuple[str, list[str]]:
+    """Cruza los documentos PRESENTES (canónicos) contra los requeridos por el tipo.
+
+    ``requeridos_tabla`` (de `lprequisitos_eps`) prevalece; si no hay, usa REQUISITOS_DEFAULT.
+    Devuelve (estado ∈ COMPLETA/INCOMPLETA, faltantes[]). Aplica grupos de equivalencia.
+    """
+    pres = {canon_doc(p) for p in (presentes or []) if p}
+    if requeridos_tabla:
+        requeridos = [canon_doc(d) for d in requeridos_tabla]
+    else:
+        requeridos = REQUISITOS_DEFAULT.get(id_tipo or 0, ["INCAPACIDAD"])
+    faltantes = [r for r in requeridos if r and not (_grupo_doc(r) & pres)]
+    return ("COMPLETA" if not faltantes else "INCOMPLETA"), faltantes
+
+
 def _norm(texto: str) -> str:
     s = (texto or "").lower()
     s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
@@ -273,6 +338,7 @@ def mapear_a_staging(
     lookups=None,
     hoy: Optional[date] = None,
     overrides: Optional[dict[str, Any]] = None,
+    documentos_presentes=None,
 ) -> dict[str, Any]:
     """Construye la fila staging desde el resultado de ``process()``. No toca la BD.
 
@@ -323,6 +389,12 @@ def mapear_a_staging(
         if _df:
             fecha_inicio = (_df - timedelta(days=num_dias - 1)).isoformat()
             fecha_inicio_calculada = True
+    # Simétrico: si hay inicio + fin pero NO días, se calculan por diferencia (inclusive).
+    # Cubre p.ej. vacaciones donde el inicio vino del nombre del archivo y el fin del OCR.
+    if fecha_inicio and fecha_fin and not num_dias:
+        _di, _df = _safe_date(fecha_inicio), _safe_date(fecha_fin)
+        if _di and _df and 1 <= (_df - _di).days + 1 <= 540:
+            num_dias = (_df - _di).days + 1
 
     problemas: list[str] = []
     faltantes_campos: list[dict[str, Any]] = []  # campos OBLIGATORIOS para revisión manual
@@ -437,11 +509,25 @@ def mapear_a_staging(
         else [cedula, cie, fecha_inicio, num_dias]
     confianza = round(sum(1 for x in nucleo if x) / len(nucleo), 3)
 
-    # Requisitos documentales → faltantes (asume que llegó la INCAPACIDAD). No aplica
-    # a permisos (id_ent es None ahí, así que ya no devuelve nada igual).
-    requeridos = lookups.documentos_requeridos(id_ent, id_tipo)
-    faltantes = [d for d in requeridos if d != "INCAPACIDAD"]
-    doc_estado = "COMPLETA" if not faltantes else "INCOMPLETA"
+    # Requisitos documentales. Si el lote pasa los documentos REALES presentes del caso
+    # (por nombre/nomenclatura), se valida contra ellos con grupos de equivalencia; si no,
+    # se degrada al comportamiento simple (asume que llegó la INCAPACIDAD).
+    requeridos_tabla = lookups.documentos_requeridos(id_ent, id_tipo) or None
+    if documentos_presentes is not None:
+        # Permisos y vacaciones NO exigen incapacidad: su requisito base es el propio
+        # documento (aunque el tipo remunerado/no-remunerado no se haya podido leer).
+        if es_permiso:
+            doc_estado, faltantes = validar_documentacion(documentos_presentes, None, ["PERMISO"])
+        elif es_vacaciones:
+            doc_estado, faltantes = validar_documentacion(documentos_presentes, None, ["VACACIONES"])
+        else:
+            doc_estado, faltantes = validar_documentacion(documentos_presentes, id_tipo, requeridos_tabla)
+        if faltantes:
+            problemas.append("Faltan documentos requeridos: " + ", ".join(faltantes))
+    else:
+        requeridos = requeridos_tabla or []
+        faltantes = [d for d in requeridos if d != "INCAPACIDAD"]
+        doc_estado = "COMPLETA" if not faltantes else "INCOMPLETA"
 
     observaciones = (
         _observaciones_permiso(etiqueta_tipo, perm) if es_permiso

@@ -78,6 +78,26 @@ def _iso_fechas(filas: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return filas
 
 
+ALERTAS_TABLE = "lp_alertas_documentacion"
+
+
+def insertar_alerta(cx, row: dict[str, Any]) -> int:
+    """INSERT de una alerta de documentación faltante. Devuelve el id."""
+    cols = list(row.keys())
+    marcadores = ", ".join(["%s"] * len(cols))
+    sql = f"INSERT INTO {ALERTAS_TABLE} ({', '.join(cols)}) VALUES ({marcadores})"
+    cur = cx.cursor()
+    try:
+        cur.execute(sql, [row[c] for c in cols])
+        cx.commit()
+        return cur.lastrowid
+    except Exception:
+        cx.rollback()
+        raise
+    finally:
+        cur.close()
+
+
 def listar_staging(cx, limite: int = 20, estado: Optional[str] = None) -> list[dict[str, Any]]:
     """Últimos registros (para la pantalla del auxiliar). Filtra por estado si se da."""
     cur = cx.cursor(dictionary=True)

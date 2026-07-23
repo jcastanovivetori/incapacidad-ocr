@@ -86,6 +86,60 @@ curl -s http://localhost:8000/api/staging/1 | python -m json.tool
 
 > Los datos de prueba (`sql/init.sql`) son catálogos mínimos. En producción se apunta a la BD ASTGU real (variables `DB_*`).
 
+## Ingesta masiva por lotes (carpeta «sin procesar» + botón «Procesar todos»)
+
+Para procesar **muchos documentos de una vez** (no de uno en uno), hay un flujo por **carpetas**. Quien recibe los documentos (WhatsApp/correo/escáner) los deja en la carpeta de ingesta **con una nomenclatura fija**; el sistema los agrupa por trámite, OCR-ea la incapacidad, valida los soportes requeridos según el tipo y los registra en `lp_ausentismos_ia`.
+
+**Nomenclatura de los archivos** (el nombre indica el caso y el tipo de documento):
+
+```
+cedula_AAAAMMDD_TIPODOC[_NN].ext
+```
+- **Llave del trámite** = `cedula_AAAAMMDD` (misma cédula + fecha ⇒ mismo caso). La fecha es la de inicio de la incapacidad (o la de recepción); el sistema re-lee la real por OCR y avisa si difiere.
+- **`TIPODOC` base** (el único que se OCR-ea): `INCAPACIDAD` · `PERMISO` · `VACACIONES`.
+- **Adjuntos** (solo se verifican por el nombre): `FURAT` · `FURIPS` · `EPICRISIS` · `HISTORIA` · `NACIDOVIVO` · `REGISTROCIVIL` · `DEFUNCION` · `CEDULA` · `FORMULA` · `ORDEN` · `OTRO`.
+
+```
+Ejemplo (enfermedad general con soporte clínico):
+  13742111_20260609_INCAPACIDAD.pdf
+  13742111_20260609_EPICRISIS.pdf
+Ejemplo (accidente de trabajo):
+  1005542119_20260601_INCAPACIDAD.pdf
+  1005542119_20260601_FURAT.pdf
+```
+
+**Estructura de carpetas** (en la raíz del repo, montada en el contenedor como `/data/ingesta`):
+
+```
+ingesta/
+├── inbox/whatsapp | correo | original/   # AQUÍ se dejan los documentos (con nomenclatura).
+│   │                                      #   RH puede crear subcarpetas: el escaneo es recursivo.
+│   └── sin_nomenclatura/                  # los mal nombrados caen aquí (se omiten)
+├── procesados/<Nombre persona>/<AAAA>/<MM>/<DD>/   # COMPLETOS, organizados por persona y fecha
+├── incompletos/<Nombre persona>/<AAAA>/<MM>/<DD>/  # falta un soporte requerido → genera alerta
+└── cuarentena/<caso>/                              # fallo técnico
+```
+
+En `procesados/` e `incompletos/` los documentos quedan organizados por **persona → año → mes → día**, para revisar fácil el historial de un empleado. El nombre de la carpeta es **primer nombre + primer apellido** (tomado de la incapacidad vía el catálogo, p.ej. `LEONARDO GARNICA`), y la fecha es la de **inicio de la incapacidad**.
+
+**Documentos requeridos por tipo** (mínimo la incapacidad; el resto según el tipo — la tabla `lprequisitos_eps` manda, con estos valores por defecto):
+
+| Tipo de ausentismo | Requiere además |
+|---|---|
+| Accidente de trabajo / Enf. laboral | `FURAT` |
+| Enfermedad general | soporte clínico (`EPICRISIS`/`HISTORIA`) |
+| Licencia maternidad | `HISTORIA` + (`NACIDOVIVO`\|`REGISTROCIVIL`) |
+| Licencia paternidad | `REGISTROCIVIL`\|`NACIDOVIVO` |
+| Tránsito no laboral | `FURIPS` |
+| Permiso / Vacaciones / Prelicencia | solo el documento base |
+
+**Cómo usarlo:**
+- **UI:** en el panel **«Procesamiento por lotes»** pulsa **«⚙ Procesar todos»** → agrupa, procesa y registra todo lo del `inbox`; el resumen muestra completos/incompletos y la **bandeja** de abajo lista los registros para revisar/aprobar.
+- **API:** `POST /api/lote/procesar` (equivale al botón) · `GET /api/lote/pendientes` (cuenta la carpeta).
+- **CLI:** `docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --dry-run` (reporta sin escribir) · `... python -m incapacidad_ocr.batch` (procesa).
+
+Los archivos base se OCR-ean con RapidOCR + reglas; los adjuntos **no** se OCR-ean (se cuentan por su nombre). Todo entra a staging como `PENDIENTE_REVISION`; el auxiliar revisa/aprueba. Diseño técnico completo en [`PLAN_INGESTA_MASIVA.md`](PLAN_INGESTA_MASIVA.md).
+
 ## Arquitectura (piezas intercambiables)
 
 | Capa | Opciones | Notas |
@@ -94,7 +148,8 @@ curl -s http://localhost:8000/api/staging/1 | python -m json.tool
 | **Extractor** (`incapacidad_ocr/extract.py`) | `RuleBasedExtractor` · `OllamaLLMExtractor` · `HybridExtractor` | reglas = determinista (impreso limpio); LLM = ruidoso/manuscrito; **híbrido = reglas + LLM fusionados (recomendado)** |
 | **Orquestador** (`incapacidad_ocr/processor.py`) | `process()` / `IncapacidadProcessor` | une OCR + extractor; reconcilia fechas/días (regla de fecha de inicio) |
 | **Mapeo ERP** (`incapacidad_ocr/erp.py`) | `mapear_a_staging()` · `Lookups` | lookups + homologación + `overrides` (correcciones manuales) → fila staging |
-| **BD** (`incapacidad_ocr/db.py`) | MySQL (BD ASTGU) | INSERT/UPDATE en `lp_ausentismos_ia`, flujo `PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO` |
+| **BD** (`incapacidad_ocr/db.py`) | MySQL (BD ASTGU) | INSERT/UPDATE en `lp_ausentismos_ia` + alertas, flujo `PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO` |
+| **Lote** (`incapacidad_ocr/batch.py`) | `procesar_todo()` · `parse_nombre()` | ingesta masiva por carpetas (nomenclatura → agrupar → validar por tipo → staging) |
 
 ## Esquema de salida
 
@@ -132,7 +187,7 @@ Revisado y endurecido (ver detalle en [`CONTEXT.md`](CONTEXT.md) §9):
 
 - **Sin SSRF:** la URL y el modelo de Ollama se fijan **en el servidor** (variables de entorno `OLLAMA_URL`/`LLM_MODEL`); el cliente **no** puede elegirlos. La API solo acepta `archivo`, `ocr`, `extractor` (lista blanca).
 - **PII (Ley 1581):** los archivos subidos se procesan en un temporal y se **borran** de inmediato; nada se persiste ni sale a terceros. Los errores no devuelven detalles internos y **no se loguea** el contenido.
-- **Anti-DoS:** límite de subida (25 MB, configurable con `MAX_UPLOAD_BYTES`), tope de páginas de PDF (`MAX_PDF_PAGES=20`) y guarda contra *decompression bombs* de imágenes (Pillow ≤ 64 MP).
+- **Documentos pesados / anti-DoS:** límite de subida **50 MB** (`MAX_UPLOAD_BYTES`); el PDF se rasteriza **página a página en streaming** (una en memoria a la vez) hasta `MAX_PDF_PAGES` (30); cada página se acota a `OCR_MAX_PIXELS` (40 MP) para no disparar la RAM en escaneos enormes; guarda contra *decompression bombs* (`MAX_IMAGE_PIXELS`, 200 MP). Todo configurable por env.
 - **Red:** la UI se publica **solo en `127.0.0.1`** (no en la LAN). **Ollama no expone puerto al host** (no tiene autenticación) — solo es accesible desde la red interna del contenedor web.
 - **Contenedor:** corre como **usuario no-root**, con `no-new-privileges` y `cap_drop: ALL` en el servicio web.
 

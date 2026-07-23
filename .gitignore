@@ -6,3 +6,10 @@ uploads/
 _eval_out.txt
 _explore_ocr.py
 .env
+
+# Ingesta por lotes: documentos (PII, Ley 1581) y datos de runtime — NO versionar.
+# Se conserva solo la estructura de carpetas (los .gitkeep). El escenario de demo se
+# regenera con: python scripts/sembrar_demo.py
+/ingesta/**
+!/ingesta/**/
+!/ingesta/**/.gitkeep

@@ -1,13 +1,20 @@
 -- ===========================================================================
 --  incapacidad-ocr → ERP (BD ASTGU)  —  esquema mínimo para el flujo a STAGING
 --
---  Replica (en versión mínima) lo confirmado con Diana (11 jun 2026):
+--  Replica (en versión mínima) lo confirmado con el cliente:
 --    • El middleware NO inserta en lpausentismos directo (se saltaría la lógica del ERP).
 --    • Escribe en una tabla STAGING (lp_ausentismos_ia, estado PENDIENTE_REVISION) con los
 --      MISMOS nombres de columna del ERP en los campos obligatorios → promover = 1:1.
---    • Catálogos para los LOOKUPS que faltaban en la prueba de la Sesión 1:
+--    • Lookups (los que faltaban en la prueba de la Sesión 1):
 --        cédula → idlpempleado · CIE-10 → idlpdiagnosticos · EPS → idlpentidad
---    • Códigos de tipo de ausentismo entregados por Diana: 2/3/5/8/9/10/11.
+--    • Tipos de ausentismo: 2/3/5/7/8/9/10/11/12/13 (incl. permisos 7/12 y vacaciones 13).
+--
+--  IMPORTANTE — coincide con lo que consulta erp.Lookups (ERP real):
+--    • `vlpempleados`     VIEW(idlpempleado, nroidentificacion, nombrecompleto, nombreeps)
+--    • `vlpentidades_ss`  VIEW(idlpeps, nombre, tipoentidad)
+--    • `lpdiagnosticos.codigo`   (antes `codigo_cie10`)
+--  En el ERP real esos son objetos existentes; aquí se emulan con vistas sobre las
+--  tablas demo para que los lookups resuelvan igual en la BD de `docker compose`.
 --
 --  Los datos de prueba COINCIDEN con los documentos de ../Ejemplos para demostrar el flujo.
 -- ===========================================================================
@@ -20,12 +27,13 @@ CREATE TABLE IF NOT EXISTS lpempleados (
   idlpempleado INT AUTO_INCREMENT PRIMARY KEY,
   cedula       VARCHAR(20)  NOT NULL UNIQUE,
   nombre       VARCHAR(120) NOT NULL,
+  eps          VARCHAR(80)  NULL,          -- EPS del empleado (regla SOAT / respaldo de EPS)
   activo       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS lpdiagnosticos (
   idlpdiagnosticos INT AUTO_INCREMENT PRIMARY KEY,
-  codigo_cie10     VARCHAR(10)  NOT NULL UNIQUE,   -- guardado con punto (J06.9); el lookup compara sin punto
+  codigo           VARCHAR(10)  NOT NULL UNIQUE,   -- CIE-10 con punto (J06.9); el lookup compara sin punto
   descripcion      VARCHAR(200) NOT NULL
 ) ENGINE=InnoDB;
 
@@ -41,6 +49,12 @@ CREATE TABLE IF NOT EXISTS lptipoausentismo (
   nombre             VARCHAR(60) NOT NULL
 ) ENGINE=InnoDB;
 
+-- Nivel de incapacidad (default por tipo en erp.NIVEL_INCAPACIDAD_DEFAULT; editable en revisión).
+CREATE TABLE IF NOT EXISTS lpnivelincapacidad (
+  idlpnivelincapacidad INT PRIMARY KEY,
+  nombre               VARCHAR(30) NOT NULL
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS lpestadosrecepausentismos (
   idlpestadosrecepausentismos INT PRIMARY KEY,
   nombre                      VARCHAR(30) NOT NULL
@@ -53,6 +67,22 @@ CREATE TABLE IF NOT EXISTS lprequisitos_eps (
   documento          VARCHAR(60) NOT NULL,
   obligatorio        TINYINT(1)  NOT NULL DEFAULT 1
 ) ENGINE=InnoDB;
+
+-- ------------------------------------------------- vistas que consulta erp.Lookups
+-- El ERP real expone estas vistas; aquí las emulamos sobre las tablas demo para que
+-- los lookups resuelvan igual (nroidentificacion/nombrecompleto/nombreeps · idlpeps).
+CREATE OR REPLACE VIEW vlpempleados AS
+  SELECT idlpempleado,
+         cedula AS nroidentificacion,
+         nombre AS nombrecompleto,
+         eps    AS nombreeps
+  FROM lpempleados;
+
+CREATE OR REPLACE VIEW vlpentidades_ss AS
+  SELECT idlpentidad AS idlpeps,
+         nombre,
+         tipoentidad
+  FROM lpentidades;
 
 -- ----------------------------------------------------------------- staging
 CREATE TABLE IF NOT EXISTS lp_ausentismos_ia (
@@ -109,7 +139,15 @@ CREATE TABLE IF NOT EXISTS lp_alertas_documentacion (
 -- ----------------------------------------------------------------- datos de prueba
 INSERT INTO lptipoausentismo (idlptipoausentismo, nombre) VALUES
   (2,'ACCIDENTE DE TRABAJO'),(3,'ENFERMEDAD GENERAL'),(5,'LICENCIA MATERNIDAD'),
-  (8,'ENFERMEDAD LABORAL'),(9,'LICENCIA PATERNIDAD'),(10,'PRELICENCIA'),(11,'TRANSITO NO LABORAL')
+  (7,'LICENCIA NO REMUNERADA'),(8,'ENFERMEDAD LABORAL'),(9,'LICENCIA PATERNIDAD'),
+  (10,'PRELICENCIA'),(11,'TRANSITO NO LABORAL'),(12,'LICENCIA REMUNERADA'),(13,'VACACIONES')
+ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
+
+-- Niveles de incapacidad (coincide con erp.ETIQUETAS_NIVEL).
+INSERT INTO lpnivelincapacidad (idlpnivelincapacidad, nombre) VALUES
+  (1,'INDEFINIDO'),(2,'LEVE'),(3,'SEVERO'),(4,'GRAVE'),(5,'MORTAL'),
+  (6,'CALIFICADA'),(7,'NO CALIFICADA'),(8,'CRITICA'),(9,'NO CRITICA'),
+  (10,'CRITICO'),(11,'NO CRITICO'),(12,'NO APLICA'),(13,'NO APLICA.'),(14,'NO APLICA..')
 ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 
 INSERT INTO lpestadosrecepausentismos (idlpestadosrecepausentismos, nombre) VALUES
@@ -129,20 +167,23 @@ INSERT INTO lpentidades (idlpentidad, nombre, nit, tipoentidad) VALUES
 ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 
 -- Empleados: cédulas que coinciden con ../Ejemplos (+ la muestra sintética de las pruebas).
-INSERT INTO lpempleados (cedula, nombre, activo) VALUES
-  ('1151480134','ALEJANDRO ISAAC LINARES RICARDO',1),
-  ('1095817662','CESAR ARMANDO LANCHEROS CHAPARRO',1),
-  ('91349897','JAIME SEDINSON AFANADOR',1),
-  ('1005542119','MICHAEL ALEXIZ MORENO VELANDIA',1),
-  ('63523940','ALIX HERNANDEZ SANDOVAL',1),
-  ('13742111','LEONARDO GARNICA REYES',1),
-  ('1098757631','YARITZA CONTRERAS RIVERA',1),
-  ('1095912481','JAIDER SEBASTIAN HERNANDEZ ARDILA',1),
-  ('1098765432','JUAN PEREZ GOMEZ',1)
-ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
+-- 'eps' = EPS del empleado (palabra clave del catálogo lpentidades): sirve para la regla
+-- SOAT (usar la EPS del empleado, no la aseguradora de tránsito) y como respaldo cuando el
+-- documento no trae EPS o no matchea.
+INSERT INTO lpempleados (cedula, nombre, eps, activo) VALUES
+  ('1151480134','ALEJANDRO ISAAC LINARES RICARDO','NUEVA EPS',1),
+  ('1095817662','CESAR ARMANDO LANCHEROS CHAPARRO','SURAMERICANA',1),
+  ('91349897','JAIME SEDINSON AFANADOR','SALUD TOTAL',1),
+  ('1005542119','MICHAEL ALEXIZ MORENO VELANDIA','SALUD TOTAL',1),
+  ('63523940','ALIX HERNANDEZ SANDOVAL','FAMISANAR',1),
+  ('13742111','LEONARDO GARNICA REYES','SALUD TOTAL',1),
+  ('1098757631','YARITZA CONTRERAS RIVERA','SANITAS',1),
+  ('1095912481','JAIDER SEBASTIAN HERNANDEZ ARDILA','NUEVA EPS',1),
+  ('1098765432','JUAN PEREZ GOMEZ','SALUD MIA',1)
+ON DUPLICATE KEY UPDATE nombre=VALUES(nombre), eps=VALUES(eps);
 
--- Catálogo CIE-10 (con punto, como lo entrega el extractor) para los ejemplos.
-INSERT INTO lpdiagnosticos (codigo_cie10, descripcion) VALUES
+-- Catálogo CIE-10 (columna `codigo`, con punto; el lookup compara sin punto) para los ejemplos.
+INSERT INTO lpdiagnosticos (codigo, descripcion) VALUES
   ('S42.0','FRACTURA DE LA CLAVICULA'),
   ('M54.4','LUMBAGO CON CIATICA'),
   ('M75.1','SINDROME DE MANGUITO ROTATORIO'),
@@ -157,7 +198,7 @@ ON DUPLICATE KEY UPDATE descripcion=VALUES(descripcion);
 INSERT INTO lprequisitos_eps (idlpentidad, idlptipoausentismo, documento, obligatorio) VALUES
   (1,3,'INCAPACIDAD',1),(1,3,'EPICRISIS',1),
   (3,3,'INCAPACIDAD',1),(3,3,'HISTORIA_CLINICA',1),
-  (4,3,'INCAPACIDAD',1),
+  (4,3,'INCAPACIDAD',1),(4,3,'HISTORIA_CLINICA',1),
   (5,3,'INCAPACIDAD',1),(5,3,'HISTORIA_CLINICA',1),
   (6,2,'INCAPACIDAD',1),(6,2,'FURAT',1),
   (7,2,'INCAPACIDAD',1),(7,2,'FURAT',1);

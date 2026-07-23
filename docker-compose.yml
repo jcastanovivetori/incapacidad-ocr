@@ -28,6 +28,11 @@ services:
       - DB_NAME=${DB_NAME:-ASTGU}
       - DB_USER=${DB_USER:-ocr}
       - DB_PASSWORD=${DB_PASSWORD:-ocr}
+      # Carpeta de ingesta masiva (bind mount abajo). Los feeders dejan aquí los documentos
+      # con la nomenclatura cedula_AAAAMMDD_TIPODOC.ext; el runner los procesa y los mueve.
+      - INGESTA_ROOT=/data/ingesta
+    volumes:
+      - ./ingesta:/data/ingesta
     depends_on:
       - ollama
       - db

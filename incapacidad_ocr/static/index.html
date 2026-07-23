@@ -142,7 +142,7 @@
     <div class="drop" id="drop">
       <div class="ic">📄</div>
       <div>Arrastra aquí una incapacidad o <b>haz clic para elegir</b></div>
-      <small>PDF, JPG, PNG, WEBP, TIFF — máx. 25 MB · se procesa y se borra (no se guarda)</small>
+      <small>PDF, JPG, PNG, WEBP, TIFF — máx. 50 MB · se procesa y se borra (no se guarda)</small>
       <input type="file" id="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" hidden />
     </div>
 
@@ -269,6 +269,17 @@
       </div>
       <div id="erpResultado" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; font-size:14px;"></div>
     </div>
+  </div>
+
+  <!-- Procesamiento por lotes: carpeta "sin procesar" -->
+  <div class="panel" id="lote">
+    <div class="res-head">
+      <h2 style="font-size:18px;">Procesamiento por lotes <small style="color:var(--muted);font-weight:400;">carpeta «sin procesar»</small></h2>
+      <span class="pill" id="lotePend" style="background:#eef2ff;color:#4338ca;">—</span>
+      <button class="btn ok" id="procesarTodos" style="margin-left:auto;">⚙ Procesar todos</button>
+    </div>
+    <p class="hint">Los documentos se dejan en la carpeta de ingesta con la nomenclatura <code>cedula_AAAAMMDD_TIPODOC.ext</code> (p.ej. <code>13742111_20260609_INCAPACIDAD.pdf</code>, <code>..._EPICRISIS.pdf</code>). «Procesar todos» los agrupa por trámite, OCR-ea la incapacidad, valida los soportes requeridos por tipo, los registra en <code>lp_ausentismos_ia</code> y los mueve a <code>procesados/</code> o <code>incompletos/</code>.</p>
+    <div id="loteResultado" style="display:none; margin-top:6px;"></div>
   </div>
 
   <!-- Bandeja de revisión: cola de registros del auxiliar -->
@@ -702,6 +713,57 @@ async function accionBandeja(id, accion) {
 $("refrescar").addEventListener("click", cargarBandeja);
 $("filtroEstado").addEventListener("change", cargarBandeja);
 cargarBandeja();
+
+// ----------------------- Procesamiento por lotes ------------------------
+async function cargarPendientes() {
+  try {
+    const r = await fetch("/api/lote/pendientes"); const d = await r.json();
+    $("lotePend").textContent = `${d.con_nomenclatura} pend. · ${d.casos} casos` +
+      (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura` : "");
+  } catch { $("lotePend").textContent = "—"; }
+}
+
+$("procesarTodos").addEventListener("click", async () => {
+  const btn = $("procesarTodos");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Procesando lote…';
+  const out = $("loteResultado");
+  try {
+    const r = await fetch("/api/lote/procesar", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ extractor: "rule" }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || ("HTTP " + r.status));
+    let html = `<div style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:10px 14px;border-radius:10px;">` +
+      `✓ Lote procesado: <b>${d.procesados}</b> completos · <b>${d.incompletos}</b> incompletos · <b>${d.cuarentena}</b> en cuarentena` +
+      (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura (omitidos)` : "") +
+      (d.error ? `<br>⚠️ ${escapeHtml(d.error)}` : "") + `</div>`;
+    if (d.detalle && d.detalle.length) {
+      html += '<div class="bandeja-scroll"><table class="bandeja" style="margin-top:10px;"><thead><tr>' +
+        '<th>Caso</th><th>Cédula</th><th>Tipo</th><th>Docs</th><th>Presentes</th><th>Falta</th><th>id</th></tr></thead><tbody>';
+      for (const c of d.detalle) {
+        if (c.error) { html += `<tr><td>${escapeHtml(c.caso || "—")}</td><td colspan="6">❌ ${escapeHtml(c.error)}</td></tr>`; continue; }
+        const badge = c.documentacion_estado === "COMPLETA"
+          ? '<span class="estado APROBADO">COMPLETA</span>'
+          : '<span class="estado PENDIENTE_REVISION">INCOMPLETA</span>';
+        html += `<tr><td>${escapeHtml(c.caso)}</td><td>${escapeHtml(c.cedula || "—")}</td>` +
+          `<td>${escapeHtml(c.tipo_ausentismo || "—")}</td><td>${badge}</td>` +
+          `<td>${escapeHtml((c.presentes || []).join(", "))}</td>` +
+          `<td>${escapeHtml((c.faltantes || []).join(", ") || "—")}</td>` +
+          `<td>${c.id != null ? c.id : "—"}</td></tr>`;
+      }
+      html += '</tbody></table></div>';
+    }
+    out.innerHTML = html; out.style.display = "block";
+    cargarPendientes(); cargarBandeja();
+  } catch (err) {
+    out.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:10px;">❌ ${escapeHtml(err.message)}</div>`;
+    out.style.display = "block";
+  } finally {
+    btn.disabled = false; btn.textContent = "⚙ Procesar todos";
+  }
+});
+cargarPendientes();
 </script>
 </body>
 </html>

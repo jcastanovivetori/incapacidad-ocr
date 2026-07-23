@@ -335,8 +335,7 @@ _NAME_STOP = re.compile(
 # minimizando el nº de segmentos). El catálogo de empleados (en erp.py) sigue siendo
 # la fuente AUTORITATIVA del nombre cuando la cédula resuelve; esto es el respaldo
 # genérico para médicos/pacientes no encontrados.
-_NAME_LEX = {
-    # apellidos frecuentes
+_APELLIDOS = {
     "GARCIA", "RODRIGUEZ", "MARTINEZ", "LOPEZ", "GONZALEZ", "HERNANDEZ", "PEREZ",
     "SANCHEZ", "RAMIREZ", "TORRES", "FLOREZ", "FLORES", "RIVERA", "GOMEZ", "DIAZ",
     "REYES", "MORALES", "JIMENEZ", "RUIZ", "ALVAREZ", "MORENO", "MUNOZ", "ROJAS",
@@ -353,7 +352,8 @@ _NAME_LEX = {
     "QUIROGA", "RANGEL", "RIOS", "SIERRA", "TOVAR", "URIBE", "VEGA", "VERA", "VILLA",
     "GELVEZ", "NORIEGA", "MANTILLA", "CARRILLO", "ESPINOSA", "FAJARDO", "ORTEGA", "ROA",
     "SOLANO", "TELLEZ", "ZAMBRANO", "BARRIOS", "CESPEDES", "CHACON", "DELGADO", "ESTUPINAN",
-    # nombres de pila frecuentes
+}
+_NOMBRES_PILA = {
     "JUAN", "CARLOS", "LUIS", "JOSE", "JORGE", "MIGUEL", "ANDRES", "DAVID", "DANIEL",
     "FERNANDO", "ALEJANDRO", "JAIME", "CESAR", "ARMANDO", "MICHAEL", "ALEXIZ", "ALIX",
     "YARITZA", "JAIDER", "SEBASTIAN", "ISAAC", "LEONARDO", "MARIA", "ANA", "LUISA",
@@ -366,8 +366,9 @@ _NAME_LEX = {
     "JULIAN", "KEVIN", "BRAYAN", "JEISON", "YEISON", "MARIANA", "DANIELA", "NATALIA",
     "CAROLINA", "ANDREA", "JOHANA", "YESICA", "KAREN", "TATIANA", "ALEXANDRA", "VIVIANA",
     "ADRIANA", "MONICA", "ELIANA", "GLORIA", "ROCIO", "ESPERANZA", "CONSUELO", "BLANCA",
-    "AMANDA", "EDWIN", "JESUS", "OMAR", "WILLIAM", "YENNY", "YINETH",
+    "AMANDA", "EDWIN", "JESUS", "OMAR", "WILLIAM", "YENNY", "YINETH", "SEDINSON",
 }
+_NAME_LEX = _APELLIDOS | _NOMBRES_PILA
 # Traducción length-preserving para comparar sin tildes/Ñ (mantiene los índices).
 _UPPER_ASCII = str.maketrans("ÁÉÍÓÚÜÑ", "AEIOUUN")
 
@@ -420,6 +421,27 @@ def _clean_name(raw: str | None) -> str | None:
     name = re.sub(r"\s+[A-ZÑ]$", "", name).strip()  # quita letra suelta final (p.ej. "R" de Registro)
     name = _split_glued_name(name)  # separa nombres pegados por el OCR
     return name or None
+
+
+def primer_nombre_apellido(nombre: str | None) -> str | None:
+    """Reduce un nombre completo a 'primer nombre + primer apellido'.
+
+    Consume los nombres de pila conocidos del inicio; el primer token que NO es un
+    nombre de pila conocido se toma como primer apellido. Cubre los patrones típicos
+    colombianos: "ALIX HERNANDEZ SANDOVAL"→"ALIX HERNANDEZ", "ALEJANDRO ISAAC LINARES
+    RICARDO"→"ALEJANDRO LINARES", "LEONARDO GARNICA REYES"→"LEONARDO GARNICA".
+    """
+    if not nombre:
+        return None
+    toks = [t for t in re.split(r"\s+", nombre.strip()) if t]
+    if not toks:
+        return None
+    if len(toks) == 1:
+        return toks[0]
+    i = 1
+    while i < len(toks) - 1 and _ascii_upper(toks[i]) in _NOMBRES_PILA:
+        i += 1
+    return f"{toks[0]} {toks[i]}"
 
 
 # --------------------------------------------------------------------------- #
