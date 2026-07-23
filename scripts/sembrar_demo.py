@@ -1,6 +1,7 @@
 """Siembra el escenario de demo de la INGESTA por lotes en ``ingesta/inbox/whatsapp``.
 
-Deja 5 casos + 1 archivo mal nombrado, con la nomenclatura ``cedula_AAAAMMDD_TIPODOC.ext``:
+Deja 5 casos + 1 archivo mal nombrado, con la nomenclatura ``cedula_TIPODOC.ext``
+(la FECHA no va en el nombre: sale del OCR del documento):
   - 13742111 (LEONARDO, Salud Total)  INCAPACIDAD + EPICRISIS  → enf. general, COMPLETO
   - 63523940 (ALIX, Famisanar)        INCAPACIDAD              → enf. general, INCOMPLETO (falta soporte)
   - 1005542119 (MICHAEL, Seg. Estado) INCAPACIDAD + FURAT      → accidente de trabajo, COMPLETO   [sintético]
@@ -60,13 +61,13 @@ def main() -> None:
             f.unlink()
 
     # --- Casos con documentos REALES (../Ejemplos) ---
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_20260609_INCAPACIDAD.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_20260609_EPICRISIS.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.jpeg", INBOX / "63523940_20260611_INCAPACIDAD.jpeg")
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_INCAPACIDAD.pdf")
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_EPICRISIS.pdf")
+    shutil.copy(EJEMPLOS / "incapacidad.jpeg", INBOX / "63523940_INCAPACIDAD.jpeg")
     shutil.copy(EJEMPLOS / "incapacidad_.jpeg", INBOX / "documento_suelto.jpeg")  # sin nomenclatura
     print("  copiados: 13742111 (x2), 63523940, documento_suelto")
 
-    # --- Casos SINTÉTICOS (texto claro para OCR) ---
+    # --- Casos SINTÉTICOS (texto claro para OCR; la fecha va DENTRO del documento) ---
     render([
         "INCAPACIDAD MEDICA",
         "Entidad: SEGUROS DEL ESTADO ARL",
@@ -78,9 +79,9 @@ def main() -> None:
         "Fecha fin: 2026-06-24",
         "Dias de incapacidad: 10",
         "Medico: Dr. CARLOS PEREZ  Registro: 12345",
-    ], INBOX / "1005542119_20260615_INCAPACIDAD.png")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "1005542119_20260615_FURAT.pdf")
-    print("  generado: 1005542119_20260615_FURAT.pdf")
+    ], INBOX / "1005542119_INCAPACIDAD.png")
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "1005542119_FURAT.pdf")
+    print("  generado: 1005542119_FURAT.pdf")
 
     render([
         "NOTIFICACION DE PERIODO DE VACACIONES",
@@ -90,7 +91,7 @@ def main() -> None:
         "a partir del primero (01) de julio de dos mil veintiseis (2026)",
         "hasta el quince (15) de julio de dos mil veintiseis (2026).",
         "Departamento de Gestion Humana",
-    ], INBOX / "1095912481_20260701_VACACIONES.png")
+    ], INBOX / "1095912481_VACACIONES.png")
 
     render([
         "FORMATO SOLICITUD DE PERMISO",
@@ -112,7 +113,7 @@ def main() -> None:
         "AUTORIZADO POR",
         "Nombre: Diana Gelvez",
         "Cargo: Jefe de Gestion Humana",
-    ], INBOX / "1098757631_20260620_PERMISO.png")
+    ], INBOX / "1098757631_PERMISO.png")
 
     print(f"OK — escenario sembrado en {INBOX}")
 

@@ -71,7 +71,7 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
 
 La carpeta `ingesta/` (raíz del repo) se monta en el contenedor como `/data/ingesta` (bind mount en
 `docker-compose.yml`). Los feeders dejan los documentos en `ingesta/inbox/<whatsapp|correo|original>/`
-con la **nomenclatura** `cedula_AAAAMMDD_TIPODOC[_NN].ext` (ver §Reglas de dominio).
+con la **nomenclatura** `cedula_TIPODOC[_NN].ext` (ver §Reglas de dominio).
 
 ```bash
 # Botón "Procesar todos" de la UI == este endpoint:
@@ -154,8 +154,8 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   (`extract._extraer_detalle_incapacidad`) porque es más fiable que las heurísticas genéricas y evita falsos
   positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.).
 - **Ingesta por lotes — nomenclatura de archivos** (`batch.py`): los documentos llegan **separados**, uno por
-  archivo, nombrados `cedula_AAAAMMDD_TIPODOC[_NN].ext` (`parse_nombre`). **Llave de caso** = `cedula_AAAAMMDD`
-  (agrupa el trámite). `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`; adjuntos
+  archivo, nombrados `cedula_TIPODOC[_NN].ext` (`parse_nombre`, **sin fecha**). **Llave de caso** = la `cedula`
+  (agrupa el trámite; la fecha sale del OCR). `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`; adjuntos
   (solo se verifican por nombre, no se OCR-ean) = `FURAT`/`FURIPS`/`EPICRISIS`/`HISTORIA`/`NACIDOVIVO`/
   `REGISTROCIVIL`/`DEFUNCION`/`CEDULA`/`FORMULA`/`ORDEN`/`OTRO`. La cédula del nombre se **coteja** con la que
   el OCR lee de la incapacidad (mismatch → se anota en `problemas`); **nunca se cruzan cédulas distintas**. Los

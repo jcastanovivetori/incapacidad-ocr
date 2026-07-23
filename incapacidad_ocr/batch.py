@@ -1,7 +1,7 @@
 """Ingesta masiva por lotes.
 
 Escanea la carpeta de "sin procesar" (``INGESTA_ROOT/inbox``), agrupa los archivos de
-un mismo trámite por la NOMENCLATURA del nombre  ``{cedula}_{AAAAMMDD}_{TIPODOC}[_NN].{ext}``,
+un mismo trámite por la NOMENCLATURA del nombre  ``{cedula}_{TIPODOC}[_NN].{ext}`` (sin fecha),
 OCR-ea SOLO el documento base (incapacidad/permiso/vacaciones), valida que estén los
 soportes requeridos según el tipo de ausentismo, registra cada caso en la tabla STAGING
 ``lp_ausentismos_ia`` (estado PENDIENTE_REVISION) y mueve los archivos a ``procesados/`` o
@@ -42,31 +42,24 @@ TIPODOC_BASE = {"INCAPACIDAD", "PERMISO", "VACACIONES"}
 # Sub-árbol del inbox → estado de recepción.
 RECEPCION_POR_CARPETA = {"whatsapp": "WHATSAPP", "correo": "CORREO", "original": "ORIGINAL"}
 
-# {cedula}_{AAAAMMDD}_{TIPODOC}[_{NN}]
+# {cedula}_{TIPODOC}[_{NN}]  — sin fecha: se toma del documento (OCR). La llave de caso
+# es la CÉDULA (todos los archivos de un empleado en el inbox = un trámite).
 _RE_NOMBRE = re.compile(
-    r"^(?P<cedula>\d{5,15})[_-](?P<fecha>\d{8})[_-](?P<tipo>[A-Za-zÑñ]+)(?:[_-](?P<nn>\d{1,3}))?$"
+    r"^(?P<cedula>\d{5,15})[_-](?P<tipo>[A-Za-zÑñ]+)(?:[_-](?P<nn>\d{1,3}))?$"
 )
 
 
 def parse_nombre(nombre: str) -> Optional[dict[str, Any]]:
-    """Parsea el nombre del archivo según la nomenclatura. None si no cumple."""
+    """Parsea el nombre del archivo según la nomenclatura ``cedula_TIPODOC[_NN]``. None si no cumple."""
     m = _RE_NOMBRE.match(Path(nombre).stem)
     if not m:
         return None
     return {
         "cedula": m.group("cedula"),
-        "fecha": m.group("fecha"),               # AAAAMMDD
         "tipo": m.group("tipo").upper(),
         "nn": m.group("nn"),
-        "caso": f"{m.group('cedula')}_{m.group('fecha')}",
+        "caso": m.group("cedula"),   # agrupa por cédula (la fecha sale del OCR)
     }
-
-
-def _fecha_iso(aaaammdd: str) -> Optional[str]:
-    try:
-        return date(int(aaaammdd[:4]), int(aaaammdd[4:6]), int(aaaammdd[6:8])).isoformat()
-    except (ValueError, IndexError):
-        return None
 
 
 def _sub(root: Path, *partes: str) -> Path:
@@ -123,17 +116,14 @@ def _carpeta_persona(nombre: Optional[str], cedula: str) -> str:
     return base or f"SIN NOMBRE {cedula}"
 
 
-def _partes_persona(subdir: str, nombre_persona: str, fecha_iso: Optional[str],
-                    fecha_nombre: Optional[str]) -> list[str]:
+def _partes_persona(subdir: str, nombre_persona: str, fecha_iso: Optional[str]) -> list[str]:
     """Ruta relativa organizada: <subdir>/<Nombre persona>/<AAAA>/<MM>/<DD>.
 
-    La fecha es la de inicio de la incapacidad (ISO del staging); si falta, la del nombre.
-    """
+    La fecha es la de inicio de la incapacidad (ISO, del OCR/staging); si no se pudo leer,
+    queda en 'sin_fecha' (el revisor la completa)."""
     y = m = d = None
     if fecha_iso and re.match(r"^\d{4}-\d{2}-\d{2}", fecha_iso):
         y, m, d = fecha_iso[:4], fecha_iso[5:7], fecha_iso[8:10]
-    elif fecha_nombre and len(fecha_nombre) == 8 and fecha_nombre.isdigit():
-        y, m, d = fecha_nombre[:4], fecha_nombre[4:6], fecha_nombre[6:8]
     partes = [subdir, nombre_persona]
     partes += [p for p in (y or "sin_fecha", m, d) if p]
     return partes
@@ -162,52 +152,57 @@ def procesar_caso(caso: str, archivos: list[dict], ocr_backend, extractor, cx, l
     """Procesa un caso (grupo de archivos con la misma llave). Registra en staging y mueve."""
     root = INGESTA_ROOT
     cedula_nombre = archivos[0]["cedula"]
-    fecha_iso = _fecha_iso(archivos[0]["fecha"])
     recepcion = archivos[0]["recepcion"]
     presentes = {erp.canon_doc(a["tipo"]) for a in archivos}
-    base = next((a for a in archivos if a["tipo"] in TIPODOC_BASE), None)
+    bases = [a for a in archivos if a["tipo"] in TIPODOC_BASE]
+    base = bases[0] if bases else None
 
     if base is not None:
         result = IncapacidadProcessor(ocr_backend, extractor).run(base["path"])
         result["fuente"] = base["path"].name
     else:
         # Sin documento base: no hay qué OCR-ear. Se registra el caso como incompleto
-        # (falta la incapacidad) usando la cédula/fecha del nombre.
+        # (falta la incapacidad) usando la cédula del nombre.
         result = {"ocr_backend": getattr(ocr_backend, "name", "?"),
                   "extractor": getattr(extractor, "name", "?"),
                   "fuente": archivos[0]["path"].name, "incapacidad": {}}
 
-    # Overrides: la cédula/fecha del NOMBRE respaldan al OCR (no lo pisan si el OCR sí leyó).
+    # Override: la cédula del NOMBRE respalda al OCR (no lo pisa si el OCR sí la leyó).
+    # La FECHA NO viene en el nombre: sale del OCR/derivación del modelo.
     inc = (result.get("incapacidad") or {})
     pac = inc.get("paciente") or {}
-    inca = inc.get("incapacidad") or {}
     overrides: dict[str, Any] = {}
     if not pac.get("documento_numero"):
         overrides["cedula"] = cedula_nombre
-    if not inca.get("fecha_inicio") and fecha_iso:
-        overrides["fecha_inicio"] = fecha_iso
 
     mapeo = erp.mapear_a_staging(result, recepcion, lookups, hoy=hoy,
                                  overrides=overrides, documentos_presentes=presentes)
     row = mapeo["row"]
     row["archivo_origen"] = (base or archivos[0])["path"].name
 
+    problemas = list(mapeo["problemas"])
     # Cotejo de seguridad: cédula del nombre vs la leída por el OCR.
     ced_ocr = re.sub(r"\D", "", str(pac.get("documento_numero") or ""))
     mismatch = bool(ced_ocr) and ced_ocr != cedula_nombre
     if mismatch:
-        row["problemas"] = ((row.get("problemas") or "") +
-                            f"; Cédula del nombre ({cedula_nombre}) ≠ leída ({ced_ocr})").strip("; ")
+        problemas.append(f"Cédula del nombre ({cedula_nombre}) ≠ leída ({ced_ocr})")
+    # Varios documentos base para la misma cédula → posibles trámites distintos juntos.
+    if len(bases) > 1:
+        problemas.append(f"Hay {len(bases)} documentos base para la cédula {cedula_nombre} "
+                         "(¿trámites distintos?): revisar")
+    if problemas != mapeo["problemas"]:
+        row["problemas"] = "; ".join(problemas) or None
 
+    requiere_revision = bool(problemas)
     doc_estado = row.get("documentacion_estado")
-    completo = doc_estado == "COMPLETA" and not mapeo["requiere_revision"]
+    completo = doc_estado == "COMPLETA" and not requiere_revision
 
     # Carpeta destino organizada por persona / año / mes / día (fecha = inicio de la
-    # incapacidad ya resuelta; si falta, la del nombre del archivo).
+    # incapacidad leída por el OCR; si no se pudo leer, queda en 'sin_fecha').
     nombre_persona = _carpeta_persona(row.get("paciente_leido") or mapeo.get("paciente_catalogo"),
                                       cedula_nombre)
     subdir = PROCESADOS if completo else INCOMPLETOS
-    partes = _partes_persona(subdir, nombre_persona, row.get("fechainicio"), archivos[0]["fecha"])
+    partes = _partes_persona(subdir, nombre_persona, row.get("fechainicio"))
 
     resultado_caso = {
         "caso": caso, "cedula": cedula_nombre, "persona": nombre_persona,
@@ -215,7 +210,7 @@ def procesar_caso(caso: str, archivos: list[dict], ocr_backend, extractor, cx, l
         "tiene_base": base is not None, "presentes": sorted(p for p in presentes if p),
         "tipo_ausentismo": mapeo.get("tipo_ausentismo"),
         "documentacion_estado": doc_estado, "faltantes": mapeo.get("documentos_faltantes"),
-        "requiere_revision": mapeo["requiere_revision"], "problemas": mapeo["problemas"],
+        "requiere_revision": requiere_revision, "problemas": problemas,
         "mismatch_cedula": mismatch, "id": None, "destino": "/".join(partes),
     }
     if dry_run:

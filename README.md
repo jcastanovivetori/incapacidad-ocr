@@ -93,19 +93,19 @@ Para procesar **muchos documentos de una vez** (no de uno en uno), hay un flujo 
 **Nomenclatura de los archivos** (el nombre indica el caso y el tipo de documento):
 
 ```
-cedula_AAAAMMDD_TIPODOC[_NN].ext
+cedula_TIPODOC[_NN].ext
 ```
-- **Llave del trámite** = `cedula_AAAAMMDD` (misma cédula + fecha ⇒ mismo caso). La fecha es la de inicio de la incapacidad (o la de recepción); el sistema re-lee la real por OCR y avisa si difiere.
+- **Llave del trámite** = la **cédula** (todos los archivos con la misma cédula = un caso). **La fecha NO va en el nombre**: el sistema la extrae del documento (OCR) y con ella organiza las carpetas.
 - **`TIPODOC` base** (el único que se OCR-ea): `INCAPACIDAD` · `PERMISO` · `VACACIONES`.
 - **Adjuntos** (solo se verifican por el nombre): `FURAT` · `FURIPS` · `EPICRISIS` · `HISTORIA` · `NACIDOVIVO` · `REGISTROCIVIL` · `DEFUNCION` · `CEDULA` · `FORMULA` · `ORDEN` · `OTRO`.
 
 ```
 Ejemplo (enfermedad general con soporte clínico):
-  13742111_20260609_INCAPACIDAD.pdf
-  13742111_20260609_EPICRISIS.pdf
+  13742111_INCAPACIDAD.pdf
+  13742111_EPICRISIS.pdf
 Ejemplo (accidente de trabajo):
-  1005542119_20260601_INCAPACIDAD.pdf
-  1005542119_20260601_FURAT.pdf
+  1005542119_INCAPACIDAD.pdf
+  1005542119_FURAT.pdf
 ```
 
 **Estructura de carpetas** (en la raíz del repo, montada en el contenedor como `/data/ingesta`):

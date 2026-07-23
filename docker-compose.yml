@@ -6,7 +6,7 @@
 #   docker compose exec ollama ollama pull qwen2.5vl:3b  # OCR de visión (opcional, lento en CPU)
 #
 # Ingesta por lotes: deja los documentos en ./ingesta/inbox/ con la nomenclatura
-#   cedula_AAAAMMDD_TIPODOC.ext  (ver GUIA_RECEPCION_INCAPACIDADES.md). Corrida programada:
+#   cedula_TIPODOC.ext  (la fecha sale del OCR; ver GUIA_RECEPCION_INCAPACIDADES.md). Programada:
 #   INGESTA_CRON="0 2 * * *" docker compose up -d incapacidad-ocr
 services:
   incapacidad-ocr:
@@ -33,7 +33,7 @@ services:
       - DB_USER=${DB_USER:-ocr}
       - DB_PASSWORD=${DB_PASSWORD:-ocr}
       # Carpeta de ingesta masiva (bind mount abajo). Los feeders dejan aquí los documentos
-      # con la nomenclatura cedula_AAAAMMDD_TIPODOC.ext; el runner los procesa y los mueve.
+      # con la nomenclatura cedula_TIPODOC.ext; el runner los procesa y los mueve.
       - INGESTA_ROOT=/data/ingesta
       # Corrida PROGRAMADA de la ingesta (cron in-process). Vacío = desactivada.
       # Ej.: INGESTA_CRON="0 2 * * *" procesa la carpeta cada día a las 02:00 (zona BATCH_TZ).

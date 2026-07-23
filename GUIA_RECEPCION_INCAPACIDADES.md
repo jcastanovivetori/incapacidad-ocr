@@ -14,29 +14,28 @@
 
 ## 2. Cómo nombrar cada archivo (lo más importante)
 
-El **nombre del archivo** le dice al sistema de quién es y qué documento es. El formato es:
+El **nombre del archivo** le dice al sistema de quién es y qué documento es. El formato es sencillo:
 
 ```
-cedula_AAAAMMDD_TIPO.extensión
+cedula_TIPO.extensión
 ```
 
 | Parte | Qué va | Ejemplo |
 |---|---|---|
 | **cedula** | Cédula del empleado (solo números) | `1005542119` |
-| **AAAAMMDD** | Fecha de **inicio de la incapacidad**: año, mes, día, pegados | `20260615` (= 15/06/2026) |
 | **TIPO** | Qué documento es (ver lista abajo) | `INCAPACIDAD` |
 | **extensión** | `pdf`, `jpg`, `png`… | `.pdf` |
 
-> **Regla clave:** todos los archivos de un mismo trámite llevan la **misma cédula y la misma fecha** → así el sistema los agrupa como un solo caso.
+> **Regla clave:** todos los archivos de un mismo empleado/trámite llevan la **misma cédula** → así el sistema los agrupa como un solo caso. **La fecha NO va en el nombre:** el sistema la lee del propio documento.
 
 **Ejemplos:**
 
 ```
-1005542119_20260615_INCAPACIDAD.pdf     ← la incapacidad
-1005542119_20260615_FURAT.pdf           ← su soporte (accidente de trabajo)
+1005542119_INCAPACIDAD.pdf     ← la incapacidad
+1005542119_FURAT.pdf           ← su soporte (accidente de trabajo)
 
-1023456789_20260701_INCAPACIDAD.pdf
-1023456789_20260701_EPICRISIS.pdf
+1023456789_INCAPACIDAD.pdf
+1023456789_EPICRISIS.pdf
 ```
 
 Si un trámite trae **dos del mismo tipo**, se numeran: `..._EPICRISIS_01.pdf`, `..._EPICRISIS_02.pdf`.
@@ -87,7 +86,7 @@ inbox/original/    ← físico / ventanilla
 
 ## 6. Qué hace el sistema después
 
-1. **Agrupa** los archivos por cédula + fecha (un caso por trámite).
+1. **Agrupa** los archivos por cédula (un caso por trámite) y **lee la fecha del propio documento**.
 2. **Lee** la incapacidad y saca los datos (paciente, diagnóstico, fechas, tipo).
 3. **Valida** que estén los soportes requeridos según el tipo.
 4. **Registra** el caso para revisión y lo **organiza** en el servidor por **persona → año → mes → día** (para consultar fácil el historial de un empleado).
@@ -97,8 +96,8 @@ El auxiliar solo **revisa y aprueba** (o completa lo que falte); ya no digita.
 
 ## 7. Recomendaciones rápidas
 
-- ✅ Un documento = un archivo, bien nombrado.
-- ✅ Misma cédula + misma fecha para todos los archivos de un trámite.
+- ✅ Un documento = un archivo, bien nombrado (`cédula_TIPO`).
+- ✅ Misma cédula para todos los archivos de un mismo trámite (la fecha la pone el sistema).
 - ✅ Fotos derechas y legibles (o mejor, PDF).
 - ❌ No juntar varios documentos en un solo PDF.
 - ❌ No usar nombres como `IMG_2026.jpg` o `escaneo.pdf` → el sistema no sabe de quién es y lo manda a "revisar manual".

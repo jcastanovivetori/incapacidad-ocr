@@ -8,7 +8,7 @@ Principios de diseño:
 
 - **Reutiliza la librería en-proceso** (`IncapacidadProcessor` + `erp.mapear_a_staging` + `db.insertar_staging`), nunca la API HTTP ni SQL directo a `lpausentismos`. El batch **jamás auto-aprueba**: escribe en staging (`PENDIENTE_REVISION`), un auxiliar revisa y el ERP promueve.
 - **Foco del OCR vs foco del sistema:** el OCR/extracción se concentra en el **documento base** (incapacidad/permiso/vacaciones); los **adjuntos se identifican por la nomenclatura del archivo** (no se OCR-ean). El sistema valida incapacidad **+ los adjuntos requeridos según el tipo de ausentismo que lee el OCR**.
-- **Agrupación determinista por nomenclatura de archivos** `{cedula}_{AAAAMMDD}_{TIPODOC}[_NN].{ext}` (§3): el nombre indica el caso y el tipo de documento. La clasificación/agrupación por OCR queda como fallback para archivos mal nombrados.
+- **Agrupación determinista por nomenclatura de archivos** `{cedula}_{TIPODOC}[_NN].{ext}` (§3): el nombre indica el caso (cédula) y el tipo de documento; la fecha se toma del OCR. La clasificación/agrupación por OCR queda como fallback para archivos mal nombrados.
 - **MySQL es la fuente de verdad** del estado, la cola, el claim y la idempotencia (MySQL 8.4: claim con `SELECT ... FOR UPDATE SKIP LOCKED` + fencing por `worker_id`/`lease_token`, `GET_LOCK` con keepalive, hash indexado + `UNIQUE (caso_id, hash)`). El árbol de carpetas es **organización física best-effort y reconciliable**, nunca fuente de verdad ni mecanismo de lock.
 - **Portabilidad Windows/Linux:** la lógica vive en **contenedores Linux** y corre idéntica en ambos SO; solo el mecanismo de arranque programado se elige según el host (§5).
 - **100% local (Ley 1581):** ni documentos ni datos salen a internet; PII de salud tratada con `case_id` sin cédula en rutas/logs, volumen cifrado y ACL.
@@ -62,18 +62,19 @@ flowchart TB
 Los documentos llegan **separados** (un archivo por documento). La agrupación y la clasificación se hacen de forma **determinista por el nombre del archivo**, que el feeder (escáner / quien recibe por WhatsApp o correo) aplica al guardar:
 
 ```
-{cedula}_{AAAAMMDD}_{TIPODOC}[_NN].{ext}
+{cedula}_{TIPODOC}[_NN].{ext}
 ```
 
 | Parte | Significado | Reglas |
 |---|---|---|
-| `cedula` | Identificación del empleado (solo dígitos) | Llave de agrupación (con la fecha). |
-| `AAAAMMDD` | Fecha del trámite: inicio de la incapacidad; si el feeder no la conoce, la de recepción. **Igual en todos los archivos del mismo trámite**. | El sistema re-lee la fecha real por OCR de la incapacidad; si difiere, marca `requiere_revision`. |
+| `cedula` | Identificación del empleado (solo dígitos) | **Llave de agrupación** del trámite. |
 | `TIPODOC` | Tipo de documento (vocabulario controlado) | Insensible a mayúsculas; se normaliza. |
 | `NN` | (opcional) 2 dígitos si hay varios del mismo tipo | `_01`, `_02`, … |
 | `ext` | `pdf` \| `jpg` \| `jpeg` \| `png` | |
 
-**Llave de caso** = `{cedula}_{AAAAMMDD}`. Todos los archivos con la misma llave forman un trámite.
+**La FECHA no va en el nombre:** el sistema la toma del **OCR del documento base** y con ella organiza la salida (`procesados/…/AAAA/MM/DD`). Se eligió así porque es más simple y menos propenso a error para quien nombra los soportes.
+
+**Llave de caso** = la **`cedula`**. Todos los archivos con la misma cédula (en el inbox) forman un trámite. Si un mismo empleado tuviera dos trámites distintos en el mismo lote, el caso se marca para revisión (se detectan **varios documentos base**).
 
 **Vocabulario `TIPODOC`:**
 - **Base (uno por caso — el ÚNICO que se OCR-ea/extrae):** `INCAPACIDAD` · `PERMISO` · `VACACIONES`.
@@ -81,20 +82,20 @@ Los documentos llegan **separados** (un archivo por documento). La agrupación y
 
 **Ejemplos:**
 ```
-Accidente de trabajo (empleado 1005542119, inicio 09/06/2026):
-  1005542119_20260609_INCAPACIDAD.pdf
-  1005542119_20260609_FURAT.pdf
+Accidente de trabajo (empleado 1005542119):
+  1005542119_INCAPACIDAD.pdf
+  1005542119_FURAT.pdf
 Licencia de maternidad:
-  1023456789_20260701_INCAPACIDAD.pdf
-  1023456789_20260701_HISTORIA.pdf
-  1023456789_20260701_NACIDOVIVO.pdf
+  1023456789_INCAPACIDAD.pdf
+  1023456789_HISTORIA.pdf
+  1023456789_NACIDOVIVO.pdf
 ```
 
 **Cotejo de seguridad:** la cédula del nombre se compara con la que el OCR lee de la incapacidad; si no coinciden → `requiere_revision`. **Nunca se cruzan cédulas distintas** en un mismo caso.
 
 **PII en el nombre (Ley 1581):** la cédula aparece en el nombre **de entrada** (carpeta `inbox`, transitoria, con ACL y volumen cifrado). Al mover a `procesados/`, el sistema **renombra a nombres sin PII** (`NN_<tipo>.<ext>` bajo `case_id` sin cédula, §4.2/§4.4) y los logs redactan la cédula.
 
-**Archivos que no siguen la convención → `inbox/sin_nomenclatura/`:** el sistema intenta (a) clasificar por OCR (§7.2) y (b) auto-agrupar por la cédula+fecha leídas del documento dentro de una ventana `±N días`; si sigue ambiguo → bucket de revisión humana (nunca se fuerza a un caso ni se cruzan cédulas). El camino primario y determinista es la nomenclatura.
+**Archivos que no siguen la convención → `inbox/sin_nomenclatura/`:** el sistema intenta (a) clasificar por OCR (§7.2) y (b) auto-agrupar por la **cédula leída del documento**; si sigue ambiguo → bucket de revisión humana (nunca se fuerza a un caso ni se cruzan cédulas). El camino primario y determinista es la nomenclatura.
 
 ## 4. Estructura de carpetas y máquina de estados
 
@@ -106,7 +107,7 @@ Todo cuelga de `/data/ingesta` (bind mount del host). El estado autoritativo viv
 /data/ingesta/                         # INGESTA_ROOT (bind mount INGESTA_HOST_ROOT)
 ├── inbox/                             # CONTRATO DE ENTRADA: archivos con NOMENCLATURA (§3).
 │   ├── whatsapp/  correo/  original/  #   subarbol -> deriva estado_recepcion (§7.7); RH puede
-│   │   └── {cedula}_{AAAAMMDD}_{TIPODOC}[_NN].{ext}  #   crear mas subcarpetas: el escaneo es RECURSIVO
+│   │   └── {cedula}_{TIPODOC}[_NN].{ext}         #   crear mas subcarpetas: el escaneo es RECURSIVO
 │   └── sin_nomenclatura/              # archivos mal nombrados -> fallback OCR + revision (§3)
 ├── work/                             # area interna (mismo volumen)
 │   ├── recepcion/                    # estabilidad verificada + saneo de nombres
@@ -284,7 +285,7 @@ El benchmark inicial (100 docs representativos + bundles multipágina reales) mi
 
 ### 7.1 Agrupación del trámite
 
-La agrupación es por la **llave de caso `{cedula}_{AAAAMMDD}` del nombre** (§3), sin OCR. Los adjuntos con la misma llave se asocian al caso del documento base.
+La agrupación es por la **cédula del nombre** (llave de caso, §3), sin OCR. Los adjuntos con la misma cédula se asocian al caso del documento base.
 
 **Transacción de re-agrupación (adjunto tardío):** cuando un adjunto llega después y debe unirse a un caso existente:
 - Se toma `GET_LOCK('caso_'||caso_id_destino)` → reasignación atómica de `caso_id` en el ledger del adjunto (UPDATE fenced) → re-evaluación single-writer de la completitud del caso (§7.4) → move del archivo a la carpeta del caso (best-effort, `estado_move`).
@@ -494,7 +495,7 @@ Todos *connection-scoped*; se autoliberan al caer la conexión (crash-safe), agn
 Migraciones en `sql/init.sql`: `lp_ingesta_documentos` (con `hash` indexado no único, **UNIQUE `(caso_id, hash)`**, `lease_token`, `estado_move`, `secuencia_caso`, `worker_id`, `instancia_id`, `claimed_at`, `heartbeat_at`, `staging_id`, `corrida_id`, `error_clase`, `tipo_doc`, e índice compuesto `(estado, prioridad, caso_id, id)`) y `lp_ingesta_corridas`; columnas `case_id` + hash en `lp_ausentismos_ia`; índice único auxiliar en `lp_alertas_documentacion(id_ausentismo_ia)`; ampliar `archivo_origen`/`documentos_faltantes`. `db.insertar_staging_tx`, `crear_conexion` con statement-timeout + reconexión, `upsert_alerta_por_caso`. `Lookups.requisitos_documentales` con `obligatorio`. Tests unitarios.
 
 ### Fase 1 — Nomenclatura, clasificación y validación por caso (core, sin lote)
-Parser de nomenclatura (`{cedula}_{AAAAMMDD}_{TIPODOC}[_NN]` → llave de caso + tipo, con normalización y validación) y `clasificador.py` (mapea `TIPODOC`→código canónico; anclas de texto para el fallback). `erp.REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion` single-writer, `mapear_a_staging(..., documentos_presentes=None)` con degradación `NO_EVALUADA`. Cotejo cédula-nombre ↔ cédula-OCR de la incapacidad → `requiere_revision`. Opcional (fallback): `read_pages()` + refuerzo de `es_pagina_relevante`. Tests contra `../Ejemplos`. Validar Windows y Linux.
+Parser de nomenclatura (`{cedula}_{TIPODOC}[_NN]` → llave de caso (cédula) + tipo, con normalización y validación) y `clasificador.py` (mapea `TIPODOC`→código canónico; anclas de texto para el fallback). `erp.REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion` single-writer, `mapear_a_staging(..., documentos_presentes=None)` con degradación `NO_EVALUADA`. Cotejo cédula-nombre ↔ cédula-OCR de la incapacidad → `requiere_revision`. Opcional (fallback): `read_pages()` + refuerzo de `es_pagina_relevante`. Tests contra `../Ejemplos`. Validar Windows y Linux.
 
 ### Fase 2 — Runner por lotes (on-demand, un host)
 Subpaquete `incapacidad_ocr/batch/` (config, layout con `case_id` sin cédula y nombres serializados, `fs_atomico` con `_tmp` siempre + `estado_move`, escaner con estabilidad robusta + `(caso_id,hash)` + parseo de nomenclatura, claim fenced, worker con heartbeat-bg + reconexión + Job Object en Windows, validador single-writer, runner, observ, cli). Pool `spawn`, ONNX 1 hilo, extractor `rule`, PDF en streaming, checkpoint fenced, move reconciliable, cuarentena, aviso de dedup semántica, `--once`/`--dry-run`. Benchmark de dimensionamiento.
@@ -517,7 +518,7 @@ Upsert idempotente de alertas + cierre a RESUELTA; `retencion.py` con separació
 | 3 | **Lost-update de completitud** (N workers recalculan el mismo caso). | Evaluación single-writer por caso bajo `GET_LOCK('caso_...')` tras drenar el caso. |
 | 4 | **Dedup equivocada** (mismo byte legítimo entre casos). | UNIQUE `(caso_id, hash)`; `hash` indexado no único para aviso; dedup semántica por clave natural como aviso. |
 | 5 | **Lock de corrida soltado ocioso** → doble drain. | Keepalive (`SELECT 1` cada ~60 s); fencing del claim como defensa dura. |
-| 6 | **Agrupación real** (canales entregan documentos sueltos). | Nomenclatura de archivos `{cedula}_{AAAAMMDD}_{TIPODOC}` como camino primario determinista; auto-agrupación por OCR solo como fallback. |
+| 6 | **Agrupación real** (canales entregan documentos sueltos). | Nomenclatura de archivos `{cedula}_{TIPODOC}` (la fecha sale del OCR) como camino primario determinista; auto-agrupación por OCR solo como fallback. |
 | 7 | **Move no atómico / archivo varado en `work/`**. | Escribir siempre a `_tmp/` + `os.replace`; move best-effort reconciliable con `estado_move`; reconciliación reintenta `HECHO` no movidos; la correctitud vive en MySQL. |
 | 8 | **Estabilidad de archivo sobre gRPC-FUSE/SMB** (OCR truncado). | Apertura exclusiva/rename-probe + edad mínima + `tamaño>0`; patrón `.part`→rename en origen. |
 | 9 | **Procesos worker huérfanos en Windows**. | Job Object `KILL_ON_JOB_CLOSE`; verificación de `lease_token`/generación en cada claim. |
