@@ -115,6 +115,11 @@ CREATE TABLE IF NOT EXISTS lp_ausentismos_ia (
   problemas                    TEXT          NULL,
   documentacion_estado         VARCHAR(20)   NULL,
   documentos_faltantes         VARCHAR(255)  NULL,
+  -- sub-bandera "DUDOSA" (no es un estado nuevo): señal de posible manipulación del
+  -- documento (fuentes inconsistentes en PDF nativo / ELA en imagen), no bloqueante.
+  sospecha_manipulacion        TINYINT(1)    NOT NULL DEFAULT 0,
+  motivo_sospecha              VARCHAR(500)  NULL,
+  sospecha_revisada            TINYINT(1)    NOT NULL DEFAULT 0,
   -- control del flujo
   estado                       VARCHAR(20)   NOT NULL DEFAULT 'PENDIENTE_REVISION',
   creado_en                    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -202,3 +207,16 @@ INSERT INTO lprequisitos_eps (idlpentidad, idlptipoausentismo, documento, obliga
   (5,3,'INCAPACIDAD',1),(5,3,'HISTORIA_CLINICA',1),
   (6,2,'INCAPACIDAD',1),(6,2,'FURAT',1),
   (7,2,'INCAPACIDAD',1),(7,2,'FURAT',1);
+
+-- ------------------------------------------------------------------ migración
+-- `init.sql` SOLO corre en el PRIMER init de un volumen vacío (ver CLAUDE.md,
+-- "Gotchas del entorno"). Para una BD ya inicializada antes de agregar la sub-bandera
+-- de sospecha de manipulación, corre este bloque a mano (idempotente, requiere
+-- MySQL 8.0.29+, ya cumplido por la imagen `mysql:8` del docker-compose):
+--   docker exec -i ocr-db mysql -uroot -proot ASTGU < sql/init.sql
+-- (repetir el CREATE TABLE no falla por el IF NOT EXISTS; el ALTER de abajo sí
+-- aplica sobre una tabla ya existente sin estas columnas).
+ALTER TABLE lp_ausentismos_ia
+  ADD COLUMN IF NOT EXISTS sospecha_manipulacion TINYINT(1) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS motivo_sospecha VARCHAR(500) NULL,
+  ADD COLUMN IF NOT EXISTS sospecha_revisada TINYINT(1) NOT NULL DEFAULT 0;

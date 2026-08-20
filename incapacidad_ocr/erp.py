@@ -137,6 +137,36 @@ def _norm(texto: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+# Palabras vacías del español que no aportan a comparar dos descripciones de diagnóstico
+# (conectores/artículos muy frecuentes; NO son términos clínicos).
+_STOPWORDS_DX = {
+    "de", "del", "la", "el", "los", "las", "en", "con", "por", "sin", "no", "y", "o",
+    "u", "al", "sus", "otra", "otro", "otras", "otros", "no especificada", "especificada",
+}
+
+
+def _palabras_significativas(texto: str) -> set[str]:
+    palabras = re.findall(r"[a-z]+", _norm(texto))
+    return {p for p in palabras if len(p) > 3 and p not in _STOPWORDS_DX}
+
+
+def _diagnostico_coincide(desc_catalogo: Optional[str], desc_documento: Optional[str]) -> Optional[bool]:
+    """¿El texto del diagnóstico que trae el documento es compatible con la descripción
+    OFICIAL del código CIE-10 en el catálogo? Comparación conservadora por solapamiento
+    de palabras significativas (no exige coincidencia exacta: cada IPS redacta distinto).
+
+    Devuelve None si no se puede evaluar con confianza (falta alguna descripción, o
+    son demasiado cortas) — en ese caso NO se reporta nada, se prefiere no opinar.
+    """
+    if not desc_catalogo or not desc_documento:
+        return None
+    sig_cat = _palabras_significativas(desc_catalogo)
+    sig_doc = _palabras_significativas(desc_documento)
+    if len(sig_cat) < 2 or len(sig_doc) < 2:
+        return None
+    return bool(sig_cat & sig_doc)
+
+
 def homologar_tipo(texto: str) -> tuple[int, str]:
     """Texto del documento → (código, etiqueta) de tipo de ausentismo."""
     t = _norm(texto)
@@ -399,6 +429,17 @@ def mapear_a_staging(
     problemas: list[str] = []
     faltantes_campos: list[dict[str, Any]] = []  # campos OBLIGATORIOS para revisión manual
 
+    # Sub-bandera DUDOSA (no bloquea, solo alerta): señal de posible manipulación del
+    # documento calculada en processor.analizar_autenticidad. No confundir con
+    # `problemas`/`requiere_revision`: hoy se suma ahí también para que dispare la
+    # revisión estándar, pero queda además en columnas propias para que la UI pinte
+    # el badge sin tener que parsear el string de `problemas`.
+    auten = resultado.get("autenticidad") or {}
+    sospecha_manipulacion = bool(auten.get("sospechosa"))
+    motivo_sospecha = auten.get("motivo") if sospecha_manipulacion else None
+    if sospecha_manipulacion:
+        problemas.append(f"Posible manipulación del documento: {motivo_sospecha}")
+
     def _faltan(campo: str, etiqueta: str, valor: Any) -> None:
         faltantes_campos.append({"campo": campo, "etiqueta": etiqueta, "valor": valor})
 
@@ -458,8 +499,38 @@ def mapear_a_staging(
             problemas.append("No se detectó el código de diagnóstico (CIE-10)")
             _faltan("cie10", "Código CIE-10", None)
         elif id_dx is None:
-            problemas.append(f"Diagnóstico {cie} no está en el catálogo CIE-10")
+            motivo_nf = f"Diagnóstico {cie} no está en el catálogo CIE-10"
+            problemas.append(motivo_nf)
             _faltan("cie10", "Código CIE-10", cie)
+            # Tercera señal DUDOSA (Diana, confirmado contra la tabla real): todo CIE-10
+            # vigente debe resolver contra `lpdiagnosticos` — si no matchea, es indicio de
+            # un código fabricado/alterado a mano (o un error de tecleo/OCR severo).
+            sospecha_manipulacion = True
+            motivo_sospecha = f"{motivo_sospecha}; {motivo_nf}" if motivo_sospecha else motivo_nf
+        else:
+            # Segunda señal DUDOSA: el código CIE-10 existe en el catálogo, pero el texto
+            # del diagnóstico que trae el documento no tiene relación con la descripción
+            # OFICIAL de ese código — típico de una incapacidad donde se cambió el código
+            # a mano pero no (o mal) la descripción, o viceversa. Algunos formatos omiten
+            # la descripción del todo: en ese caso no se evalúa (no hay con qué comparar).
+            if _diagnostico_coincide(desc_dx, diag.get("descripcion")) is False:
+                motivo_dx = (
+                    f"El texto del diagnóstico no coincide con {cie} "
+                    f"({desc_dx}) según el catálogo CIE-10"
+                )
+                problemas.append(f"Posible manipulación del documento: {motivo_dx}")
+                sospecha_manipulacion = True
+                motivo_sospecha = f"{motivo_sospecha}; {motivo_dx}" if motivo_sospecha else motivo_dx
+
+        # Cuarta señal DUDOSA: un CIE-10 vigente reportable tiene 4 caracteres (categoría
+        # + subcategoría, p.ej. "S801"/"S80.1"); un código de solo 3 (la categoría sin
+        # subdividir, p.ej. "A09") está estructuralmente incompleto para este catálogo —
+        # independiente de si además matcheó o no contra `lpdiagnosticos`.
+        if cie and len(cie.replace(".", "")) == 3:
+            motivo_len = f"Código CIE-10 {cie} incompleto (3 caracteres; se esperan 4)"
+            problemas.append(f"Posible manipulación del documento: {motivo_len}")
+            sospecha_manipulacion = True
+            motivo_sospecha = f"{motivo_sospecha}; {motivo_len}" if motivo_sospecha else motivo_len
 
     eps_de_empleado = False
     if es_permiso or es_vacaciones:
@@ -566,6 +637,8 @@ def mapear_a_staging(
         "problemas": "; ".join(problemas) or None,
         "documentacion_estado": doc_estado,
         "documentos_faltantes": ", ".join(faltantes) or None,
+        "sospecha_manipulacion": 1 if sospecha_manipulacion else 0,
+        "motivo_sospecha": motivo_sospecha,
         "estado": "PENDIENTE_REVISION",
     }
     return {

@@ -325,8 +325,11 @@ def revisar(
     El ERP promueve a `lpausentismos` solo cuando el registro queda APROBADO.
     """
     accion = (accion or "").lower()
-    if accion not in ("aprobar", "rechazar", "guardar"):
-        raise HTTPException(status_code=400, detail="accion inválida (aprobar|rechazar|guardar).")
+    if accion not in ("aprobar", "rechazar", "guardar", "descartar_alerta"):
+        raise HTTPException(
+            status_code=400,
+            detail="accion inválida (aprobar|rechazar|guardar|descartar_alerta).",
+        )
     if not db.db_disponible():
         raise HTTPException(status_code=503, detail="Base de datos no disponible.")
 
@@ -335,6 +338,15 @@ def revisar(
         recep = "WHATSAPP"
     try:
         with db.conexion_mysql() as cx:
+            if accion == "descartar_alerta":
+                # Ortogonal al ciclo aprobar/rechazar: NO toca `estado`, solo oculta el
+                # badge DUDOSA. `sospecha_manipulacion`/`motivo_sospecha` no se borran.
+                nota = f"ALERTA DE MANIPULACIÓN DESCARTADA: {motivo}" if motivo else "ALERTA DE MANIPULACIÓN DESCARTADA en revisión"
+                ok = db.marcar_alerta_revisada(cx, id, nota)
+                if not ok:
+                    raise HTTPException(status_code=404, detail=f"Registro {id} no encontrado.")
+                return JSONResponse({"id": id, "sospecha_revisada": True})
+
             if accion == "rechazar":
                 nota = f"RECHAZADO: {motivo}" if motivo else "RECHAZADO en revisión"
                 ok = db.actualizar_estado(cx, id, ESTADO_RECHAZADO, nota)
@@ -392,8 +404,9 @@ def revisar(
 
 
 @app.get("/api/staging")
-def staging(estado: str = "") -> JSONResponse:
-    """Lista los últimos registros (pantalla del auxiliar). Filtra por estado opcional."""
+def staging(estado: str = "", sospechosa: bool | None = None) -> JSONResponse:
+    """Lista los últimos registros (pantalla del auxiliar). Filtra por estado y/o
+    por sospecha de manipulación (``?sospechosa=1``), ambos opcionales y aditivos."""
     if not db.db_disponible():
         return JSONResponse({"db_disponible": False, "registros": []})
     filtro = estado.upper() if estado else None
@@ -401,7 +414,7 @@ def staging(estado: str = "") -> JSONResponse:
         with db.conexion_mysql() as cx:
             return JSONResponse({
                 "db_disponible": True,
-                "registros": db.listar_staging(cx, estado=filtro),
+                "registros": db.listar_staging(cx, estado=filtro, sospechosa=sospechosa),
             })
     except Exception:
         logger.exception("Error listando staging")

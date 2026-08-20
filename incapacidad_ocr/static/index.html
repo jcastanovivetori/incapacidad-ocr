@@ -123,6 +123,8 @@
   .estado.PENDIENTE_REVISION { background: #fef3c7; color: #92400e; }
   .estado.APROBADO { background: #dcfce7; color: #166534; }
   .estado.RECHAZADO { background: #fee2e2; color: #b91c1c; }
+  .badge-dudosa { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+    background: #fecaca; color: #991b1b; white-space: nowrap; margin-left: 4px; cursor: help; }
   .bandeja-scroll { overflow-x: auto; }
   footer { color: #64748b; font-size: 12px; text-align: center; margin-top: 26px; }
 </style>
@@ -210,6 +212,7 @@
         <h2 style="font-size:16px;">Registro ERP <small style="color:var(--muted);font-weight:400;">→ staging <code>lp_ausentismos_ia</code></small></h2>
         <span class="pill" id="pillRevision"></span>
       </div>
+      <div id="erpDudosa" style="display:none; margin-bottom:14px; background:#fef2f2; border:2px solid #fca5a5; color:#991b1b; padding:12px 16px; border-radius:10px; font-size:14px;"></div>
       <p class="hint" style="margin-top:0">Revisa y <b>completa los campos obligatorios</b> que el OCR no pudo leer (resaltados). Luego <b>Recalcular</b> para resolver los IDs y <b>Aprobar</b>, dejar <b>en revisión</b> o <b>Rechazar</b>.</p>
       <div class="grid">
         <div class="sec">
@@ -293,6 +296,9 @@
         <option value="RECHAZADO">Rechazados</option>
         <option value="">Todos</option>
       </select>
+      <label style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--muted);">
+        <input type="checkbox" id="filtroSospechosa"> Solo ⚠ DUDOSAS
+      </label>
       <button class="dl" id="refrescar">↻ Actualizar</button>
     </div>
     <div class="bandeja-scroll"><div id="bandejaBody"><p class="hint">Pulsa «Actualizar» para ver los registros.</p></div></div>
@@ -530,7 +536,12 @@ function renderResolved(staging) {
   lastStaging = staging;
   const row = staging.row || {};
   const pill = $("pillRevision");
-  if (staging.requiere_revision) {
+  if (row.sospecha_manipulacion) {
+    // Prioridad sobre el mensaje genérico de "requiere revisión": el auxiliar debe
+    // ver de inmediato que esto es DUDOSO (posible manipulación), no un simple
+    // campo faltante — son cosas muy distintas y no deben verse igual.
+    pill.textContent = "🚩 DUDOSA"; pill.style.background = "#fecaca"; pill.style.color = "#991b1b";
+  } else if (staging.requiere_revision) {
     pill.textContent = "⚠ Requiere revisión"; pill.style.background = "#fef3c7"; pill.style.color = "#92400e";
   } else {
     pill.textContent = "✓ Listo para aprobar"; pill.style.background = "#dcfce7"; pill.style.color = "#166534";
@@ -573,6 +584,13 @@ function renderResolved(staging) {
   }
   $("erpResolved").innerHTML = html;
   markMissing(staging);
+
+  const dudosa = $("erpDudosa");
+  if (row.sospecha_manipulacion) {
+    dudosa.innerHTML = "🚩 <b>DUDOSA — posible manipulación del documento:</b> " + escapeHtml(row.motivo_sospecha || "") +
+      "<br><small>Verifica el original con más cuidado antes de aprobar. No bloquea el registro, pero requiere tu confirmación.</small>";
+    dudosa.style.display = "block";
+  } else { dudosa.style.display = "none"; }
 
   const prob = $("erpProblemas");
   if (staging.problemas && staging.problemas.length) {
@@ -666,30 +684,50 @@ async function cargarBandeja() {
   body.innerHTML = '<p class="hint"><span class="spinner" style="border-color:#cbd5e1;border-top-color:#0d9488"></span>Cargando…</p>';
   try {
     const estado = $("filtroEstado").value;
-    const resp = await fetch("/api/staging" + (estado ? "?estado=" + encodeURIComponent(estado) : ""));
+    const soloDudosas = $("filtroSospechosa").checked;
+    const params = new URLSearchParams();
+    if (estado) params.set("estado", estado);
+    if (soloDudosas) params.set("sospechosa", "1");
+    const qs = params.toString();
+    const resp = await fetch("/api/staging" + (qs ? "?" + qs : ""));
     const data = await resp.json();
     if (!data.db_disponible) { body.innerHTML = '<p class="hint">Base de datos no disponible.</p>'; return; }
     if (!data.registros.length) { body.innerHTML = '<p class="hint">Sin registros para este filtro.</p>'; return; }
     let html = '<table class="bandeja"><thead><tr><th>ID</th><th>Estado</th><th>Tipo</th><th>Paciente</th><th>Cédula</th>' +
                '<th>Inicio</th><th>Fin</th><th>Días</th><th>Dx</th><th>Pendiente</th><th></th></tr></thead><tbody>';
     for (const r of data.registros) {
-      const pend = r.problemas ? escapeHtml(r.problemas) : "—";
+      const esDudosa = r.sospecha_manipulacion && !r.sospecha_revisada;
+      // El motivo de la sospecha va PRIMERO y resaltado (no mezclado/perdido entre los
+      // demás "problemas" de campos faltantes) — el auxiliar debe ver la razón sin
+      // tener que pasar el mouse por encima del badge. Se filtra de la lista genérica
+      // de abajo para no repetir el mismo texto dos veces.
+      const otrosProblemas = (r.problemas || "")
+        .split("; ").filter((p) => !p.startsWith("Posible manipulación del documento")).join("; ");
+      const pend = (esDudosa ? `<b style="color:#991b1b">🚩 DUDOSO: ${escapeHtml(r.motivo_sospecha || "")}</b><br>` : "") +
+        (otrosProblemas ? escapeHtml(otrosProblemas) : (esDudosa ? "" : "—"));
       const tipo = r.idlptipoausentismo != null
         ? `${r.idlptipoausentismo} · ${ETIQUETAS_TIPO[r.idlptipoausentismo] || "?"}` : "—";
-      const acts = r.estado === "PENDIENTE_REVISION"
+      const dudosa = esDudosa
+        ? ` <span class="badge-dudosa" title="${escapeHtml(r.motivo_sospecha || "")}">🚩 DUDOSA</span>`
+        : "";
+      const acts = (r.estado === "PENDIENTE_REVISION"
         ? `<button class="btn ok sm" data-ap="${r.id}">✓</button> <button class="btn danger sm" data-rc="${r.id}">✗</button>`
-        : "—";
-      html += `<tr><td>${r.id}</td><td><span class="estado ${r.estado}">${escapeHtml(r.estado)}</span></td>` +
+        : "") + (esDudosa
+        ? ` <button class="btn sm" data-desc="${r.id}" title="Descartar alerta de manipulación">🔍✓</button>`
+        : "") || "—";
+      html += `<tr${esDudosa ? ' style="background:#fef2f2"' : ""}>` +
+              `<td>${r.id}</td><td><span class="estado ${r.estado}">${escapeHtml(r.estado)}</span>${dudosa}</td>` +
               `<td>${escapeHtml(tipo)}</td>` +
               `<td>${escapeHtml(r.paciente_leido || "—")}</td><td>${escapeHtml(r.cedula_leida || "—")}</td>` +
               `<td>${escapeHtml(r.fechainicio || "—")}</td><td>${escapeHtml(r.fechavencimiento || "—")}</td>` +
               `<td>${r.Numerodias != null ? r.Numerodias : "—"}</td><td>${escapeHtml(r.codigo_diagnostico_leido || "—")}</td>` +
-              `<td style="max-width:240px">${pend}</td><td class="acts">${acts}</td></tr>`;
+              `<td style="max-width:280px">${pend}</td><td class="acts">${acts}</td></tr>`;
     }
     html += "</tbody></table>";
     body.innerHTML = html;
     body.querySelectorAll("[data-ap]").forEach((b) => b.addEventListener("click", () => accionBandeja(b.dataset.ap, "aprobar")));
     body.querySelectorAll("[data-rc]").forEach((b) => b.addEventListener("click", () => accionBandeja(b.dataset.rc, "rechazar")));
+    body.querySelectorAll("[data-desc]").forEach((b) => b.addEventListener("click", () => accionBandeja(b.dataset.desc, "descartar_alerta")));
   } catch (err) {
     body.innerHTML = '<p class="hint">❌ ' + escapeHtml(err.message) + "</p>";
   }
@@ -713,6 +751,7 @@ async function accionBandeja(id, accion) {
 
 $("refrescar").addEventListener("click", cargarBandeja);
 $("filtroEstado").addEventListener("change", cargarBandeja);
+$("filtroSospechosa").addEventListener("change", cargarBandeja);
 cargarBandeja();
 
 // ----------------------- Procesamiento por lotes ------------------------

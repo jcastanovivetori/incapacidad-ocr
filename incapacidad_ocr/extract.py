@@ -822,7 +822,25 @@ class RuleBasedExtractor:
             # (sin excluir \n: el valor suele quedar en la línea siguiente, "Duracion:\n126").
             dias = _first(t, r"(?i)duraci[oó]n\b[^\d]{0,10}(\d{1,3})")
             if not dias:
-                dias = _first(t, r"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{0,15}(\d{1,3})")
+                # Ventana corta (6, no 15): "Dias de Incapacidad:  2" cabe de sobra, pero
+                # evita que en frases tipo "5 DIAS DESDE 09-06-26" el patrón "cruce" hasta
+                # la fecha y agarre el "09" en vez de fallar limpio (caso real: formato
+                # SIOS/SYSNET, "SE DA INCAPACIDAD MEDICA POR 5 DIAS DESDE 09-06-26...").
+                dias = _first(t, r"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{0,6}(\d{1,3})")
+            if not dias:
+                # "5 DIAS" / "2 Dias" (el número JUSTO ANTES de "dias", sin etiqueta):
+                # variante vista en reportes tipo SIOS/SYSNET ("... POR 5 DIAS DESDE...").
+                # Se descartan los candidatos que en realidad son parte de una EDAD
+                # ("31 año(s), 1 mes(es), 26 días", frecuente en reportes de admisión
+                # tipo SIOS/SYSNET) o de historia clínica ("hace 3 días" = inicio de
+                # síntomas, no duración de la incapacidad) — ambos preceden al número
+                # con "año"/"mes"/"hace" a corta distancia.
+                for _m in re.finditer(r"(?i)\b(\d{1,3})\s*d[ií]as?\b", t):
+                    antes = t[max(0, _m.start() - 20):_m.start()]
+                    if re.search(r"(?i)a[ñn]o|mes|hace\s*$", antes):
+                        continue
+                    dias = _m.group(1)
+                    break
             if not dias:
                 dias = _first(t, r"(?i)(\d{1,3})\s*[\(\-]?\s*(?:un|dos|tres|cuatro|cinco|"
                                  r"seis|siete|ocho|nueve|diez|quince|veinte|treinta)\w*\s*d[ií]as?")
@@ -918,6 +936,27 @@ class RuleBasedExtractor:
                 rec["incapacidad"]["fecha_fin"] = detalle["fecha_fin"]
             if detalle["dias"]:
                 rec["incapacidad"]["dias"] = detalle["dias"]
+
+        # --- Sanidad: el paciente y el médico tratante no pueden ser la MISMA persona.
+        # En layouts donde el nombre del médico queda pegado justo después del número
+        # de documento del paciente (formatos tipo "SIOS/SYSNET": nombre del paciente
+        # ANTES del "CC - número", nombre del médico DESPUÉS), la heurística genérica
+        # "nombre justo después del documento" agarra el nombre equivocado. Si ambos
+        # nombres coinciden, se intenta el patrón más específico "<número> - <NOMBRE>"
+        # (ligado al propio número ya resuelto, como aparece en la cabecera de ese
+        # formato); si tampoco resuelve, se prefiere dejar el campo vacío (el auxiliar
+        # lo completa a mano) antes que un nombre de paciente claramente incorrecto.
+        pac_nombre, med_nombre = rec["paciente"]["nombre"], rec["medico"]["nombre"]
+        if pac_nombre and med_nombre and _ascii_upper(pac_nombre) == _ascii_upper(med_nombre):
+            numero = rec["paciente"]["documento_numero"]
+            nombre_alt = None
+            if numero:
+                m_alt = re.search(
+                    rf"(?<!\d){re.escape(numero)}\s*-\s*([A-ZÑÁÉÍÓÚ][A-ZÑÁÉÍÓÚ ]{{4,40}})", t
+                )
+                if m_alt:
+                    nombre_alt = _clean_name(m_alt.group(1))
+            rec["paciente"]["nombre"] = nombre_alt
 
         return rec
 
