@@ -14,6 +14,7 @@ Replica lo confirmado con Diana (mentoría Gruppo, 11 jun 2026):
 """
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
 from datetime import date, timedelta
@@ -21,6 +22,12 @@ from typing import Any, Optional
 
 # Estados de recepción (códigos placeholder — confirmar con el catálogo real del ERP).
 ESTADO_RECEPCION = {"ORIGINAL": 1, "WHATSAPP": 2, "CORREO": 3}
+
+# Estado de flujo aparte de PENDIENTE_REVISION: cuando `analizar_autenticidad` (o las
+# señales adicionales de CIE-10/fechas de abajo) marcan `sospecha_manipulacion`, el
+# registro entra a staging con este estado en vez de PENDIENTE_REVISION, para que
+# quede fácilmente identificable en la bandeja sin depender solo del badge DUDOSA.
+ESTADO_POSIBLE_MANIPULACION = "POSIBLE_MANIPULACION"
 
 # Etiquetas de tipo de ausentismo (códigos entregados por Diana).
 ETIQUETAS_TIPO = {
@@ -82,6 +89,10 @@ DOC_CANON = {
     "REGISTROCIVIL": "REGISTRO_CIVIL_NACIMIENTO", "REGISTRO_CIVIL_NACIMIENTO": "REGISTRO_CIVIL_NACIMIENTO",
     "DEFUNCION": "CERTIFICADO_DEFUNCION", "CEDULA": "CEDULA",
     "FORMULA": "FORMULA_MEDICA", "ORDEN": "ORDEN_MEDICA", "OTRO": "OTRO",
+    # documentos que solo exige la RADICACIÓN ante la EPS (ver checklist_radicacion)
+    "SOAT": "SOAT", "RAT": "RAT", "DESCARTE": "DESCARTE_EVENTO_LABORAL",
+    "DESCARTE_EVENTO_LABORAL": "DESCARTE_EVENTO_LABORAL",
+    "CERTIFICADOLABORAL": "CERTIFICADO_LABORAL", "CERTIFICADO_LABORAL": "CERTIFICADO_LABORAL",
 }
 # Grupos de equivalencia: un documento requerido se satisface si hay algún
 # documento presente del mismo grupo (p.ej. una EPICRISIS satisface "historia clínica").
@@ -128,6 +139,121 @@ def validar_documentacion(presentes, id_tipo: Optional[int],
     else:
         requeridos = REQUISITOS_DEFAULT.get(id_tipo or 0, ["INCAPACIDAD"])
     faltantes = [r for r in requeridos if r and not (_grupo_doc(r) & pres)]
+    return ("COMPLETA" if not faltantes else "INCOMPLETA"), faltantes
+
+
+# --------------------------------------------------------------------------- #
+# Radicación ante la EPS: el paquete que hay que armar para COBRAR la incapacidad.
+# Es una exigencia distinta (y casi siempre mayor) a la de la recepción interna:
+# sale del JSON `lpeps.cheklistradicaciones`, que cada EPS configura por tipo de
+# ausentismo. Se avisa desde la ingesta, pero NO bloquea: el caso entra a staging
+# igual y el auxiliar consigue lo que falte antes de radicar.
+# --------------------------------------------------------------------------- #
+# Nombre del documento TAL COMO lo escribe el ERP en el JSON → código canónico nuestro.
+# (Las claves van normalizadas: mayúsculas, sin tildes, un solo espacio. "CERTICADO
+# LABORAL" viene así, con el error de digitación, en los datos del ERP.)
+RADICACION_DOC_CANON = {
+    "CERTIFICADO DE INCAPACIDAD": "INCAPACIDAD",
+    "HISTORIA CLINICA": "HISTORIA_CLINICA",
+    "CEDULA DEL TRABAJADOR": "CEDULA",
+    "CERTIFICADO NACIDO VIVO": "CERTIFICADO_NACIDO_VIVO",
+    "REGISTRO CIVIL": "REGISTRO_CIVIL_NACIMIENTO",
+    "SOAT": "SOAT",
+    "REPORTE ACCIDENTE DE TRANSITO RAT": "RAT",
+    "FORMATO DE DESCARTE EVENTO LABORAL": "DESCARTE_EVENTO_LABORAL",
+    "FURIPS": "FURIPS",
+    "CERTICADO LABORAL": "CERTIFICADO_LABORAL",
+    "CERTIFICADO LABORAL": "CERTIFICADO_LABORAL",
+}
+# Etiquetas legibles para el aviso al auxiliar (el código canónico es para la lógica).
+ETIQUETAS_DOC = {
+    "INCAPACIDAD": "certificado de incapacidad",
+    "HISTORIA_CLINICA": "historia clínica",
+    "EPICRISIS": "epicrisis",
+    "RESUMEN_ATENCION": "resumen de atención",
+    "CEDULA": "cédula del trabajador",
+    "CERTIFICADO_NACIDO_VIVO": "certificado de nacido vivo",
+    "REGISTRO_CIVIL_NACIMIENTO": "registro civil",
+    "SOAT": "SOAT",
+    "RAT": "reporte de accidente de tránsito (RAT)",
+    "DESCARTE_EVENTO_LABORAL": "formato de descarte de evento laboral",
+    "FURIPS": "FURIPS",
+    "FURAT": "FURAT",
+    "CERTIFICADO_LABORAL": "certificado laboral",
+}
+
+
+def etiqueta_doc(codigo: str) -> str:
+    return ETIQUETAS_DOC.get(codigo, (codigo or "").replace("_", " ").lower())
+
+
+def _canon_doc_radicacion(nombre: str) -> Optional[str]:
+    """Nombre del documento en el JSON del ERP → código canónico."""
+    txt = "".join(c for c in unicodedata.normalize("NFD", str(nombre or "").upper())
+                  if unicodedata.category(c) != "Mn")
+    txt = re.sub(r"[^A-Z ]", " ", txt)
+    txt = re.sub(r"\s+", " ", txt).strip()
+    if not txt:
+        return None
+    return RADICACION_DOC_CANON.get(txt) or canon_doc(txt.replace(" ", "_"))
+
+
+def documentos_checklist_radicacion(json_texto: Optional[str], id_tipo: Optional[int]) -> list[str]:
+    """Parsea `lpeps.cheklistradicaciones` y devuelve los documentos (canónicos) del tipo.
+
+    El ERP guarda el JSON ENVUELTO en comillas dobles sin escapar el contenido
+    (``"{"ausentismos":[...]}"``), así que no es JSON válido tal cual: hay que quitar
+    esas comillas externas antes de parsear. Formato real:
+    ``{"ausentismos":[{"idlptipoausentismo":N, "documentos":[{"nombredocumento":"..."}]}]}``
+    Devuelve [] si el campo está vacío, es ilegible o el tipo no está configurado.
+    """
+    if not json_texto or id_tipo is None:
+        return []
+    texto = str(json_texto).strip()
+    if len(texto) > 1 and texto[0] == '"' and texto[-1] == '"':
+        texto = texto[1:-1]
+    try:
+        datos = json.loads(texto)
+        if isinstance(datos, str):          # por si algún día queda bien serializado
+            datos = json.loads(datos)
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(datos, dict):
+        return []
+    for aus in datos.get("ausentismos") or []:
+        if not isinstance(aus, dict):
+            continue
+        try:
+            if int(aus.get("idlptipoausentismo")) != int(id_tipo):
+                continue
+        except (TypeError, ValueError):
+            continue
+        docs = []
+        for d in aus.get("documentos") or []:
+            codigo = _canon_doc_radicacion((d or {}).get("nombredocumento"))
+            if codigo and codigo not in docs:
+                docs.append(codigo)
+        return docs
+    return []
+
+
+def validar_radicacion(presentes, requeridos) -> tuple[Optional[str], list[str]]:
+    """Cruza los documentos presentes contra los que la EPS exige para RADICAR.
+
+    Devuelve (estado ∈ COMPLETA/INCOMPLETA | None si la EPS no tiene checklist, faltantes[]).
+    Aplica las mismas equivalencias que la recepción, PERO solo entre documentos que la EPS
+    no pidió por separado: si el checklist exige nacido vivo Y registro civil, se exigen los
+    dos (uno no cubre al otro).
+    """
+    if not requeridos:
+        return None, []
+    pres = {canon_doc(p) for p in (presentes or []) if p}
+    req = [canon_doc(r) for r in requeridos if r]
+    faltantes = []
+    for r in req:
+        equivalentes = (_grupo_doc(r) - set(req)) | {r}
+        if not (equivalentes & pres):
+            faltantes.append(r)
     return ("COMPLETA" if not faltantes else "INCOMPLETA"), faltantes
 
 
@@ -193,6 +319,7 @@ class Lookups:
         self._cx = conexion
         self._cache_emp: dict[str, tuple[Optional[int], Optional[str], Optional[str]]] = {}
         self._cache_dx: dict[str, tuple[Optional[int], Optional[str]]] = {}
+        self._cache_checklist: dict[int, Optional[str]] = {}  # idlpeps → JSON crudo de radicación
         self._entidades: Optional[list[tuple[int, str, int, str]]] = None  # (id, nombre_norm, tipo, nombre)
         self._empleados_nombre: Optional[list[tuple[int, str, str, str]]] = None  # (id, nombre, eps, clave)
 
@@ -236,7 +363,10 @@ class Lookups:
             return None, None, None
         if self._empleados_nombre is None:
             filas = self._query("SELECT idlpempleado, nombrecompleto, nombreeps FROM vlpempleados", ())
-            self._empleados_nombre = [(int(i), nm, eps, _norm(nm).replace(" ", "")) for (i, nm, eps) in filas]
+            # `vlpempleados` del ERP real trae filas con id o nombre en NULL (empleados sin
+            # ficha completa): se descartan, no sirven para buscar por nombre.
+            self._empleados_nombre = [(int(i), nm, eps, _norm(nm).replace(" ", ""))
+                                      for (i, nm, eps) in filas if i is not None and nm]
         for idp, nm, eps_cat, clave in self._empleados_nombre:
             if clave and (clave == leido or clave in leido or leido in clave):
                 return idp, nm, eps_cat
@@ -287,6 +417,25 @@ class Lookups:
             return []
         return [f[0] for f in filas]
 
+    def documentos_radicacion(self, id_entidad: Optional[int], id_tipo: Optional[int]) -> list[str]:
+        """Documentos que la EPS exige para RADICAR el cobro (`lpeps.cheklistradicaciones`).
+
+        Distinto de `documentos_requeridos` (recepción interna): esto es lo que hay que
+        entregarle a la EPS. Solo una parte de las EPS tiene el checklist cargado; si está
+        vacío, o la columna/tabla no existe en el entorno, devuelve [] (no se opina)."""
+        if id_entidad is None or id_tipo is None:
+            return []
+        if id_entidad not in self._cache_checklist:
+            try:
+                filas = self._query(
+                    "SELECT cheklistradicaciones FROM lpeps WHERE idlpeps = %s LIMIT 1",
+                    (id_entidad,),
+                )
+                self._cache_checklist[id_entidad] = filas[0][0] if filas else None
+            except Exception:  # noqa: BLE001 — entorno sin `lpeps` (BD demo): sin checklist
+                self._cache_checklist[id_entidad] = None
+        return documentos_checklist_radicacion(self._cache_checklist[id_entidad], id_tipo)
+
 
 class LookupsNulos:
     """Sin BD: todo None (la validación marcará los IDs como pendientes de revisión)."""
@@ -307,6 +456,9 @@ class LookupsNulos:
         return None, None, None
 
     def documentos_requeridos(self, id_entidad, id_tipo):  # noqa: ARG002
+        return []
+
+    def documentos_radicacion(self, id_entidad, id_tipo):  # noqa: ARG002
         return []
 
 
@@ -600,6 +752,17 @@ def mapear_a_staging(
         faltantes = [d for d in requeridos if d != "INCAPACIDAD"]
         doc_estado = "COMPLETA" if not faltantes else "INCOMPLETA"
 
+    # Radicación ante la EPS: qué faltará para COBRAR el ausentismo (aviso, no bloquea).
+    # Los permisos y las vacaciones no se radican ante ninguna EPS → no aplica.
+    rad_estado: Optional[str] = None
+    rad_faltantes: list[str] = []
+    rad_requeridos: list[str] = []
+    if documentos_presentes is not None and not (es_permiso or es_vacaciones):
+        consultar_radicacion = getattr(lookups, "documentos_radicacion", None)
+        if callable(consultar_radicacion):
+            rad_requeridos = consultar_radicacion(id_ent, id_tipo) or []
+            rad_estado, rad_faltantes = validar_radicacion(documentos_presentes, rad_requeridos)
+
     observaciones = (
         _observaciones_permiso(etiqueta_tipo, perm) if es_permiso
         else _observaciones(
@@ -639,7 +802,7 @@ def mapear_a_staging(
         "documentos_faltantes": ", ".join(faltantes) or None,
         "sospecha_manipulacion": 1 if sospecha_manipulacion else 0,
         "motivo_sospecha": motivo_sospecha,
-        "estado": "PENDIENTE_REVISION",
+        "estado": ESTADO_POSIBLE_MANIPULACION if sospecha_manipulacion else "PENDIENTE_REVISION",
     }
     return {
         "row": row,
@@ -650,6 +813,10 @@ def mapear_a_staging(
         "nivel_incapacidad": ETIQUETAS_NIVEL.get(id_nivel),
         "estado_recepcion": estado,
         "documentos_faltantes": faltantes,
+        # Radicación ante la EPS (aviso anticipado; None = esa EPS no tiene checklist cargado)
+        "radicacion_estado": rad_estado,
+        "radicacion_requeridos": rad_requeridos,
+        "radicacion_faltantes": rad_faltantes,
         "paciente_catalogo": nombre_catalogo,
         "paciente_ocr": nombre_ocr,
         "entidad_catalogo": nombre_entidad,

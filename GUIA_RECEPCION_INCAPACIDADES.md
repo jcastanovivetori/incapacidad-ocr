@@ -55,6 +55,12 @@ Si un trámite trae **dos del mismo tipo**, se numeran: `..._EPICRISIS_01.pdf`, 
 
 Si falta un soporte, **igual se puede enviar**: el sistema lo registra como **incompleto** y genera una alerta para pedir lo que falta.
 
+> **Además — lo que pide la EPS para pagar.** Radicar el cobro ante la EPS suele exigir **más**
+> documentos que el trámite interno (p. ej. copia de la cédula del trabajador o certificado
+> laboral, según la EPS). Al procesar el lote, el sistema compara lo que llegó contra el
+> checklist de radicación de esa EPS y avisa —sin frenar el trámite— **qué documento faltará
+> a la hora de radicar**, para pedirlo desde ya.
+
 ## 4. Palabra para el "TIPO" del nombre
 
 | Documento | Escribir en el nombre |
@@ -70,6 +76,10 @@ Si falta un soporte, **igual se puede enviar**: el sistema lo registra como **in
 | Registro civil de nacimiento | `REGISTROCIVIL` |
 | Certificado de defunción | `DEFUNCION` |
 | Copia de la cédula | `CEDULA` |
+| SOAT (accidente de tránsito) | `SOAT` |
+| Reporte de accidente de tránsito | `RAT` |
+| Formato de descarte de evento laboral | `DESCARTE` |
+| Certificado laboral | `CERTIFICADOLABORAL` |
 | Otro soporte | `OTRO` |
 
 ## 5. Dónde se dejan

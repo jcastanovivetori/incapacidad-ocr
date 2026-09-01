@@ -78,6 +78,9 @@ def _job_programado() -> None:
         logger.exception("Error en la corrida programada del lote")
 # Estados del flujo de revisión humana.
 ESTADO_PENDIENTE, ESTADO_APROBADO, ESTADO_RECHAZADO = "PENDIENTE_REVISION", "APROBADO", "RECHAZADO"
+# Estado adicional (no seleccionable por el auxiliar): lo fija `erp.mapear_a_staging`
+# cuando detecta `sospecha_manipulacion`, en vez de PENDIENTE_REVISION.
+ESTADO_POSIBLE_MANIPULACION = erp.ESTADO_POSIBLE_MANIPULACION
 # Campos que el auxiliar puede corregir/llenar a mano (overrides de la revisión).
 CAMPOS_OVERRIDE = {"cedula", "cie10", "eps", "fecha_inicio", "fecha_fin", "dias", "paciente", "tipo", "nivel", "numeroorden"}
 
@@ -261,6 +264,8 @@ def registrar(
     Recibe el resultado ya extraído (no re-procesa la imagen) + las correcciones manuales
     (``campos``) y lo mapea con lookups de BD. ``estado`` ∈ {PENDIENTE_REVISION, APROBADO,
     RECHAZADO}: el auxiliar puede dejarlo en revisión, aprobarlo o rechazarlo (con ``motivo``).
+    Si el flujo se deja en PENDIENTE_REVISION (el default) y el mapeo detecta
+    `sospecha_manipulacion`, el registro queda en POSIBLE_MANIPULACION en su lugar.
     El ERP promueve a `lpausentismos` solo cuando el registro queda APROBADO.
     """
     if not isinstance(resultado, dict) or "incapacidad" not in resultado:
@@ -287,7 +292,11 @@ def registrar(
                     detail="No se puede aprobar: faltan datos obligatorios. " +
                            "; ".join(mapeo["problemas"]),
                 )
-            mapeo["row"]["estado"] = flujo
+            # Si el auxiliar no aprobó/rechazó explícitamente (flujo sigue en el default
+            # PENDIENTE_REVISION), se respeta el estado que ya calculó el mapeo — que es
+            # POSIBLE_MANIPULACION cuando `sospecha_manipulacion` se disparó.
+            if flujo != ESTADO_PENDIENTE:
+                mapeo["row"]["estado"] = flujo
             if flujo == ESTADO_RECHAZADO and motivo:
                 obs = mapeo["row"].get("observaciones") or ""
                 mapeo["row"]["observaciones"] = (f"{obs} | RECHAZADO: {motivo}").strip(" |")[:65000]
@@ -300,7 +309,7 @@ def registrar(
     return JSONResponse({
         "id": new_id,
         "tabla": db.STAGING_TABLE,
-        "estado": flujo,
+        "estado": mapeo["row"]["estado"],
         "requiere_revision": mapeo["requiere_revision"],
         "problemas": mapeo["problemas"],
         "campos_faltantes": mapeo.get("campos_faltantes", []),
@@ -320,7 +329,8 @@ def revisar(
     """Revisión humana de un registro ya insertado: aprobar / rechazar / guardar.
 
     - ``aprobar``  → re-mapea con las correcciones manuales y fija estado APROBADO.
-    - ``guardar``  → re-mapea y guarda correcciones, sigue PENDIENTE_REVISION.
+    - ``guardar``  → re-mapea y guarda correcciones, sigue PENDIENTE_REVISION (o
+      POSIBLE_MANIPULACION si el re-mapeo sigue detectando `sospecha_manipulacion`).
     - ``rechazar`` → fija estado RECHAZADO (con ``motivo``); no exige completar campos.
     El ERP promueve a `lpausentismos` solo cuando el registro queda APROBADO.
     """
@@ -364,7 +374,10 @@ def revisar(
                         detail="No se puede aprobar: faltan datos obligatorios. " +
                                "; ".join(mapeo["problemas"]),
                     )
-                destino = ESTADO_APROBADO if accion == "aprobar" else ESTADO_PENDIENTE
+                # 'guardar' conserva el estado recién calculado por el re-mapeo (que es
+                # POSIBLE_MANIPULACION si `sospecha_manipulacion` sigue activa) en vez de
+                # forzar PENDIENTE_REVISION a ciegas.
+                destino = ESTADO_APROBADO if accion == "aprobar" else mapeo["row"]["estado"]
                 ok = db.actualizar_revision(cx, id, mapeo["row"], destino,
                                             nota="Revisado manualmente" if campos else None)
                 if not ok:

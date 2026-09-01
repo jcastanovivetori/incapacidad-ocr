@@ -123,6 +123,7 @@
   .estado.PENDIENTE_REVISION { background: #fef3c7; color: #92400e; }
   .estado.APROBADO { background: #dcfce7; color: #166534; }
   .estado.RECHAZADO { background: #fee2e2; color: #b91c1c; }
+  .estado.POSIBLE_MANIPULACION { background: #991b1b; color: #fff; }
   .badge-dudosa { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
     background: #fecaca; color: #991b1b; white-space: nowrap; margin-left: 4px; cursor: help; }
   .bandeja-scroll { overflow-x: auto; }
@@ -292,6 +293,7 @@
       <h2 style="font-size:18px;">Bandeja de revisión</h2>
       <select id="filtroEstado" style="min-width:160px;">
         <option value="PENDIENTE_REVISION" selected>Pendientes</option>
+        <option value="POSIBLE_MANIPULACION">Posible manipulación</option>
         <option value="APROBADO">Aprobados</option>
         <option value="RECHAZADO">Rechazados</option>
         <option value="">Todos</option>
@@ -660,7 +662,8 @@ async function registrarFlujo(estado, motivo) {
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.detail || ("HTTP " + resp.status));
     lastRegistroId = data.id;
-    const etq = { APROBADO: "APROBADO ✓", PENDIENTE_REVISION: "en revisión", RECHAZADO: "RECHAZADO" }[data.estado] || data.estado;
+    const etq = { APROBADO: "APROBADO ✓", PENDIENTE_REVISION: "en revisión", RECHAZADO: "RECHAZADO",
+      POSIBLE_MANIPULACION: "🚩 POSIBLE MANIPULACIÓN" }[data.estado] || data.estado;
     erpMsg(true, `Registrado en <code>lp_ausentismos_ia</code> con <b>id = ${data.id}</b> · estado <b>${escapeHtml(etq)}</b>.`);
     cargarBandeja();
   } catch (err) {
@@ -710,7 +713,7 @@ async function cargarBandeja() {
       const dudosa = esDudosa
         ? ` <span class="badge-dudosa" title="${escapeHtml(r.motivo_sospecha || "")}">🚩 DUDOSA</span>`
         : "";
-      const acts = (r.estado === "PENDIENTE_REVISION"
+      const acts = ((r.estado === "PENDIENTE_REVISION" || r.estado === "POSIBLE_MANIPULACION")
         ? `<button class="btn ok sm" data-ap="${r.id}">✓</button> <button class="btn danger sm" data-rc="${r.id}">✗</button>`
         : "") + (esDudosa
         ? ` <button class="btn sm" data-desc="${r.id}" title="Descartar alerta de manipulación">🔍✓</button>`
@@ -788,19 +791,26 @@ $("procesarTodos").addEventListener("click", async () => {
     let html = `<div style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:10px 14px;border-radius:10px;">` +
       `✓ Lote procesado: <b>${d.procesados}</b> completos · <b>${d.incompletos}</b> incompletos · <b>${d.cuarentena}</b> en cuarentena` +
       (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura (omitidos)` : "") +
+      (d.pendientes_radicacion ? ` · <b>${d.pendientes_radicacion}</b> con documentos pendientes para radicar ante la EPS` : "") +
       (d.error ? `<br>⚠️ ${escapeHtml(d.error)}` : "") + `</div>`;
     if (d.detalle && d.detalle.length) {
       html += '<div class="bandeja-scroll"><table class="bandeja" style="margin-top:10px;"><thead><tr>' +
-        '<th>Caso</th><th>Cédula</th><th>Tipo</th><th>Docs</th><th>Presentes</th><th>Falta</th><th>id</th></tr></thead><tbody>';
+        '<th>Caso</th><th>Cédula</th><th>Tipo</th><th>Docs</th><th>Presentes</th><th>Falta</th>' +
+        '<th>Falta para radicar</th><th>id</th></tr></thead><tbody>';
       for (const c of d.detalle) {
-        if (c.error) { html += `<tr><td>${escapeHtml(c.caso || "—")}</td><td colspan="6">❌ ${escapeHtml(c.error)}</td></tr>`; continue; }
+        if (c.error) { html += `<tr><td>${escapeHtml(c.caso || "—")}</td><td colspan="7">❌ ${escapeHtml(c.error)}</td></tr>`; continue; }
         const badge = c.documentacion_estado === "COMPLETA"
           ? '<span class="estado APROBADO">COMPLETA</span>'
           : '<span class="estado PENDIENTE_REVISION">INCOMPLETA</span>';
+        // Radicación ante la EPS: null = esa EPS no tiene checklist cargado en el ERP.
+        const rad = c.radicacion_estado === "INCOMPLETA"
+          ? `⚠️ ${escapeHtml((c.radicacion_faltantes || []).join(", "))}`
+          : (c.radicacion_estado === "COMPLETA" ? "✓ listo" : "—");
         html += `<tr><td>${escapeHtml(c.caso)}</td><td>${escapeHtml(c.cedula || "—")}</td>` +
           `<td>${escapeHtml(c.tipo_ausentismo || "—")}</td><td>${badge}</td>` +
           `<td>${escapeHtml((c.presentes || []).join(", "))}</td>` +
           `<td>${escapeHtml((c.faltantes || []).join(", ") || "—")}</td>` +
+          `<td>${rad}</td>` +
           `<td>${c.id != null ? c.id : "—"}</td></tr>`;
       }
       html += '</tbody></table></div>';
