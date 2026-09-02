@@ -1,0 +1,355 @@
+<title>Radicación EPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+  :root{
+    --ground:#e9eef0;
+    --surface:#ffffff;
+    --surface-2:#f3f6f7;
+    --line:#cfd9dd;
+    --line-soft:#e2e9eb;
+    --text:#132029;
+    --text-2:#4d6472;
+    --text-3:#7d949f;
+    --accent:#0b6b7d;
+    --accent-soft:#dceaed;
+    --ok:#2c7a52;
+    --ok-soft:#dcefe3;
+    --falta:#a8571a;
+    --falta-soft:#f6e8d9;
+    --shadow:0 1px 2px rgba(19,32,41,.06), 0 8px 24px -16px rgba(19,32,41,.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0b1317;
+      --surface:#131f26;
+      --surface-2:#182731;
+      --line:#2a3d47;
+      --line-soft:#20313a;
+      --text:#dfe8ec;
+      --text-2:#9db0ba;
+      --text-3:#718893;
+      --accent:#4fb6c7;
+      --accent-soft:#15323a;
+      --ok:#6ec295;
+      --ok-soft:#152c22;
+      --falta:#e0a15f;
+      --falta-soft:#2e2213;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0b1317;
+    --surface:#131f26;
+    --surface-2:#182731;
+    --line:#2a3d47;
+    --line-soft:#20313a;
+    --text:#dfe8ec;
+    --text-2:#9db0ba;
+    --text-3:#718893;
+    --accent:#4fb6c7;
+    --accent-soft:#15323a;
+    --ok:#6ec295;
+    --ok-soft:#152c22;
+    --falta:#e0a15f;
+    --falta-soft:#2e2213;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground);
+    color:var(--text);
+    font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    padding:0 0 64px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ---------- encabezado ---------- */
+  header{
+    border-bottom:1px solid var(--line);
+    background:var(--surface);
+  }
+  .head{
+    display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+    gap:16px;padding:26px 0 22px;
+  }
+  h1{
+    font-family:Archivo,"Segoe UI",system-ui,sans-serif;
+    font-weight:700;font-size:1.75rem;line-height:1.1;letter-spacing:-.015em;
+    margin:0;text-wrap:balance;
+  }
+  .sub{color:var(--text-2);margin:6px 0 0;max-width:62ch;font-size:.95rem}
+  .fuente{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.72rem;color:var(--text-3);letter-spacing:.02em;
+    text-align:right;line-height:1.6;
+  }
+
+  /* ---------- selectores ---------- */
+  .filtros{
+    display:grid;grid-template-columns:minmax(240px,1.4fr) minmax(220px,1fr);
+    gap:14px;padding:0 0 22px;
+  }
+  .campo{display:flex;flex-direction:column;gap:6px}
+  label{
+    font-family:Archivo,sans-serif;font-weight:600;
+    font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2);
+  }
+  select{
+    font-family:inherit;font-size:1rem;color:var(--text);
+    background:var(--surface-2);border:1px solid var(--line);border-radius:6px;
+    padding:10px 12px;width:100%;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--text-2) 50%),linear-gradient(135deg,var(--text-2) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
+    background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+  }
+  select:focus-visible,button:focus-visible,.doc:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;
+  }
+
+  /* ---------- tablero de estado ---------- */
+  .estado{
+    display:flex;flex-wrap:wrap;align-items:center;gap:20px;
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:18px 20px;margin:24px 0 0;box-shadow:var(--shadow);
+  }
+  .veredicto{
+    font-family:Archivo,sans-serif;font-weight:700;font-size:1.05rem;
+    letter-spacing:.01em;display:flex;align-items:center;gap:10px;
+  }
+  .punto{width:11px;height:11px;border-radius:50%;background:var(--falta);flex:none}
+  .estado[data-listo="1"] .punto{background:var(--ok)}
+  .estado[data-listo="1"] .veredicto{color:var(--ok)}
+  .estado[data-listo="0"] .veredicto{color:var(--falta)}
+  .conteo{
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    font-size:.85rem;color:var(--text-2);margin-left:auto;
+  }
+  .barra{
+    flex-basis:100%;height:6px;border-radius:3px;background:var(--line-soft);overflow:hidden;
+  }
+  .barra span{
+    display:block;height:100%;background:var(--falta);
+    transition:width .25s ease, background-color .25s ease;
+  }
+  .estado[data-listo="1"] .barra span{background:var(--ok)}
+
+  /* ---------- lista de documentos ---------- */
+  .lista{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .doc{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;cursor:pointer;font:inherit;color:inherit;
+    transition:border-color .15s ease, background-color .15s ease;
+  }
+  .doc:hover{border-color:var(--accent)}
+  .caja{
+    width:22px;height:22px;border-radius:4px;flex:none;
+    border:2px solid var(--text-3);display:grid;place-items:center;
+    transition:border-color .15s ease, background-color .15s ease;
+  }
+  .caja svg{width:13px;height:13px;stroke:var(--surface);stroke-width:3.2;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.6);
+    transition:opacity .15s ease, transform .15s ease;}
+  .doc[aria-pressed="true"]{background:var(--ok-soft);border-color:var(--ok)}
+  .doc[aria-pressed="true"] .caja{background:var(--ok);border-color:var(--ok)}
+  .doc[aria-pressed="true"] .caja svg{opacity:1;transform:scale(1)}
+  .doc[aria-pressed="true"] .nombre{color:var(--text-2)}
+  .nombre{font-weight:600;font-size:1rem;letter-spacing:.005em}
+  .marca{
+    margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+    color:var(--text-3);letter-spacing:.03em;flex:none;
+  }
+  .doc[aria-pressed="true"] .marca{color:var(--ok)}
+
+  /* ---------- avisos ---------- */
+  .aviso{
+    background:var(--surface);border:1px dashed var(--line);border-radius:8px;
+    padding:20px;color:var(--text-2);margin-top:18px;
+  }
+  .aviso b{color:var(--text)}
+
+  /* ---------- acciones ---------- */
+  .acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+  button.accion{
+    font-family:Archivo,sans-serif;font-weight:600;font-size:.82rem;
+    letter-spacing:.04em;text-transform:uppercase;
+    background:var(--surface);color:var(--text);border:1px solid var(--line);
+    border-radius:6px;padding:9px 14px;cursor:pointer;
+  }
+  button.accion:hover{border-color:var(--accent);color:var(--accent)}
+  button.accion.principal{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+  button.accion.principal:hover{opacity:.9;color:var(--surface)}
+  .msg{font-size:.85rem;color:var(--ok);font-weight:600}
+
+  /* ---------- nota final ---------- */
+  .nota{
+    margin-top:34px;padding-top:16px;border-top:1px solid var(--line-soft);
+    font-size:.85rem;color:var(--text-3);max-width:70ch;
+  }
+  .nota code{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--text-2)}
+
+  @media (max-width:640px){
+    .filtros{grid-template-columns:1fr}
+    .fuente{text-align:left}
+    h1{font-size:1.45rem}
+  }
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>Checklist de radicación ante la EPS</h1>
+        <p class="sub">Marque los documentos que ya tiene del caso. El tablero le dice si el paquete está completo para radicar el cobro de la incapacidad.</p>
+      </div>
+      <div class="fuente">
+        FUENTE: ASTGU · lpeps<br>cheklistradicaciones (JSON)<br>19 EPS configuradas
+      </div>
+    </div>
+    <div class="filtros">
+      <div class="campo">
+        <label for="eps">EPS donde se radica</label>
+        <select id="eps"></select>
+      </div>
+      <div class="campo">
+        <label for="tipo">Tipo de ausentismo</label>
+        <select id="tipo"></select>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="estado" id="estado" data-listo="0">
+    <div class="veredicto"><span class="punto"></span><span id="veredicto">Faltan documentos</span></div>
+    <div class="conteo" id="conteo">0 / 0</div>
+    <div class="barra"><span id="barra" style="width:0%"></span></div>
+  </div>
+
+  <ul class="lista" id="lista"></ul>
+  <div class="aviso" id="aviso" hidden></div>
+
+  <div class="acciones">
+    <button class="accion principal" id="copiar" type="button">Copiar resumen</button>
+    <button class="accion" id="limpiar" type="button">Reiniciar marcas</button>
+    <span class="msg" id="msg" hidden>Resumen copiado</span>
+  </div>
+
+  <p class="nota">
+    Los requisitos salen del campo <code>cheklistradicaciones</code> de cada EPS en el ERP: si allí cambia la
+    exigencia, este checklist cambia. Las marcas se guardan en este navegador, separadas por EPS y tipo de
+    ausentismo. Los tipos sin documentos configurados no exigen soportes en el ERP — confirme con la EPS antes de radicar.
+  </p>
+</main>
+
+<script>
+const DATOS = {"tipos":{"2":"ACCIDENTE DE TRABAJO","3":"ENFERMEDAD GENERAL","5":"LICENCIA DE MATERNIDAD","8":"ENFERMEDAD LABORAL","9":"LICENCIA DE PATERNIDAD","10":"PRELICENCIA","11":"TRANSITO NO LABORAL"},"eps":[{"id":5,"nombre":"ALIANZA SALUD","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0}],"5":[],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":3},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"9":[{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":2},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":1},{"n":"FURIPS","a":1}]}},{"id":7,"nombre":"ASMET SALUD","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":2},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":11,"nombre":"CAPITAL SALUD","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":2}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":2}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":4},{"n":"SOAT","a":3},{"n":"FURIPS","a":3}]}},{"id":53,"nombre":"COMFAORIENTE","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTICADO LABORAL","a":0}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":3},{"n":"HISTORIA CLINICA","a":4},{"n":"CEDULA DEL TRABAJADOR","a":5},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":2},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":4},{"n":"FURIPS","a":3}]}},{"id":19,"nombre":"COMFENALCO VALLE","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":20,"nombre":"COMPENSAR","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"8":[],"9":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":1},{"n":"FURIPS","a":1}]}},{"id":23,"nombre":"COOSALUD E.S.S.","aus":{"2":[],"3":[],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":3},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1}],"9":[{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":2},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":2},{"n":"FURIPS","a":2}]}},{"id":26,"nombre":"EMSSANAR","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":27,"nombre":"FAMISANAR LTDA. CAFAM COLSUBSIDIO","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":1},{"n":"FURIPS","a":1}]}},{"id":32,"nombre":"MALLAMAS","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":5},{"n":"SOAT","a":4},{"n":"FURIPS","a":3}]}},{"id":64,"nombre":"MUTUAL SER ESS","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":3}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"8":[],"9":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":1},{"n":"FURIPS","a":1}]}},{"id":36,"nombre":"NUEVA EPS S.A","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":1},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":1},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":1},{"n":"FURIPS","a":1}]}},{"id":62,"nombre":"PIJAOS SALUD EPSI","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":40,"nombre":"SALUD TOTAL S.A. EPS ARS","aus":{"2":[],"3":[],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"9":[{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":54,"nombre":"SALUDMIA","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":4},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":2}],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":5},{"n":"SOAT","a":4},{"n":"FURIPS","a":3}],"9":[{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":2}],"10":[],"11":[]}},{"id":45,"nombre":"SANITAS S.A.","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"8":[],"9":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":1},{"n":"FURIPS","a":1}]}},{"id":46,"nombre":"SAVIA SALUDEPS","aus":{"2":[],"3":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"CERTIFICADO NACIDO VIVO","a":4},{"n":"REGISTRO CIVIL","a":3}],"8":[],"9":[{"n":"HISTORIA CLINICA","a":3},{"n":"CEDULA DEL TRABAJADOR","a":3},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"SOAT","a":6},{"n":"REPORTE ACCIDENTE DE TRANSITO RAT","a":4},{"n":"FORMATO DE DESCARTE EVENTO LABORAL","a":3},{"n":"FURIPS","a":5}]}},{"id":47,"nombre":"SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.","aus":{"2":[],"3":[],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":3},{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":4},{"n":"CERTIFICADO NACIDO VIVO","a":2},{"n":"REGISTRO CIVIL","a":1}],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1},{"n":"HISTORIA CLINICA","a":2}],"9":[{"n":"HISTORIA CLINICA","a":2},{"n":"CEDULA DEL TRABAJADOR","a":2},{"n":"CERTIFICADO NACIDO VIVO","a":1},{"n":"REGISTRO CIVIL","a":1}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":2},{"n":"HISTORIA CLINICA","a":1},{"n":"CEDULA DEL TRABAJADOR","a":1},{"n":"SOAT","a":4},{"n":"FURIPS","a":3}]}},{"id":49,"nombre":"SURA","aus":{"2":[{"n":"CERTIFICADO DE INCAPACIDAD","a":1}],"3":[],"5":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"8":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0}],"9":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"CERTIFICADO NACIDO VIVO","a":0},{"n":"REGISTRO CIVIL","a":0}],"10":[],"11":[{"n":"CERTIFICADO DE INCAPACIDAD","a":0},{"n":"HISTORIA CLINICA","a":0},{"n":"CEDULA DEL TRABAJADOR","a":0},{"n":"SOAT","a":0},{"n":"FURIPS","a":0}]}}]};
+
+const $ = (id) => document.getElementById(id);
+const selEps = $("eps"), selTipo = $("tipo"), lista = $("lista"), aviso = $("aviso");
+
+/* ---- llenar selectores ---- */
+DATOS.eps.forEach((e, i) => {
+  const o = document.createElement("option");
+  o.value = String(i); o.textContent = e.nombre;
+  selEps.appendChild(o);
+});
+Object.entries(DATOS.tipos).forEach(([id, nombre]) => {
+  const o = document.createElement("option");
+  o.value = id; o.textContent = nombre;
+  selTipo.appendChild(o);
+});
+selTipo.value = "3"; // enfermedad general: el caso más frecuente
+
+/* ---- persistencia por viewer ---- */
+function llave(){ return "chk:" + DATOS.eps[+selEps.value].id + ":" + selTipo.value; }
+function leer(){
+  try { return JSON.parse(localStorage.getItem(llave()) || "[]"); } catch(_) { return []; }
+}
+function guardar(marcados){
+  try { localStorage.setItem(llave(), JSON.stringify(marcados)); } catch(_) {}
+}
+
+function docsActuales(){
+  const eps = DATOS.eps[+selEps.value];
+  return eps.aus[selTipo.value] || [];
+}
+
+function pintar(){
+  const eps = DATOS.eps[+selEps.value];
+  const docs = docsActuales();
+  const marcados = new Set(leer());
+  lista.innerHTML = "";
+
+  if (!docs.length){
+    aviso.hidden = false;
+    aviso.innerHTML = "<b>" + eps.nombre + "</b> no tiene documentos configurados para <b>" +
+      DATOS.tipos[selTipo.value] + "</b> en el ERP. Verifique el requisito directamente con la EPS antes de radicar.";
+  } else {
+    aviso.hidden = true;
+    docs.forEach((d, i) => {
+      const li = document.createElement("li");
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "doc";
+      b.setAttribute("aria-pressed", marcados.has(i) ? "true" : "false");
+      b.innerHTML =
+        '<span class="caja"><svg viewBox="0 0 16 16"><polyline points="3,8.5 6.5,12 13,4.5"></polyline></svg></span>' +
+        '<span class="nombre"></span>' +
+        '<span class="marca">' + (marcados.has(i) ? "LISTO" : "PENDIENTE") + '</span>';
+      b.querySelector(".nombre").textContent = d.n;
+      b.addEventListener("click", () => {
+        const m = new Set(leer());
+        m.has(i) ? m.delete(i) : m.add(i);
+        guardar([...m]);
+        pintar();
+      });
+      li.appendChild(b);
+      lista.appendChild(li);
+    });
+  }
+  medir(docs.length, docs.length ? [...marcados].filter(i => i < docs.length).length : 0);
+}
+
+function medir(total, hechos){
+  const estado = $("estado");
+  const completo = total > 0 && hechos === total;
+  estado.dataset.listo = completo ? "1" : "0";
+  $("veredicto").textContent = total === 0
+    ? "Sin requisitos configurados"
+    : (completo ? "Listo para radicar" : "Faltan " + (total - hechos) + " documento" + (total - hechos === 1 ? "" : "s"));
+  $("conteo").textContent = hechos + " / " + total;
+  $("barra").style.width = (total ? (hechos / total) * 100 : 0) + "%";
+}
+
+/* ---- acciones ---- */
+$("limpiar").addEventListener("click", () => { guardar([]); pintar(); });
+
+$("copiar").addEventListener("click", async () => {
+  const eps = DATOS.eps[+selEps.value], docs = docsActuales(), m = new Set(leer());
+  const lineas = [
+    "RADICACIÓN — " + eps.nombre,
+    "Tipo de ausentismo: " + DATOS.tipos[selTipo.value],
+    ""
+  ];
+  docs.forEach((d, i) => lineas.push((m.has(i) ? "[x] " : "[ ] ") + d.n));
+  if (!docs.length) lineas.push("(sin documentos configurados en el ERP)");
+  const faltan = docs.filter((_, i) => !m.has(i)).length;
+  lineas.push("", docs.length && !faltan ? "PAQUETE COMPLETO" : "FALTAN " + faltan + " documento(s)");
+  const texto = lineas.join("\n");
+  try {
+    await navigator.clipboard.writeText(texto);
+    const msg = $("msg"); msg.hidden = false; setTimeout(() => { msg.hidden = true; }, 2000);
+  } catch(_) {
+    window.prompt("Copie el resumen:", texto);
+  }
+});
+
+selEps.addEventListener("change", pintar);
+selTipo.addEventListener("change", pintar);
+pintar();
+</script>

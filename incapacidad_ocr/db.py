@@ -141,20 +141,28 @@ def insertar_alerta(cx, row: dict[str, Any]) -> int:
         cur.close()
 
 
-def listar_staging(cx, limite: int = 20, estado: Optional[str] = None) -> list[dict[str, Any]]:
-    """Últimos registros (para la pantalla del auxiliar). Filtra por estado si se da."""
+def listar_staging(cx, limite: int = 20, estado: Optional[str] = None,
+                   sospechosa: Optional[bool] = None) -> list[dict[str, Any]]:
+    """Últimos registros (para la pantalla del auxiliar). Filtra por estado y/o
+    sospecha de manipulación si se dan."""
     cur = cx.cursor(dictionary=True)
     base = (
         "SELECT id, creado_en, estado, cedula_leida, paciente_leido, idlpempleado, "
         "fechainicio, Numerodias, fechavencimiento, idlpdiagnosticos, codigo_diagnostico_leido, idlpentidad, "
-        "idlptipoausentismo, idlpnivelincapacidad, documentacion_estado, problemas, archivo_origen "
+        "idlptipoausentismo, idlpnivelincapacidad, documentacion_estado, problemas, archivo_origen, "
+        "sospecha_manipulacion, motivo_sospecha, sospecha_revisada "
         f"FROM {STAGING_TABLE} "
     )
+    condiciones, params = [], []
+    if estado:
+        condiciones.append("estado = %s")
+        params.append(estado)
+    if sospechosa is not None:
+        condiciones.append("sospecha_manipulacion = %s")
+        params.append(1 if sospechosa else 0)
+    where = ("WHERE " + " AND ".join(condiciones) + " ") if condiciones else ""
     try:
-        if estado:
-            cur.execute(base + "WHERE estado = %s ORDER BY id DESC LIMIT %s", (estado, int(limite)))
-        else:
-            cur.execute(base + "ORDER BY id DESC LIMIT %s", (int(limite),))
+        cur.execute(base + where + "ORDER BY id DESC LIMIT %s", (*params, int(limite)))
         filas = cur.fetchall()
     finally:
         cur.close()
@@ -180,7 +188,7 @@ _COLS_ACTUALIZABLES = {
     "observaciones", "original", "idlpdiagnosticos", "idlpempleado", "idlptipoausentismo",
     "idlpnivelincapacidad", "idlpentidad", "tipoentidad", "idlpestadosrecepausentismos", "cedula_leida",
     "codigo_diagnostico_leido", "eps_leida", "paciente_leido", "problemas",
-    "documentacion_estado", "documentos_faltantes",
+    "documentacion_estado", "documentos_faltantes", "sospecha_manipulacion", "motivo_sospecha",
     # El veredicto temporal se RECALCULA al guardar (el auxiliar corrigió las fechas/días).
     # `fechafin_leida`/`dias_leidos` NO están aquí a propósito: son la EVIDENCIA de lo que
     # el documento imprimía y no se pisan con una corrección manual.
@@ -204,6 +212,31 @@ def actualizar_revision(cx, registro_id: int, row: dict[str, Any], estado: str,
     cur = cx.cursor()
     try:
         cur.execute(f"UPDATE {STAGING_TABLE} SET {sets} WHERE id = %s", valores)
+        cx.commit()
+        return cur.rowcount > 0
+    except Exception:
+        cx.rollback()
+        raise
+    finally:
+        cur.close()
+
+
+def marcar_alerta_revisada(cx, registro_id: int, nota: Optional[str] = None) -> bool:
+    """Descarta/reconoce manualmente una alerta de sospecha de manipulación, SIN tocar
+    `estado` (ortogonal al ciclo aprobar/rechazar) ni sobreescribir `sospecha_manipulacion`/
+    `motivo_sospecha` (se conserva el historial de que hubo una alerta)."""
+    cur = cx.cursor()
+    try:
+        if nota:
+            cur.execute(
+                f"UPDATE {STAGING_TABLE} SET sospecha_revisada = 1, "
+                "observaciones = LEFT(CONCAT(COALESCE(observaciones,''), ' | ', %s), 65000) "
+                "WHERE id = %s",
+                (nota, int(registro_id)),
+            )
+        else:
+            cur.execute(f"UPDATE {STAGING_TABLE} SET sospecha_revisada = 1 WHERE id = %s",
+                        (int(registro_id),))
         cx.commit()
         return cur.rowcount > 0
     except Exception:

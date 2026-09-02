@@ -14,6 +14,8 @@ Replica lo confirmado con Diana (mentoría Gruppo, 11 jun 2026):
 """
 from __future__ import annotations
 
+import json
+import logging
 import re
 import unicodedata
 from datetime import date, timedelta
@@ -21,8 +23,16 @@ from typing import Any, Optional
 
 from . import reglas_tiempo
 
+log = logging.getLogger("incapacidad_ocr.erp")
+
 # Estados de recepción (códigos placeholder — confirmar con el catálogo real del ERP).
 ESTADO_RECEPCION = {"ORIGINAL": 1, "WHATSAPP": 2, "CORREO": 3}
+
+# Estado de flujo aparte de PENDIENTE_REVISION: cuando `analizar_autenticidad` (o las
+# señales adicionales de CIE-10/fechas de abajo) marcan `sospecha_manipulacion`, el
+# registro entra a staging con este estado en vez de PENDIENTE_REVISION, para que
+# quede fácilmente identificable en la bandeja sin depender solo del badge DUDOSA.
+ESTADO_POSIBLE_MANIPULACION = "POSIBLE_MANIPULACION"
 
 # Etiquetas de tipo de ausentismo (códigos entregados por Diana).
 ETIQUETAS_TIPO = {
@@ -84,6 +94,10 @@ DOC_CANON = {
     "REGISTROCIVIL": "REGISTRO_CIVIL_NACIMIENTO", "REGISTRO_CIVIL_NACIMIENTO": "REGISTRO_CIVIL_NACIMIENTO",
     "DEFUNCION": "CERTIFICADO_DEFUNCION", "CEDULA": "CEDULA",
     "FORMULA": "FORMULA_MEDICA", "ORDEN": "ORDEN_MEDICA", "OTRO": "OTRO",
+    # documentos que solo exige la RADICACIÓN ante la EPS (ver checklist_radicacion)
+    "SOAT": "SOAT", "RAT": "RAT", "DESCARTE": "DESCARTE_EVENTO_LABORAL",
+    "DESCARTE_EVENTO_LABORAL": "DESCARTE_EVENTO_LABORAL",
+    "CERTIFICADOLABORAL": "CERTIFICADO_LABORAL", "CERTIFICADO_LABORAL": "CERTIFICADO_LABORAL",
 }
 # Grupos de equivalencia: un documento requerido se satisface si hay algún
 # documento presente del mismo grupo (p.ej. una EPICRISIS satisface "historia clínica").
@@ -133,10 +147,155 @@ def validar_documentacion(presentes, id_tipo: Optional[int],
     return ("COMPLETA" if not faltantes else "INCOMPLETA"), faltantes
 
 
+# --------------------------------------------------------------------------- #
+# Radicación ante la EPS: el paquete que hay que armar para COBRAR la incapacidad.
+# Es una exigencia distinta (y casi siempre mayor) a la de la recepción interna:
+# sale del JSON `lpeps.cheklistradicaciones`, que cada EPS configura por tipo de
+# ausentismo. Se avisa desde la ingesta, pero NO bloquea: el caso entra a staging
+# igual y el auxiliar consigue lo que falte antes de radicar.
+# --------------------------------------------------------------------------- #
+# Nombre del documento TAL COMO lo escribe el ERP en el JSON → código canónico nuestro.
+# (Las claves van normalizadas: mayúsculas, sin tildes, un solo espacio. "CERTICADO
+# LABORAL" viene así, con el error de digitación, en los datos del ERP.)
+RADICACION_DOC_CANON = {
+    "CERTIFICADO DE INCAPACIDAD": "INCAPACIDAD",
+    "HISTORIA CLINICA": "HISTORIA_CLINICA",
+    "CEDULA DEL TRABAJADOR": "CEDULA",
+    "CERTIFICADO NACIDO VIVO": "CERTIFICADO_NACIDO_VIVO",
+    "REGISTRO CIVIL": "REGISTRO_CIVIL_NACIMIENTO",
+    "SOAT": "SOAT",
+    "REPORTE ACCIDENTE DE TRANSITO RAT": "RAT",
+    "FORMATO DE DESCARTE EVENTO LABORAL": "DESCARTE_EVENTO_LABORAL",
+    "FURIPS": "FURIPS",
+    "CERTICADO LABORAL": "CERTIFICADO_LABORAL",
+    "CERTIFICADO LABORAL": "CERTIFICADO_LABORAL",
+}
+# Etiquetas legibles para el aviso al auxiliar (el código canónico es para la lógica).
+ETIQUETAS_DOC = {
+    "INCAPACIDAD": "certificado de incapacidad",
+    "HISTORIA_CLINICA": "historia clínica",
+    "EPICRISIS": "epicrisis",
+    "RESUMEN_ATENCION": "resumen de atención",
+    "CEDULA": "cédula del trabajador",
+    "CERTIFICADO_NACIDO_VIVO": "certificado de nacido vivo",
+    "REGISTRO_CIVIL_NACIMIENTO": "registro civil",
+    "SOAT": "SOAT",
+    "RAT": "reporte de accidente de tránsito (RAT)",
+    "DESCARTE_EVENTO_LABORAL": "formato de descarte de evento laboral",
+    "FURIPS": "FURIPS",
+    "FURAT": "FURAT",
+    "CERTIFICADO_LABORAL": "certificado laboral",
+}
+
+
+def etiqueta_doc(codigo: str) -> str:
+    return ETIQUETAS_DOC.get(codigo, (codigo or "").replace("_", " ").lower())
+
+
+def _canon_doc_radicacion(nombre: str) -> Optional[str]:
+    """Nombre del documento en el JSON del ERP → código canónico."""
+    txt = "".join(c for c in unicodedata.normalize("NFD", str(nombre or "").upper())
+                  if unicodedata.category(c) != "Mn")
+    txt = re.sub(r"[^A-Z ]", " ", txt)
+    txt = re.sub(r"\s+", " ", txt).strip()
+    if not txt:
+        return None
+    return RADICACION_DOC_CANON.get(txt) or canon_doc(txt.replace(" ", "_"))
+
+
+def documentos_checklist_radicacion(json_texto: Optional[str], id_tipo: Optional[int]) -> list[str]:
+    """Parsea `lpeps.cheklistradicaciones` y devuelve los documentos (canónicos) del tipo.
+
+    El ERP guarda el JSON ENVUELTO en comillas dobles sin escapar el contenido
+    (``"{"ausentismos":[...]}"``), así que no es JSON válido tal cual: hay que quitar
+    esas comillas externas antes de parsear. Formato real:
+    ``{"ausentismos":[{"idlptipoausentismo":N, "documentos":[{"nombredocumento":"..."}]}]}``
+    Devuelve [] si el campo está vacío, es ilegible o el tipo no está configurado.
+    """
+    if not json_texto or id_tipo is None:
+        return []
+    texto = str(json_texto).strip()
+    if len(texto) > 1 and texto[0] == '"' and texto[-1] == '"':
+        texto = texto[1:-1]
+    try:
+        datos = json.loads(texto)
+        if isinstance(datos, str):          # por si algún día queda bien serializado
+            datos = json.loads(datos)
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(datos, dict):
+        return []
+    for aus in datos.get("ausentismos") or []:
+        if not isinstance(aus, dict):
+            continue
+        try:
+            if int(aus.get("idlptipoausentismo")) != int(id_tipo):
+                continue
+        except (TypeError, ValueError):
+            continue
+        docs = []
+        for d in aus.get("documentos") or []:
+            codigo = _canon_doc_radicacion((d or {}).get("nombredocumento"))
+            if codigo and codigo not in docs:
+                docs.append(codigo)
+        return docs
+    return []
+
+
+def validar_radicacion(presentes, requeridos) -> tuple[Optional[str], list[str]]:
+    """Cruza los documentos presentes contra los que la EPS exige para RADICAR.
+
+    Devuelve (estado ∈ COMPLETA/INCOMPLETA | None si la EPS no tiene checklist, faltantes[]).
+    Aplica las mismas equivalencias que la recepción, PERO solo entre documentos que la EPS
+    no pidió por separado: si el checklist exige nacido vivo Y registro civil, se exigen los
+    dos (uno no cubre al otro).
+    """
+    if not requeridos:
+        return None, []
+    pres = {canon_doc(p) for p in (presentes or []) if p}
+    req = [canon_doc(r) for r in requeridos if r]
+    faltantes = []
+    for r in req:
+        equivalentes = (_grupo_doc(r) - set(req)) | {r}
+        if not (equivalentes & pres):
+            faltantes.append(r)
+    return ("COMPLETA" if not faltantes else "INCOMPLETA"), faltantes
+
+
 def _norm(texto: str) -> str:
     s = (texto or "").lower()
     s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
     return re.sub(r"\s+", " ", s).strip()
+
+
+# Palabras vacías del español que no aportan a comparar dos descripciones de diagnóstico
+# (conectores/artículos muy frecuentes; NO son términos clínicos).
+_STOPWORDS_DX = {
+    "de", "del", "la", "el", "los", "las", "en", "con", "por", "sin", "no", "y", "o",
+    "u", "al", "sus", "otra", "otro", "otras", "otros", "no especificada", "especificada",
+}
+
+
+def _palabras_significativas(texto: str) -> set[str]:
+    palabras = re.findall(r"[a-z]+", _norm(texto))
+    return {p for p in palabras if len(p) > 3 and p not in _STOPWORDS_DX}
+
+
+def _diagnostico_coincide(desc_catalogo: Optional[str], desc_documento: Optional[str]) -> Optional[bool]:
+    """¿El texto del diagnóstico que trae el documento es compatible con la descripción
+    OFICIAL del código CIE-10 en el catálogo? Comparación conservadora por solapamiento
+    de palabras significativas (no exige coincidencia exacta: cada IPS redacta distinto).
+
+    Devuelve None si no se puede evaluar con confianza (falta alguna descripción, o
+    son demasiado cortas) — en ese caso NO se reporta nada, se prefiere no opinar.
+    """
+    if not desc_catalogo or not desc_documento:
+        return None
+    sig_cat = _palabras_significativas(desc_catalogo)
+    sig_doc = _palabras_significativas(desc_documento)
+    if len(sig_cat) < 2 or len(sig_doc) < 2:
+        return None
+    return bool(sig_cat & sig_doc)
 
 
 def homologar_tipo(texto: str) -> tuple[int, str]:
@@ -193,9 +352,11 @@ class Lookups:
         self._cx = conexion
         self._cache_emp: dict[str, tuple[Optional[int], Optional[str], Optional[str]]] = {}
         self._cache_dx: dict[str, tuple[Optional[int], Optional[str]]] = {}
+        self._cache_checklist: dict[int, Optional[str]] = {}  # idlpeps → JSON crudo de radicación
         self._entidades: Optional[list[tuple[int, str, int, str]]] = None  # (id, nombre_norm, tipo, nombre)
         self._empleados_nombre: Optional[list[tuple[int, str, str, str]]] = None  # (id, nombre, eps, clave)
         self._cfg_tiempos: Optional[dict[str, Any]] = None
+        self._catalogo_dx: Optional[bool] = None   # ¿`lpdiagnosticos` tiene filas? (una sonda)
 
     def _query(self, sql: str, params: tuple):
         cur = self._cx.cursor()
@@ -237,7 +398,10 @@ class Lookups:
             return None, None, None
         if self._empleados_nombre is None:
             filas = self._query("SELECT idlpempleado, nombrecompleto, nombreeps FROM vlpempleados", ())
-            self._empleados_nombre = [(int(i), nm, eps, _norm(nm).replace(" ", "")) for (i, nm, eps) in filas]
+            # `vlpempleados` del ERP real trae filas con id o nombre en NULL (empleados sin
+            # ficha completa): se descartan, no sirven para buscar por nombre.
+            self._empleados_nombre = [(int(i), nm, eps, _norm(nm).replace(" ", ""))
+                                      for (i, nm, eps) in filas if i is not None and nm]
         for idp, nm, eps_cat, clave in self._empleados_nombre:
             if clave and (clave == leido or clave in leido or leido in clave):
                 return idp, nm, eps_cat
@@ -258,6 +422,22 @@ class Lookups:
         res = (int(filas[0][0]), filas[0][1]) if filas else (None, None)
         self._cache_dx[key] = res
         return res
+
+    def catalogo_diagnosticos_disponible(self) -> bool:
+        """True si `lpdiagnosticos` existe y tiene filas (se consulta una vez y se cachea).
+
+        Hace falta para poder afirmar "este CIE-10 NO existe". Sin catálogo cargado, un
+        código que no resuelve no significa nada: TODOS fallarían, y la señal de sospecha
+        marcaría el 100% de los documentos legítimos. Es la diferencia entre "no existe" y
+        "no lo pude comprobar".
+        """
+        if self._catalogo_dx is None:
+            try:
+                filas = self._query("SELECT 1 FROM lpdiagnosticos LIMIT 1", ())
+                self._catalogo_dx = bool(filas)
+            except Exception:  # noqa: BLE001 — entorno sin la tabla: no hay catálogo
+                self._catalogo_dx = False
+        return self._catalogo_dx
 
     def id_entidad_por_nombre(self, nombre: Optional[str]) -> tuple[Optional[int], Optional[int], Optional[str]]:
         """Match por CONTENCIÓN: la palabra clave del catálogo dentro del nombre leído.
@@ -304,6 +484,25 @@ class Lookups:
                 self._cfg_tiempos = {}
         return self._cfg_tiempos
 
+    def documentos_radicacion(self, id_entidad: Optional[int], id_tipo: Optional[int]) -> list[str]:
+        """Documentos que la EPS exige para RADICAR el cobro (`lpeps.cheklistradicaciones`).
+
+        Distinto de `documentos_requeridos` (recepción interna): esto es lo que hay que
+        entregarle a la EPS. Solo una parte de las EPS tiene el checklist cargado; si está
+        vacío, o la columna/tabla no existe en el entorno, devuelve [] (no se opina)."""
+        if id_entidad is None or id_tipo is None:
+            return []
+        if id_entidad not in self._cache_checklist:
+            try:
+                filas = self._query(
+                    "SELECT cheklistradicaciones FROM lpeps WHERE idlpeps = %s LIMIT 1",
+                    (id_entidad,),
+                )
+                self._cache_checklist[id_entidad] = filas[0][0] if filas else None
+            except Exception:  # noqa: BLE001 — entorno sin `lpeps` (BD demo): sin checklist
+                self._cache_checklist[id_entidad] = None
+        return documentos_checklist_radicacion(self._cache_checklist[id_entidad], id_tipo)
+
 
 class LookupsNulos:
     """Sin BD: todo None (la validación marcará los IDs como pendientes de revisión)."""
@@ -320,6 +519,11 @@ class LookupsNulos:
     def diagnostico_por_codigo(self, codigo):  # noqa: ARG002
         return None, None
 
+    def catalogo_diagnosticos_disponible(self):
+        """Sin BD no hay catálogo: por eso un CIE-10 que no resuelve NO puede tratarse como
+        indicio de manipulación (marcaría el 100% de los documentos). Ver la versión con BD."""
+        return False
+
     def id_entidad_por_nombre(self, nombre):  # noqa: ARG002
         return None, None, None
 
@@ -330,6 +534,9 @@ class LookupsNulos:
         """Sin BD: no hay config en tabla → el motor usa el archivo del volumen y los
         defaults del código (las reglas siguen evaluándose, no se "apagan")."""
         return None
+
+    def documentos_radicacion(self, id_entidad, id_tipo):  # noqa: ARG002
+        return []
 
 
 # --------------------------------------------------------------------------- #
@@ -466,6 +673,17 @@ def mapear_a_staging(
     problemas: list[str] = []
     faltantes_campos: list[dict[str, Any]] = []  # campos OBLIGATORIOS para revisión manual
 
+    # Sub-bandera DUDOSA (no bloquea, solo alerta): señal de posible manipulación del
+    # documento calculada en processor.analizar_autenticidad. No confundir con
+    # `problemas`/`requiere_revision`: hoy se suma ahí también para que dispare la
+    # revisión estándar, pero queda además en columnas propias para que la UI pinte
+    # el badge sin tener que parsear el string de `problemas`.
+    auten = resultado.get("autenticidad") or {}
+    sospecha_manipulacion = bool(auten.get("sospechosa"))
+    motivo_sospecha = auten.get("motivo") if sospecha_manipulacion else None
+    if sospecha_manipulacion:
+        problemas.append(f"Posible manipulación del documento: {motivo_sospecha}")
+
     def _faltan(campo: str, etiqueta: str, valor: Any) -> None:
         faltantes_campos.append({"campo": campo, "etiqueta": etiqueta, "valor": valor})
 
@@ -528,8 +746,51 @@ def mapear_a_staging(
             problemas.append("No se detectó el código de diagnóstico (CIE-10)")
             _faltan("cie10", "Código CIE-10", None)
         elif id_dx is None:
-            problemas.append(f"Diagnóstico {cie} no está en el catálogo CIE-10")
+            motivo_nf = f"Diagnóstico {cie} no está en el catálogo CIE-10"
+            problemas.append(motivo_nf)
             _faltan("cie10", "Código CIE-10", cie)
+            # Tercera señal DUDOSA (Diana, confirmado contra la tabla real): todo CIE-10
+            # vigente debe resolver contra `lpdiagnosticos` — si no matchea, es indicio de
+            # un código fabricado/alterado a mano (o un error de tecleo/OCR severo).
+            # SOLO si el catálogo está realmente cargado: sin él NADA resuelve, y la señal
+            # marcaría el 100% de los documentos legítimos (con 7000 al mes, eso no es una
+            # alerta, es ruido que tapa las de verdad). Sin catálogo queda el problema
+            # anotado para revisión, pero NO como sospecha de manipulación.
+            # `getattr` y no una llamada directa: `lookups` es duck-typed (hay dobles de
+            # prueba y podría llegar otro origen de catálogos). Si al objeto le falta el
+            # método se asume SIN catálogo, que es el lado seguro: no acusar de manipulación
+            # a un documento legítimo. Se registra para que la carencia no pase inadvertida.
+            _hay_catalogo = getattr(lookups, "catalogo_diagnosticos_disponible", None)
+            if _hay_catalogo is None:
+                log.warning("El objeto de lookups no expone catalogo_diagnosticos_disponible: "
+                            "la señal de CIE-10 inexistente queda desactivada.")
+            if _hay_catalogo is not None and _hay_catalogo():
+                sospecha_manipulacion = True
+                motivo_sospecha = f"{motivo_sospecha}; {motivo_nf}" if motivo_sospecha else motivo_nf
+        else:
+            # Segunda señal DUDOSA: el código CIE-10 existe en el catálogo, pero el texto
+            # del diagnóstico que trae el documento no tiene relación con la descripción
+            # OFICIAL de ese código — típico de una incapacidad donde se cambió el código
+            # a mano pero no (o mal) la descripción, o viceversa. Algunos formatos omiten
+            # la descripción del todo: en ese caso no se evalúa (no hay con qué comparar).
+            if _diagnostico_coincide(desc_dx, diag.get("descripcion")) is False:
+                motivo_dx = (
+                    f"El texto del diagnóstico no coincide con {cie} "
+                    f"({desc_dx}) según el catálogo CIE-10"
+                )
+                problemas.append(f"Posible manipulación del documento: {motivo_dx}")
+                sospecha_manipulacion = True
+                motivo_sospecha = f"{motivo_sospecha}; {motivo_dx}" if motivo_sospecha else motivo_dx
+
+        # Cuarta señal DUDOSA: un CIE-10 vigente reportable tiene 4 caracteres (categoría
+        # + subcategoría, p.ej. "S801"/"S80.1"); un código de solo 3 (la categoría sin
+        # subdividir, p.ej. "A09") está estructuralmente incompleto para este catálogo —
+        # independiente de si además matcheó o no contra `lpdiagnosticos`.
+        if cie and len(cie.replace(".", "")) == 3:
+            motivo_len = f"Código CIE-10 {cie} incompleto (3 caracteres; se esperan 4)"
+            problemas.append(f"Posible manipulación del documento: {motivo_len}")
+            sospecha_manipulacion = True
+            motivo_sospecha = f"{motivo_sospecha}; {motivo_len}" if motivo_sospecha else motivo_len
 
     eps_de_empleado = False
     if es_permiso or es_vacaciones:
@@ -629,6 +890,17 @@ def mapear_a_staging(
         faltantes = [d for d in requeridos if d != "INCAPACIDAD"]
         doc_estado = "COMPLETA" if not faltantes else "INCOMPLETA"
 
+    # Radicación ante la EPS: qué faltará para COBRAR el ausentismo (aviso, no bloquea).
+    # Los permisos y las vacaciones no se radican ante ninguna EPS → no aplica.
+    rad_estado: Optional[str] = None
+    rad_faltantes: list[str] = []
+    rad_requeridos: list[str] = []
+    if documentos_presentes is not None and not (es_permiso or es_vacaciones):
+        consultar_radicacion = getattr(lookups, "documentos_radicacion", None)
+        if callable(consultar_radicacion):
+            rad_requeridos = consultar_radicacion(id_ent, id_tipo) or []
+            rad_estado, rad_faltantes = validar_radicacion(documentos_presentes, rad_requeridos)
+
     observaciones = (
         _observaciones_permiso(etiqueta_tipo, perm) if es_permiso
         else _observaciones(
@@ -675,7 +947,13 @@ def mapear_a_staging(
         # distinguir "los tiempos no cuadran" de "no encontré la cédula".
         "alertas_tiempos": ("; ".join(veredicto.codigos) or None),
         "severidad_tiempos": veredicto.severidad_max,
-        "estado": "PENDIENTE_REVISION",
+        "sospecha_manipulacion": 1 if sospecha_manipulacion else 0,
+        "motivo_sospecha": motivo_sospecha,
+        # El estado de sospecha manda sobre el pendiente normal: es una cola distinta para
+        # el auxiliar. El veredicto temporal viaja aparte (`severidad_tiempos`) porque son
+        # dos ejes independientes — un documento puede tener los tiempos incoherentes sin
+        # ser una manipulación, y al revés.
+        "estado": ESTADO_POSIBLE_MANIPULACION if sospecha_manipulacion else "PENDIENTE_REVISION",
     }
     return {
         "row": row,
@@ -695,6 +973,10 @@ def mapear_a_staging(
         "nivel_incapacidad": ETIQUETAS_NIVEL.get(id_nivel),
         "estado_recepcion": estado,
         "documentos_faltantes": faltantes,
+        # Radicación ante la EPS (aviso anticipado; None = esa EPS no tiene checklist cargado)
+        "radicacion_estado": rad_estado,
+        "radicacion_requeridos": rad_requeridos,
+        "radicacion_faltantes": rad_faltantes,
         "paciente_catalogo": nombre_catalogo,
         "paciente_ocr": nombre_ocr,
         "entidad_catalogo": nombre_entidad,

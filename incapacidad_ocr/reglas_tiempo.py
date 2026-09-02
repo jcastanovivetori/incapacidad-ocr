@@ -176,6 +176,22 @@ class ContextoTiempos:
     fin_perdido: bool = False
     # --- instrumentación del lector de duraciones en letras ("DOS (2) días")
     dias_letra: Optional[int] = None
+    # --- otra evidencia del papel (NO la toca la reconciliación: se lee del registro)
+    expedicion_leida: Optional[date] = None
+    expedicion_cruda: Any = None
+    # "Prórroga: SI/No" impreso en 9 de 31 documentos del corpus. HOY el extractor no lo
+    # publica → la regla que lo usa queda NO EVALUABLE (ver T16 en el CATALOGO).
+    prorroga_declarada: Optional[bool] = None
+    # --- accesos externos declarados (no son datos del papel, son consultas al sistema)
+    # `historial`: adaptador de SOLO LECTURA al histórico de ausentismos del empleado.
+    # None (lo normal hoy) → las reglas que lo exigen quedan NO EVALUABLE, igual que
+    # `LookupsNulos` deja los IDs sin resolver en vez de explotar. Interfaz esperada
+    # (duck typing, como `Lookups`; ver T15/T16/T17):
+    #     solapamientos(ctx)            -> list[dict]  ausentismos que cruzan el intervalo
+    #     duplicados_exactos(ctx)       -> list[dict]  misma terna (empleado, inicio, días)
+    #     ausentismo_previo_contiguo(ctx) -> dict|None  el que termina justo antes
+    historial: Any = None
+    id_empleado: Optional[int] = None
     # --- valores efectivos (informativos)
     inicio_efectivo: Optional[date] = None
     fin_efectivo: Optional[date] = None
@@ -395,10 +411,16 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
         fin_crudo, fin_recalculado, fin_perdido = overrides["fecha_fin"], False, False
     if "dias" in overrides:
         dias_crudo = overrides["dias"]
+    # La fecha de EXPEDICIÓN y el flag de PRÓRROGA se leen del registro sin pasar por la
+    # foto: la reconciliación no los toca (solo mueve inicio/fin/días), así que lo que hay
+    # en el registro ES lo leído. Si algún día se derivaran, habría que meterlos en la foto.
+    expedicion_cruda = overrides.get("fecha_expedicion", inca.get("fecha_expedicion"))
     return {
         "inicio_crudo": inicio_crudo, "fin_crudo": fin_crudo, "dias_crudo": dias_crudo,
         "inicio_calculado": inicio_calculado, "fin_recalculado": fin_recalculado,
         "fin_perdido": fin_perdido, "dias_letra": entero_dias(dias_letra),
+        "expedicion_cruda": expedicion_cruda,
+        "prorroga_declarada": inca.get("prorroga") if isinstance(inca.get("prorroga"), bool) else None,
     }
 
 
@@ -407,8 +429,14 @@ def construir_contexto(inca: dict[str, Any], *, hoy: date,
                        inicio_efectivo: Any = None, fin_efectivo: Any = None,
                        dias_efectivo: Optional[int] = None,
                        tipo_documento: Optional[str] = None,
-                       id_tipo: Optional[int] = None) -> ContextoTiempos:
-    """Registro (+ overrides del auxiliar) → contexto de evaluación."""
+                       id_tipo: Optional[int] = None,
+                       id_empleado: Optional[int] = None,
+                       historial: Any = None) -> ContextoTiempos:
+    """Registro (+ overrides del auxiliar) → contexto de evaluación.
+
+    ``historial``/``id_empleado`` son opcionales: sin ellos, las reglas que comparan
+    contra el histórico del empleado quedan NO EVALUABLE (nunca dan un falso veredicto).
+    """
     v = valores_leidos(inca, overrides)
     return ContextoTiempos(
         hoy=hoy,
@@ -418,8 +446,11 @@ def construir_contexto(inca: dict[str, Any], *, hoy: date,
         inicio_crudo=v["inicio_crudo"], fin_crudo=v["fin_crudo"], dias_crudo=v["dias_crudo"],
         inicio_calculado=v["inicio_calculado"], fin_recalculado=v["fin_recalculado"],
         fin_perdido=v["fin_perdido"], dias_letra=v["dias_letra"],
+        expedicion_leida=fecha_iso(v["expedicion_cruda"]), expedicion_cruda=v["expedicion_cruda"],
+        prorroga_declarada=v["prorroga_declarada"],
         inicio_efectivo=fecha_iso(inicio_efectivo), fin_efectivo=fecha_iso(fin_efectivo),
         dias_efectivo=dias_efectivo, tipo_documento=tipo_documento, id_tipo=id_tipo,
+        id_empleado=id_empleado, historial=historial,
     )
 
 
@@ -576,8 +607,11 @@ def _t11_fin_reescrito(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]
 def _t12_dias_letra_discrepa(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
     if ctx.dias_letra == ctx.dias_leido:
         return None
-    return (f"La duración en letras ({ctx.dias_letra}) no coincide con la del dígito "
-            f"({ctx.dias_leido}) en el mismo campo del documento")
+    # El mensaje NO dice "las dos formas del documento": ``dias_leido`` puede venir de un
+    # override del auxiliar, y entonces el desacuerdo es entre lo tecleado y la palabra
+    # impresa. En los dos casos hay que mirar el papel, pero no se afirma de dónde salió.
+    return (f"La duración escrita en LETRAS en el documento ({ctx.dias_letra}) no coincide "
+            f"con el número de días registrado ({ctx.dias_leido})")
 
 
 def _t13_dia_semana(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
@@ -964,24 +998,27 @@ def validar_tiempos(contexto: ContextoTiempos, config: Optional[ConfigReglas] = 
     porque necesita los objetos ``Hallazgo``): se reutiliza ese recorrido en vez de repetirlo.
     """
     cfg = config or cargar_config()
-    veredicto = veredicto if veredicto is not None else evaluar(contexto, cfg)
+    # Sin `resultados` no se puede armar el informe por regla (un veredicto construido a
+    # mano): se recalcula en vez de devolver un informe vacío que parecería "todo bien".
+    if veredicto is None or not veredicto.resultados:
+        veredicto = evaluar(contexto, cfg)
     resultados = veredicto.resultados
     por_estado = {e: [r.codigo for r in resultados if r.estado == e] for e in ESTADOS}
     comprobables = len(por_estado[CUMPLE]) + len(por_estado[NO_CUMPLE])
     activas = comprobables + len(por_estado[NO_EVALUABLE])
     if veredicto.exige_revision:
-        global_ = V_REVISAR
+        veredicto_global = V_REVISAR
     elif veredicto.hallazgos:
-        global_ = V_AVISOS
+        veredicto_global = V_AVISOS
     elif hay_evidencia_temporal(contexto):
-        global_ = V_COHERENTE
+        veredicto_global = V_COHERENTE
     else:
         # No había NADA que comprobar (el OCR no recuperó ni una fecha ni los días). No es
         # "coherente" (no se comprobó) ni "incoherente" (no hay contradicción): es un
         # documento del que hay que sacar los datos a mano.
-        global_ = V_SIN_DATOS
+        veredicto_global = V_SIN_DATOS
     return {
-        "veredicto": global_,
+        "veredicto": veredicto_global,
         "exige_revision": veredicto.exige_revision,
         "severidad_max": veredicto.severidad_max,
         "puntaje_coherencia": veredicto.puntaje,

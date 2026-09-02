@@ -1,9 +1,11 @@
 """Orquestador: imagen → (OCR) texto plano → (extractor) JSON de incapacidad."""
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 from typing import Any
 
+from .authenticity import analizar_autenticidad
 from .extract import Extractor, RuleBasedExtractor, empty_record, normalizar_fechas
 from .ocr import OCRBackend, get_ocr_backend
 from .reglas_tiempo import CLAVE_SNAPSHOT, snapshot_leidos
@@ -37,6 +39,8 @@ class IncapacidadProcessor:
                 "prueba con el motor 'RapidOCR' (más fiable para texto impreso) o sube una "
                 "imagen/escaneo más nítido."
             )
+            with contextlib.suppress(Exception):
+                out["autenticidad"] = analizar_autenticidad(image_path, texto_plano, None)
             return out
         # extract() devuelve el registro completo (paciente/entidad/incapacidad/…).
         rec = self.extractor.extract(texto_plano)
@@ -52,6 +56,8 @@ class IncapacidadProcessor:
             inca[CLAVE_SNAPSHOT] = snapshot_leidos(inca)
         normalizar_fechas(rec)  # reconciliación única de fechas/días (regla del cliente)
         out["incapacidad"] = rec
+        with contextlib.suppress(Exception):
+            out["autenticidad"] = analizar_autenticidad(image_path, texto_plano, rec)
         return out
 
 

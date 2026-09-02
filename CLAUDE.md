@@ -25,7 +25,7 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 | `validacion_temporal.py` | **API pública** del motor (re-exporta `reglas_tiempo`, sin lógica propia): `validar_registro(registro)` → informe serializable · `python -m incapacidad_ocr.validacion_temporal` imprime el catálogo y la config efectiva |
 | `numeros_es.py` | numerales en español: `normalizar` (saneo OCR), `texto_a_entero`, `duracion_en_texto` (días en **números, letras o las dos**), `numerales_en_texto` (enteros presentes → anclaje del LLM). Lector puro: no aplica reglas de dominio |
 | `processor.py` | `IncapacidadProcessor` une OCR+extractor y llama `normalizar_fechas()`. Guarda `MIN_OCR_CHARS` (no estructurar texto vacío → anti-fabricación de PII) |
-| `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo, **validación documental** (`REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion`, `canon_doc`) |
+| `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo, **validación documental** (`REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion`, `canon_doc`) y **checklist de radicación ante la EPS** (`documentos_checklist_radicacion`, `validar_radicacion`, `Lookups.documentos_radicacion`, `etiqueta_doc`) |
 | `db.py` | MySQL (BD ASTGU): `insertar_staging`, `insertar_alerta`, `listar_staging`, `obtener_staging`, `actualizar_revision`, `actualizar_estado` |
 | `batch.py` | **Ingesta masiva por lotes**: escanea `INGESTA_ROOT/1_entrada`, agrupa por nomenclatura del nombre, OCR-ea solo el doc base, valida requisitos por tipo, inserta en staging + alerta, mueve a `3_archivo/` o `2_revisar/…`. `parse_nombre`, `procesar_todo`, `contar_pendientes`, `asegurar_estructura` |
 | `webapp.py` | API FastAPI + estado del flujo (`PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO`) + endpoints de lote |
@@ -54,7 +54,12 @@ docker exec ocr-db mysql -uocr -pocr ASTGU -e "SELECT id,estado,paciente_leido,f
 
 # Pruebas (local, fuera de Docker):
 python tests/test_processor.py           # unitarias deterministas (StubOCR + RapidOCR si está)
+python tests/test_numeros_es.py          # numerales en español ("DOS", "DOS (2)") y sus falsos positivos
 python tests/test_validacion_temporal.py # motor de tiempos: reglas, config en caliente, integración
+python tests/test_reinicio_prueba.py     # reinicio de la prueba + invariantes del borrado en BD
+python tests/test_radicacion.py          # checklist de radicación (parseo del JSON del ERP, sin BD)
+python tests/test_authenticity.py        # señales de manipulación del documento
+python tests/test_erp_diagnostico.py     # validación del diagnóstico contra el catálogo
 python tests/test_ejemplos_reales.py     # evalúa los 8 documentos reales de ../Ejemplos
 
 # Reglas de tiempos: ver el catálogo y la configuración EFECTIVA (comprobar un cambio en caliente):
@@ -167,6 +172,13 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   pipeline no expone cajas OCR hoy). Ver `erp.mapear_a_staging` (`es_permiso`) y `extract._extraer_permiso`.
 - **Staging, no directo:** NUNCA insertar en `lpausentismos`. Se escribe en `lp_ausentismos_ia`
   (`estado=PENDIENTE_REVISION`); el ERP promueve al APROBAR. No se aprueba con obligatorios faltantes (→ 409).
+- **Estado `POSIBLE_MANIPULACION`:** si `erp.mapear_a_staging` detecta `sospecha_manipulacion` (heurísticas de
+  `authenticity.analizar_autenticidad` + señales de CIE-10/fechas en el propio `erp.py`) y el flujo no fue
+  aprobado/rechazado explícitamente, el registro entra a staging con `estado=POSIBLE_MANIPULACION` en vez de
+  PENDIENTE_REVISION (`erp.ESTADO_POSIBLE_MANIPULACION`) — así queda filtrable/identificable en la bandeja sin
+  depender solo del badge 🚩 DUDOSA (`sospecha_manipulacion`/`motivo_sospecha`, que se conservan igual). Es
+  ortogonal al ciclo aprobar/rechazar: `POST /api/revisar` con `guardar` conserva ese estado si la sospecha
+  sigue vigente tras el re-mapeo; `aprobar`/`rechazar` lo reemplazan igual que a PENDIENTE_REVISION.
 - **Nivel de incapacidad** (`idlpnivelincapacidad`, FK a `lpnivelincapacidad`): estudiado contra el histórico
   real (`lpausentismos`) — **ni los días ni el diagnóstico predicen el nivel de forma limpia** (el mismo
   CIE-10 aparece con niveles distintos; los rangos de días se solapan entre niveles), es un juicio clínico
@@ -241,6 +253,19 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   (`EQUIVALENCIAS_DOC`): p.ej. una `EPICRISIS` satisface el requisito de `HISTORIA_CLINICA` (soporte clínico), y
   `NACIDO_VIVO`≡`REGISTRO_CIVIL`. Caso incompleto → `documentacion_estado=INCOMPLETA` + fila en
   `lp_alertas_documentacion`; igual entra a staging como `PENDIENTE_REVISION` (el auxiliar decide).
+- **Checklist de RADICACIÓN ante la EPS** (`lpeps.cheklistradicaciones`): exigencia **distinta y mayor** a la de
+  la recepción interna — es lo que hay que entregarle a la EPS para **cobrar** el ausentismo. El campo es un JSON
+  por EPS con la forma `{"ausentismos":[{"idlptipoausentismo":N,"documentos":[{"nombredocumento":…}]}]}`,
+  configurado para los tipos **2/3/5/8/9/10/11**. **Gotcha del dato:** el ERP lo guarda ENVUELTO en comillas
+  dobles sin escapar el contenido (`"{"ausentismos":…}"`) → **no es JSON válido tal cual**, hay que quitar esas
+  comillas antes de parsear (`erp.documentos_checklist_radicacion`); y el certificado laboral viene escrito
+  `CERTICADO LABORAL` (error de digitación del catálogo). Solo ~19 de 62 EPS lo tienen cargado y varios tipos
+  quedan con lista vacía: **sin checklist NO se opina** (`radicacion_estado=None`), nunca se inventa un requisito.
+  `erp.validar_radicacion` aplica las mismas equivalencias que la recepción **salvo entre documentos que la EPS
+  pidió por separado** (si exige nacido vivo Y registro civil, se exigen los dos). Desde la ingesta
+  (`batch.procesar_caso`) el faltante **avisa, no bloquea**: el caso NO se manda a `incompletos/` por esto — se
+  registra una fila en `lp_alertas_documentacion` con `estado=PENDIENTE_RADICACION` (20 chars, justo el máximo
+  de esa columna) y sale en el resumen del lote (`pendientes_radicacion`) y en la tabla de la UI.
 
 ## Restricciones / convenciones
 

@@ -79,6 +79,10 @@ def test_e2e_stub() -> None:
     check("backend=stub", res["ocr_backend"] == "stub")
     check("doc number", inc["paciente"]["documento_numero"] == EXPECTED["documento_numero"])
     check("dias", inc["incapacidad"]["dias"] == EXPECTED["dias"], str(inc["incapacidad"]["dias"]))
+    # La sub-bandera DUDOSA (analizar_autenticidad) debe correr siempre, sin romper el
+    # pipeline, incluso para una extensión (.png) que no cubre ninguna heurística todavía.
+    check("autenticidad presente", "autenticidad" in res, str(res.get("autenticidad")))
+    check("autenticidad no sospechosa por defecto", res.get("autenticidad", {}).get("sospechosa") is False)
 
 
 def test_e2e_real_ocr() -> None:

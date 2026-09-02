@@ -8,6 +8,11 @@ soportes requeridos según el tipo de ausentismo, registra cada caso en la tabla
 corresponda (``3_archivo/`` si está completo, ``2_revisar/`` si necesita acción humana).
 Los adjuntos NO se OCR-ean: se identifican por su ``TIPODOC`` en el nombre.
 
+Además avisa, desde la ingesta, qué documentos faltarán para RADICAR el cobro ante la EPS
+(``lpeps.cheklistradicaciones``): es una exigencia distinta y mayor a la de la recepción
+interna, así que se registra como alerta ``PENDIENTE_RADICACION`` sin mandar el caso a
+``incompletos/`` — el trámite sigue, pero el auxiliar ya sabe qué pedir.
+
 100% local. No se inserta en ``lpausentismos`` directo (el ERP promueve al aprobar).
 
 Uso por CLI:   python -m incapacidad_ocr.batch [--extractor rule|hibrido] [--dry-run] [--init]
@@ -285,6 +290,9 @@ def procesar_caso(caso: str, archivos: list[dict], ocr_backend, extractor, cx, l
         "tiene_base": base is not None, "presentes": sorted(p for p in presentes if p),
         "tipo_ausentismo": mapeo.get("tipo_ausentismo"),
         "documentacion_estado": doc_estado, "faltantes": mapeo.get("documentos_faltantes"),
+        # Lo que faltará para RADICAR el cobro ante la EPS (aviso; no manda el caso a incompletos)
+        "radicacion_estado": mapeo.get("radicacion_estado"),
+        "radicacion_faltantes": mapeo.get("radicacion_faltantes") or [],
         "requiere_revision": requiere_revision, "problemas": problemas,
         "mismatch_cedula": mismatch, "id": None, "destino": "/".join(partes),
     }
@@ -294,20 +302,38 @@ def procesar_caso(caso: str, archivos: list[dict], ocr_backend, extractor, cx, l
     new_id = db.insertar_staging(cx, row)
     resultado_caso["id"] = new_id
 
-    # Alerta de documentación si el caso quedó incompleto.
-    if doc_estado == "INCOMPLETA":
-        with_ = ", ".join(mapeo.get("documentos_faltantes") or []) or "documentos requeridos"
+    def _alerta(faltantes: list[str], mensaje: str, estado_alerta: str) -> None:
         try:
             db.insertar_alerta(cx, {
                 "id_ausentismo_ia": new_id, "idlpempleado": row.get("idlpempleado"),
                 "cedula": cedula_nombre, "idlpentidad": row.get("idlpentidad"),
                 "eps": row.get("eps_leida"),
-                "documentos_faltantes": with_,
-                "mensaje": f"Faltan soportes para el ausentismo del empleado {cedula_nombre}: {with_}.",
-                "canal": recepcion, "estado": "PENDIENTE",
+                "documentos_faltantes": ", ".join(faltantes)[:255],
+                "mensaje": mensaje[:500],
+                "canal": recepcion, "estado": estado_alerta,
             })
-        except Exception:  # noqa: BLE001
-            log.exception("No se pudo crear la alerta del caso %s", caso)
+        except Exception:  # noqa: BLE001 — una alerta fallida no debe tumbar el caso
+            log.exception("No se pudo crear la alerta (%s) del caso %s", estado_alerta, caso)
+
+    # Alerta de RECEPCIÓN: faltan los soportes mínimos para tramitar el ausentismo.
+    if doc_estado == "INCOMPLETA":
+        faltan_rec = mapeo.get("documentos_faltantes") or []
+        with_ = ", ".join(faltan_rec) or "documentos requeridos"
+        _alerta(faltan_rec or ["documentos requeridos"],
+                f"Faltan soportes para el ausentismo del empleado {cedula_nombre}: {with_}.",
+                "PENDIENTE")
+
+    # Alerta de RADICACIÓN: el caso puede estar completo para el trámite interno y aun así
+    # faltarle documentos para COBRARLE a la EPS (`lpeps.cheklistradicaciones`). Se avisa
+    # desde ya, con la lista concreta, para que el auxiliar los pida a tiempo.
+    if resultado_caso["radicacion_estado"] == "INCOMPLETA":
+        faltan_rad = resultado_caso["radicacion_faltantes"]
+        legibles = ", ".join(erp.etiqueta_doc(d) for d in faltan_rad)
+        eps_txt = mapeo.get("entidad_catalogo") or row.get("eps_leida") or "la EPS"
+        _alerta(faltan_rad,
+                f"Para radicar ante {eps_txt} el ausentismo del empleado {cedula_nombre} "
+                f"faltará: {legibles}.",
+                "PENDIENTE_RADICACION")
 
     destino = _sub(root, *partes)
     _mover([a["path"] for a in archivos], destino)
@@ -331,7 +357,7 @@ def procesar_todo(ocr_backend, extractor_name: str = "rule", limite: int = 500,
     resumen: dict[str, Any] = {
         "root": str(root), "extractor": extractor_name,
         "casos_total": len(casos), "completos": 0, "faltan_soportes": 0,
-        "datos_por_revisar": 0, "con_error": 0,
+        "datos_por_revisar": 0, "con_error": 0, "pendientes_radicacion": 0,
         "mal_nombrados": len(sueltos), "detalle": [],
     }
     # Los mal nombrados no se pueden agrupar → van a la zona de revisión (no se procesan).
@@ -358,6 +384,11 @@ def procesar_todo(ocr_backend, extractor_name: str = "rule", limite: int = 500,
                     resumen["faltan_soportes"] += 1
                 else:
                     resumen["datos_por_revisar"] += 1
+                # La radicación es un eje APARTE de la completitud interna: un caso puede
+                # estar completo para nosotros y aun así faltarle documentos para cobrarle
+                # a la EPS, así que se cuenta sin alterar la zona destino del caso.
+                if r.get("radicacion_estado") == "INCOMPLETA":
+                    resumen["pendientes_radicacion"] += 1
                 resumen["detalle"].append(r)
             except Exception as exc:  # noqa: BLE001 — un caso no debe tumbar el lote
                 log.exception("Error procesando caso %s", caso)

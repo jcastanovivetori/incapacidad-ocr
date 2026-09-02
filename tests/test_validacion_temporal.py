@@ -107,6 +107,28 @@ def _catalogo_con(*reglas: rt.ReglaTiempo):
         rt.CATALOGO, rt.CATALOGO_POR_CODIGO = orig, orig_map
 
 
+class _LookupsFalsos(erp.LookupsNulos):
+    """Catálogos que SÍ resuelven (cédula/CIE/EPS), sin MySQL.
+
+    Aísla el canal de TIEMPOS: con los lookups nulos, `problemas` se llena de "cédula no
+    encontrada"/"CIE-10 no está en el catálogo" y no se puede afirmar que un mensaje
+    concreto viene del motor temporal. Hereda de `LookupsNulos` para que cualquier método
+    nuevo que `erp` empiece a consultar siga degradando igual que en producción sin BD.
+    """
+
+    def empleado_por_cedula(self, cedula):
+        return (7, "PACIENTE DE PRUEBA", "SALUD TOTAL") if cedula else (None, None, None)
+
+    def id_empleado_por_cedula(self, cedula):
+        return self.empleado_por_cedula(cedula)[0]
+
+    def diagnostico_por_codigo(self, codigo):
+        return (11, "INFECCION AGUDA DE LAS VIAS RESPIRATORIAS") if codigo else (None, None)
+
+    def id_entidad_por_nombre(self, nombre):
+        return (3, 1, "SALUD TOTAL") if nombre else (None, None, None)
+
+
 def _resultado(inca: dict, **extra) -> dict:
     """Resultado tipo `processor.process()` con los campos que mira `erp.mapear_a_staging`."""
     registro = {
@@ -683,6 +705,10 @@ def test_informe() -> None:
                                                        dias=5)).problemas))
     check("dice de dónde salió la configuración aplicada",
           informe["config"]["fuentes"][0] == "codigo" and informe["config"]["umbrales"]["dias_max"] == 540)
+    compacto = rt.evaluar(_ctx(inicio="2026-06-01", fin="2026-07-06", dias=5)).como_dict()
+    check("el veredicto operativo se serializa solo (ResultadoTiempos.como_dict)",
+          json.loads(json.dumps(compacto))["hallazgos"][0]["codigo"] == "T01_DURACION_VS_RANGO"
+          and compacto["puntaje"] == 60, str(compacto["puntaje"]))
 
     limpio = vt.validar_registro(
         _resultado({"fecha_inicio": "2026-06-01", "fecha_fin": "2026-06-05", "dias": 5}), hoy=HOY)
@@ -715,10 +741,11 @@ def test_integracion_erp() -> None:
             "fecha_fin_recalculada": True,
             rt.CLAVE_SNAPSHOT: {"fecha_inicio": "2026-06-06", "fecha_fin": "2026-07-06",
                                 "dias": 1, "dias_letra": None}}
-    mapeo = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", erp.LookupsNulos(), hoy=HOY)
+    mapeo = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
 
-    check("el hallazgo entra en `problemas` (canal existente)",
-          any("no cuadran" in p for p in mapeo["problemas"]), str(mapeo["problemas"]))
+    check("el hallazgo entra en `problemas` (canal existente) y es el ÚNICO problema",
+          len(mapeo["problemas"]) == 1 and "no cuadran" in mapeo["problemas"][0],
+          str(mapeo["problemas"]))
     check("y marca requiere_revision", mapeo["requiere_revision"] is True)
     check("severidad del veredicto en la fila", mapeo["row"]["severidad_tiempos"] == rt.GRAVE)
     check("código de regla en la fila (para ordenar la cola)",
@@ -729,8 +756,10 @@ def test_integracion_erp() -> None:
     check("y los días impresos", mapeo["row"]["dias_leidos"] == 1)
     check("estructura detallada disponible para la UI/API",
           mapeo["tiempos"]["reglas"] and mapeo["hallazgos_tiempos"][0]["codigo"] == "T01_DURACION_VS_RANGO")
+    # El motor MARCA y explica; no decide. Un hallazgo GRAVE de tiempos no cambia por sí
+    # mismo el estado del flujo (eso es de otras señales) ni aprueba/rechaza nada.
     check("NUNCA se rechaza solo: la fila entra a revisión humana",
-          mapeo["row"]["estado"] == "PENDIENTE_REVISION")
+          mapeo["row"]["estado"] == "PENDIENTE_REVISION", str(mapeo["row"]["estado"]))
     check("nunca escribe en la tabla del ERP (solo staging)",
           "fechafin_leida" in mapeo["row"] and mapeo["row"]["fechavencimiento"] == "2026-06-07")
 
@@ -738,12 +767,16 @@ def test_integracion_erp() -> None:
     raiz = Path(tempfile.mkdtemp(prefix="cfg_erp_"))
     try:
         cfg = _cfg_archivo({"reglas": {"T01_DURACION_VS_RANGO": {"severidad": "LEVE"}}}, raiz)
-        m2 = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", erp.LookupsNulos(), hoy=HOY,
+        m2 = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
                                   config_reglas=cfg)
         check("severidad LEVE por config: el mensaje pasa a avisos",
               any("no cuadran" in a for a in m2["avisos_tiempos"])
               and not any("no cuadran" in p for p in m2["problemas"]), str(m2["problemas"]))
         check("y la fila lo registra como LEVE", m2["row"]["severidad_tiempos"] == rt.LEVE)
+        # Consecuencia práctica del cambio de severidad (esto es lo que pidió el cliente):
+        # el MISMO documento deja de bloquear la aprobación, sin desplegar nada.
+        check("con LEVE el documento ya no exige revisión por tiempos",
+              m2["requiere_revision"] is False and not m2["problemas"], str(m2["problemas"]))
     finally:
         shutil.rmtree(raiz, ignore_errors=True)
 
@@ -751,7 +784,7 @@ def test_integracion_erp() -> None:
     dias_malos = {"fecha_inicio": None, "fecha_fin": None, "dias": 900,
                   rt.CLAVE_SNAPSHOT: {"fecha_inicio": None, "fecha_fin": None, "dias": 900,
                                       "dias_letra": None}}
-    m3 = erp.mapear_a_staging(_resultado(dias_malos), "WHATSAPP", erp.LookupsNulos(), hoy=HOY)
+    m3 = erp.mapear_a_staging(_resultado(dias_malos), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
     sobre_dias = [p for p in m3["problemas"] if "días" in p or "dias" in p]
     check("días fuera de rango: UN solo mensaje (el de la regla, con el valor leído)",
           len(sobre_dias) == 1 and "fuera del rango válido" in sobre_dias[0], str(sobre_dias))
@@ -765,7 +798,7 @@ def test_integracion_erp() -> None:
     rec = {"incapacidad": {"fecha_fin": "2026-06-30", "dias": 5}}
     rec["incapacidad"][rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(rec["incapacidad"])
     normalizar_fechas(rec)
-    m4 = erp.mapear_a_staging(_resultado(rec["incapacidad"]), "WHATSAPP", erp.LookupsNulos(), hoy=HOY)
+    m4 = erp.mapear_a_staging(_resultado(rec["incapacidad"]), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
     check("inicio derivado: sin alertas de tiempos",
           m4["row"]["alertas_tiempos"] is None and m4["row"]["severidad_tiempos"] is None,
           str(m4["row"]["alertas_tiempos"]))

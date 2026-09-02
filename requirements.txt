@@ -1,6 +1,7 @@
 # incapacidad-ocr — 100% local, sin APIs pagas.
 Pillow>=10            # carga/preprocesado de imágenes + generación de muestras
 pypdfium2>=4         # renderiza PDF → imagen (PDFium, local, sin Poppler ni servicios)
+PyMuPDF>=1.24        # spans de fuente/tamaño en PDF de texto nativo (authenticity.py; opcional)
 
 # --- OCR local (elige uno) ---
 rapidocr-onnxruntime>=1.2   # OCR ONNX en CPU, modelos embebidos, sin servicios externos
