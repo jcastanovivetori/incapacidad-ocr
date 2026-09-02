@@ -39,13 +39,28 @@
     "T11_FIN_REESCRITO_SIN_EVIDENCIA": { "severidad": "GRAVE", "activa": true },
     "T12_DIAS_LETRA_DISCREPA":        { "severidad": "MEDIA", "activa": true },
 
+    "T14_EXPEDICION_POSTERIOR_AL_INICIO": { "severidad": "LEVE", "activa": true },
+
     "_T13": [
       "T13_DIA_SEMANA_INCONSISTENTE viene DESACTIVADA de fabrica y no debe activarse todavia:",
       "el registro no publica el dia de la semana impreso, asi que hoy queda 'no evaluable'.",
       "La version 'por posicion' de esa comprobacion marca documentos LEGITIMOS cuando el OCR",
       "desordena las celdas (evidencia: dataset-falsedad, caso L14)."
     ],
-    "T13_DIA_SEMANA_INCONSISTENTE":   { "severidad": "LEVE",  "activa": false }
+    "T13_DIA_SEMANA_INCONSISTENTE":   { "severidad": "LEVE",  "activa": false },
+
+    "_T15_T16_T17": [
+      "Las tres comparan contra el HISTORICO de ausentismos del empleado y vienen",
+      "DESACTIVADAS: falta el acceso de solo lectura a la tabla del ERP (pregunta P5 al",
+      "cliente; `lpausentismos` no existe en el esquema local) y el adaptador que la",
+      "consulte (`ContextoTiempos.historial`). Mientras no exista, si se activan quedan",
+      "'no evaluable' con su motivo: NUNCA dicen 'no cumple' por falta de datos.",
+      "T16 ademas necesita que el extractor publique el campo 'Prorroga: SI/No' del",
+      "documento (hoy lo imprimen 9 de 31 documentos del corpus y no se lee)."
+    ],
+    "T15_SOLAPAMIENTO_MISMO_EMPLEADO": { "severidad": "MEDIA", "activa": false },
+    "T16_PRORROGA_SIN_ANTECEDENTE":    { "severidad": "LEVE",  "activa": false },
+    "T17_DUPLICADO_TEMPORAL_EXACTO":   { "severidad": "MEDIA", "activa": false }
   },
 
   "umbrales": {
@@ -69,6 +84,17 @@
     "dias_antiguedad_max": 730,
 
     "_desfase_tolerado_dias": "tolerancia del cruce duracion vs rango; 0 = exacto. Admisible: 0..5",
-    "desfase_tolerado_dias": 0
+    "desfase_tolerado_dias": 0,
+
+    "_dias_expedicion_posterior_tolerados": [
+      "Dias que se admite que el certificado se expida DESPUES de empezar la incapacidad.",
+      "0 = se avisa (LEVE) de cualquier expedicion posterior. La incapacidad RETROACTIVA es",
+      "legitima: si el cliente confirma que es normal (pregunta P7), subir este umbral",
+      "silencia el aviso sin desactivar la regla. Admisible: 0..90"
+    ],
+    "dias_expedicion_posterior_tolerados": 0,
+
+    "_dias_contiguidad_prorroga": "holgura entre el fin anterior y el inicio de la prorroga (T16). Admisible: 0..30",
+    "dias_contiguidad_prorroga": 1
   }
 }

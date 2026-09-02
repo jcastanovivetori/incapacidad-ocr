@@ -825,7 +825,12 @@ def mapear_a_staging(
         inca, hoy=hoy, overrides=overrides,
         inicio_efectivo=fecha_inicio, fin_efectivo=fecha_fin, dias_efectivo=num_dias,
         tipo_documento=inc.get("tipo_documento") if isinstance(inc, dict) else None,
-        id_tipo=id_tipo,
+        id_tipo=id_tipo, id_empleado=id_empleado,
+        # Acceso de SOLO LECTURA al histórico del empleado para las reglas T15/T16/T17
+        # (solapamiento / prórroga / duplicado). Hoy ningún `lookups` lo expone → None y
+        # esas reglas quedan NO EVALUABLE; el día que exista el adaptador (pregunta P5 al
+        # cliente: usuario de lectura sobre `lpausentismos`) basta con publicarlo aquí.
+        historial=getattr(lookups, "historial_ausentismos", None),
     )
     veredicto = reglas_tiempo.evaluar(ctx_tiempos, cfg_tiempos)
     problemas.extend(veredicto.problemas)

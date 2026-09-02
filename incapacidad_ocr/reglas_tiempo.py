@@ -124,6 +124,13 @@ UMBRALES_DEFAULT: dict[str, int] = {
     "dias_antiguedad_max": 730,
     # Tolerancia del cruce duración↔rango. 0 = exacto (el rango es inclusivo).
     "desfase_tolerado_dias": 0,
+    # Días que se admite que un certificado se expida DESPUÉS de que la incapacidad
+    # empezó. 0 = cualquier expedición posterior se avisa (LEVE). La incapacidad
+    # RETROACTIVA es legítima y frecuente → es pregunta abierta al cliente (P7); mientras
+    # no se confirme, este umbral es la palanca para callar el aviso sin tocar código.
+    "dias_expedicion_posterior_tolerados": 0,
+    # Holgura admitida entre el fin del ausentismo anterior y el inicio de la prórroga.
+    "dias_contiguidad_prorroga": 1,
 }
 # Rango admisible de CADA umbral: un valor absurdo en la config se ignora (con aviso) en
 # vez de desactivar de facto una regla (p.ej. dias_max = 99999 dejaría pasar todo).
@@ -134,6 +141,8 @@ LIMITES_UMBRAL: dict[str, tuple[int, int]] = {
     "dias_futuro_max": (0, 365),
     "dias_antiguedad_max": (30, 36500),
     "desfase_tolerado_dias": (0, 5),
+    "dias_expedicion_posterior_tolerados": (0, 90),
+    "dias_contiguidad_prorroga": (0, 30),
 }
 
 # Ruta del archivo de configuración. Por defecto vive DENTRO del bind mount de la
@@ -470,12 +479,19 @@ class ReglaTiempo:
     activa: bool = True                # activa POR DEFECTO
 
 
-# Único conjunto de campos del contexto que una regla puede EXIGIR: todos son evidencia.
-# Que un campo `*_efectivo` no esté aquí es lo que impide, por construcción, que una
-# regla se dispare sobre un valor calculado. Lo verifica la prueba del catálogo.
+# Único conjunto de campos del contexto que una regla puede EXIGIR: evidencia del papel
+# (más los accesos externos declarados y la fecha de proceso). Que NINGÚN campo
+# `*_efectivo` esté aquí es lo que impide, por construcción, que una regla se dispare
+# sobre un valor reconciliado. Lo verifica la prueba del catálogo, que además revisa el
+# código fuente de cada regla.
 CAMPOS_EXIGIBLES = frozenset({
-    "hoy", "inicio_leido", "fin_leido", "dias_leido",
+    "hoy",
+    # --- lo que traía el documento (o tecleó el auxiliar mirándolo)
+    "inicio_leido", "fin_leido", "dias_leido",
     "inicio_crudo", "fin_crudo", "dias_crudo", "dias_letra", "dia_semana_inicio_leido",
+    "expedicion_leida", "expedicion_cruda", "prorroga_declarada",
+    # --- accesos externos declarados (consultas de SOLO LECTURA al sistema)
+    "historial", "id_empleado",
 })
 
 
@@ -625,6 +641,66 @@ def _t13_dia_semana(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
             f"{ctx.inicio_leido.isoformat()}, que fue {real}")
 
 
+def _t14_expedicion_posterior(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+    desfase = (ctx.expedicion_leida - ctx.inicio_leido).days
+    if desfase <= u["dias_expedicion_posterior_tolerados"]:
+        return None
+    return (f"El certificado se expidió el {ctx.expedicion_leida.isoformat()}, {desfase} día(s) "
+            f"DESPUÉS de que la incapacidad empezara ({ctx.inicio_leido.isoformat()}): "
+            f"confirmar que es una incapacidad retroactiva")
+
+
+# --- Reglas que comparan contra el HISTÓRICO del empleado -------------------------------
+# Van DECLARADAS y DESACTIVADAS: ni la tabla del histórico está en el esquema local
+# (`sql/init.sql` no tiene `lpausentismos`) ni hay adaptador que la consulte, y el acceso
+# de solo lectura es una pregunta abierta al cliente (P5). Cada una dice, en su comentario,
+# el dato y la consulta que necesita: activarlas será un cambio de configuración
+# (`activa: true`) + implementar el adaptador, no reescribir el motor.
+def _t15_solapamiento(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+    # Consulta que debe hacer `historial.solapamientos(ctx)` (SOLO LECTURA), excluyendo la
+    # PRÓRROGA legítima (prorroga = 0 AND idlpausentismo_inicial IS NULL) y la propia fila
+    # (id <> …, archivo_origen <> …), porque sin eso lo primero que encuentra es ella misma:
+    #   a.fechainicio <= DATE_ADD(:inicio, INTERVAL :dias-1 DAY)
+    #   AND DATE_SUB(a.fechavencimiento, INTERVAL 1 DAY) >= :inicio   -- vencimiento NO inclusivo
+    cruces = ctx.historial.solapamientos(ctx) or []
+    if not cruces:
+        return None
+    d = cruces[0]
+    return (f"El periodo {ctx.inicio_leido.isoformat()} + {ctx.dias_leido} día(s) se cruza con "
+            f"otro ausentismo ya registrado del mismo empleado "
+            f"({d.get('fechainicio')} a {d.get('fechavencimiento')}, tipo {d.get('idlptipoausentismo')})")
+
+
+def _t16_prorroga_sin_antecedente(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+    if not ctx.prorroga_declarada:
+        return None
+    # `historial.ausentismo_previo_contiguo(ctx)` debe devolver el ausentismo del mismo
+    # empleado cuyo fin cae dentro de `dias_contiguidad_prorroga` días antes del inicio.
+    # Guarda contra el falso positivo del arranque: si el empleado no tiene NINGÚN
+    # ausentismo previo en el sistema, la ausencia de antecedente no informa nada.
+    if not ctx.historial.tiene_antecedentes(ctx):
+        return None
+    if ctx.historial.ausentismo_previo_contiguo(ctx):
+        return None
+    return (f"El documento declara PRÓRROGA pero no hay un ausentismo previo del empleado que "
+            f"termine dentro de {u['dias_contiguidad_prorroga']} día(s) antes del "
+            f"{ctx.inicio_leido.isoformat()}")
+
+
+def _t17_duplicado_temporal(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+    # `historial.duplicados_exactos(ctx)`: misma terna (idlpempleado, fechainicio,
+    # Numerodias) en `lp_ausentismos_ia` con estado <> 'RECHAZADO', excluyendo la propia
+    # fila y el propio `archivo_origen`. Es cotidiano con ~7000 casos/mes por WhatsApp +
+    # correo + ventanilla y sin dedup en la ingesta.
+    gemelas = ctx.historial.duplicados_exactos(ctx) or []
+    if not gemelas:
+        return None
+    d = gemelas[0]
+    return (f"Ya hay un registro con el mismo empleado, inicio {ctx.inicio_leido.isoformat()} y "
+            f"{ctx.dias_leido} día(s), de otro archivo (id {d.get('id')}, "
+            f"{d.get('archivo_origen')}): posible documento repetido")
+
+
 CATALOGO: tuple[ReglaTiempo, ...] = (
     # --- Contradicciones internas del documento: la señal de alteración más barata de
     #     detectar y la única respaldada por el corpus (duración vs. rango de fechas).
@@ -721,6 +797,48 @@ CATALOGO: tuple[ReglaTiempo, ...] = (
         "el día de la semana impreso no corresponde a la fecha de inicio",
         LEVE, _t13_dia_semana,
         requiere=("inicio_leido", "dia_semana_inicio_leido"), campo="fecha_inicio",
+        activa=False,
+    ),
+    # --- Fecha de EXPEDICIÓN contra el inicio. LEVE: la incapacidad retroactiva es
+    #     legítima y frecuente (el rótulo "Incapacidad retroactiva" sale en 13 documentos
+    #     del corpus), así que esto informa, no bloquea. El extractor solo ancla en
+    #     "expedición" (no en "impresión", que sí puede ser posterior por una reimpresión),
+    #     así que lo que llega aquí es una fecha de expedición de verdad.
+    ReglaTiempo(
+        "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+        "el certificado se expidió después de que la incapacidad empezara",
+        LEVE, _t14_expedicion_posterior,
+        requiere=("expedicion_leida", "inicio_leido"), campo="fecha_inicio",
+    ),
+    # --- DECLARADAS Y DESACTIVADAS: necesitan consultar el histórico del empleado.
+    #     No es que "falten de programar": están escritas y probadas contra un adaptador
+    #     falso; lo que falta es el ACCESO (P5: usuario de solo lectura sobre
+    #     `lpausentismos`, que no existe en el esquema local) y el adaptador que lo use.
+    #     Activarlas = implementar `ContextoTiempos.historial` + `activa: true` en la
+    #     configuración. Sin él quedan NO EVALUABLE, nunca "no cumple".
+    ReglaTiempo(
+        "T15_SOLAPAMIENTO_MISMO_EMPLEADO",
+        "el periodo se cruza con otro ausentismo ya registrado del mismo empleado",
+        # MEDIA y no GRAVE: dos ausentismos concurrentes de origen distinto (accidente de
+        # trabajo + enfermedad general) existen en la práctica (P4).
+        MEDIA, _t15_solapamiento,
+        requiere=("inicio_leido", "dias_leido", "id_empleado", "historial"), campo="fecha_inicio",
+        activa=False,
+    ),
+    ReglaTiempo(
+        "T16_PRORROGA_SIN_ANTECEDENTE",
+        "el documento declara prórroga pero no hay un ausentismo previo contiguo",
+        # LEVE: al arrancar el sistema el histórico está vacío, así que la ausencia de
+        # antecedente es lo NORMAL y no puede bloquear una nómina.
+        LEVE, _t16_prorroga_sin_antecedente,
+        requiere=("prorroga_declarada", "inicio_leido", "id_empleado", "historial"),
+        campo="fecha_inicio", activa=False,
+    ),
+    ReglaTiempo(
+        "T17_DUPLICADO_TEMPORAL_EXACTO",
+        "ya existe un registro con el mismo empleado, inicio y días, de otro archivo",
+        MEDIA, _t17_duplicado_temporal,
+        requiere=("inicio_leido", "dias_leido", "id_empleado", "historial"), campo="fecha_inicio",
         activa=False,
     ),
     # ======================================================================= #
@@ -872,6 +990,10 @@ ETIQUETA_DATO: dict[str, str] = {
     "dias_crudo": "algún valor de días en el documento",
     "dias_letra": "la duración escrita en letras",
     "dia_semana_inicio_leido": "el día de la semana impreso junto a la fecha",
+    "expedicion_leida": "la fecha de expedición del certificado",
+    "prorroga_declarada": "el campo 'Prórroga: SI/No' del documento",
+    "id_empleado": "el empleado resuelto en el catálogo",
+    "historial": "el acceso al histórico de ausentismos del empleado",
 }
 
 
@@ -954,6 +1076,8 @@ def resumen_evidencia(ctx: ContextoTiempos) -> dict[str, Any]:
             "fecha_fin": _iso(ctx.fin_leido),
             "dias": ctx.dias_leido,
             "dias_letra": ctx.dias_letra,
+            "fecha_expedicion": _iso(ctx.expedicion_leida),
+            "prorroga_declarada": ctx.prorroga_declarada,
             "fecha_inicio_cruda": None if ctx.inicio_crudo is None else recortar(ctx.inicio_crudo),
             "fecha_fin_cruda": None if ctx.fin_crudo is None else recortar(ctx.fin_crudo),
             "dias_crudo": None if ctx.dias_crudo is None else recortar(ctx.dias_crudo),
@@ -968,6 +1092,10 @@ def resumen_evidencia(ctx: ContextoTiempos) -> dict[str, Any]:
             "dias_efectivo": ctx.dias_efectivo,
         },
         "documento": {"tipo_documento": ctx.tipo_documento, "id_tipo_ausentismo": ctx.id_tipo},
+        # Accesos externos disponibles en esta evaluación (para saber por qué una regla del
+        # histórico quedó sin comprobar).
+        "accesos": {"empleado_resuelto": ctx.id_empleado is not None,
+                    "historial_disponible": ctx.historial is not None},
     }
 
 
@@ -982,6 +1110,7 @@ def hay_evidencia_temporal(ctx: ContextoTiempos) -> bool:
         ctx.dias_leido is not None, ctx.dias_letra is not None,
         not _sin_dato(ctx.inicio_crudo), not _sin_dato(ctx.fin_crudo),
         not _sin_dato(ctx.dias_crudo), ctx.fin_perdido,
+        not _sin_dato(ctx.expedicion_cruda),
     ])
 
 

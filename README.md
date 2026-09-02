@@ -5,6 +5,9 @@ Convierte una **imagen/escaneo de una incapacidad médica** (Colombia) en **text
 **100% local — sin APIs pagas.** El OCR corre con **RapidOCR** (ONNX/CPU) o con un **modelo de visión en Ollama**. Sigue un enfoque de **dos pasos** (imagen → texto plano → JSON estructurado), adaptado a incapacidades médicas.
 
 > 📄 **Contexto completo** (origen, decisiones, evidencia de pruebas, cómo encaja en nómina, pendientes): [`CONTEXT.md`](CONTEXT.md). Guía para trabajar el repo: [`CLAUDE.md`](CLAUDE.md).
+>
+> 🧪 **Probar con los documentos reales** (31 del cliente: 15 adulterados + 16 legítimos, repetible): [`PRUEBAS.md`](PRUEBAS.md).
+> 🖥️ **Qué instalar y qué servidor hace falta** para producción: [`INSTALACION_CLIENTE.md`](INSTALACION_CLIENTE.md).
 
 ```
 imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [mapeo ERP] ─► staging lp_ausentismos_ia (MySQL)
