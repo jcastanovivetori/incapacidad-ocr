@@ -91,15 +91,16 @@ Y —esto importa igual o más— **no marcó ni una sola de las 16 legítimas**
 un sistema que sospecha de documentos buenos ahoga al auxiliar y hace que deje de mirar las
 alertas; preferimos detectar menos y no gritar en falso.
 
-**Los 5 que no señaló, uno por uno.** Cada uno falla por un motivo distinto y ninguno es
-«el sistema no sabe detectar»:
+**Los 5 que no señaló, uno por uno.** Con tu aclaración de que el rojo hereda el motivo de la
+fila anterior, los 3 que estaban «sin motivo» ya tienen razón — y resultó que **4 de los 5 son cosa
+nuestra**, no tuya:
 
-| Casos | Por qué no lo vio | De quién depende |
-|---|---|---|
-| **2** | tu tabla no trae el motivo escrito, así que no sabemos qué había que buscar | de ti |
-| **1** | nuestro OCR no pudo leer el campo del diagnóstico en ese documento (leyó texto suelto en vez del código), así que no había nada que comparar | **de nosotros** — calidad de lectura |
-| **1** | el código es `A09.9`; el catálogo público que usamos es de una edición antigua que no subdivide `A09`, y ahí el sistema se calla a propósito en vez de acusar (ver abajo) | de tu catálogo |
-| **1** | los días venían escritos solo en letras («DOS») y las fechas no cuadran; detectarlo exige distinguir el dato **impreso** del que el sistema calcula, que es la mejora que tenemos en curso | **de nosotros** — en desarrollo |
+| Casos | Motivo que declaraste | Por qué no lo vio | De quién depende |
+|---|---|---|---|
+| **2** | el nombre del DX no es igual | nuestro lector toma como descripción del diagnóstico el **rótulo de la columna** (lee literalmente `CIE10`) en vez del texto, así que no hay nada que comparar | **nosotros** — arreglo concreto |
+| **1** | el nombre del DX no es igual | el código es `A09.9` y el catálogo público que usamos no subdivide `A09`; ahí el sistema se calla a propósito en vez de acusar (ver abajo) | tu catálogo |
+| **1** | no existe el DX | el OCR leyó texto suelto en vez del código en ese documento | **nosotros** — calidad de lectura |
+| **1** | alteración de fechas y duración | los días venían escritos solo en letras («DOS»); detectarlo exige distinguir el dato **impreso** del que el sistema calcula, que es la mejora en curso | **nosotros** — en desarrollo |
 
 **Sobre el catálogo:** el que usamos hoy responde «¿existe este código en la CIE-10?». El tuyo
 responde la pregunta que de verdad importa: «¿está en el catálogo que usa Gruppo?». Y hay un
@@ -111,27 +112,29 @@ del catálogo. Con el tuyo, esos casos se recuperan sin tocar una línea de cód
 
 ## Lo que necesitamos de ti
 
-**Tres cosas para desbloquear la detección:**
+*(La duda del **rojo** ya está resuelta: nos confirmaste que marca que el documento está mal y que
+la razón es la de la fila inmediatamente anterior. Aplicado — los 3 documentos que estaban sin
+motivo ya tienen razón, y con eso supimos que 3 de los 5 fallos son de «nombre del DX».)*
 
-1. **Los catálogos reales** de la BD ASTGU: diagnósticos (`lpdiagnosticos`) y el histórico
-   (`lpausentismos`). Los diagnósticos ya los cubrimos con un catálogo CIE-10 público completo,
-   pero el tuyo es el autoritativo; los empleados y las EPS sí son datos de prueba todavía.
-2. **Los 5 documentos con etiqueta contradictoria.** Encontramos que **el mismo archivo, idéntico
+**Dos cosas para desbloquear la detección:**
+
+1. **Los 5 documentos con etiqueta contradictoria.** Encontramos que **el mismo archivo, idéntico
    byte a byte**, está entregado como falso *y* como legítimo (dos parejas), y uno más comparte
    cédula con un legítimo. No los usamos para medir nada hasta que nos digas cuál es la correcta.
-3. **Qué significa el rojo en tu tabla.** Cinco filas tienen el nombre del archivo en rojo, y las
-   tres que no traen motivo escrito son de esas cinco. Si el rojo quiere decir algo, cambia cómo
-   los tratamos.
+2. **Un volcado de los catálogos de ASTGU**: diagnósticos (`lpdiagnosticos`), empleados, entidades
+   y el histórico de ausentismos (`lpausentismos`). Los diagnósticos ya los cubrimos con un catálogo
+   público, pero el de ustedes es el autoritativo; empleados y EPS siguen siendo datos de prueba, y
+   el histórico habilita validar solapamientos y prórrogas.
 
 **Y dos decisiones de operación:**
 
-4. **La convención de nombres.** El sistema agrupa los documentos de un trámite por el nombre del
+3. **La convención de nombres.** El sistema agrupa los documentos de un trámite por el nombre del
    archivo: `cédula_TIPO.pdf` (p.ej. `1000000001_INCAPACIDAD.pdf` + `1000000001_FURAT.pdf`,
    con una cédula de ejemplo ficticia). La
    fecha **no** va en el nombre, la lee del documento. Hay que validar que quien recibe por
    WhatsApp y correo pueda nombrarlos así — es la pieza de la que depende todo el flujo por lotes.
    Detalle en la [guía de recepción](GUIA_RECEPCION_INCAPACIDADES.md), pensada para ese equipo.
-5. **Si nos envías el `.xlsx`** de la tabla de motivos en vez del pantallazo, evitamos leer
+4. **Si nos envías el `.xlsx`** de la tabla de motivos en vez del pantallazo, evitamos leer
    nombres de pacientes por OCR y desaparece la duda del orden de las filas.
 
 ---
