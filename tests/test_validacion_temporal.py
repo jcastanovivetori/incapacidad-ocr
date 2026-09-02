@@ -64,17 +64,44 @@ def check(name: str, cond: bool, detail: str = "") -> None:
 # Ayudas
 # --------------------------------------------------------------------------- #
 def _ctx(*, inicio=None, fin=None, dias=None, dias_letra=None, hoy: date = HOY,
-         overrides=None, **marcas) -> rt.ContextoTiempos:
+         overrides=None, id_empleado=None, historial=None, **marcas) -> rt.ContextoTiempos:
     """Contexto por el camino de PRODUCCIÓN: la foto que deja `processor` + las marcas.
 
     Se usa `CLAVE_SNAPSHOT` a propósito (y no se construye el `ContextoTiempos` a mano):
     así las pruebas ejercitan `valores_leidos()`, que es donde vive la separación entre
-    evidencia y valor derivado.
+    evidencia y valor derivado. ``marcas`` va tal cual al registro (`fecha_expedicion`,
+    `prorroga`, `fecha_inicio_calculada`…).
     """
     inca = {rt.CLAVE_SNAPSHOT: {"fecha_inicio": inicio, "fecha_fin": fin,
                                 "dias": dias, "dias_letra": dias_letra}}
     inca.update(marcas)
-    return rt.construir_contexto(inca, hoy=hoy, overrides=overrides)
+    return rt.construir_contexto(inca, hoy=hoy, overrides=overrides,
+                                 id_empleado=id_empleado, historial=historial)
+
+
+class _HistorialFalso:
+    """Adaptador de histórico de PRUEBA: documenta la interfaz que exigen T15/T16/T17.
+
+    En producción esta pieza hará SELECTs de solo lectura contra el histórico del ERP
+    (`lpausentismos`) y contra la propia tabla de staging; aquí devuelve lo que se le pase
+    para poder probar las reglas ANTES de tener el acceso a esa BD (pregunta P5).
+    """
+
+    def __init__(self, cruces=(), gemelas=(), previo=None, antecedentes=True) -> None:
+        self._cruces, self._gemelas = list(cruces), list(gemelas)
+        self._previo, self._antecedentes = previo, antecedentes
+
+    def solapamientos(self, ctx):        # noqa: ARG002
+        return self._cruces
+
+    def duplicados_exactos(self, ctx):   # noqa: ARG002
+        return self._gemelas
+
+    def tiene_antecedentes(self, ctx):   # noqa: ARG002
+        return self._antecedentes
+
+    def ausentismo_previo_contiguo(self, ctx):  # noqa: ARG002
+        return self._previo
 
 
 def _regla(ctx: rt.ContextoTiempos, codigo: str, cfg=None) -> rt.ResultadoRegla:
@@ -299,6 +326,21 @@ def test_reglas_cumple_y_no_cumple() -> None:
     check("T12 NO_CUMPLE cuando discrepan", r.estado == rt.NO_CUMPLE, r.estado)
     check("T12 cita los dos valores", "3" in r.mensaje and "2" in r.mensaje, r.mensaje)
 
+    # --- T14 expedición posterior al inicio (retroactividad: aviso, nunca bloqueo)
+    check("T14 CUMPLE si se expidió el mismo día que empieza",
+          _estado(_ctx(inicio="2026-06-01", fecha_expedicion="2026-06-01"),
+                  "T14_EXPEDICION_POSTERIOR_AL_INICIO") == rt.CUMPLE)
+    check("T14 CUMPLE si se expidió ANTES de empezar (maternidad/prelicencia)",
+          _estado(_ctx(inicio="2026-06-10", fecha_expedicion="2026-06-01"),
+                  "T14_EXPEDICION_POSTERIOR_AL_INICIO") == rt.CUMPLE)
+    r = _regla(_ctx(inicio="2026-06-01", fecha_expedicion="2026-07-15"),
+               "T14_EXPEDICION_POSTERIOR_AL_INICIO")
+    check("T14 NO_CUMPLE si se expidió 44 días después", r.estado == rt.NO_CUMPLE, r.estado)
+    check("T14 es LEVE y nombra la retroactividad (el auxiliar lo descarta en un vistazo)",
+          r.severidad == rt.LEVE and "retroactiva" in r.mensaje, r.mensaje)
+    check("T14 NO_EVALUABLE si el documento no trae fecha de expedición",
+          _estado(_ctx(inicio="2026-06-01"), "T14_EXPEDICION_POSTERIOR_AL_INICIO") == rt.NO_EVALUABLE)
+
     # --- T13 declarada y DESACTIVADA de fábrica (el dato aún no existe en el registro)
     ctx = _ctx(inicio="2026-06-09")
     check("T13 viene DESACTIVADA (se reporta, no se silencia)",
@@ -313,6 +355,75 @@ def test_reglas_cumple_y_no_cumple() -> None:
               _estado(martes, "T13_DIA_SEMANA_INCONSISTENTE", cfg) == rt.CUMPLE)
         check("T13 activada por config: NO_CUMPLE si no lo es",
               _estado(viernes, "T13_DIA_SEMANA_INCONSISTENTE", cfg) == rt.NO_CUMPLE)
+    finally:
+        shutil.rmtree(raiz, ignore_errors=True)
+
+
+# --------------------------------------------------------------------------- #
+# [2b] Reglas DECLARADAS y desactivadas: las que dependen del histórico del empleado
+# --------------------------------------------------------------------------- #
+def test_reglas_del_historico() -> None:
+    print("[2b] T15/T16/T17: declaradas, apagadas, y NO_EVALUABLE sin acceso al histórico")
+    inca = _ctx(inicio="2026-06-01", dias=5, id_empleado=7)
+    for codigo in ("T15_SOLAPAMIENTO_MISMO_EMPLEADO", "T16_PRORROGA_SIN_ANTECEDENTE",
+                   "T17_DUPLICADO_TEMPORAL_EXACTO"):
+        check(f"{codigo} viene DESACTIVADA (declarada, no activada sin datos)",
+              _estado(inca, codigo) == rt.DESACTIVADA)
+
+    raiz = Path(tempfile.mkdtemp(prefix="cfg_hist_"))
+    try:
+        cfg = _cfg_archivo({"reglas": {c: {"activa": True} for c in (
+            "T15_SOLAPAMIENTO_MISMO_EMPLEADO", "T16_PRORROGA_SIN_ANTECEDENTE",
+            "T17_DUPLICADO_TEMPORAL_EXACTO")}}, raiz)
+
+        # Activadas SIN adaptador de histórico: no opinan, y dicen por qué.
+        r = _regla(inca, "T15_SOLAPAMIENTO_MISMO_EMPLEADO", cfg)
+        check("activada sin histórico: NO_EVALUABLE (nunca 'no cumple' por falta de datos)",
+              r.estado == rt.NO_EVALUABLE, r.estado)
+        check("y el motivo nombra el acceso que falta",
+              r.motivo and "histórico" in r.motivo, r.motivo or "")
+        check("T17 igual sin histórico",
+              _estado(inca, "T17_DUPLICADO_TEMPORAL_EXACTO", cfg) == rt.NO_EVALUABLE)
+        check("sin empleado resuelto tampoco se opina",
+              _estado(_ctx(inicio="2026-06-01", dias=5, historial=_HistorialFalso()),
+                      "T15_SOLAPAMIENTO_MISMO_EMPLEADO", cfg) == rt.NO_EVALUABLE)
+
+        # Con un adaptador (el día que exista el acceso a BD) las reglas ya funcionan.
+        limpio = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, historial=_HistorialFalso())
+        check("T15 CUMPLE si el histórico no devuelve cruces",
+              _estado(limpio, "T15_SOLAPAMIENTO_MISMO_EMPLEADO", cfg) == rt.CUMPLE)
+        cruzado = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, historial=_HistorialFalso(
+            cruces=[{"fechainicio": "2026-05-28", "fechavencimiento": "2026-06-03",
+                     "idlptipoausentismo": 3}]))
+        r = _regla(cruzado, "T15_SOLAPAMIENTO_MISMO_EMPLEADO", cfg)
+        check("T15 NO_CUMPLE si hay un cruce", r.estado == rt.NO_CUMPLE, r.estado)
+        check("T15 muestra el ausentismo que cruza (para decidir en un vistazo)",
+              "2026-05-28" in r.mensaje and "tipo 3" in r.mensaje, r.mensaje)
+
+        gemela = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, historial=_HistorialFalso(
+            gemelas=[{"id": 41, "archivo_origen": "13742111_INCAPACIDAD.pdf"}]))
+        r = _regla(gemela, "T17_DUPLICADO_TEMPORAL_EXACTO", cfg)
+        check("T17 NO_CUMPLE con una fila gemela de otro archivo", r.estado == rt.NO_CUMPLE, r.estado)
+        check("T17 cita el id y el archivo de la gemela",
+              "41" in r.mensaje and "13742111_INCAPACIDAD.pdf" in r.mensaje, r.mensaje)
+
+        # T16 necesita además el flag del documento, que el extractor todavía no publica.
+        sin_flag = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, historial=_HistorialFalso())
+        check("T16 NO_EVALUABLE si el documento no dice si es prórroga",
+              _estado(sin_flag, "T16_PRORROGA_SIN_ANTECEDENTE", cfg) == rt.NO_EVALUABLE)
+        con_previo = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, prorroga=True,
+                          historial=_HistorialFalso(previo={"id": 9}))
+        check("T16 CUMPLE si hay ausentismo previo contiguo",
+              _estado(con_previo, "T16_PRORROGA_SIN_ANTECEDENTE", cfg) == rt.CUMPLE)
+        huerfana = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, prorroga=True,
+                        historial=_HistorialFalso(previo=None))
+        check("T16 NO_CUMPLE si declara prórroga y no hay antecedente contiguo",
+              _estado(huerfana, "T16_PRORROGA_SIN_ANTECEDENTE", cfg) == rt.NO_CUMPLE)
+        # Guarda contra el falso positivo del arranque (histórico vacío).
+        nuevo = _ctx(inicio="2026-06-01", dias=5, id_empleado=7, prorroga=True,
+                     historial=_HistorialFalso(previo=None, antecedentes=False))
+        check("T16 CUMPLE si el empleado no tiene NINGÚN ausentismo previo (sistema recién puesto)",
+              _estado(nuevo, "T16_PRORROGA_SIN_ANTECEDENTE", cfg) == rt.CUMPLE)
     finally:
         shutil.rmtree(raiz, ignore_errors=True)
 
@@ -346,11 +457,17 @@ def test_no_evaluable() -> None:
     informe = rt.validar_tiempos(_ctx())
     check("veredicto SIN_DATOS (≠ COHERENTE: no se comprobó nada)",
           informe["veredicto"] == rt.V_SIN_DATOS, informe["veredicto"])
-    # La cobertura delata que "no encontré nada raro" era "casi no pude mirar": de las 12
-    # reglas activas solo opinó la única que no necesita ningún dato del documento.
-    check("cobertura casi nula (11 de 12 reglas activas no pudieron comprobar nada)",
-          informe["resumen"]["no_evaluables"] == 11 and informe["resumen"]["cobertura"] < 0.1,
-          str(informe["resumen"]))
+    # La cobertura delata que "no encontré nada raro" era "casi no pude mirar": de las
+    # reglas activas solo opina la única que no necesita ningún dato del documento.
+    # Se comprueba con la RELACIÓN entre los contadores, no con números fijos: el catálogo
+    # crece, y una prueba que fije "11 de 12" se rompe al añadir la regla 13 sin que nada
+    # esté mal (fue exactamente lo que pasó).
+    res = informe["resumen"]
+    activas = res["reglas_en_catalogo"] - res["desactivadas"]
+    check("todas las reglas activas quedan contabilizadas",
+          res["cumplen"] + res["no_cumplen"] + res["no_evaluables"] == activas, str(res))
+    check("casi ninguna regla activa pudo comprobar algo",
+          res["no_evaluables"] == activas - 1 and res["cobertura"] < 0.1, str(res))
 
 
 # --------------------------------------------------------------------------- #

@@ -196,9 +196,10 @@ class ContextoTiempos:
     # None (lo normal hoy) → las reglas que lo exigen quedan NO EVALUABLE, igual que
     # `LookupsNulos` deja los IDs sin resolver en vez de explotar. Interfaz esperada
     # (duck typing, como `Lookups`; ver T15/T16/T17):
-    #     solapamientos(ctx)            -> list[dict]  ausentismos que cruzan el intervalo
-    #     duplicados_exactos(ctx)       -> list[dict]  misma terna (empleado, inicio, días)
-    #     ausentismo_previo_contiguo(ctx) -> dict|None  el que termina justo antes
+    #     solapamientos(ctx)              -> list[dict]  ausentismos que cruzan el intervalo
+    #     duplicados_exactos(ctx)         -> list[dict]  misma terna (empleado, inicio, días)
+    #     tiene_antecedentes(ctx)         -> bool        ¿el empleado tiene algún ausentismo?
+    #     ausentismo_previo_contiguo(ctx) -> dict|None   el que termina justo antes
     historial: Any = None
     id_empleado: Optional[int] = None
     # --- valores efectivos (informativos)
