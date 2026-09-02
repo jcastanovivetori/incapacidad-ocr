@@ -65,8 +65,9 @@ Se puede repetir tantas veces como quieras, cambiando lo que sea.
 
 ## Qué detectó de tus documentos adulterados — sin adornos
 
-De los 15 que marcaste, **9 se pueden evaluar hoy** (los otros 6 se explican abajo). De esos 9,
-el sistema señaló **4**:
+De los 15 documentos que marcaste, 3 están en cuarentena (etiqueta contradictoria, ver abajo) y
+quedan **12 usables**. El sistema no razona por documento sino por **caso** —los documentos de una
+misma cédula son un solo trámite— y esos 12 documentos forman **9 casos**. De esos 9 señaló **4**:
 
 | Documento (por su hallazgo) | Cómo lo pilló |
 |---|---|
@@ -83,17 +84,22 @@ uno, porque con un catálogo armado a mano no se puede afirmar que un código no
 documento se versiona en el repositorio y los nombres que enviaste llevan datos de pacientes.
 En la sesión los abrimos y los ves con su nombre.)*
 
+Un detalle que vale la pena: el del desfase de 30 días lo tenías marcado por el diagnóstico, no
+por las fechas. El sistema encontró ahí un problema **distinto** al que habías anotado, y es real.
+
 Y —esto importa igual o más— **no marcó ni una sola de las 16 legítimas**. Con 7000 casos al mes,
 un sistema que sospecha de documentos buenos ahoga al auxiliar y hace que deje de mirar las
 alertas; preferimos detectar menos y no gritar en falso.
 
-**Por qué 4 de 9 y no más, y qué haría falta:**
+**Los 5 que no señaló, uno por uno.** Cada uno falla por un motivo distinto y ninguno es
+«el sistema no sabe detectar»:
 
-| Lo que falta | Cuántos casos desbloquea |
-|---|---|
-| **Tu** catálogo de diagnósticos (`lpdiagnosticos` de ASTGU) | 2 — el catálogo público que usamos es de una edición antigua y le faltan subdivisiones; donde falta una, el sistema se calla a propósito en vez de acusar (ver abajo) |
-| El **histórico de ausentismos** (`lpausentismos`) | 1 — para saber si los días son plausibles para ese diagnóstico |
-| Que nos digas el motivo | 3 — están en tu tabla **sin motivo escrito**, así que no sabemos qué buscar |
+| Casos | Por qué no lo vio | De quién depende |
+|---|---|---|
+| **2** | tu tabla no trae el motivo escrito, así que no sabemos qué había que buscar | de ti |
+| **1** | nuestro OCR no pudo leer el campo del diagnóstico en ese documento (leyó texto suelto en vez del código), así que no había nada que comparar | **de nosotros** — calidad de lectura |
+| **1** | el código es `A09.9`; el catálogo público que usamos es de una edición antigua que no subdivide `A09`, y ahí el sistema se calla a propósito en vez de acusar (ver abajo) | de tu catálogo |
+| **1** | los días venían escritos solo en letras («DOS») y las fechas no cuadran; detectarlo exige distinguir el dato **impreso** del que el sistema calcula, que es la mejora que tenemos en curso | **de nosotros** — en desarrollo |
 
 **Sobre el catálogo:** el que usamos hoy responde «¿existe este código en la CIE-10?». El tuyo
 responde la pregunta que de verdad importa: «¿está en el catálogo que usa Gruppo?». Y hay un
