@@ -131,8 +131,11 @@ python scripts/exportar_analisis.py
 El sistema **funciona igual**: es un pipeline de OCR, no un modelo entrenado. Lo que no puedes
 hacer sin los documentos es reproducir las mediciones. Con solo el `git pull` ya tienes:
 
-- las **7 baterías de pruebas** (`tests/`), que no necesitan corpus ni base de datos;
-- el escenario de demo sintético: `python scripts/sembrar_demo.py` (5 casos + 1 mal nombrado);
+- las **7 baterías de pruebas** (`tests/`), que no necesitan corpus ni base de datos —
+  verificado sobre un clon limpio;
+- el escenario de demo: `python scripts/sembrar_demo.py`. Sin `../Ejemplos` genera los **3 casos
+  sintéticos** (accidente de trabajo, vacaciones y permiso) y avisa de los 2 que omite, que son
+  los que usan documentos reales. Con esos 3 se ve el flujo completo;
 - el análisis y las métricas ya medidas, en `analisis/`, con seudónimos;
 - el benchmark para medir en tu propio hardware: `python analisis/requisitos/bench_ocr.py`.
 

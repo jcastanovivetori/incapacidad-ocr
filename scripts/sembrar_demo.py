@@ -68,11 +68,20 @@ def main() -> None:
             f.unlink()
 
     # --- Casos con documentos REALES (../Ejemplos) ---
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_INCAPACIDAD.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_EPICRISIS.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.jpeg", ENTRADA_WA / "63523940_INCAPACIDAD.jpeg")
-    shutil.copy(EJEMPLOS / "incapacidad_.jpeg", ENTRADA_WA / "documento_suelto.jpeg")  # sin nomenclatura
-    print("  copiados: 13742111 (x2), 63523940, documento_suelto")
+    # `Ejemplos/` NO está en el repositorio (son documentos con datos de salud, Ley 1581), así
+    # que tras un `git clone` puede no existir. En ese caso se sigue: los 3 casos SINTÉTICOS de
+    # abajo se generan igual y alcanzan para ver el flujo completo. Fallar aquí dejaba el
+    # escenario de demo inservible en una máquina nueva, que es justo cuando más se necesita.
+    if EJEMPLOS.is_dir():
+        shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_INCAPACIDAD.pdf")
+        shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_EPICRISIS.pdf")
+        shutil.copy(EJEMPLOS / "incapacidad.jpeg", ENTRADA_WA / "63523940_INCAPACIDAD.jpeg")
+        shutil.copy(EJEMPLOS / "incapacidad_.jpeg", ENTRADA_WA / "documento_suelto.jpeg")  # sin nomenclatura
+        print("  copiados: 13742111 (x2), 63523940, documento_suelto")
+    else:
+        print(f"  AVISO: no existe {EJEMPLOS} — se omiten los 2 casos con documentos reales")
+        print("         (13742111 enf. general COMPLETO y 63523940 INCOMPLETO) y el mal nombrado.")
+        print("         Los 3 casos sintéticos de abajo sí se generan: el flujo se puede probar igual.")
 
     # --- Casos SINTÉTICOS (texto claro para OCR; la fecha va DENTRO del documento) ---
     render([
@@ -87,8 +96,15 @@ def main() -> None:
         "Dias de incapacidad: 10",
         "Medico: Dr. CARLOS PEREZ  Registro: 12345",
     ], ENTRADA_WA / "1005542119_INCAPACIDAD.png")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "1005542119_FURAT.pdf")
-    print("  generado: 1005542119_FURAT.pdf")
+    # El FURAT es un ADJUNTO: el lote solo comprueba que exista por su nombre, no lo OCR-ea
+    # (ver batch.TIPODOC_BASE). Así que se genera sintético en vez de copiar un documento real
+    # — el caso queda igual de COMPLETO y el escenario funciona sin `../Ejemplos`.
+    render([
+        "FURAT - FORMULARIO UNICO DE REPORTE DE ACCIDENTE DE TRABAJO",
+        "(documento de prueba: adjunto que el lote verifica por su NOMBRE, no lo lee)",
+        "Empleado: CC 1005542119",
+        "Fecha del accidente: 2026-06-15",
+    ], ENTRADA_WA / "1005542119_FURAT.png")
 
     render([
         "NOTIFICACION DE PERIODO DE VACACIONES",
