@@ -1,11 +1,13 @@
 # Qué hay que instalar y qué servidor hace falta
 
 **Para:** el equipo de TI de Gruppo que va a montar `incapacidad-ocr` en el **servidor de producción**.
-**Resumen en una línea:** un servidor Linux de **4 núcleos y 16 GB de RAM** con **Docker**, sin salida a
-internet, y unos **250 GB de disco** para cinco años de soportes.
+**Resumen en una línea:** un servidor Linux con **Docker**, sin salida a internet, **8 núcleos y
+16 GB de RAM**, y **500 GB de disco** para cinco años de soportes (con 4 núcleos y 250 GB funciona,
+pero el disco solo cubre ~3 años).
 
 > Documento **ejecutivo**. El detalle (comandos exactos, traslado a un equipo aislado, matriz
-> Windows vs Linux, aritmética completa) está en [`REQUISITOS_INSTALACION.md`](REQUISITOS_INSTALACION.md).
+> Windows vs Linux, aritmética completa) está en [`REQUISITOS_INSTALACION.md`](REQUISITOS_INSTALACION.md),
+> **que es el documento que prevalece** si alguna cifra no coincide.
 
 ---
 
@@ -41,11 +43,15 @@ dentro de la imagen.
 
 | | Mínimo | **Recomendado** | Con IA local (Ollama) |
 |---|---|---|---|
-| **Núcleos** | 4 | **4** | 6 |
-| **RAM** | 12 GB | **16 GB** | 24 GB |
-| **Disco** | 120 GB SSD | **250 GB SSD** | 270 GB SSD |
-| **GPU** | no | no | opcional |
-| **SO** | Linux x86-64 (Ubuntu Server / RHEL) | igual | igual |
+| **Núcleos** (físicos, x86-64) | 4 | **8** | 16 |
+| **RAM** | 8 GB *con el tope de píxeles puesto*; 16 GB con los valores por defecto | **16 GB** | 32 GB |
+| **Disco** | 250 GB SSD → ~3 años de soportes | **500 GB SSD NVMe** → 5 años | 1 TB SSD NVMe |
+| **GPU** | no | no | opcional (solo acelera la IA, **nunca** el OCR) |
+| **SO** | Linux x86-64 (Ubuntu Server LTS / RHEL) | igual | igual |
+
+**El volumen de Gruppo no necesita CPU: necesita RAM y disco.** Los 4 núcleos del perfil mínimo
+cubren el trabajo con el código de hoy, que procesa de a un documento; los 8 del recomendado compran
+el procesamiento en paralelo que está en el plan y margen para reprocesar atrasos.
 
 ### De dónde salen esos números
 
@@ -54,27 +60,37 @@ Medido sobre los **31 documentos reales** del cliente, en un i7-1255U con un hil
 - **Coste de CPU por documento:** mediana **8,6 s**, media **10 s** (imágenes ~3,5 s; PDF de 1 página
   ~8,6 s; PDF de varias páginas ~12 s). El **97 % del tiempo es el OCR**; convertir el PDF a imagen es
   el 3 %. Cada proceso usa **1 núcleo efectivo** (medido: 0,96).
-- **Cálculo de CPU:** 7 000 trámites/mes × 10 s = **19,4 horas de CPU al mes** ≈ **53 minutos de un
-  núcleo por día laboral**. Incluso asumiendo que las incapacidades llegan concentradas (lunes y
-  después de festivos, ×3), un día pico son ~2,6 horas de CPU: **3 procesos en paralelo lo drenan en
-  menos de una hora**. Por eso 4 núcleos bastan — el cuello de botella no es la CPU.
-- **Disco:** el documento medio del corpus pesa **379 KB**. Con incapacidad + soportes (≈2,5 archivos
-  por trámite): **~6,3 GB/mes → 76 GB/año → 379 GB a cinco años**. Los 250 GB recomendados cubren
-  **~3 años**; hay que planear crecimiento o depuración según el plazo legal de conservación.
+- **Cálculo de CPU:** 7 000 trámites/mes × 10 s = **19,4 horas de CPU al mes**. El día hábil medio son
+  **350 documentos** y el día pico **875**. Con el código de hoy (un documento a la vez) eso drena
+  **1 400–2 100 documentos por noche** en una ventana de 02:00 a 07:00 — suficiente, pero con un límite
+  que hay que conocer: **cada corrida procesa como máximo 500 casos**, así que un día pico necesita dos
+  corridas hasta que subamos ese tope. Es un arreglo de software, no de hardware.
+- **Disco:** el documento medio del corpus pesa **379 KB** y cada trámite mueve ≈2,1 archivos
+  (la incapacidad más el soporte que exige su tipo, más un 5 % de reenvíos por WhatsApp que llegan
+  recomprimidos y hoy **no se deduplican**): **~5,4 GB/mes → 65 GB/año → 324 GB a cinco años**. Por eso
+  250 GB solo cubren **~3 años** y quedan como mínimo, no como recomendación.
 - **RAM — el dato que hay que mirar:** el pipeline usa ~100 MB al arrancar, pero **un solo PDF del
   corpus llegó a un pico de 7,6 GB**. No es un caso raro: con los topes que trae hoy el sistema
-  (`PDF_RENDER_SCALE=3.0`, `OCR_MAX_PIXELS=40 MP`), un escaneo de gran formato genera una imagen
-  enorme y el OCR reserva memoria proporcional. Con esos valores por defecto, **8 GB no alcanzan ni
-  para un proceso**. Dos opciones, y hay que elegir una antes de comprar:
-  1. **Bajar los topes** (`PDF_RENDER_SCALE=2.0`, `OCR_MAX_PIXELS=12000000`) → la RAM por proceso baja
-     a ~2 GB y 16 GB cubren varios procesos. Es la vía recomendada; hay que comprobar que no se pierde
-     precisión en los escaneos de peor calidad.
-  2. **Dejar los topes** y limitar a 1 proceso con 16 GB, o subir a 32 GB para trabajar en paralelo.
+  (`OCR_MAX_PIXELS=40 MP`), un escaneo de gran formato genera una imagen enorme y el OCR reserva
+  memoria proporcional. Con esos valores por defecto, **8 GB no alcanzan ni para un proceso**.
+  La vía medida es **poner el tope en `OCR_MAX_PIXELS=8000000`** dejando la escala de render como
+  está: con eso la RAM por proceso baja lo suficiente para que 8 GB alcancen. Está medido sobre 5
+  documentos y una sola pasada, así que hay que confirmarlo en el servidor y comprobar que no se
+  pierde precisión en los escaneos de peor calidad.
 
-> Estas cifras se midieron en un **portátil con Python 3.14**. En producción (Docker, Python 3.12) el
-> OCR corre una **versión más nueva y más precisa** del motor (82 % de acierto frente al 76 % del
-> entorno local), así que la precisión será mejor; el tiempo puede variar. El script de medición
-> (`bench_ocr.py`) se entrega para **repetir la medición en el servidor real antes de cerrar la compra**.
+> **Estas cifras se midieron en un portátil de 15 W bajo carga**, y el mismo documento varió hasta
+> ×2,86 entre dos pasadas: son un **orden de magnitud**, no un compromiso de rendimiento. El script de
+> medición (`analisis/requisitos/bench_ocr.py`) se entrega para **repetir la medición en el servidor
+> real antes de cerrar la compra**.
+>
+> Sobre la **exactitud de lectura**: el entorno de desarrollo mide **76 %** de los campos núcleo
+> (Python 3.14, que arrastra una versión antigua del motor de OCR). En producción va Python 3.12 con
+> una versión más nueva, que en una medición anterior dio **82 %** — pendiente de re-verificar en el
+> servidor. La cifra del 80 % que aparece en documentos internos más viejos no corresponde a ninguna
+> configuración real; ignórala.
+
+El detalle completo de la aritmética, con los perfiles y los supuestos, está en
+[`REQUISITOS_INSTALACION.md`](REQUISITOS_INSTALACION.md) §1 y §3, que es el documento que prevalece.
 
 ---
 
@@ -110,7 +126,8 @@ curl http://localhost:8000/api/lote/pendientes # cuenta los documentos en la car
 |---|---|---|
 | **Servidor** con las características de §2 y **Docker instalado como servicio** (que arranque solo tras un reinicio) | correr el sistema | el proceso programado no se levanta tras un reboot |
 | **Acceso a la BD ASTGU** (host, puerto, usuario, clave) | escribir en `lp_ausentismos_ia` | el sistema lee documentos pero no registra nada |
-| Catálogo real de **diagnósticos CIE-10** (`lpdiagnosticos`) | validar el diagnóstico y detectar códigos inexistentes | no se puede afirmar que un diagnóstico no existe |
+| Catálogo de **diagnósticos del ERP** (`lpdiagnosticos`) | es el autoritativo para validar el diagnóstico | funciona con un catálogo CIE-10 público que ya incluimos, pero responde «¿existe en la CIE-10?» y no «¿está en el catálogo de Gruppo?» |
+| **Histórico de ausentismos** (`lpausentismos`) | validar solapamientos, prórrogas y si los días son plausibles | esas tres validaciones quedan apagadas |
 | **Carpeta compartida** donde el punto de recepción deja los documentos | la ingesta por lotes | habría que copiarlos a mano al servidor |
 | **Decisión: Linux o Windows Server** | preparar el servidor | recomendamos Linux (ver el documento detallado) |
 | **Plazo legal de conservación** de los soportes | dimensionar el disco a 3 o 5 años | el disco se calcula a ciegas |

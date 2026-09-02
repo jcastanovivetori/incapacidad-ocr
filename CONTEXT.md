@@ -72,7 +72,7 @@ Imagen de prueba: `tests/make_sample.py` genera `tests/sample_incapacidad.png` (
 
 Se procesaron los **8 documentos reales** de la carpeta `Ejemplos/` (6 PDF + 2 JPEG, de 8 EPS/IPS distintas: Famisanar, Salud Total, Nueva EPS, Sura, Seguros del Estado, Salud Mía, Colpatria, FOSCAL) con el pipeline **PDF/imagen → RapidOCR → RuleBasedExtractor** (100% local, sin Ollama). Ground-truth y script: `tests/test_ejemplos_reales.py`.
 
-**Precisión campos núcleo: 36/45 = 80%.** Por campo:
+**Precisión campos núcleo: 36/45 = 80%** *(medido el 2026-06-16 con las versiones de entonces; re-ejecutado el 2026-09-02 en el venv actual da 34/45 = 76% porque Python 3.14 arrastra `rapidocr` 1.2.3 — el stack de Docker con Python 3.12 y `rapidocr` 1.4.4 midió 82%)*. Por campo:
 
 | Campo | Acierto | Notas |
 |---|---|---|

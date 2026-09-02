@@ -1,6 +1,8 @@
 # MOTOR DE FALSEDAD — especificación consolidada
 
-Estado: **especificación. NO implementado en el paquete.** Fecha de consolidación: 2026-09-02.
+Estado: **especificación parcialmente implementada.** Fecha de consolidación: 2026-09-02 (estado revisado el mismo día).
+
+> Ya están **en el paquete**: las señales de CIE-10 (código inexistente contra el catálogo y formato incompleto, `erp.py`), el análisis de autenticidad del PDF (`authenticity.py`: fuentes inconsistentes, ELA en imagen, generaciones múltiples), el estado `POSIBLE_MANIPULACION` y el motor de coherencia temporal (`reglas_tiempo.py`). **Siguen sin cablear:** el reuso de la imagen de firma entre documentos y la plausibilidad de días por diagnóstico (necesita el histórico del ERP).
 
 > ### Veredicto de arranque, sin adornos
 >

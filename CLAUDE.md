@@ -319,7 +319,7 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   configurado para los tipos **2/3/5/8/9/10/11**. **Gotcha del dato:** el ERP lo guarda ENVUELTO en comillas
   dobles sin escapar el contenido (`"{"ausentismos":…}"`) → **no es JSON válido tal cual**, hay que quitar esas
   comillas antes de parsear (`erp.documentos_checklist_radicacion`); y el certificado laboral viene escrito
-  `CERTICADO LABORAL` (error de digitación del catálogo). Solo ~19 de 62 EPS lo tienen cargado y varios tipos
+  `CERTICADO LABORAL` (error de digitación del catálogo). Solo ~19 de 64 EPS lo tienen cargado y varios tipos
   quedan con lista vacía: **sin checklist NO se opina** (`radicacion_estado=None`), nunca se inventa un requisito.
   `erp.validar_radicacion` aplica las mismas equivalencias que la recepción **salvo entre documentos que la EPS
   pidió por separado** (si exige nacido vivo Y registro civil, se exigen los dos). Desde la ingesta
@@ -373,5 +373,11 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   **escribe** ahí para mover archivos — en Docker Desktop Windows el bind mount lo permite. La ingesta por lotes
   **no tiene ledger/dedup ni concurrencia** todavía (es la Fase 2 del plan): reprocesar es seguro solo porque los
   archivos se mueven fuera de `1_entrada/` al terminar.
+- **El aviso «Número de días fuera de rango» NUNCA llega al auxiliar.** `erp.mapear_a_staging` lo
+  emite, pero el valor ya viene en `None`. **La causa NO es `normalizar_fechas`** (ahí el `n = None`
+  es sobre una variable LOCAL y no toca `inc["dias"]`): quien descarta el valor es el **LECTOR** de
+  días en `extract.py` (`_dias_por_etiqueta`/`_dias_de_celda` y el filtro de rango del extractor),
+  que devuelve `None` cuando el valor está fuera de 1..540. Si se quiere que el auxiliar lo vea, hay
+  que conservar el valor CRUDO leído y dejar que la validación opine sobre él.
 - **`_sistema/tmp` y `_sistema/control` se crean pero AÚN NO se usan** (son de la Fase 2 del plan: escrituras
   atómicas y centinela on-demand). Están en el árbol para que la estructura no cambie al implementarlas.

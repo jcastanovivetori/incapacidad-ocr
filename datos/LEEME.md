@@ -19,7 +19,7 @@ un servidor aislado el CSV viaja con el repositorio y no hace falta internet ni 
 Es lo que convierte «este diagnóstico no existe» en una afirmación verificable. Sin catálogo
 *ningún* código resuelve, así que la señal marcaría el 100% de los documentos legítimos y habría
 que dejarla apagada. Con él, sobre el corpus real del cliente, la detección de documentos
-adulterados pasó de **2 a 5 de 9**.
+adulterados pasó de **2 a 4 de 9**.
 
 ## Procedencia, y por qué importa
 

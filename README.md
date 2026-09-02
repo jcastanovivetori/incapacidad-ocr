@@ -338,7 +338,7 @@ el preprocesado, el parseo JSON y el pipeline end-to-end (con `StubOCR` siempre;
 
 `test_ejemplos_reales.py` corre el pipeline completo **PDF/imagen → RapidOCR →
 RuleBasedExtractor** sobre los 8 documentos reales de la carpeta `Ejemplos/` y mide la
-precisión contra un ground-truth. Resultado actual: **80% de los campos núcleo**
+precisión contra un ground-truth. Medido el **2026-06-16**: **80% de los campos núcleo** con las versiones de entonces. **Hoy** el mismo test da **34/45 = 76%** en el venv local (Python 3.14 arrastra `rapidocr` 1.2.3, de 2023) y una medición anterior sobre el stack de Docker (Python 3.12 + `rapidocr` 1.4.4) dio **82%**. Es decir: la cifra depende de la versión del motor que elige pip según la versión de Python — ver `REQUISITOS_INSTALACION.md` §2.2. Los campos núcleo
 (documento, CIE-10, fechas, días, origen); CIE-10 y documento ~100% en los documentos
 con etiqueta legible. Los fallos se concentran en 2 fotos con OCR muy degradado
 (rótulos mal leídos, texto desordenado) — el caso para el path **Ollama-visión + LLM**.
