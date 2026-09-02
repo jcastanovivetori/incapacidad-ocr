@@ -293,6 +293,20 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   `asegurar_estructura()` (o `batch --init`) crea el árbol; `scripts/migrar_estructura_ingesta.py` migra el
   árbol viejo (`inbox`/`procesados`/`incompletos`/`cuarentena`) y el runner **sigue leyendo** un `inbox/` viejo
   si existe (ver `ENTRADA_LEGACY`) para no dejar documentos huérfanos.
+- **Catálogo CIE-10 y la señal «este diagnóstico no existe»** (`datos/cie10.csv`,
+  `scripts/descargar_cie10.py`, `erp.Lookups.categoria_subdividida`): el catálogo público (14.484
+  códigos, CIE-10 en español) se descarga UNA vez y se versiona — es un dato de referencia, no una
+  API de IA, y en runtime la consulta es un `SELECT` local. Lo carga `scripts/sembrar_bd_prueba.py`
+  **reemplazando** `lpdiagnosticos` por completo (mezclarlo con códigos puestos a mano TAPA los
+  huecos reales del catálogo y rompe la guarda de abajo). Tres condiciones para que la señal marque
+  sospecha, y ninguna es opcional: (1) el catálogo está cargado —`catalogo_diagnosticos_disponible`,
+  sin él nada resuelve y marcaría el 100%—, (2) el código tiene FORMA de CIE-10 (letra + dígitos:
+  un `FECHA` o `0039` del OCR es una lectura fallida, no un código falso), y (3) el catálogo
+  **subdivide** la categoría de 3 (`categoria_subdividida`): la edición pública no subdivide 276 de
+  sus 2070 categorías, así que un `A09.9` ausente es un hueco de la edición, no un fraude. Medido
+  sobre el corpus: la detección pasó de 2 a 4 de 9 adulteradas manteniendo 0 falsos positivos
+  sobre las 16 legítimas; sin la condición (3) aparecían 2. Al llegar `lpdiagnosticos` de ASTGU
+  solo hay que cargarlo: el código no cambia.
 - **Validación documental por tipo** (`erp.validar_documentacion`): el conjunto de `TIPODOC` presentes del caso
   se cruza contra los requeridos por el tipo — `lprequisitos_eps` (por `idlpentidad+idlptipoausentismo`,
   `obligatorio=1`) prevalece; si no hay filas, `erp.REQUISITOS_DEFAULT`. Se aplican **grupos de equivalencia**

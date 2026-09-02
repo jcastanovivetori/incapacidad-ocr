@@ -175,6 +175,46 @@ def test_basura_ocr_no_dispara() -> None:
           r["row"]["sospecha_manipulacion"] == 1, str(r["row"]["motivo_sospecha"]))
 
 
+class LookupsCatalogoReal(LookupsFake):
+    """Catálogo con una categoría SUBDIVIDIDA y otra que no, como el CIE-10 público real.
+
+    `R50` está subdividida (R50.9 existe) → un `R50.5` ausente SÍ se puede negar.
+    `A09` no está subdividida en esa edición → un `A09.9` ausente NO se puede negar: es un
+    hueco del catálogo, no un código inventado.
+    """
+
+    _CIE = {"R50.9": "FIEBRE, NO ESPECIFICADA", "A09": "DIARREA Y GASTROENTERITIS",
+            "M54.4": "LUMBAGO CON CIATICA"}
+
+    def categoria_subdividida(self, codigo):
+        cat = str(codigo or "").replace(".", "").upper()[:3]
+        return any(k.replace(".", "").startswith(cat) and len(k.replace(".", "")) == 4
+                   for k in self._CIE)
+
+
+def test_categoria_sin_subdividir_no_dispara() -> None:
+    print("[10] Categoría del catálogo SIN subdividir -> no se puede negar el código de 4")
+    lk = LookupsCatalogoReal()
+    # A09.9 no está y A09 no tiene hijos de 4 en este catálogo: es un hueco de la edición.
+    r = erp.mapear_a_staging(_resultado("A09.9", "GASTROENTERITIS"), lookups=lk)
+    check("A09.9: sospecha_manipulacion=0", r["row"]["sospecha_manipulacion"] == 0,
+          str(r["row"]["motivo_sospecha"]))
+    check("A09.9: el problema SÍ queda anotado para revisión",
+          any("catálogo" in p for p in r["problemas"]), str(r["problemas"]))
+    # R50.5 no está pero R50 SÍ tiene hijos: el catálogo puede negarlo.
+    r2 = erp.mapear_a_staging(_resultado("R50.5", "FIEBRE"), lookups=lk)
+    check("R50.5: sospecha_manipulacion=1 (categoría subdividida)",
+          r2["row"]["sospecha_manipulacion"] == 1, str(r2["row"]["motivo_sospecha"]))
+    # Un lookups SIN el método nuevo no debe relajar la señal más de lo que ya estaba.
+    class _SinMetodo(LookupsFake):
+        pass
+    _SinMetodo.categoria_subdividida = None
+    del _SinMetodo.categoria_subdividida
+    r3 = erp.mapear_a_staging(_resultado("Z99.9", "LO QUE SEA"), lookups=_SinMetodo())
+    check("sin el método: sigue disparando (no se relaja)",
+          r3["row"]["sospecha_manipulacion"] == 1, str(r3["row"]["motivo_sospecha"]))
+
+
 def main() -> int:
     print("=" * 64)
     print("PRUEBAS erp.py — coincidencia diagnóstico vs. catálogo CIE-10")
@@ -188,6 +228,7 @@ def main() -> int:
     test_helper_umbral_conservador()
     test_sin_catalogo_no_dispara()
     test_basura_ocr_no_dispara()
+    test_categoria_sin_subdividir_no_dispara()
     print("-" * 64)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")
     return 1 if _fail else 0

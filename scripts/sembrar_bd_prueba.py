@@ -205,6 +205,18 @@ def generar_sql() -> str:
                              if c not in CIE10_DESCRIPCIONES
                              and c.replace(".", "") not in CIE10_INEXISTENTES)
     checklists = _checklists_reales()
+    # El catálogo CIE-10 completo se lee ANTES de la cabecera porque su conteo se
+    # anuncia ahí. Si no está descargado, se cae al mínimo hecho a mano.
+    cie10_csv = REPO / "datos" / "cie10.csv"
+    catalogo: list[tuple[str, str]] = []
+    if cie10_csv.is_file():
+        with cie10_csv.open(encoding="utf-8", newline="") as fh:
+            for r in csv.DictReader(fh):
+                cod = (r.get("codigo") or "").strip().upper()
+                desc = (r.get("descripcion") or "").strip()
+                if cod and desc:
+                    catalogo.append((cod, desc))
+    n_catalogo = len(catalogo)
 
     L: list[str] = []
     add = L.append
@@ -216,7 +228,8 @@ def generar_sql() -> str:
     add("--  FUERA del repositorio y NO se versiona (Ley 1581).")
     add("--")
     add(f"--  empleados sembrados ............ {len(empleados)}")
-    add(f"--  diagnósticos sembrados ......... {len(sembrables)}")
+    add(f"--  diagnósticos sembrados ......... {n_catalogo or len(sembrables)}"
+        f"{'  (catálogo CIE-10 completo, datos/cie10.csv)' if n_catalogo else '  (mínimo a mano)'}")
     add(f"--  diagnósticos OMITIDOS a propósito {omitidos}  (el cliente los declaró inexistentes)")
     add(f"--  leídos sin descripción conocida . {sin_descripcion}  (no se siembran: no inventamos texto)")
     add(f"--  EPS con checklist de radicación .. {len(checklists)}")
@@ -244,13 +257,36 @@ def generar_sql() -> str:
             f"ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);")
     add("")
 
-    add("-- Diagnósticos. Los declarados inexistentes por el cliente NO están, a propósito.")
-    for cod in sembrables:
-        desc = CIE10_DESCRIPCIONES[cod]
-        marca = "  -- [APROX] confirmar con ASTGU" if cod in APROX else ""
-        add(f"INSERT INTO lpdiagnosticos (codigo, descripcion) VALUES "
-            f"({_q(cod)}, {_q(desc)}) ON DUPLICATE KEY UPDATE descripcion=VALUES(descripcion);{marca}")
-    add("")
+    # Catálogo CIE-10 COMPLETO si está descargado (`scripts/descargar_cie10.py`). Es lo que
+    # convierte la señal "este diagnóstico no existe" en algo verificable: con 25 códigos
+    # puestos a mano, cualquier código legítimo fuera de esa lista se veía como inexistente.
+    if catalogo:
+        add("-- Catálogo CIE-10 completo (datos/cie10.csv). El código se guarda CON punto en el")
+        add("-- nivel de 4 caracteres (X##.#), que es la forma que el ERP muestra; el lookup")
+        add("-- compara sin punto, así que las dos formas resuelven igual.")
+        add("--")
+        add("-- Se REEMPLAZA el catálogo entero, no se añade encima. Un catálogo mezclado es peor")
+        add("-- que uno incompleto: los códigos sueltos que hubiera antes TAPAN los huecos reales")
+        add("-- y hacen que `categoria_subdividida` opine sobre una base que no es la del catálogo")
+        add("-- (se vio: 4 códigos puestos a mano hacían 'existir' a 3 que el catálogo niega).")
+        add("-- Ojo: los `idlpdiagnosticos` cambian, así que hay que reiniciar la prueba después")
+        add("-- («Reiniciar prueba» vacía staging, que es donde se guardaban esos ids).")
+        add("DELETE FROM lpdiagnosticos;")
+        for cod, desc in catalogo:
+            con_punto = f"{cod[:3]}.{cod[3:]}" if len(cod) >= 4 else cod
+            add(f"INSERT INTO lpdiagnosticos (codigo, descripcion) VALUES "
+                f"({_q(con_punto)}, {_q(desc[:200])}) "
+                f"ON DUPLICATE KEY UPDATE descripcion=VALUES(descripcion);")
+        add("")
+    else:
+        add("-- Diagnósticos: catálogo mínimo hecho a mano (no se descargó datos/cie10.csv).")
+        add("-- Los declarados inexistentes por el cliente NO están, a propósito.")
+        for cod in sembrables:
+            desc = CIE10_DESCRIPCIONES[cod]
+            marca = "  -- [APROX] confirmar con ASTGU" if cod in APROX else ""
+            add(f"INSERT INTO lpdiagnosticos (codigo, descripcion) VALUES "
+                f"({_q(cod)}, {_q(desc)}) ON DUPLICATE KEY UPDATE descripcion=VALUES(descripcion);{marca}")
+        add("")
 
     if checklists:
         add("-- Entidades + checklist de radicación REAL (export del ERP). Los ids son los del")

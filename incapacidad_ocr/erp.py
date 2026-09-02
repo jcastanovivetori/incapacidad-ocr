@@ -357,6 +357,7 @@ class Lookups:
         self._empleados_nombre: Optional[list[tuple[int, str, str, str]]] = None  # (id, nombre, eps, clave)
         self._cfg_tiempos: Optional[dict[str, Any]] = None
         self._catalogo_dx: Optional[bool] = None   # ¿`lpdiagnosticos` tiene filas? (una sonda)
+        self._cache_cat3: dict[str, bool] = {}     # categoría de 3 → ¿está subdividida?
 
     def _query(self, sql: str, params: tuple):
         cur = self._cx.cursor()
@@ -422,6 +423,33 @@ class Lookups:
         res = (int(filas[0][0]), filas[0][1]) if filas else (None, None)
         self._cache_dx[key] = res
         return res
+
+    def categoria_subdividida(self, codigo: Optional[str]) -> bool:
+        """True si el catálogo tiene ALGÚN código de 4 caracteres bajo esta categoría de 3.
+
+        Es la guarda que separa «este código no existe» de «mi catálogo no llega a ese nivel».
+        Un catálogo CIE-10 puede no subdividir una categoría (`A09` sin `A09.0`/`A09.9` en las
+        ediciones antiguas). Si no la subdivide, un `A09.9` ausente NO es un código inventado:
+        es un hueco de la edición, y acusar por eso marcaría documentos legítimos. Si SÍ la
+        subdivide (p.ej. `R50` con `R50.0`/`R50.1`/`R50.9`), entonces un `R50.5` ausente sí es
+        un código que no existe — que es exactamente el caso que reportó el cliente.
+        """
+        key = str(codigo or "").replace(".", "").upper()
+        if len(key) < 3:
+            return False
+        cat = key[:3]
+        if cat not in self._cache_cat3:
+            try:
+                filas = self._query(
+                    "SELECT 1 FROM lpdiagnosticos "
+                    "WHERE REPLACE(codigo, '.', '') LIKE %s AND CHAR_LENGTH(REPLACE(codigo, '.', '')) = 4 "
+                    "LIMIT 1",
+                    (cat + "%",),
+                )
+                self._cache_cat3[cat] = bool(filas)
+            except Exception:  # noqa: BLE001 — sin tabla no se puede afirmar nada
+                self._cache_cat3[cat] = False
+        return self._cache_cat3[cat]
 
     def catalogo_diagnosticos_disponible(self) -> bool:
         """True si `lpdiagnosticos` existe y tiene filas (se consulta una vez y se cachea).
@@ -522,6 +550,10 @@ class LookupsNulos:
     def catalogo_diagnosticos_disponible(self):
         """Sin BD no hay catálogo: por eso un CIE-10 que no resuelve NO puede tratarse como
         indicio de manipulación (marcaría el 100% de los documentos). Ver la versión con BD."""
+        return False
+
+    def categoria_subdividida(self, codigo):  # noqa: ARG002
+        """Sin catálogo no se puede saber si la categoría está subdividida → no se afirma nada."""
         return False
 
     def id_entidad_por_nombre(self, nombre):  # noqa: ARG002
@@ -830,7 +862,13 @@ def mapear_a_staging(
             if _hay_catalogo is None:
                 log.warning("El objeto de lookups no expone catalogo_diagnosticos_disponible: "
                             "la señal de CIE-10 inexistente queda desactivada.")
-            if _hay_catalogo is not None and _hay_catalogo() and bien_formado:
+            # Tercera condición (además de catálogo cargado y código bien formado): que el
+            # catálogo SUBDIVIDA esa categoría. Sin eso, un código ausente puede ser solo un
+            # hueco de la edición del catálogo — medido: el CIE-10 público que usamos no
+            # subdivide 276 de sus 2070 categorías, y `A09.9` (legítimo) es una de ellas.
+            _subdiv = getattr(lookups, "categoria_subdividida", None)
+            _puede_negar = _subdiv is None or _subdiv(cie)   # sin el método, no se relaja nada más
+            if _hay_catalogo is not None and _hay_catalogo() and bien_formado and _puede_negar:
                 sospecha_manipulacion = True
                 motivo_sospecha = f"{motivo_sospecha}; {motivo_nf}" if motivo_sospecha else motivo_nf
         else:

@@ -85,6 +85,11 @@ funcionan el sistema y las pruebas, pero **no** las sondas de `analisis/`, que l
 
 ### 5. Sembrar los catálogos de la BD
 
+El catálogo CIE-10 (`datos/cie10.csv`, 14.484 códigos) **ya viene en el repositorio**, así que no
+hay que descargar nada. Si alguna vez hace falta refrescarlo:
+`python scripts/descargar_cie10.py --forzar` (una sola descarga, valida lo que baja y aborta si no
+cuadra — ver [`datos/LEEME.md`](datos/LEEME.md)).
+
 ```bash
 python scripts/sembrar_bd_prueba.py
 ```
@@ -147,7 +152,8 @@ Nada de lo anterior es suficiente para poner esto a trabajar de verdad. Falta, y
 cliente:
 
 - **La BD ASTGU real** (`DB_*` en `.env`). Los catálogos de prueba son eso, de prueba.
-- **El catálogo CIE-10 real** (`lpdiagnosticos`). Sin él no se puede afirmar que un diagnóstico
-  no existe, y esa familia de señales queda desactivada a propósito.
+- **El catálogo CIE-10 del cliente** (`lpdiagnosticos` de ASTGU). El repo ya trae uno público
+  completo (`datos/cie10.csv`) que hace funcionar la señal, pero el del cliente es el autoritativo:
+  responde «¿está en SU catálogo?» en vez de «¿existe en la CIE-10?».
 - **El histórico `lpausentismos`**, para validar solapamientos y prórrogas.
 - El servidor y su preparación: [`INSTALACION_CLIENTE.md`](INSTALACION_CLIENTE.md).
