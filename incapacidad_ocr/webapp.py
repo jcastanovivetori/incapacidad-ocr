@@ -54,13 +54,16 @@ _lote_lock = threading.Lock()
 _scheduler = None
 
 
-def _correr_lote(extractor: str) -> dict:
+def _correr_lote(extractor: str, dry_run: bool = False) -> dict:
     """Ejecuta el lote bajo el lock (no reentrante). Si ya hay una corrida en curso,
-    devuelve ``{"en_curso": True}`` en vez de solaparse."""
+    devuelve ``{"en_curso": True}`` en vez de solaparse.
+
+    El lock también protege la corrida EN SECO: no escribe, pero lee los mismos archivos
+    que una corrida real podría estar moviendo."""
     if not _lote_lock.acquire(blocking=False):
         return {"en_curso": True, "error": "Ya hay una corrida del lote en curso."}
     try:
-        return batch.procesar_todo(_get_rapidocr(), extractor_name=extractor)
+        return batch.procesar_todo(_get_rapidocr(), extractor_name=extractor, dry_run=dry_run)
     finally:
         _lote_lock.release()
 
@@ -487,19 +490,29 @@ def lote_pendientes() -> JSONResponse:
 
 
 @app.post("/api/lote/procesar")
-def lote_procesar(extractor: str = Body("rule", embed=True)) -> JSONResponse:
+def lote_procesar(extractor: str = Body("rule", embed=True),
+                  dry_run: bool = Body(False, embed=True)) -> JSONResponse:
     """Procesa TODOS los documentos de la zona de entrada (ingesta masiva por lotes).
 
     Agrupa por nomenclatura, OCR-ea el documento base, valida requisitos por tipo, registra
     en staging (`PENDIENTE_REVISION`) y mueve los archivos a `3_archivo/` (completos) o a
     `2_revisar/` (una sub-carpeta por motivo: mal nombrados / faltan soportes /
     datos por revisar / con error).
+
+    Con `dry_run=true` hace una **corrida en seco**: lee y valida todo igual, pero NO
+    inserta en staging ni mueve archivos, y por eso **no exige base de datos**. Es la forma
+    de probar OCR/extracción/validaciones en un equipo sin MySQL; los IDs del ERP quedan
+    sin resolver (lookups degradados) y el resumen lo marca en `sin_catalogos`.
     """
     extr = extractor if extractor in VALID_EXTRACTOR else "rule"
-    if not db.db_disponible():
-        raise HTTPException(status_code=503, detail="Base de datos no disponible.")
+    if not dry_run and not db.db_disponible():
+        raise HTTPException(
+            status_code=503,
+            detail="Base de datos no disponible: el lote no puede registrar en "
+                   "lp_ausentismos_ia. Levanta la BD (docker compose up -d db) o usa la "
+                   "corrida en seco para probar la lectura sin registrar.")
     try:
-        resumen = _correr_lote(extr)
+        resumen = _correr_lote(extr, dry_run=dry_run)
     except Exception:
         logger.exception("Error en el procesamiento por lotes")
         raise HTTPException(status_code=500, detail="Error en el procesamiento por lotes.") from None

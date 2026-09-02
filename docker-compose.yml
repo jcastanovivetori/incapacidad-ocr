@@ -41,6 +41,10 @@ services:
       - INGESTA_CRON=${INGESTA_CRON:-}
       - BATCH_TZ=${BATCH_TZ:-America/Bogota}
       - INGESTA_EXTRACTOR=${INGESTA_EXTRACTOR:-rule}
+      # Declara que la BD de este stack es de PRUEBA: habilita que «Reiniciar prueba» VACÍE
+      # la tabla de staging (no solo las filas de esos archivos). NO poner en producción:
+      # es la única salvaguarda que impide vaciar el staging de la BD ASTGU real.
+      - RESET_BD_PRUEBA=${RESET_BD_PRUEBA:-1}
     volumes:
       - ./ingesta:/data/ingesta
     depends_on:
@@ -76,8 +80,13 @@ services:
       - db-data:/var/lib/mysql
       # Carga catálogos + tabla staging + datos de prueba en el PRIMER arranque.
       - ./sql/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
-    # Sin puerto al host por defecto (solo red interna). Para inspeccionar con un cliente,
-    # descomenta:  ports: ["127.0.0.1:3306:3306"]
+    ports:
+      # Enlazado SOLO a localhost, nunca a la LAN (contiene PII de salud). Se publica para
+      # poder (a) inspeccionar con un cliente MySQL y (b) correr la app FUERA de Docker
+      # contra esta BD de prueba (DB_HOST=127.0.0.1), que es como se hacen las pruebas
+      # locales. En producción, si la app corre en el mismo compose, esta línea puede
+      # quitarse: los contenedores se ven por la red interna sin publicar nada.
+      - "127.0.0.1:3306:3306"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]

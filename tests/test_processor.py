@@ -267,6 +267,75 @@ def test_dias_en_letras() -> None:
           f"{inc['dias_letra']} / {inc['dias_letra_coincide']}")
 
 
+def test_duraciones_que_no_son_la_duracion() -> None:
+    print("[6b] Texto del certificado que PARECE una duración y no lo es (end-to-end)")
+    # Fórmula de cierre notarial ANTES del campo real: gana la primera lectura del
+    # documento, así que si esta frase se leyera como duración se quedaría con el
+    # campo Y `normalizar_fechas` re-derivaría la fecha fin (2026-06-24).
+    inc = _corre(_CABECERA + (
+        "Dada en Malambo a los 15 dias del mes de agosto de 2026\n"
+        "Dias de Incapacidad: 2\n"
+        "Fecha Inicial: 10/06/2026\n"
+        "Fecha Final: 11/06/2026\n"
+    ))["incapacidad"]
+    check("cierre notarial 'a los 15 dias del mes' → manda el campo (dias=2)",
+          inc["dias"] == 2, str(inc["dias"]))
+    check("…y la fecha fin del documento NO se re-deriva",
+          (inc["fecha_fin"], inc["fecha_fin_recalculada"]) == ("2026-06-11", False),
+          f"{inc['fecha_fin']} / {inc['fecha_fin_recalculada']}")
+
+    # Nota de trámite impresa en el propio certificado (la versión en HORAS existe en
+    # el corpus). Documento SIN fecha fin: si entrara, entraría MUDA (nada la marca).
+    inc = _corre(_CABECERA + (
+        "Dias de Incapacidad:\n"
+        "Fecha Inicial: 10/06/2026\n"
+        "La incapacidad debe radicarse dentro de los 3 dias habiles siguientes\n"
+    ))["incapacidad"]
+    check("plazo de trámite '3 dias habiles' → NO hay duración inventada",
+          inc["dias"] is None, str(inc["dias"]))
+
+    # Renglón del REGISTRO PROFESIONAL degradado por el OCR: la corrección de OCR que
+    # lo convertía en "1 dias" se retiró. Con ella, este documento salía con 1 día y
+    # PERDÍA la fecha fin que traía escrita.
+    inc = _corre(_CABECERA + (
+        "Dias de Incapacidad:\n"
+        "Fecha Inicio: 02/09/2025\n"
+        "Fecha Fin: 04/09/2025\n"
+        "Registro Profaslonal ce -,tl 111222.t1 DIAN\n"
+    ))["incapacidad"]
+    check("registro profesional '…t1 DIAN' → dias por fechas (3), no 1",
+          inc["dias"] == 3, str(inc["dias"]))
+    check("…y la fecha fin leída del documento se conserva",
+          (inc["fecha_fin"], inc["fecha_fin_recalculada"]) == ("2025-09-04", False),
+          f"{inc['fecha_fin']} / {inc['fecha_fin_recalculada']}")
+
+    # Tabla DETALLE con el bloque DESPLAZADO: en la columna de días cae un CIE-10 o
+    # una dosis. Prestarle a la celda un rótulo escrito las leía como 69 y 500 días
+    # (dentro de 1..540, o sea sin ninguna señal para el revisor). Ahora la celda no
+    # aporta nada y los días salen de las FECHAS de la propia tabla (10/06→12/06 = 3);
+    # el bloque sigue casando, que es lo que da el CIE-10 y las fechas.
+    for celda in ("J069", "X 500 MG", "1 de 1"):
+        rec = _corre(_texto_detalle(celda))
+        inc = rec["incapacidad"]
+        check(f"tabla DETALLE con {celda!r} en la celda de días → nada leído de la celda",
+              (inc["dias"], inc["dias_letra"]) == (3, None), f"{inc['dias']} / {inc['dias_letra']}")
+        check("…y el bloque sigue aportando el CIE-10",
+              rec["diagnostico"]["cie10"] == "J06.9", str(rec["diagnostico"]["cie10"]))
+
+    # VACACIONES con la tilde de "Período": el patrón del título es el ÚNICO guardián
+    # de la regla. Si no casa, la carta se procesa como incapacidad, se queda sin
+    # fechas y el lector de días devuelve el DÍA DEL MES (7) — justo lo prohibido.
+    for titulo in ("Notificacion Período de Vacaciones",
+                   "NOTIFICACION DE PERÍODO DE VACACIONES"):
+        res = _corre(TEXTO_VACACIONES.replace("NOTIFICACION DE PERIODO DE VACACIONES", titulo))
+        inc = res["incapacidad"]
+        check(f"vacaciones con tilde ({titulo[:24]}…): sigue siendo vacaciones",
+              res["tipo_documento"] == "vacaciones", str(res["tipo_documento"]))
+        check("…y los días salen de las fechas (14), no del día del mes (7)",
+              (inc["dias"], inc["dias_letra"]) == (14, None),
+              f"{inc['dias']} / {inc['dias_letra']}")
+
+
 # --------------------------------------------------------------------------- #
 # Fusión híbrida con el LLM SIMULADO
 # --------------------------------------------------------------------------- #
@@ -319,6 +388,19 @@ def test_hibrido_llm_simulado() -> None:
     check("guarda de fechas: una fecha que no está en el texto se descarta",
           rec["incapacidad"]["fecha_fin"] == "2026-06-11", rec["incapacidad"]["fecha_fin"])
 
+    # El AÑO ESCRITO EN PALABRAS era el único camino por el que el modelo podía
+    # "justificar" una duración: `numerales_en_texto` anclaba el 2 y el 26 de "dos mil
+    # veintiseis". El millar se rechaza entero, así que ya no ancla nada.
+    texto_anio_en_letras = _CABECERA + (
+        "Dias de Incapacidad:\n"
+        "Expedida en Malambo a dos mil veintiseis (2026)\n"
+    )
+    for propuesta in (26, 2, 20):
+        rec = HybridExtractor(llm=StubLLM({"incapacidad": {"dias": propuesta}})).extract(
+            texto_anio_en_letras)
+        check(f"el año en palabras NO ancla dias={propuesta} del LLM",
+              rec["incapacidad"]["dias"] is None, str(rec["incapacidad"]["dias"]))
+
     # Doble evidencia (dígito + palabra concordantes) → las reglas pesan más que el LLM.
     texto_mixto = TEXTO_MIXTO_OK + "Nivel: 1\n"
     rec = HybridExtractor(llm=StubLLM({"incapacidad": {"dias": 1}})).extract(texto_mixto)
@@ -355,6 +437,7 @@ def main() -> int:
     test_e2e_stub()
     test_e2e_real_ocr()
     test_dias_en_letras()
+    test_duraciones_que_no_son_la_duracion()
     test_hibrido_llm_simulado()
     print("-" * 64)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")

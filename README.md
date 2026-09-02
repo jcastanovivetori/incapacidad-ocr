@@ -193,22 +193,46 @@ que decía la palabra y `dias_letra_coincide` si palabra y dígito cuadran (`nul
 una de las dos formas). Los dos últimos son **informativos** para la revisión humana: aquí no se decide si
 un desacuerdo es un documento adulterado.
 
+Un número solo cuenta como duración si el documento lo **justifica**: la unidad pegada al valor
+(`POR 4 DIAS`) o un rótulo de duración (`Dias de Incapacidad:`, `Duracion`) en el mismo renglón. Y **no**
+cuenta cuando lo que hay alrededor dice otra cosa: la edad (`33 Ano(s), 1 mes(es), 8 dia(s)`), las horas de
+un permiso, las semanas de gestación, el día del mes de una fecha, el plazo de trámite (`3 dias habiles`),
+la validez del certificado, `control en 3 dias`, `3 dias de evolucion` o la fórmula de cierre
+(`a los 15 dias del mes de agosto`). Si no hay una duración clara, `dias` se calcula desde las fechas o
+queda en `null` para que lo complete la persona que revisa: **nunca se inventa**. `dias` va acotado a
+1..540; `dias_letra` es lo que decía el papel, en crudo. Detalle y casos en
+`tests/test_numeros_es.py`.
+
 ## Requisitos mínimos
 
-**Con Docker (recomendado):**
+> 🖥️ **Requisitos del SERVIDOR de producción, instalación (con y sin internet), preparación del SO y
+> verificación: [`REQUISITOS_INSTALACION.md`](REQUISITOS_INSTALACION.md)** — es el documento de referencia
+> (cifras medidas, aritmética del dimensionamiento y supuestos a confirmar). Resumen ejecutivo para el
+> cliente: [`INSTALACION_CLIENTE.md`](INSTALACION_CLIENTE.md).
+
+**Para PROBAR el proyecto en un equipo de desarrollo, con Docker:**
 
 | | Mínimo (solo RapidOCR) | Recomendado (con Ollama/IA) |
 |---|---|---|
 | **SO** | Windows 10/11, macOS o Linux con **Docker** + Compose v2 | igual |
 | **CPU** | x86-64, 2 núcleos | 4+ núcleos |
-| **RAM** | 4 GB | **8 GB+** (el modelo `gemma3:4b` usa ~4-5 GB al inferir) |
-| **Disco** | ~1.5 GB (imagen web) | **~13 GB** (imagen web 1.1 GB + imagen Ollama 8.3 GB + modelo 3.3 GB) |
-| **GPU** | No requerida (corre en CPU) | Opcional; acelera mucho el LLM/visión |
+| **RAM** | **8 GB** — con los defaults actuales 4 GB **no bastan**: un documento real del cliente llega a un pico medido de **7,6 GB** (página de 72 MP; `OCR_MAX_PIXELS=40 MP` no lo evita) y uno normal ya usa ~1 GB. Con `OCR_MAX_PIXELS=8000000` el peor caso medido baja a **1,6 GB** | **16 GB** (además del OCR, `gemma3:4b` usa ~4-5 GB al inferir) |
+| **Disco** | **~3 GB**: imagen web ~1,1 GB + `mysql:8` ~0,6 GB (compose la levanta siempre) + volumen `db-data` | **~20 GB**: + imagen Ollama ~8 GB + los **dos** modelos (`gemma3:4b` 3,34 GB + `qwen2.5vl:3b` 3,20 GB, medidos) |
+| **GPU** | No requerida (corre en CPU) | Opcional; acelera mucho el LLM/visión — **nunca el OCR**: RapidOCR corre en el `onnxruntime` de CPU (`use_cuda: false`) |
 | **Red** | Solo para la **descarga inicial** de imágenes/modelos; en runtime es 100% offline | igual |
 
-> La imagen de Ollama es grande (~8 GB, incluye libs de aceleración). Si **no** vas a usar IA, puedes correr solo el servicio web (RapidOCR) y omitir el contenedor `ollama`.
+> Los tamaños en disco de las imágenes son **estimados** (deducidos del `Dockerfile`/compose); las
+> descargas de Ollama y de los modelos sí están medidas contra el registro. Si **no** vas a usar IA,
+> puedes correr solo el servicio web (RapidOCR) y omitir el contenedor `ollama`.
+>
+> En **producción** el disco lo domina la carpeta `ingesta/`, no el software: **~5,4 GB/mes** con el
+> volumen del cliente (≈65 GB/año). Ver `REQUISITOS_INSTALACION.md` §3.4.
 
-**Sin Docker (local):** Python **3.11–3.14**, `pip install -r requirements.txt`. RapidOCR descarga modelos ONNX embebidos en el wheel (sin servicios externos).
+**Sin Docker (local):** Python **3.12** (`pip install -r requirements.txt`). Instala también en 3.13/3.14,
+pero **no conviene**: `rapidocr-onnxruntime` declara `requires-python <3.13`, así que en ≥3.13 pip degrada
+en silencio a la **1.2.3 de 2023** (modelos PP-OCRv3) y el pipeline pierde ~6 puntos de precisión medidos
+(**76 %** vs **82 %** con la 1.4.4 que instala el contenedor). Los modelos ONNX vienen **embebidos en el
+wheel** de RapidOCR (no se descarga nada en runtime).
 
 ## Seguridad y privacidad
 

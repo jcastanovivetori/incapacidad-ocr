@@ -11,6 +11,7 @@ contra la misma función que en producción apunta a la BD ASTGU real.
 """
 from __future__ import annotations
 
+import os
 import shutil
 import sys
 import tempfile
@@ -176,6 +177,9 @@ class _CursorFalso:
     def fetchall(self):
         return [(11,), (12,)]
 
+    def fetchone(self):
+        return (11,)          # COUNT(*) que ve `vaciar_staging_prueba`
+
     def close(self) -> None:
         pass
 
@@ -229,6 +233,51 @@ def test_borrado_bd_seguro() -> None:
           not any("estado = %s" in s for s, _ in todos.registro))
 
 
+def test_vaciado_bd_exige_declaracion() -> None:
+    print("[7] db.vaciar_staging_prueba: sin RESET_BD_PRUEBA=1 no vacía NADA")
+    previo = os.environ.pop("RESET_BD_PRUEBA", None)
+    try:
+        class _CxProhibida:
+            def cursor(self, **_kw):
+                raise AssertionError("no debería llegar a abrir un cursor")
+
+            def commit(self):
+                pass
+
+            def rollback(self):
+                pass
+
+        check("reset_bd_prueba_permitido() es False", not db.reset_bd_prueba_permitido())
+        try:
+            db.vaciar_staging_prueba(_CxProhibida())
+            check("lanza RuntimeError antes de tocar la BD", False, "no lanzó")
+        except RuntimeError as exc:
+            check("lanza RuntimeError antes de tocar la BD", True)
+            check("el mensaje explica cómo habilitarlo", "RESET_BD_PRUEBA" in str(exc), str(exc))
+        except AssertionError:
+            check("lanza RuntimeError antes de tocar la BD", False, "abrió un cursor")
+
+        # Con la declaración presente: vacía, y las alertas ANTES del staging.
+        os.environ["RESET_BD_PRUEBA"] = "1"
+        cx = _ConexionFalsa()
+        r = db.vaciar_staging_prueba(cx)
+        sqls = [s for s, _ in cx.registro]
+        check("cuenta lo vaciado", r == {"staging": 11, "alertas": 11}, str(r))
+        check("usa TRUNCATE de las dos tablas",
+              sum(1 for s in sqls if s.startswith("TRUNCATE TABLE")) == 2, str(sqls))
+        check("vacía las alertas ANTES del staging",
+              next(i for i, s in enumerate(sqls) if "TRUNCATE" in s and db.ALERTAS_TABLE in s)
+              < next(i for i, s in enumerate(sqls) if "TRUNCATE" in s and db.STAGING_TABLE in s))
+        check("NO toca ninguna tabla de catálogo",
+              not any(t in s for s in sqls
+                      for t in ("lpempleados", "lpdiagnosticos", "lpentidades", "lpeps",
+                                "lprequisitos_eps")), str(sqls))
+    finally:
+        os.environ.pop("RESET_BD_PRUEBA", None)
+        if previo is not None:
+            os.environ["RESET_BD_PRUEBA"] = previo
+
+
 def main() -> int:
     print("=" * 64)
     print("PRUEBAS reinicio de prueba de la ingesta")
@@ -239,6 +288,7 @@ def main() -> int:
     test_nada_que_reiniciar()
     test_colision_de_nombres_al_mover()
     test_borrado_bd_seguro()
+    test_vaciado_bd_exige_declaracion()
     print("-" * 64)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")
     return 1 if _fail else 0

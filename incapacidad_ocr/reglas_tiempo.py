@@ -19,13 +19,20 @@ pudiera dispararse sobre un valor derivado, la aritmética que lo derivó garant
 documento legítimo al que el OCR solo le leyó dos de las tres patas.
 
 Cómo se garantiza en el código (no por disciplina, por construcción):
-  1. ``ReglaTiempo.requiere`` solo puede nombrar campos ``*_leido``/``*_crudo`` del
-     contexto (lo verifica ``tests/test_validacion_temporal.py``).
-  2. El motor descarta la regla ANTES de llamarla si le falta un dato leído → la regla
+  1. A la regla NO se le pasa el contexto, se le pasa ``EvidenciaTiempos`` — una vista que
+     no tiene ningún campo ``*_efectivo``. No hay forma de leer un valor reconciliado, ni
+     por descuido ni con un ``getattr`` de nombre construido.
+  2. ``ReglaTiempo.requiere`` solo admite nombres de ``CAMPOS_EXIGIBLES`` (que se DERIVA de
+     esa vista) y la propia declaración lo rechaza al importar el módulo: una errata no
+     puede dejar una regla muda para siempre.
+  3. El motor descarta la regla ANTES de llamarla si le falta un dato leído → la regla
      queda "no evaluable" (se reporta como tal; no es ni acierto ni fallo).
-  3. Los valores leídos salen de la FOTO que ``processor`` toma antes de reconciliar
+  4. Los valores leídos salen de la FOTO que ``processor`` toma antes de reconciliar
      (``CLAVE_SNAPSHOT``); si no hay foto, se deducen de las marcas
      ``fecha_inicio_calculada`` / ``fecha_fin_recalculada`` de forma conservadora.
+  5. Un override del auxiliar cuenta como evidencia solo si CAMBIA algo: el formulario
+     reenvía el valor que se le pintó (que puede ser el derivado) en cada llamada, y
+     tomarlo por evidencia resucitaba el valor calculado como si lo imprimiera el papel.
 
 Escalable (añadir una regla = añadir una declaración)
 ----------------------------------------------------
@@ -65,8 +72,8 @@ from __future__ import annotations
 import json
 import os
 import re
-from dataclasses import dataclass
-from datetime import date, timedelta
+from dataclasses import dataclass, fields
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -79,6 +86,14 @@ from typing import Any, Callable, Optional
 GRAVE, MEDIA, LEVE = "GRAVE", "MEDIA", "LEVE"
 ORDEN_SEVERIDAD = {LEVE: 1, MEDIA: 2, GRAVE: 3}
 SEVERIDADES_QUE_EXIGEN_REVISION = frozenset({GRAVE, MEDIA})
+# Severidad que se usa cuando la declarada NO existe (una errata al añadir una regla:
+# ``severidad="ALTA"``). Antes eso reventaba con KeyError y tumbaba el mapeo de TODOS los
+# documentos, no solo del que disparaba la regla nueva — justo lo contrario de la promesa
+# del motor ("una regla con un bug queda no evaluable, no rompe el pipeline"). Se elige
+# MEDIA a propósito: sigue entrando en `problemas` (una errata no puede SILENCIAR un
+# hallazgo) pero no encabeza la cola como si fuese lo más grave. El motivo sale como aviso
+# de configuración, así que la errata se ve en la API y en el CLI.
+SEVERIDAD_RESPALDO = MEDIA
 
 # --------------------------------------------------------------------------- #
 # Estados de una regla frente a UN documento (tri-estado obligatorio)
@@ -94,6 +109,28 @@ ESTADOS = (CUMPLE, NO_CUMPLE, NO_EVALUABLE, DESACTIVADA)
 # objetar). NO es una probabilidad de fraude ni la salida de un modelo: es una forma
 # estable de ORDENAR una cola de ~7000 casos/mes para que lo más grave se vea primero.
 PENALIZACION_SEVERIDAD = {GRAVE: 40, MEDIA: 20, LEVE: 5}
+
+
+def severidad_valida(valor: Any) -> Optional[str]:
+    """``'grave'`` → ``'GRAVE'``; cualquier cosa que no sea una severidad → None.
+
+    Único sitio donde se decide si una severidad existe, venga de donde venga: del
+    CATÁLOGO (escrita a mano al añadir una regla), del archivo JSON o de la tabla de la BD.
+    """
+    if not isinstance(valor, str):
+        return None
+    s = valor.strip().upper()
+    return s if s in ORDEN_SEVERIDAD else None
+
+
+def _orden(severidad: Any) -> int:
+    """Peso para ordenar/comparar severidades. Nunca lanza: una severidad rara se
+    trata como la de respaldo (ver ``SEVERIDAD_RESPALDO``) en vez de tumbar el informe."""
+    return ORDEN_SEVERIDAD.get(severidad, ORDEN_SEVERIDAD[SEVERIDAD_RESPALDO])
+
+
+def _penalizacion(severidad: Any) -> int:
+    return PENALIZACION_SEVERIDAD.get(severidad, PENALIZACION_SEVERIDAD[SEVERIDAD_RESPALDO])
 
 # Veredicto global del informe (deriva de los estados; no añade criterio nuevo).
 V_COHERENTE = "COHERENTE"        # todo lo comprobable cuadra
@@ -168,7 +205,10 @@ class ContextoTiempos:
     mensaje pueda citarlos. Ninguna regla debe decidir con un ``*_efectivo``.
     """
 
-    hoy: date
+    # Fecha de proceso. Opcional a propósito: si el llamador no la tiene, las reglas de
+    # ventana temporal la exigen (``requiere=("hoy",)``) y quedan NO EVALUABLE, igual que
+    # con cualquier otro dato ausente. El informe tampoco debe reventar por eso.
+    hoy: Optional[date] = None
     # --- evidencia ya interpretada (None = no se leyó o no es interpretable)
     inicio_leido: Optional[date] = None
     fin_leido: Optional[date] = None
@@ -183,6 +223,16 @@ class ContextoTiempos:
     # True cuando hubo un fin leído que no cuadraba y NO se conservó el original
     # (registro que llega sin la foto de `processor`).
     fin_perdido: bool = False
+    # True cuando el registro TRAE una fecha fin pero no se puede distinguir de una que
+    # completó la reconciliación (cuadra exactamente con inicio + días y no hay foto que
+    # lo demuestre). No es evidencia (no se juzga) pero tampoco es "no hay fecha fin":
+    # sin esta distinción, T08 avisaría de una "duración sin respaldo" que sí tiene rango.
+    fin_indistinguible: bool = False
+    # True cuando los días NO los imprimía el papel: los derivó el lector de las dos
+    # fechas (`extract`) o quedaron obsoletos al corregir una fecha a mano. Un valor
+    # derivado del rango no puede usarse para juzgar ese mismo rango (sería tautología, o
+    # un GRAVE falso si luego se corrige una de las dos fechas).
+    dias_calculado: bool = False
     # --- instrumentación del lector de duraciones en letras ("DOS (2) días")
     dias_letra: Optional[int] = None
     # --- otra evidencia del papel (NO la toca la reconciliación: se lee del registro)
@@ -289,7 +339,7 @@ class ResultadoTiempos:
     def severidad_max(self) -> Optional[str]:
         if not self.hallazgos:
             return None
-        return max((h.severidad for h in self.hallazgos), key=lambda s: ORDEN_SEVERIDAD[s])
+        return max((h.severidad for h in self.hallazgos), key=_orden)
 
     @property
     def codigos(self) -> list[str]:
@@ -303,7 +353,7 @@ class ResultadoTiempos:
         auxiliar. Un documento del que no se pudo comprobar nada NO baja de 100 por eso
         (ilegible ≠ incoherente); esa distinción la da ``cobertura`` en el resumen.
         """
-        castigo = sum(PENALIZACION_SEVERIDAD[h.severidad] for h in self.hallazgos)
+        castigo = sum(_penalizacion(h.severidad) for h in self.hallazgos)
         return max(0, 100 - castigo)
 
     def como_dict(self) -> dict[str, Any]:
@@ -336,7 +386,15 @@ def fecha_iso(valor: Any) -> Optional[date]:
     Es deliberadamente MÁS ESTRICTO que ``date.fromisoformat``: en Python 3.11+ esa
     función acepta formas ISO que MySQL DATE no entiende (``2026-W23-1`` semana,
     ``20260601`` básico), y ningún documento imprime una fecha ISO de semana.
+
+    Un ``datetime`` se reduce a su FECHA: ``datetime`` es subclase de ``date``, así que sin
+    esta rama entraba tal cual y luego reventaba al compararlo con un ``date`` (la regla
+    quedaba muda) o truncaba las horas al restar (``(fin - inicio).days``), lo que producía
+    un desfase de un día y un GRAVE falso. Ningún papel imprime la hora de la incapacidad:
+    quedarse con la fecha es la lectura correcta y además hace comparables las dos patas.
     """
+    if isinstance(valor, datetime):
+        return valor.date()
     if isinstance(valor, date):
         return valor
     if not isinstance(valor, str):
@@ -355,13 +413,19 @@ def entero_dias(valor: Any) -> Optional[int]:
 
     Rechaza a propósito: ``bool`` (en Python ``True`` es 1, pero nunca es "un día
     leído"), dígitos Unicode no decimales (``²``, ``⁵`` — ``str.isdigit()`` los acepta
-    y ``int()`` revienta), cadenas larguísimas y floats no enteros. Acepta el signo
-    para que un ``-3`` llegue a la regla de rango en vez de morir como "no se detectó".
+    y ``int()`` revienta), números de más de ``_MAX_DIGITOS_DIAS`` cifras y floats no
+    enteros. Acepta el signo para que un ``-3`` llegue a la regla de rango en vez de morir
+    como "no se detectó".
+
+    El tope de cifras se aplica al ENTERO igual que a la cadena: un ``int`` de 12 cifras
+    llegado por la API pasaba verbatim a la columna ``dias_leidos INT`` y MySQL en modo
+    estricto rechazaba el INSERT completo (error 1264), o sea que el documento no llegaba
+    a staging. Ahora se trata como lo que es —un valor inutilizable— y T05 lo explica.
     """
     if isinstance(valor, bool):
         return None
     if isinstance(valor, int):
-        return valor
+        return valor if abs(valor) < 10 ** _MAX_DIGITOS_DIAS else None
     if isinstance(valor, float):
         return int(valor) if valor.is_integer() and abs(valor) < 10 ** _MAX_DIGITOS_DIAS else None
     if isinstance(valor, str):
@@ -378,28 +442,131 @@ def recortar(valor: Any, tope: int = 40) -> str:
     return s if len(s) <= tope else s[:tope] + "…"
 
 
+def _sin_dato(valor: Any) -> bool:
+    """¿Este valor es "no hay dato"? None, False, "" y "   " (solo espacios).
+
+    Los espacios cuentan como vacío a propósito: un override en blanco llegado por la API
+    no es "leí un dato y no sirve" (eso haría que el motor declarara ilegible un campo que
+    nadie escribió, y encima taparía el mensaje claro de `erp`: "No se detectó la fecha").
+    """
+    if valor is None or valor is False:
+        return True
+    if isinstance(valor, str):
+        return not valor.strip()
+    return valor == ""
+
+
+# Claves de EVIDENCIA que el extractor puede publicar en el registro y que este motor lee
+# si están (hoy `extract` no las escribe: quedan como contrato acordado para cuando las
+# publique — ver VALIDACION_TEMPORAL.md, "propuestas al lector").
+#   *_cruda / dias_crudo : la cadena que el lector RECHAZÓ ("31/02/2026", "dos dia(s)").
+#     Sin ellas, un dato imposible impreso en el papel llega al motor como "no se detectó"
+#     y el auxiliar sale a buscar lo que ya está impreso.
+#   dias_calculado : True si los días NO los imprimía el papel (los derivó de las fechas).
+#   fecha_fin_calculada : simétrico de `fecha_inicio_calculada`, para el fin COMPLETADO
+#     (hoy solo se marca el fin RE-derivado, así que el completado no se distingue de uno
+#     impreso y hay que deducirlo por aritmética).
+CLAVE_INICIO_CRUDO, CLAVE_FIN_CRUDO, CLAVE_DIAS_CRUDO = (
+    "fecha_inicio_cruda", "fecha_fin_cruda", "dias_crudo")
+CLAVE_DIAS_CALCULADO, CLAVE_FIN_CALCULADO = "dias_calculado", "fecha_fin_calculada"
+
+
 def snapshot_leidos(inca: dict[str, Any]) -> dict[str, Any]:
     """Foto de los tiempos TAL COMO LOS LEYÓ el extractor (antes de reconciliar)."""
-    return {
+    foto = {
         "fecha_inicio": inca.get("fecha_inicio"),
         "fecha_fin": inca.get("fecha_fin"),
         "dias": inca.get("dias"),
         "dias_letra": inca.get("dias_letra"),
     }
+    # Evidencia extra si el lector la publica (ver las CLAVE_* de arriba). Se copia solo
+    # lo que exista: la foto no inventa claves que el extractor no escribió.
+    for clave in (CLAVE_INICIO_CRUDO, CLAVE_FIN_CRUDO, CLAVE_DIAS_CRUDO,
+                  CLAVE_DIAS_CALCULADO, CLAVE_FIN_CALCULADO):
+        if clave in inca:
+            foto[clave] = inca[clave]
+    return foto
+
+
+def _mismo_valor(a: Any, b: Any) -> bool:
+    """¿Los dos valores dicen lo MISMO (comparando por significado, no por tipo)?
+
+    ``'2026-06-01'`` == ``date(2026,6,1)`` y ``'5'`` == ``5``: hace falta para saber si un
+    override trae un dato nuevo o solo devuelve el que se le pintó en el formulario.
+    """
+    if _sin_dato(a) or _sin_dato(b):
+        return _sin_dato(a) and _sin_dato(b)
+    fa, fb = fecha_iso(a), fecha_iso(b)
+    if fa is not None or fb is not None:
+        return fa == fb
+    na, nb = entero_dias(a), entero_dias(b)
+    if na is not None or nb is not None:
+        return na == nb
+    return str(a).strip() == str(b).strip()
+
+
+def es_correccion_humana(inca: Optional[dict[str, Any]], campo: str,
+                         overrides: Optional[dict[str, Any]]) -> bool:
+    """¿El override de ``campo`` aporta un dato NUEVO sobre el papel?
+
+    Un override cuenta como EVIDENCIA porque lo teclea una persona mirando el documento…
+    pero solo si de verdad lo tecleó. El formulario de revisión se rellena con el valor
+    EFECTIVO de la fila (que puede ser el que DERIVÓ la reconciliación) y lo reenvía en
+    cada ``/api/mapear`` y ``/api/registrar`` aunque no se toque nada: tomar eso como
+    evidencia resucita el valor calculado como si lo hubiera impreso el papel, y entonces
+    las reglas de ventana temporal acusan a un documento legítimo, T01 pasa a un CUMPLE
+    tautológico, la marca "(calculada: fin − días)" desaparece de la pantalla y la
+    confianza sube al 100% sobre un dato que nadie leyó.
+
+    Regla: un override que repite el valor que YA tenía el registro no aporta nada (no se
+    puede distinguir de un eco del formulario) y se ignora; uno que lo cambia es una
+    corrección de verdad. Un blanco o un ``None`` tampoco son una corrección: no borran la
+    evidencia impresa.
+    """
+    if not isinstance(overrides, dict) or campo not in overrides:
+        return False
+    valor = overrides[campo]
+    if _sin_dato(valor):
+        return False
+    return not _mismo_valor(valor, (inca or {}).get(campo))
+
+
+def dias_derivable_del_rango(inca: Optional[dict[str, Any]]) -> bool:
+    """¿Los días del registro son EXACTAMENTE el span de sus dos fechas?
+
+    Cuando lo son, ese número no aporta evidencia independiente: pudo derivarlo el propio
+    lector (``extract`` calcula los días de las dos fechas cuando el papel no los imprime)
+    y cruzarlo contra el rango del que salió sería una tautología. Se usa para no acusar de
+    GRAVE a un documento legítimo cuando el auxiliar corrige UNA de las dos fechas y los
+    días viejos —derivados del rango anterior— dejan de cuadrar.
+    """
+    inca = inca if isinstance(inca, dict) else {}
+    di, df = fecha_iso(inca.get("fecha_inicio")), fecha_iso(inca.get("fecha_fin"))
+    n = entero_dias(inca.get("dias"))
+    if not (di and df and n is not None):
+        return False
+    return (df - di).days + 1 == n
 
 
 def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     """Extrae del registro los tiempos que SÍ son evidencia (nunca los derivados).
 
-    Un override del auxiliar cuenta como evidencia: lo tecleó una persona mirando el
-    documento, y si teclea un fin anterior al inicio hay que decírselo.
+    Los tres caminos por los que puede llegar un tiempo, y qué se hace con cada uno:
+      * FOTO de ``processor`` (``CLAVE_SNAPSHOT``) → es lo que leyó el extractor: evidencia.
+      * Registro ya reconciliado, SIN foto → solo lo que las marcas garantizan que se leyó.
+      * Override del auxiliar → evidencia solo si CAMBIA algo (``es_correccion_humana``).
     """
     inca = inca if isinstance(inca, dict) else {}
     overrides = overrides or {}
     snap = inca.get(CLAVE_SNAPSHOT)
     inicio_calculado = bool(inca.get("fecha_inicio_calculada"))
     fin_recalculado = bool(inca.get("fecha_fin_recalculada"))
-    fin_perdido = False
+    fin_perdido = fin_indistinguible = False
+    fuente = snap if isinstance(snap, dict) else inca
+    dias_calculado = bool(fuente.get(CLAVE_DIAS_CALCULADO))
+    # ¿El lector dice de dónde salieron los días, o hay que deducirlo? Con la marca no se
+    # deduce nada (es el dato bueno); sin ella se aplica la aritmética, que es conservadora.
+    marca_dias = CLAVE_DIAS_CALCULADO in fuente
     if isinstance(snap, dict):
         inicio_crudo, fin_crudo = snap.get("fecha_inicio"), snap.get("fecha_fin")
         dias_crudo, dias_letra = snap.get("dias"), snap.get("dias_letra")
@@ -410,17 +577,46 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
         inicio_crudo = None if inicio_calculado else inca.get("fecha_inicio")
         fin_crudo = None if fin_recalculado else inca.get("fecha_fin")
         fin_perdido = fin_recalculado
-        # `dias` no tiene marca de "calculado" en el registro (extract.normalizar_fechas
-        # marca el inicio y el fin, no los días). Tratarlo como leído es seguro: si se derivó, fue de
-        # las dos fechas, y entonces cuadra con ellas y está dentro de 1..540 — ninguna
-        # regla puede dispararse por ese camino.
         dias_crudo, dias_letra = inca.get("dias"), inca.get("dias_letra")
-    if "fecha_inicio" in overrides:
-        inicio_crudo, inicio_calculado = overrides["fecha_inicio"], False
-    if "fecha_fin" in overrides:
+        # `normalizar_fechas` COMPLETA la fecha fin cuando el papel solo trae inicio + días
+        # y en ese caso no deja ninguna marca (solo marca el fin que RE-derivó). Sin la foto
+        # no hay forma de distinguir ese fin completado de uno impreso, y tomarlo por leído
+        # le hacía decir al informe que había cruzado duración↔rango cuando el papel no
+        # imprimía ningún rango (T01 CUMPLE tautológico y cobertura inflada, incluso sobre
+        # un documento adulterado). Se degrada a "no es evidencia" — pero tampoco a "no hay
+        # fin": ver `fin_indistinguible`.
+        if fin_crudo is not None and (inca.get(CLAVE_FIN_CALCULADO)
+                                      or (CLAVE_FIN_CALCULADO not in inca
+                                          and dias_derivable_del_rango(inca))):
+            fin_crudo, fin_indistinguible = None, True
+    # Evidencia CRUDA que el lector rechazó, si la publica: permite decir "leí esto y no
+    # sirve" en vez de "no se detectó" (ver las CLAVE_* de arriba).
+    if _sin_dato(inicio_crudo):
+        inicio_crudo = fuente.get(CLAVE_INICIO_CRUDO, inicio_crudo)
+    if _sin_dato(fin_crudo) and not fin_indistinguible:
+        fin_crudo = fuente.get(CLAVE_FIN_CRUDO, fin_crudo)
+    if _sin_dato(dias_crudo):
+        dias_crudo = fuente.get(CLAVE_DIAS_CRUDO, dias_crudo)
+    # --- Correcciones del auxiliar (solo las que aportan un dato nuevo) ---------------
+    corrigio_fecha = False
+    if es_correccion_humana(inca, "fecha_inicio", overrides):
+        inicio_crudo, inicio_calculado, corrigio_fecha = overrides["fecha_inicio"], False, True
+    if es_correccion_humana(inca, "fecha_fin", overrides):
         fin_crudo, fin_recalculado, fin_perdido = overrides["fecha_fin"], False, False
-    if "dias" in overrides:
-        dias_crudo = overrides["dias"]
+        fin_indistinguible, corrigio_fecha = False, True
+    if es_correccion_humana(inca, "dias", overrides):
+        dias_crudo, dias_calculado = overrides["dias"], False
+    elif (corrigio_fecha and not marca_dias and _sin_dato(dias_letra)
+          and dias_derivable_del_rango(inca)):
+        # Se corrigió una FECHA y los días que había eran justo el span del rango ANTERIOR:
+        # pueden ser un valor derivado (el lector los calcula cuando el papel no los
+        # imprime) y además obsoleto. Juzgar el rango nuevo contra ellos acusaría de GRAVE
+        # una incoherencia que produjo el pipeline, no el papel. En cuanto el lector publique
+        # `dias_calculado` (o el papel traiga la duración en letras) esta deducción no se
+        # aplica y unos días IMPRESOS sí se contrastan con la fecha corregida.
+        dias_calculado = True
+    if dias_calculado:
+        dias_crudo = None
     # La fecha de EXPEDICIÓN y el flag de PRÓRROGA se leen del registro sin pasar por la
     # foto: la reconciliación no los toca (solo mueve inicio/fin/días), así que lo que hay
     # en el registro ES lo leído. Si algún día se derivaran, habría que meterlos en la foto.
@@ -428,13 +624,14 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
     return {
         "inicio_crudo": inicio_crudo, "fin_crudo": fin_crudo, "dias_crudo": dias_crudo,
         "inicio_calculado": inicio_calculado, "fin_recalculado": fin_recalculado,
-        "fin_perdido": fin_perdido, "dias_letra": entero_dias(dias_letra),
+        "fin_perdido": fin_perdido, "fin_indistinguible": fin_indistinguible,
+        "dias_calculado": dias_calculado, "dias_letra": entero_dias(dias_letra),
         "expedicion_cruda": expedicion_cruda,
         "prorroga_declarada": inca.get("prorroga") if isinstance(inca.get("prorroga"), bool) else None,
     }
 
 
-def construir_contexto(inca: dict[str, Any], *, hoy: date,
+def construir_contexto(inca: dict[str, Any], *, hoy: Optional[date],
                        overrides: Optional[dict[str, Any]] = None,
                        inicio_efectivo: Any = None, fin_efectivo: Any = None,
                        dias_efectivo: Optional[int] = None,
@@ -455,13 +652,71 @@ def construir_contexto(inca: dict[str, Any], *, hoy: date,
         dias_leido=entero_dias(v["dias_crudo"]),
         inicio_crudo=v["inicio_crudo"], fin_crudo=v["fin_crudo"], dias_crudo=v["dias_crudo"],
         inicio_calculado=v["inicio_calculado"], fin_recalculado=v["fin_recalculado"],
-        fin_perdido=v["fin_perdido"], dias_letra=v["dias_letra"],
+        fin_perdido=v["fin_perdido"], fin_indistinguible=v["fin_indistinguible"],
+        dias_calculado=v["dias_calculado"], dias_letra=v["dias_letra"],
         expedicion_leida=fecha_iso(v["expedicion_cruda"]), expedicion_cruda=v["expedicion_cruda"],
         prorroga_declarada=v["prorroga_declarada"],
         inicio_efectivo=fecha_iso(inicio_efectivo), fin_efectivo=fecha_iso(fin_efectivo),
         dias_efectivo=dias_efectivo, tipo_documento=tipo_documento, id_tipo=id_tipo,
         id_empleado=id_empleado, historial=historial,
     )
+
+
+# --------------------------------------------------------------------------- #
+# Lo ÚNICO que ve una regla: la EVIDENCIA (frontera leído/calculado, por construcción)
+# --------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class EvidenciaTiempos:
+    """Vista de solo-evidencia del contexto: es lo que el motor le pasa a cada regla.
+
+    Aquí está la invariante central del módulo hecha ESTRUCTURA en vez de disciplina: esta
+    clase no tiene —y nunca puede tener— ningún campo ``*_efectivo``, así que una regla no
+    puede juzgar un valor que salió de la reconciliación ni "por descuido" ni buscándolo con
+    ``getattr``. Antes solo lo vigilaba una prueba que inspeccionaba el código fuente, y esa
+    prueba se esquiva con un nombre de atributo construido en tiempo de ejecución.
+
+    Los campos son EXACTAMENTE los que una regla puede exigir en ``requiere``
+    (``CAMPOS_EXIGIBLES`` se deriva de aquí: una sola fuente de verdad).
+    """
+
+    hoy: Optional[date] = None
+    # --- lo que traía el documento (o tecleó el auxiliar mirándolo)
+    inicio_leido: Optional[date] = None
+    fin_leido: Optional[date] = None
+    dias_leido: Optional[int] = None
+    inicio_crudo: Any = None
+    fin_crudo: Any = None
+    dias_crudo: Any = None
+    dias_letra: Optional[int] = None
+    dia_semana_inicio_leido: Optional[str] = None
+    expedicion_leida: Optional[date] = None
+    expedicion_cruda: Any = None
+    prorroga_declarada: Optional[bool] = None
+    # --- PROCEDENCIA de cada pata (no es un valor reconciliado: es de dónde salió)
+    inicio_calculado: bool = False
+    fin_recalculado: bool = False
+    fin_perdido: bool = False
+    fin_indistinguible: bool = False
+    dias_calculado: bool = False
+    # --- contexto del documento (lo fija el detector de formato, no la reconciliación)
+    tipo_documento: Optional[str] = None
+    id_tipo: Optional[int] = None
+    # --- accesos externos declarados (consultas de SOLO LECTURA al sistema)
+    historial: Any = None
+    id_empleado: Optional[int] = None
+
+
+# Único conjunto de campos que una regla puede EXIGIR en `requiere`. Se DERIVA de la vista
+# de evidencia: si un campo no está en la vista, no existe para una regla. Que ningún
+# `*_efectivo` esté aquí es lo que impide, por construcción, que una regla se dispare sobre
+# un valor reconciliado; y `ReglaTiempo` rechaza en la propia declaración un `requiere` que
+# nombre algo que no está en este conjunto (una errata dejaría la regla muda para siempre).
+CAMPOS_EXIGIBLES = frozenset(f.name for f in fields(EvidenciaTiempos))
+
+
+def evidencia_de(ctx: ContextoTiempos) -> EvidenciaTiempos:
+    """Contexto completo → vista de evidencia (lo que se le entrega a las reglas)."""
+    return EvidenciaTiempos(**{c: getattr(ctx, c, None) for c in CAMPOS_EXIGIBLES})
 
 
 # --------------------------------------------------------------------------- #
@@ -472,32 +727,29 @@ class ReglaTiempo:
     codigo: str
     afirma: str                       # qué afirma la regla, en una línea (va a la UI/doc)
     severidad: str                    # severidad POR DEFECTO (la config puede cambiarla)
-    evaluar: Callable[[ContextoTiempos, dict[str, int]], Optional[str]]
+    evaluar: Callable[[EvidenciaTiempos, dict[str, int]], Optional[str]]
     # Datos LEÍDOS que la regla exige para poder opinar. Si falta uno → NO EVALUABLE
     # (nunca se opina sobre un dato ausente ni sobre uno derivado).
     requiere: tuple[str, ...] = ()
     campo: Optional[str] = None        # campo del formulario al que apunta el hallazgo
     activa: bool = True                # activa POR DEFECTO
 
+    def __post_init__(self) -> None:
+        """La declaración se valida AL DECLARARLA (al importar el módulo), no en producción.
 
-# Único conjunto de campos del contexto que una regla puede EXIGIR: evidencia del papel
-# (más los accesos externos declarados y la fecha de proceso). Que NINGÚN campo
-# `*_efectivo` esté aquí es lo que impide, por construcción, que una regla se dispare
-# sobre un valor reconciliado. Lo verifica la prueba del catálogo, que además revisa el
-# código fuente de cada regla.
-CAMPOS_EXIGIBLES = frozenset({
-    "hoy",
-    # --- lo que traía el documento (o tecleó el auxiliar mirándolo)
-    "inicio_leido", "fin_leido", "dias_leido",
-    "inicio_crudo", "fin_crudo", "dias_crudo", "dias_letra", "dia_semana_inicio_leido",
-    "expedicion_leida", "expedicion_cruda", "prorroga_declarada",
-    # --- accesos externos declarados (consultas de SOLO LECTURA al sistema)
-    "historial", "id_empleado",
-})
-
-
-def _sin_dato(valor: Any) -> bool:
-    return valor is None or valor is False or valor == ""
+        Un `requiere` con una errata (`fin_leidoo`) o que nombre un valor reconciliado
+        (`dias_efectivo`) no puede convertirse en un problema silencioso: la primera deja la
+        regla NO EVALUABLE para siempre —y el auxiliar leyendo "falta fin_leidoo"— y la
+        segunda rompe la invariante del motor. Las dos son errores de programación de una
+        regla nueva, así que se ven al arrancar (o al correr las pruebas), que es cuando hay
+        alguien mirando. La severidad NO se valida aquí a propósito: para ella sí hay un
+        respaldo razonable (`SEVERIDAD_RESPALDO`) y se corrige por configuración.
+        """
+        malos = [c for c in self.requiere if c not in CAMPOS_EXIGIBLES]
+        if malos:
+            raise ValueError(
+                f"{self.codigo}: `requiere` solo admite campos de evidencia "
+                f"({', '.join(sorted(CAMPOS_EXIGIBLES))}); no existe(n): {', '.join(malos)}")
 
 
 # --------------------------------------------------------------------------- #
@@ -505,13 +757,15 @@ def _sin_dato(valor: Any) -> bool:
 # --------------------------------------------------------------------------- #
 # RECETA — el motor NO se toca en ningún paso:
 #   1. Escribe la función de la regla junto a las demás, aquí abajo:
-#          def _t14_lo_que_afirma(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+#          def _t18_lo_que_afirma(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
 #              if <se cumple>:
 #                  return None                      # None = CUMPLE
 #              return "mensaje para el auxiliar, citando los valores leídos"
-#      Solo puede mirar campos de EVIDENCIA del contexto (``*_leido`` / ``*_crudo``);
-#      NUNCA un ``*_efectivo`` (esos son el resultado de la reconciliación: dispararían
-#      contra documentos legítimos a los que el pipeline les completó un hueco).
+#      Lo que recibe NO es el contexto completo: es la VISTA DE EVIDENCIA
+#      (``EvidenciaTiempos``), que no tiene ningún ``*_efectivo``. O sea que no hay forma de
+#      escribir una regla que juzgue un valor de la reconciliación: dispararía contra
+#      documentos legítimos a los que el pipeline les completó un hueco.
+#      El mensaje debe ser TEXTO (cualquier otra cosa se trata como bug de la regla).
 #      Si otra regla ya explica ese caso, devuelve None y déjaselo a ella (así el auxiliar
 #      no lee dos mensajes distintos del mismo problema).
 #   2. Declárala al final de ``CATALOGO`` (ver el hueco marcado) con: código nuevo,
@@ -523,41 +777,74 @@ def _sin_dato(valor: Any) -> bool:
 #   4. Añádela a ``config/reglas_tiempo.example.json`` y a
 #      ``tests/test_validacion_temporal.py`` (un caso que CUMPLE y otro que NO CUMPLE).
 #   No hay paso 5: ``evaluar()`` y ``validar_tiempos()`` la recogen solas.
-def _t01_duracion_vs_rango(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
-    if ctx.fin_leido < ctx.inicio_leido:          # eso lo explica T02
+def _span_inclusivo(desde: date, hasta: date) -> int:
+    """Días que dura un rango contando los dos extremos (convención del repo)."""
+    return (hasta - desde).days + 1
+
+
+def _contradiccion_duracion(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[tuple[int, int]]:
+    """(span, desfase) si la duración leída contradice el rango leído; None si no.
+
+    Una sola implementación de la aritmética duración↔rango: la usa T01 (que emite el
+    mensaje) y la consulta T04 para CALLARSE cuando T01 ya va a explicar el mismo hecho —
+    dos mensajes del mismo hecho castigarían dos veces el puntaje que ordena la cola.
+    """
+    if ctx.inicio_leido is None or ctx.fin_leido is None or ctx.dias_leido is None:
         return None
-    if not (u["dias_min"] <= ctx.dias_leido <= u["dias_max"]):   # eso lo explica T03
+    if ctx.fin_leido < ctx.inicio_leido:                          # eso lo explica T02
         return None
-    span = (ctx.fin_leido - ctx.inicio_leido).days + 1
+    if not (u["dias_min"] <= ctx.dias_leido <= u["dias_max"]):    # eso lo explica T03
+        return None
+    span = _span_inclusivo(ctx.inicio_leido, ctx.fin_leido)
     desfase = span - ctx.dias_leido
-    if abs(desfase) <= u["desfase_tolerado_dias"]:
+    return None if abs(desfase) <= u["desfase_tolerado_dias"] else (span, desfase)
+
+
+def _t01_duracion_vs_rango(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
+    contradiccion = _contradiccion_duracion(ctx, u)
+    if contradiccion is None:
         return None
-    esperado = ctx.inicio_leido + timedelta(days=ctx.dias_leido - 1)
+    span, desfase = contradiccion
+    # `inicio + días` puede salirse del calendario con un año leído al límite (9999): el
+    # dato accionable es el desfase, así que la fecha esperada se omite en vez de perder
+    # el hallazgo GRAVE por una excepción (antes quedaba NO EVALUABLE justo cuando NO cuadra).
+    try:
+        con_esos_dias = (f"con esos días la fecha fin sería "
+                         f"{(ctx.inicio_leido + timedelta(days=ctx.dias_leido - 1)).isoformat()}; ")
+    except OverflowError:
+        con_esos_dias = ""
     return (f"Los tiempos del documento no cuadran: el rango {ctx.inicio_leido.isoformat()} → "
             f"{ctx.fin_leido.isoformat()} son {span} día(s), pero declara {ctx.dias_leido} día(s) "
-            f"(con esos días la fecha fin sería {esperado.isoformat()}; desfase de {desfase} día(s))")
+            f"({con_esos_dias}desfase de {desfase} día(s))")
 
 
-def _t02_fin_antes_de_inicio(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t02_fin_antes_de_inicio(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if ctx.fin_leido >= ctx.inicio_leido:
         return None
+    # El mensaje nombra las DOS causas posibles y no deduce ninguna: puede ser un documento
+    # alterado, pero el corpus demuestra que el OCR también emite las dos celdas al revés
+    # (formato en palabras, sin coordenadas). El auxiliar lo resuelve mirando el papel; el
+    # motor no puede, y afirmar "rango imposible" a secas manda a corregir un dato correcto.
     return (f"La fecha fin leída ({ctx.fin_leido.isoformat()}) es ANTERIOR a la de inicio "
-            f"({ctx.inicio_leido.isoformat()}): el rango es imposible")
+            f"({ctx.inicio_leido.isoformat()}): o el documento trae el rango mal, o el lector "
+            f"invirtió las dos celdas. Confirmar cuál es cuál en el papel")
 
 
-def _t03_dias_fuera_de_rango(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t03_dias_fuera_de_rango(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if u["dias_min"] <= ctx.dias_leido <= u["dias_max"]:
         return None
     return (f"El número de días leído (={ctx.dias_leido}) está fuera del rango válido "
             f"{u['dias_min']}..{u['dias_max']}")
 
 
-def _t04_rango_mayor_al_maximo(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t04_rango_mayor_al_maximo(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if ctx.dias_leido is not None and not (u["dias_min"] <= ctx.dias_leido <= u["dias_max"]):
         return None                                # ya lo explica T03
     if ctx.fin_leido < ctx.inicio_leido:           # ya lo explica T02
         return None
-    span = (ctx.fin_leido - ctx.inicio_leido).days + 1
+    if _contradiccion_duracion(ctx, u) is not None:
+        return None                                # ya lo explica T01, con el mismo span
+    span = _span_inclusivo(ctx.inicio_leido, ctx.fin_leido)
     if span <= u["dias_max"]:
         return None
     return (f"El rango de fechas leído ({ctx.inicio_leido.isoformat()} → "
@@ -565,28 +852,33 @@ def _t04_rango_mayor_al_maximo(ctx: ContextoTiempos, u: dict[str, int]) -> Optio
             f"de {u['dias_max']}")
 
 
-def _t05_dias_no_numerico(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
-    if ctx.dias_crudo is None or ctx.dias_leido is not None:
+def _t05_dias_no_numerico(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
+    if _sin_dato(ctx.dias_crudo) or ctx.dias_leido is not None:
         return None
     return (f"El número de días leído no es un entero utilizable "
             f"(={recortar(ctx.dias_crudo)!s})")
 
 
-def _t06_fecha_inicio_ilegible(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
-    if ctx.inicio_crudo is None or ctx.inicio_leido is not None:
+def _t06_fecha_inicio_ilegible(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
+    if _sin_dato(ctx.inicio_crudo) or ctx.inicio_leido is not None:
         return None
     return (f"La fecha de inicio leída no es una fecha válida "
             f"(={recortar(ctx.inicio_crudo)!s}): se detectó el dato pero no se puede usar")
 
 
-def _t07_fecha_fin_ilegible(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
-    if ctx.fin_crudo is None or ctx.fin_leido is not None:
+def _t07_fecha_fin_ilegible(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
+    if _sin_dato(ctx.fin_crudo) or ctx.fin_leido is not None:
         return None
     return (f"La fecha fin leída no es una fecha válida (={recortar(ctx.fin_crudo)!s})")
 
 
-def _t08_duracion_sin_respaldo(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t08_duracion_sin_respaldo(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if ctx.fin_leido is not None:                  # hay rango con el que cruzarla: T01 decide
+        return None
+    if ctx.fin_indistinguible:
+        # El registro TRAE una fecha fin, solo que no se puede usar como evidencia (no se
+        # distingue de una completada por la reconciliación). Decir "sin fecha fin" ahí sería
+        # falso: no hay nada que confirmar contra el papel por este motivo.
         return None
     if not (u["dias_min"] <= ctx.dias_leido <= u["dias_max"]):   # eso lo explica T03
         return None
@@ -597,7 +889,19 @@ def _t08_duracion_sin_respaldo(ctx: ContextoTiempos, u: dict[str, int]) -> Optio
             f"{u['dias_sin_respaldo_aviso']} días)")
 
 
-def _t09_inicio_en_futuro(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+# Tipos de documento cuyo periodo EMPIEZA en el futuro por definición: la carta de
+# notificación de vacaciones (tipo 13, `extract.es_formato_vacaciones`) avisa de un periodo
+# que aún no ocurre, y la PRELICENCIA de maternidad (tipo 10) se expide antes del parto.
+# Sin esta exención T09 marcaba el 100% de esos documentos —legítimos, sin que el OCR
+# fallara— en cuanto la antelación pasaba de 30 días. Es una exención por TIPO, no un umbral
+# más laxo: no debilita la regla para las incapacidades, que es donde sirve.
+TIPOS_CON_INICIO_FUTURO = frozenset({10, 13})
+TIPOS_DOC_CON_INICIO_FUTURO = frozenset({"vacaciones"})
+
+
+def _t09_inicio_en_futuro(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
+    if ctx.tipo_documento in TIPOS_DOC_CON_INICIO_FUTURO or ctx.id_tipo in TIPOS_CON_INICIO_FUTURO:
+        return None
     margen = ctx.hoy + timedelta(days=u["dias_futuro_max"])
     if ctx.inicio_leido <= margen:
         return None
@@ -605,7 +909,7 @@ def _t09_inicio_en_futuro(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[s
             f"{u['dias_futuro_max']} día(s) después de hoy ({ctx.hoy.isoformat()})")
 
 
-def _t10_inicio_muy_antiguo(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t10_inicio_muy_antiguo(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     limite = ctx.hoy - timedelta(days=u["dias_antiguedad_max"])
     if ctx.inicio_leido >= limite:
         return None
@@ -613,15 +917,19 @@ def _t10_inicio_muy_antiguo(ctx: ContextoTiempos, u: dict[str, int]) -> Optional
             f"{u['dias_antiguedad_max']} día(s) (hoy {ctx.hoy.isoformat()})")
 
 
-def _t11_fin_reescrito(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t11_fin_reescrito(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if not ctx.fin_perdido:
         return None
-    return ("El documento traía una fecha fin que NO cuadraba con los días y el lector la "
-            "re-derivó; el valor original no quedó registrado. Verificar los tiempos contra "
-            "el papel")
+    # El mensaje dice primero QUÉ hacer (mirar el papel) y luego por qué el sistema no
+    # puede citar el valor: es una condición del SISTEMA, no un defecto del documento, y el
+    # auxiliar no puede resolverla buscando un dato en la pantalla.
+    return ("Verificar la fecha fin y los días contra el papel: el documento traía una fecha "
+            "fin que NO cuadraba con los días y el lector la re-derivó. Este registro se "
+            "guardó sin la evidencia original, así que el sistema no puede mostrar qué decía "
+            "(volver a procesar el archivo la conserva)")
 
 
-def _t12_dias_letra_discrepa(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t12_dias_letra_discrepa(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if ctx.dias_letra == ctx.dias_leido:
         return None
     # El mensaje NO dice "las dos formas del documento": ``dias_leido`` puede venir de un
@@ -631,7 +939,7 @@ def _t12_dias_letra_discrepa(ctx: ContextoTiempos, u: dict[str, int]) -> Optiona
             f"con el número de días registrado ({ctx.dias_leido})")
 
 
-def _t13_dia_semana(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t13_dia_semana(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     # Reservada: ver la nota del CATALOGO. No evaluable hoy (falta el dato).
     nombres = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
     leido = str(ctx.dia_semana_inicio_leido or "").strip().lower()
@@ -642,7 +950,7 @@ def _t13_dia_semana(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
             f"{ctx.inicio_leido.isoformat()}, que fue {real}")
 
 
-def _t14_expedicion_posterior(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t14_expedicion_posterior(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     desfase = (ctx.expedicion_leida - ctx.inicio_leido).days
     if desfase <= u["dias_expedicion_posterior_tolerados"]:
         return None
@@ -657,7 +965,7 @@ def _t14_expedicion_posterior(ctx: ContextoTiempos, u: dict[str, int]) -> Option
 # de solo lectura es una pregunta abierta al cliente (P5). Cada una dice, en su comentario,
 # el dato y la consulta que necesita: activarlas será un cambio de configuración
 # (`activa: true`) + implementar el adaptador, no reescribir el motor.
-def _t15_solapamiento(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t15_solapamiento(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     # Consulta que debe hacer `historial.solapamientos(ctx)` (SOLO LECTURA), excluyendo la
     # PRÓRROGA legítima (prorroga = 0 AND idlpausentismo_inicial IS NULL) y la propia fila
     # (id <> …, archivo_origen <> …), porque sin eso lo primero que encuentra es ella misma:
@@ -672,7 +980,7 @@ def _t15_solapamiento(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
             f"({d.get('fechainicio')} a {d.get('fechavencimiento')}, tipo {d.get('idlptipoausentismo')})")
 
 
-def _t16_prorroga_sin_antecedente(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t16_prorroga_sin_antecedente(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     if not ctx.prorroga_declarada:
         return None
     # `historial.ausentismo_previo_contiguo(ctx)` debe devolver el ausentismo del mismo
@@ -688,7 +996,7 @@ def _t16_prorroga_sin_antecedente(ctx: ContextoTiempos, u: dict[str, int]) -> Op
             f"{ctx.inicio_leido.isoformat()}")
 
 
-def _t17_duplicado_temporal(ctx: ContextoTiempos, u: dict[str, int]) -> Optional[str]:
+def _t17_duplicado_temporal(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
     # `historial.duplicados_exactos(ctx)`: misma terna (idlpempleado, fechainicio,
     # Numerodias) en `lp_ausentismos_ia` con estado <> 'RECHAZADO', excluyendo la propia
     # fila y el propio `archivo_origen`. Es cotidiano con ~7000 casos/mes por WhatsApp +
@@ -751,10 +1059,17 @@ CATALOGO: tuple[ReglaTiempo, ...] = (
     # --- Plausibilidad. Umbrales de DOMINIO (no ajustados al corpus): 180 días es la
     #     frontera del trámite pensional; la ventana temporal es un aviso mientras el
     #     cliente confirme el plazo de radicación.
+    # LEVE (era MEDIA): una duración larga sin fecha fin NO es una contradicción del
+    # documento, es una PLAUSIBILIDAD. Medido: es la única regla que marcó un documento REAL
+    # en toda la medición del corpus, y una prórroga legítima de 210 días impresa solo con
+    # inicio + días quedaba bloqueada sin que nada estuviera mal. Como LEVE sigue avisando
+    # (viaja en `avisos_tiempos`) y deja de bloquear la aprobación; subirla a MEDIA es un
+    # UPDATE en la tabla de configuración si el cliente prefiere el bloqueo. El umbral NO se
+    # tocó a propósito: 180 días es la frontera de dominio, no un número ajustado al corpus.
     ReglaTiempo(
         "T08_DURACION_SIN_RESPALDO",
         "duración por encima del umbral de aviso y sin rango de fechas que la respalde",
-        MEDIA, _t08_duracion_sin_respaldo,
+        LEVE, _t08_duracion_sin_respaldo,
         requiere=("dias_leido",), campo="dias",
     ),
     ReglaTiempo(
@@ -853,6 +1168,44 @@ CATALOGO: tuple[ReglaTiempo, ...] = (
 CATALOGO_POR_CODIGO = {r.codigo: r for r in CATALOGO}
 
 
+# Inputs del formulario de revisión a los que un hallazgo puede apuntar (los de tiempos).
+CAMPOS_DEL_FORMULARIO = frozenset({"fecha_inicio", "fecha_fin", "dias"})
+
+
+def verificar_catalogo(catalogo: tuple[ReglaTiempo, ...] = CATALOGO) -> list[str]:
+    """Errores de DECLARACIÓN del catálogo (lista vacía = catálogo sano).
+
+    Lo que no puede pasar inadvertido al añadir una regla:
+      * un CÓDIGO repetido — ``CATALOGO_POR_CODIGO`` se queda con la última entrada, así que
+        la severidad y el "activa" configurados se aplicarían a la regla equivocada y el
+        informe listaría dos veces el mismo código con textos distintos;
+      * un ``campo`` que no existe en el formulario de revisión — el hallazgo no marcaría
+        ningún input y ``erp`` no podría callar su propio "no se detectó";
+      * un ``afirma`` vacío — es el texto que explica la regla en la UI y en la documentación.
+    (Un ``requiere`` inválido lo rechaza ya ``ReglaTiempo.__post_init__``.)
+    """
+    problemas: list[str] = []
+    vistos: set[str] = set()
+    for r in catalogo:
+        if r.codigo in vistos:
+            problemas.append(f"código repetido en el CATALOGO: {r.codigo}")
+        vistos.add(r.codigo)
+        if not (r.afirma or "").strip():
+            problemas.append(f"{r.codigo}: falta `afirma` (es el texto que se le muestra a la persona)")
+        if r.campo not in CAMPOS_DEL_FORMULARIO:
+            problemas.append(f"{r.codigo}: `campo`='{r.campo}' no es un campo del formulario "
+                             f"({', '.join(sorted(CAMPOS_DEL_FORMULARIO))})")
+    return problemas
+
+
+_errores_catalogo = verificar_catalogo()
+if _errores_catalogo:  # pragma: no cover — error de programación, no de datos
+    # Se levanta AL IMPORTAR: un catálogo mal declarado es un error de código que tiene que
+    # verse al arrancar (o al correr las pruebas), no convertirse en severidades aplicadas a
+    # la regla equivocada durante semanas. Los datos de un documento nunca llegan aquí.
+    raise ValueError("CATALOGO de reglas de tiempos mal declarado: " + "; ".join(_errores_catalogo))
+
+
 # --------------------------------------------------------------------------- #
 # Configuración: BD > archivo > defaults del código
 # --------------------------------------------------------------------------- #
@@ -865,18 +1218,45 @@ class ConfigReglas:
     avisos: tuple[str, ...] = ()
 
     def severidad_de(self, codigo: str) -> str:
-        return self.severidades.get(codigo, CATALOGO_POR_CODIGO[codigo].severidad)
+        """Severidad efectiva de una regla. SIEMPRE devuelve una severidad válida.
+
+        Se valida aquí (y no solo al leer la configuración externa) porque la severidad del
+        CATÁLOGO se escribe a mano al añadir una regla y una `ConfigReglas` puede construirla
+        cualquier llamador: una errata ("ALTA") reventaba con KeyError y tumbaba el mapeo de
+        TODOS los documentos. Prioridad: lo configurado → lo declarado → `SEVERIDAD_RESPALDO`.
+        """
+        regla = CATALOGO_POR_CODIGO.get(codigo)
+        return (severidad_valida(self.severidades.get(codigo))
+                or (severidad_valida(regla.severidad) if regla else None)
+                or SEVERIDAD_RESPALDO)
 
     def esta_activa(self, codigo: str) -> bool:
-        return self.activas.get(codigo, CATALOGO_POR_CODIGO[codigo].activa)
+        regla = CATALOGO_POR_CODIGO.get(codigo)
+        return self.activas.get(codigo, regla.activa if regla else True)
 
 
 def config_por_defecto() -> ConfigReglas:
+    """Defaults del CÓDIGO, validando lo que está escrito en el catálogo.
+
+    Una severidad mal escrita en una regla nueva se sustituye por ``SEVERIDAD_RESPALDO`` y
+    sale como aviso de configuración (visible en la API y en el CLI): el documento se mapea
+    igual, la errata no se silencia y nadie se queda sin veredicto por una letra.
+    """
+    severidades, avisos = {}, []
+    for r in CATALOGO:
+        sev = severidad_valida(r.severidad)
+        if sev is None:
+            avisos.append(f"codigo: {r.codigo} declara la severidad '{recortar(r.severidad)}', "
+                          f"que no existe (válidas: {', '.join(ORDEN_SEVERIDAD)}); se usa "
+                          f"{SEVERIDAD_RESPALDO}")
+            sev = SEVERIDAD_RESPALDO
+        severidades[r.codigo] = sev
     return ConfigReglas(
-        severidades={r.codigo: r.severidad for r in CATALOGO},
+        severidades=severidades,
         activas={r.codigo: r.activa for r in CATALOGO},
         umbrales=dict(UMBRALES_DEFAULT),
         fuentes=("codigo",),
+        avisos=tuple(avisos),
     )
 
 
@@ -992,9 +1372,12 @@ ETIQUETA_DATO: dict[str, str] = {
     "dias_letra": "la duración escrita en letras",
     "dia_semana_inicio_leido": "el día de la semana impreso junto a la fecha",
     "expedicion_leida": "la fecha de expedición del certificado",
+    "expedicion_cruda": "algún valor de fecha de expedición en el documento",
     "prorroga_declarada": "el campo 'Prórroga: SI/No' del documento",
     "id_empleado": "el empleado resuelto en el catálogo",
     "historial": "el acceso al histórico de ausentismos del empleado",
+    "tipo_documento": "el tipo de documento detectado",
+    "id_tipo": "el tipo de ausentismo homologado",
 }
 
 
@@ -1003,7 +1386,9 @@ def evaluar_reglas(ctx: ContextoTiempos,
     """Recorre el CATÁLOGO y devuelve el estado de CADA regla (único recorrido del motor).
 
     El motor no conoce ninguna regla en particular: añadir una es añadir una entrada al
-    catálogo. Tres cosas que hace a propósito:
+    catálogo. Cuatro cosas que hace a propósito:
+      • A la regla le entrega la VISTA DE EVIDENCIA (``evidencia_de``), no el contexto: así
+        no hay forma de que juzgue un valor de la reconciliación.
       • Salta la regla ANTES de llamarla si le falta un dato LEÍDO → ``NO_EVALUABLE`` con
         el motivo en español (nunca un veredicto sobre un dato que no existe).
       • Una regla que revienta (bug en una regla nueva) queda ``NO_EVALUABLE`` y NO tumba
@@ -1012,6 +1397,9 @@ def evaluar_reglas(ctx: ContextoTiempos,
         decisión trazable, no un silencio.
     """
     cfg = config or config_por_defecto()
+    # La vista se construye UNA vez por documento y se comparte: es inmutable y las reglas
+    # solo leen. Además garantiza que todas juzguen exactamente la misma evidencia.
+    evidencia = evidencia_de(ctx)
     salida: list[ResultadoRegla] = []
     for regla in CATALOGO:
         sev = cfg.severidad_de(regla.codigo)
@@ -1021,23 +1409,31 @@ def evaluar_reglas(ctx: ContextoTiempos,
             salida.append(ResultadoRegla(estado=DESACTIVADA, motivo="desactivada por configuración",
                                          **base))
             continue
-        faltan = tuple(c for c in regla.requiere if _sin_dato(getattr(ctx, c, None)))
+        faltan = tuple(c for c in regla.requiere if _sin_dato(getattr(evidencia, c, None)))
         if faltan:
             detalle = ", ".join(ETIQUETA_DATO.get(c, c) for c in faltan)
             salida.append(ResultadoRegla(estado=NO_EVALUABLE, faltan=faltan,
                                          motivo=f"no se pudo comprobar: falta {detalle}", **base))
             continue
         try:
-            mensaje = regla.evaluar(ctx, cfg.umbrales)
+            mensaje = regla.evaluar(evidencia, cfg.umbrales)
         except Exception as exc:  # noqa: BLE001 — una regla con bug no rompe el pipeline
             salida.append(ResultadoRegla(
                 estado=NO_EVALUABLE,
                 motivo=f"la regla falló al evaluarse ({type(exc).__name__})", **base))
             continue
-        if mensaje:
-            salida.append(ResultadoRegla(estado=NO_CUMPLE, mensaje=str(mensaje), **base))
-        else:
+        if not mensaje:
             salida.append(ResultadoRegla(estado=CUMPLE, **base))
+        elif isinstance(mensaje, str):
+            salida.append(ResultadoRegla(estado=NO_CUMPLE, mensaje=mensaje, **base))
+        else:
+            # Un hallazgo es un TEXTO para una persona. Si una regla devuelve otra cosa
+            # (True, un número, una lista) es un bug de la regla: convertirlo con str() ponía
+            # "True" o "{'m': 1}" en la pantalla del auxiliar y en la columna `problemas`.
+            salida.append(ResultadoRegla(
+                estado=NO_EVALUABLE,
+                motivo=f"la regla devolvió {type(mensaje).__name__} en vez de un mensaje de "
+                       f"texto (bug de la regla)", **base))
     return tuple(salida)
 
 
@@ -1052,7 +1448,7 @@ def evaluar(ctx: ContextoTiempos, config: Optional[ConfigReglas] = None) -> Resu
     resultados = evaluar_reglas(ctx, cfg)
     hallazgos = [Hallazgo(r.codigo, r.severidad, r.mensaje or "", r.afirma, r.campo)
                  for r in resultados if r.estado == NO_CUMPLE]
-    hallazgos.sort(key=lambda h: (-ORDEN_SEVERIDAD[h.severidad], h.codigo))
+    hallazgos.sort(key=lambda h: (-_orden(h.severidad), h.codigo))
     no_evaluables = [{"codigo": r.codigo, "faltan": list(r.faltan), "motivo": r.motivo}
                      for r in resultados if r.estado == NO_EVALUABLE]
     desactivadas = [r.codigo for r in resultados if r.estado == DESACTIVADA]
@@ -1070,7 +1466,7 @@ def resumen_evidencia(ctx: ContextoTiempos) -> dict[str, Any]:
         return f.isoformat() if f else None
 
     return {
-        "hoy": ctx.hoy.isoformat(),
+        "hoy": ctx.hoy.isoformat() if ctx.hoy else None,
         # --- lo que se leyó del documento (o lo tecleó una persona mirándolo)
         "leido": {
             "fecha_inicio": _iso(ctx.inicio_leido),
@@ -1082,12 +1478,22 @@ def resumen_evidencia(ctx: ContextoTiempos) -> dict[str, Any]:
             "fecha_inicio_cruda": None if ctx.inicio_crudo is None else recortar(ctx.inicio_crudo),
             "fecha_fin_cruda": None if ctx.fin_crudo is None else recortar(ctx.fin_crudo),
             "dias_crudo": None if ctx.dias_crudo is None else recortar(ctx.dias_crudo),
+            # Los tres valores leídos son aritméticamente redundantes (días == span del
+            # rango): el cruce de T01 CUMPLE por definición y no prueba nada mientras el
+            # lector no publique de dónde salieron los días (ver `dias_calculado`).
+            "cruce_redundante": (ctx.inicio_leido is not None and ctx.fin_leido is not None
+                                 and ctx.dias_leido is not None
+                                 and _span_inclusivo(ctx.inicio_leido, ctx.fin_leido) == ctx.dias_leido),
         },
         # --- lo que puso la reconciliación (NUNCA se juzga: solo se informa)
         "derivado": {
             "fecha_inicio_calculada": ctx.inicio_calculado,
             "fecha_fin_recalculada": ctx.fin_recalculado,
             "fin_original_no_conservado": ctx.fin_perdido,
+            # El registro trae fecha fin, pero no se distingue de una completada por la
+            # reconciliación (registro sin la foto de `processor`): no se usó como evidencia.
+            "fecha_fin_indistinguible_de_calculada": ctx.fin_indistinguible,
+            "dias_no_impresos": ctx.dias_calculado,
             "fecha_inicio_efectiva": _iso(ctx.inicio_efectivo),
             "fecha_fin_efectiva": _iso(ctx.fin_efectivo),
             "dias_efectivo": ctx.dias_efectivo,
@@ -1134,8 +1540,16 @@ def validar_tiempos(contexto: ContextoTiempos, config: Optional[ConfigReglas] = 
         veredicto = evaluar(contexto, cfg)
     resultados = veredicto.resultados
     por_estado = {e: [r.codigo for r in resultados if r.estado == e] for e in ESTADOS}
-    comprobables = len(por_estado[CUMPLE]) + len(por_estado[NO_CUMPLE])
-    activas = comprobables + len(por_estado[NO_EVALUABLE])
+    # COBERTURA: solo cuentan las reglas que exigen algún dato del documento. Una regla sin
+    # `requiere` (T11, que mira una condición del SISTEMA) cumplía siempre y hacía que un
+    # documento del que no se leyó NADA saliera con cobertura > 0 — justo el número que
+    # existe para no leer un COHERENTE como "documento verificado".
+    def _mide_lectura(codigo: str) -> bool:
+        regla = CATALOGO_POR_CODIGO.get(codigo)
+        return bool(regla and regla.requiere)
+
+    comprobables = sum(1 for c in por_estado[CUMPLE] + por_estado[NO_CUMPLE] if _mide_lectura(c))
+    activas = comprobables + sum(1 for c in por_estado[NO_EVALUABLE] if _mide_lectura(c))
     if veredicto.exige_revision:
         veredicto_global = V_REVISAR
     elif veredicto.hallazgos:
@@ -1161,9 +1575,10 @@ def validar_tiempos(contexto: ContextoTiempos, config: Optional[ConfigReglas] = 
             "graves": sum(1 for h in veredicto.hallazgos if h.severidad == GRAVE),
             "medias": sum(1 for h in veredicto.hallazgos if h.severidad == MEDIA),
             "leves": sum(1 for h in veredicto.hallazgos if h.severidad == LEVE),
-            # Qué parte de lo activo se pudo comprobar de verdad (0..1). Una cobertura
-            # baja con veredicto COHERENTE significa "no encontré nada raro PORQUE casi
-            # no pude mirar", que es una situación distinta y hay que poder verla.
+            # Qué parte de las reglas que MIRAN EL DOCUMENTO se pudo comprobar de verdad
+            # (0..1). Una cobertura baja con veredicto COHERENTE significa "no encontré nada
+            # raro PORQUE casi no pude mirar", que es una situación distinta y hay que poder
+            # verla; 0.0 significa que no se comprobó ni una sola pata del papel.
             "cobertura": round(comprobables / activas, 3) if activas else 0.0,
         },
         "reglas": [r.como_dict() for r in resultados],

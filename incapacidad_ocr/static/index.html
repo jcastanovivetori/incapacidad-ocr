@@ -817,14 +817,18 @@ $("reiniciarPrueba").addEventListener("click", async () => {
   }
 });
 
-$("procesarTodos").addEventListener("click", async () => {
+// Corrida del lote. `seco=true` = corrida EN SECO: lee y valida igual, pero no registra en
+// staging ni mueve archivos, y por eso NO necesita base de datos. Es una sola función para que
+// el botón y el enlace de "sin BD" no puedan divergir.
+async function correrLote(seco = false) {
   const btn = $("procesarTodos");
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Procesando lote…';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>' + (seco ? "Corrida en seco…" : "Procesando lote…");
   const out = $("loteResultado");
   try {
     const r = await fetch("/api/lote/procesar", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ extractor: "rule" }),
+      body: JSON.stringify({ extractor: "rule", dry_run: seco }),
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.detail || ("HTTP " + r.status));
@@ -858,12 +862,27 @@ $("procesarTodos").addEventListener("click", async () => {
     out.innerHTML = html; out.style.display = "block";
     cargarPendientes(); cargarBandeja();
   } catch (err) {
-    out.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:10px;">❌ ${escapeHtml(err.message)}</div>`;
+    // El fallo habitual aquí es "no hay base de datos" (el lote REGISTRA, así que sin BD no
+    // puede hacer su trabajo). En vez de dejar un error opaco, se ofrece la salida concreta:
+    // levantar la BD, o hacer la corrida EN SECO, que lee y valida todo sin registrar.
+    const sinBd = /base de datos/i.test(err.message || "");
+    out.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:10px;">` +
+      `❌ ${escapeHtml(err.message)}` +
+      (sinBd ? `<div style="margin-top:8px;font-weight:400;color:#7f1d1d;">` +
+                 `Levanta la base de datos con <code>docker compose up -d db</code> y siembra los ` +
+                 `catálogos del corpus con <code>python scripts/sembrar_bd_prueba.py</code>.<br>` +
+                 `O prueba solo la lectura, sin registrar nada: ` +
+                 `<button class="dl sm" id="loteSeco" style="margin-top:6px;">⚡ Corrida en seco</button>` +
+               `</div>` : "") +
+      `</div>`;
     out.style.display = "block";
+    if (sinBd) $("loteSeco").addEventListener("click", () => correrLote(true));
   } finally {
     btn.disabled = false; btn.textContent = "⚙ Procesar todos";
   }
-});
+}
+
+$("procesarTodos").addEventListener("click", () => correrLote(false));
 cargarPendientes();
 </script>
 </body>

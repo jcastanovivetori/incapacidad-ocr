@@ -12,7 +12,12 @@ import json
 import re
 from typing import Any, Protocol
 
-from .numeros_es import duracion_en_texto, numerales_en_texto, texto_a_entero
+from .numeros_es import (
+    duracion_de_celda,
+    duracion_en_texto,
+    numerales_en_texto,
+    texto_a_entero,
+)
 
 
 def empty_record() -> dict[str, Any]:
@@ -181,7 +186,14 @@ def _fecha_inicio_fin_escrita(text: str) -> tuple[str | None, str | None]:
 # veintinueve (29) de mayo de dos mil veintiseis (2026)...". No lleva diagnóstico
 # ni EPS (ver es_vacaciones en erp.mapear_a_staging) — el nombre/cédula del
 # empleado SÍ se extraen con las reglas genéricas de paciente (mismo patrón "CC:").
-_VACACIONES_ANCHOR = re.compile(r"(?i)notificaci[oó]n\s*(?:de\s*)?periodos?\s*de\s*vacaciones")
+# La tilde se acepta en las DOS palabras ("Notificación", "Período"): este patrón es
+# el ÚNICO guardián de la regla de vacaciones, y si no casa la carta se procesa como
+# incapacidad — se pierden las fechas en prosa, el tipo pasa de 13 a 3 y el lector de
+# días lee "el dia siete (07) de julio" como 7 días, que es exactamente lo que la
+# regla prohíbe. Las capas de texto de los PDF sí conservan las tildes.
+_VACACIONES_ANCHOR = re.compile(
+    r"(?i)notificaci[oó]n\s*(?:de\s*)?per[ií]odos?\s*de\s*vacaciones"
+)
 
 
 def es_formato_vacaciones(text: str) -> bool:
@@ -294,44 +306,47 @@ def _dias_por_etiqueta(text: str) -> tuple[int | None, int | None, bool | None]:
     entiende las dos escrituras: "2", "DOS" y "DOS (2)". Cuando hay las dos, el
     DÍGITO es el valor y la palabra queda registrada para poder compararlas.
 
-    Si el módulo no encuentra nada anclado se cae a los patrones históricos del
-    repo (respaldo para variantes de rótulo que no estén en su lista), ya con el
-    guardarraíl ``_NUM_DIAS`` para no reintroducir los falsos positivos del año y
-    del día del mes.
+    Si el módulo no encuentra nada anclado se cae a los DOS patrones históricos de
+    RÓTULO del repo (respaldo para variantes de rótulo que no estén en su lista), ya
+    con el guardarraíl ``_NUM_DIAS`` para no reintroducir los falsos positivos del
+    año y del día del mes, y exigiendo el PLURAL: "el dia 15 de agosto de 2026" es
+    una fecha en prosa y el respaldo devolvía 15. El tercer patrón histórico —el
+    número pegado a la unidad SIN rótulo, "POR 5 DIAS"— se quitó: eso ya lo lee el
+    módulo por el ancla de unidad, y aquí no había forma de vetar lo que va DETRÁS
+    ("3 dias habiles", "15 dias del mes de agosto"), así que era la puerta por la
+    que volvían a entrar las duraciones inventadas que el módulo rechaza.
+
+    El rango de dominio 1..540 se aplica aquí igual que en ``_dias_de_celda``: el
+    módulo NO acota a propósito (es un lector), pero un 0 o un 999 no son días de
+    incapacidad y es mejor caer al cálculo por fechas que arrastrarlos.
     """
     dur = duracion_en_texto(text)
     if dur:
-        return dur["valor"], dur["letra"], dur["coincide"]
+        valor = dur["valor"]
+        if valor is not None and not (1 <= valor <= 540):
+            valor = None
+        return valor, dur["letra"], dur["coincide"]
     # (sin excluir \n: el valor suele quedar en la línea siguiente, "Duracion:\n126").
     dias = _first(text, rf"(?i)duraci[oó]n\b[^\d]{{0,10}}{_NUM_DIAS}")
     if not dias:
-        dias = _first(text, rf"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{{0,15}}{_NUM_DIAS}")
-    if not dias:
-        # "5 DIAS" / "2 Dias": el número JUSTO ANTES de la unidad, SIN rótulo. Variante de
-        # los reportes tipo SIOS/SYSNET ("SE DA INCAPACIDAD MEDICA POR 5 DIAS DESDE 09-06-26").
-        # Se descartan los candidatos que son parte de una EDAD ("31 año(s), 1 mes(es),
-        # 26 días", habitual en las hojas de admisión) o del relato clínico ("hace 3 días" =
-        # inicio de síntomas, no duración): ambos llevan "año"/"mes"/"hace" justo antes.
-        for _m in re.finditer(rf"(?i)\b{_NUM_DIAS}\s*d[ií]as?\b", text):
-            antes = text[max(0, _m.start() - 20):_m.start()]
-            if re.search(r"(?i)a[ñn]o|mes|hace\s*$", antes):
-                continue
-            dias = _m.group(1)
-            break
-    return (int(dias) if dias and dias.isdigit() else None), None, None
+        dias = _first(text, rf"(?i)d[ií]as(?:\s*de\s*incapacidad)?\b[^\d\n]{{0,15}}{_NUM_DIAS}")
+    valor = int(dias) if dias and dias.isdigit() else None
+    if valor is not None and not (1 <= valor <= 540):
+        valor = None
+    return valor, None, None
 
 
 def _dias_de_celda(celda: str) -> tuple[int | None, int | None, bool | None]:
     """(días, días_en_letra, coinciden) de una CELDA de tabla ("Dias Inc.").
 
     Aquí el ancla es la POSICIÓN en la tabla (columna fija del formato), más fiable
-    que cualquier rótulo. Como ``duracion_en_texto`` SIEMPRE exige un ancla (y hace
-    bien: es lo que le impide inventar duraciones), se la damos escrita —"Dias:"—
-    en vez de reimplementar el lector: así la celda se lee igual que en el resto
-    del documento, con dígito ("3"), con palabra ("TRES"), con las dos
-    ("3 (TRES)", "02 dos dia(s)") y con sus mismos guardarraíles.
+    que cualquier rótulo, y por eso el lector tiene su propia puerta de entrada
+    (``numeros_es.duracion_de_celda``): la celda se lee con dígito ("3"), con
+    palabra ("TRES") y con las dos ("3 (TRES)", "02 dos dia(s)"), pero SOLO si no
+    contiene nada más. Prestarle un rótulo escrito ("Dias: " + celda) hacía que un
+    CIE-10 desplazado a esa columna ("J069") se leyera como 69 días.
     """
-    dur = duracion_en_texto("Dias: " + celda)
+    dur = duracion_de_celda(celda)
     if not dur:
         return None, None, None
     valor = dur["valor"]
@@ -1331,6 +1346,11 @@ def normalizar_fechas(rec: dict[str, Any]) -> dict[str, Any]:
             # de adulteración que respalda la evidencia del corpus (aparece solo en
             # documentos falsos) y, al re-derivar el fin, dejaría de verse. Aquí no
             # se juzga nada — solo se marca para el revisor y para quien la analice.
+            # OJO con el alcance del aviso: solo puede dispararse cuando el extractor
+            # leyó las DOS cosas (días y fecha fin). En el documento donde el OCR se
+            # comió el dígito y solo sobrevive la palabra ("-DOS") no hay ninguna
+            # fecha legible, así que ahí el desacuerdo NO queda registrado por esta
+            # vía; en el corpus el aviso dispara en un único documento (adulterado).
             if df is not None:
                 inc["fecha_fin_recalculada"] = True
             df = di + timedelta(days=n - 1)

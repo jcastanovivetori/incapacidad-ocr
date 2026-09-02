@@ -39,7 +39,7 @@ imagen ──► [OCR backend] ──► texto plano ──► [extractor] ─�
 | **Servicio web** | `webapp.py` + `static/index.html` | API FastAPI (`/api/procesar`, `/api/mapear`, `/api/registrar`, `/api/revisar`, `/api/staging`) + UI moderna (drag&drop, **formulario de revisión editable**, **bandeja** aprobar/rechazar). RapidOCR cargado una vez; uploads procesados en temporal y **borrados** (PII). |
 | **Docker** | `Dockerfile` · `docker-compose.yml` | `docker compose up --build` → `http://localhost:8000`. 3 servicios (web + ollama + db). Instala todo desde `requirements.txt`. |
 
-**Esquema de salida** (incapacidad Colombia): `paciente{nombre, documento_tipo, documento_numero}`, `entidad{eps, ips_prestador}`, `incapacidad{fecha_inicio, fecha_fin, dias, fecha_expedicion, tipo, origen}`, `diagnostico{cie10, descripcion}`, `medico{nombre, registro}`.
+**Esquema de salida** (incapacidad Colombia): `paciente{nombre, documento_tipo, documento_numero}`, `entidad{eps, ips_prestador}`, `incapacidad{fecha_inicio, fecha_fin, dias, dias_letra, dias_letra_coincide, fecha_expedicion, tipo, origen}`, `diagnostico{cie10, descripcion}`, `medico{nombre, registro}`. Los dos campos de letras son **instrumentación** de la duración escrita en palabras (ver §5.8): `dias` es el valor a usar, `dias_letra` lo que decía la palabra y `dias_letra_coincide` si cuadran (`null` si el documento solo trae una de las dos formas). `normalizar_fechas()` añade además los avisos `fecha_inicio_calculada` y `fecha_fin_recalculada`.
 
 ---
 
@@ -178,6 +178,45 @@ ingesta/
 
 ---
 
+### 5.8 Duración en NÚMEROS y en LETRAS — `numeros_es.py` (2026-09-02)
+
+**Qué pidió el cliente:** que el sistema entienda los días escritos como número **y** como palabra, porque las incapacidades reales llegan de las dos formas y a veces de las dos a la vez (`DOS (2) DIAS`).
+
+**Evidencia que motivó el cambio** (fase previa sin tocar código; inventario completo en `dataset-falsedad/duraciones/01_evidencia.md`): se revisaron **31 textos OCR ya cacheados** (29 distintos) más la **capa de texto de 13 PDF** originales, sin volver a correr OCR. Resultado:
+
+- **17 formas reales** de escribir la duración: 10 solo con número (`Dias de Incapacidad: 1`, `Dias:3`, `DURACION:`⏎`126`, prosa `POR 4 DIAS DESDE EL …`, incluso todo pegado `…POR1DIAAPARTIRDE18/05/2026`), **6 mixtas** (`Dias: 2 (DOS DIAS)`, `02 dos dia(s)`, `DIAS: 30 (TREINTA)`, `14 - CATORCE`, `DOS (02)`, número y palabra en renglones distintos) y **1 solo con palabra**.
+- Esa única forma "solo palabra" es un **artefacto del OCR**: el dígito de `NN - PALABRA` se perdió y sobrevivió `-DOS`. O sea que **el valor real de leer letras es servir de red cuando el número se pierde** — no es un formato nuevo. Y es justamente un documento etiquetado como adulterado: la palabra dice 2 y el rango de fechas 3.
+- Solo aparecen **4 numerales cortos** en palabras (`UN`, `DOS`, `CATORCE`, `TREINTA`): las duraciones largas se escriben **siempre en dígitos** (el máximo del corpus, 126 días, no lleva palabra). Cubrir `CIENTO…`/`QUINIENTOS…` es gratis y consistente con el rango 1..540, pero no es lo que determina la precisión.
+- **17 clases de falso positivo** que un léxico de numerales suelto lee como duración: la edad (`33 Ano(s), 1 mes(es), 8 dia(s)`), las cantidades de insumo (`1 (Uno)`), las horas de un permiso, las semanas de gestación, el día del mes de una fecha, el AÑO, los consecutivos, los CIE-10, `hacetresdias` (la queja del paciente — literalmente `<palabra> dias`) y la prosa de las cartas de vacaciones.
+
+**Qué se construyó:** `numeros_es.py`, un **lector puro** (no aplica reglas de dominio, ni el rango 1..540) con su léxico ampliable por diccionarios, el saneo tolerante al OCR y **dos anclas**: la unidad pegada al valor o un rótulo de duración en el mismo renglón (o en uno adyacente que contenga SOLO el valor). En el registro aparecen dos campos nuevos —`dias_letra` y `dias_letra_coincide`— porque **el dígito manda y la discrepancia se registra, no se juzga**: decidir si un desacuerdo es adulteración es de otro módulo. Se reutiliza el mismo mecanismo de anclaje de las fechas para que la duración que devuelve el LLM solo se acepte si su expresión —el dígito **o la palabra**— está de verdad en el texto (`numerales_en_texto`).
+
+**Medido sobre los 31 textos cacheados:** de los 26 campos del esquema, **ninguno empeoró**. `dias`: 3 documentos que antes no tenían dato ahora lo tienen, 2 valores corregidos (uno leía `29`, el día del mes de la fecha) y 1 dato **inventado retirado** (leía `202`, el año). Coste ≈ +0,3 ms/documento (mismo orden que antes, ~1,5-3 ms según carga de la máquina).
+
+**Ronda de verificación adversaria** (tres frentes: 251 entradas hostiles contra el lector, regresión campo a campo sobre el corpus, y caza de duraciones inventadas). Encontró que **el ancla no era suficiente** y de ahí salieron las correcciones que hoy tiene el módulo:
+
+- **Veto por los DOS lados.** La lista negra solo miraba a la izquierda, así que cualquier `<N> DIAS` del certificado entraba: `3 dias habiles` (plazo de trámite — la versión en HORAS está impresa en un certificado real del corpus), `valido por 30 dias`, `control en 3 dias`, `3 dias de evolucion` y la fórmula de cierre notarial `a los 15 dias del mes de agosto`. Peor: si el falso positivo iba antes en el orden de lectura, **le quitaba el campo a la duración real**. Y el rótulo `Duracion` alcanzaba la duración de **otra cosa** medida en horas, semanas o meses (`DURACION DEL PERMISO: 4 HORAS` es rótulo real de los permisos).
+- **La frase numeral se lee completa.** Con una ventana de 25 caracteres tras el rótulo, `CIENTO OCHENTA` se leía como **100** y `DOSCIENTOS CINCUENTA Y CINCO (255)` como **250** —el prefijo de un numeral español siempre vale menos que el total, así que sale un valor redondo, en rango y sin ninguna señal—, y encima el recorte tapaba el dígito que lo confirmaba. Ahora la ventana acota dónde puede **empezar** el valor y el valor tiene su propio espacio; si el numeral se cortó, no se lee a medias.
+- **El rótulo escueto exige plural** (`Dias:`): `Dia:` en singular es un campo de fecha (`Dia: 27 Mes: 08 Ano: 2026`) y devolvía el día del mes. Lo mismo en el respaldo histórico de `extract`, del que además se **eliminó** el patrón sin rótulo (subsumido por el ancla de unidad y sin forma de vetar lo que va detrás).
+- **`mil` fuera del léxico pero dentro de la frase:** `Duracion: mil ochenta` daba 80 y `dos mil veintiseis` daba 2. Ahora el millar se captura entero y se rechaza entero — eso cierra también el único camino por el que el AÑO escrito en palabras podía anclar una duración del LLM.
+- **La celda de la tabla DETALLE tiene su propia puerta** (`duracion_de_celda`, ancla POSICIONAL): prestarle un rótulo escrito (`"Dias: " + celda`) hacía que un CIE-10 desplazado a esa columna (`J069`) se leyera como **69 días**, dentro de 1..540 y por tanto sin señal.
+- **La regla de VACACIONES tenía un solo guardián y era frágil:** el patrón del título toleraba la tilde de `Notificación` pero no la de `Período`, y con la tilde la carta se procesaba como incapacidad, se quedaba sin fechas y devolvía el `7` del "día siete (07) de julio" — exactamente lo que la regla prohíbe.
+- **Se retiró una corrección de OCR** (`3Dian` → `3 dias`): medida sobre las 44 entradas reales, cambiaba el resultado de **un** documento y para peor (convertía el renglón del registro profesional en 1 día y hacía que se sobrescribiera la fecha fin leída). En el documento que la motivaba los días ya salían del rango de fechas.
+- **Rendimiento:** abrir la ventana del rótulo al renglón completo hizo **cuadrática** una de las formas (frase numeral + paréntesis); un renglón artificial de 58 KB tardaba minutos. Los dos límites (proximidad al rótulo + espacio del valor) están puestos también por esto.
+
+**Lo que NO se cambió, a propósito:** `reposo por 2 dias` se sigue leyendo (en el corpus la duración se escribe justo así, `SE DA INCAPACIDAD MEDICA POR 4 DIAS`, y vetar "reposo" perdería duraciones reales); y un número suelto de 1-2 cifras en el renglón de al lado se sigue leyendo, porque es indistinguible de la forma real `DURACION:`⏎`126` (sin coordenadas del OCR no hay más información). Los dos casos están fijados como límites en `tests/test_numeros_es.py` [14].
+
+**Limitaciones declaradas:**
+
+- **El camino LLM no se ha ejecutado nunca.** Ollama no está levantado en esta máquina (ni Docker, falta elevación). El prompt nuevo y la política de fusión se validaron **por inspección** y con un `StubLLM` inyectado (extractor falso con respuesta JSON fija, al estilo de `StubOCR`) que cubre las guardas de anclaje, no el modelo. Para probarlo: `docker compose up -d --build`, `docker compose exec ollama ollama pull gemma3:4b` y procesar un documento con `--extractor hibrido` mirando `incapacidad.dias`/`dias_letra`/`dias_letra_coincide`.
+- **`tests/test_ejemplos_reales.py` no se ha corrido** con este cambio (necesita RapidOCR sobre 7 escaneos y había otra medición en curso en la máquina). Es el punto ciego: si un rótulo de días de esos documentos vive fuera de la lista del módulo, hoy depende del respaldo histórico.
+- **No hay ninguna carta de vacaciones real en el corpus:** la regla se verifica con un texto sintético.
+- **La comparación duración vs. rango de fechas —la señal de fraude respaldada por la evidencia— no se implementa aquí.** Solo hay instrumentación (`dias_letra_coincide` y `fecha_fin_recalculada`), y el aviso de fecha fin solo puede dispararse si el documento traía las dos cosas.
+- **La UI y el staging no muestran los campos nuevos:** viajan en la respuesta de la API pero `static/index.html` pinta con lista blanca y `erp.mapear_a_staging` los ignora. Que el revisor vea la discrepancia es otro alcance (etiqueta en la UI y columna o nota en observaciones).
+- **Una sola duración por documento:** si el texto trae dos (pasa en un PDF adulterado real), se lee la primera y el conflicto no se detecta.
+
+---
+
 ## 6. Cómo encaja en el flujo de nómina / ERP
 
 ```
@@ -201,6 +240,7 @@ ingesta/
 - ✅ *(hecho)* **Ollama habilitado** como contenedor Docker con `gemma3:4b` (§5.2): mejora los casos difíciles. Pendiente subir el techo con modelo de **visión fuerte** (`qwen2.5vl`/`llama3.2-vision`) y/o **GPU** (CPU es lento y el 4B alucina fechas ocasionalmente).
 - ✅ *(hecho)* **Integración a BD + revisión humana** (§5.4, §5.5): mapeo a staging, completar a mano, aprobar/rechazar.
 - ✅ *(hecho)* **Entrada por carpetas (ingesta por lotes) + nomenclatura + corrida programada** (§5.6). Guía ejecutiva para el punto de recepción: [`GUIA_RECEPCION_INCAPACIDADES.md`](GUIA_RECEPCION_INCAPACIDADES.md).
+- ✅ *(hecho)* **Duración en números y en letras** (`numeros_es.py`, §5.8) con su ronda de verificación adversaria. **Pendiente de este cambio:** correr `tests/test_ejemplos_reales.py` (necesita RapidOCR sobre los escaneos) y **validar el camino híbrido con Ollama vivo** — hoy solo está probado con `StubLLM`; y decidir si la discrepancia palabra↔dígito se le muestra al auxiliar (etiqueta en la UI) o se persiste (columna/observación en staging).
 - **Acordar con el negocio la nomenclatura y el punto de recepción** (WhatsApp/correo → carpeta): compartir la guía de recepción y validar con una muestra que los archivos llegan bien nombrados.
 - Apuntar a la **BD ASTGU real** (catálogos reales de empleados/CIE/EPS) en vez de los datos de prueba; `numero_orden` y score de confianza OCR real.
 - **Corrida programada en Windows headless** (modo B: Programador de tareas del SO) si el servidor no mantiene Docker activo sin login (§5.6 / plan §5). Escalar concurrencia (ledger/lock en BD) si el volumen lo exige.

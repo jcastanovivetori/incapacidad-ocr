@@ -930,6 +930,7 @@ def main() -> int:
     print("=" * 72)
     test_catalogo()
     test_reglas_cumple_y_no_cumple()
+    test_reglas_del_historico()
     test_no_evaluable()
     test_valor_calculado_no_dispara()
     test_evidencia_sobrevive()

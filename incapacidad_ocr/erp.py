@@ -614,7 +614,12 @@ def mapear_a_staging(
     """
     hoy = hoy or date.today()
     lookups = lookups or LookupsNulos()
-    overrides = {k: v for k, v in (overrides or {}).items() if v not in (None, "")}
+    # Un override en blanco no es una corrección: se descarta aquí (y los espacios también —
+    # "   " pasaba el filtro y el motor lo reportaba como "leí un dato y no sirve", tapando
+    # el mensaje claro de "No se detectó la fecha de inicio").
+    overrides = {k: (v.strip() if isinstance(v, str) else v)
+                 for k, v in (overrides or {}).items()
+                 if not reglas_tiempo._sin_dato(v)}
     inc = _dic(resultado, "incapacidad")
     pac = _dic(inc, "paciente")
     ent = _dic(inc, "entidad")
@@ -749,6 +754,14 @@ def mapear_a_staging(
             motivo_nf = f"Diagnóstico {cie} no está en el catálogo CIE-10"
             problemas.append(motivo_nf)
             _faltan("cie10", "Código CIE-10", cie)
+            # Un valor MAL FORMADO no es un código falsificado: es basura del OCR. Medido
+            # sobre el corpus real, los 2 únicos falsos positivos de esta señal venían de
+            # ahí ("0039" y literalmente "FECHA" leídos como diagnóstico). Acusar de
+            # manipulación a un documento legítimo porque el OCR falló es el error más caro
+            # que puede cometer este motor, así que la sospecha exige que el código TENGA
+            # forma de CIE-10 (letra + al menos 2 dígitos). Si no la tiene, queda solo como
+            # problema de lectura para que el auxiliar lo corrija.
+            bien_formado = bool(re.fullmatch(r"[A-Z]\d{2,3}", (cie or "").replace(".", "").upper()))
             # Tercera señal DUDOSA (Diana, confirmado contra la tabla real): todo CIE-10
             # vigente debe resolver contra `lpdiagnosticos` — si no matchea, es indicio de
             # un código fabricado/alterado a mano (o un error de tecleo/OCR severo).
@@ -764,7 +777,7 @@ def mapear_a_staging(
             if _hay_catalogo is None:
                 log.warning("El objeto de lookups no expone catalogo_diagnosticos_disponible: "
                             "la señal de CIE-10 inexistente queda desactivada.")
-            if _hay_catalogo is not None and _hay_catalogo():
+            if _hay_catalogo is not None and _hay_catalogo() and bien_formado:
                 sospecha_manipulacion = True
                 motivo_sospecha = f"{motivo_sospecha}; {motivo_nf}" if motivo_sospecha else motivo_nf
         else:
@@ -786,7 +799,10 @@ def mapear_a_staging(
         # + subcategoría, p.ej. "S801"/"S80.1"); un código de solo 3 (la categoría sin
         # subdividir, p.ej. "A09") está estructuralmente incompleto para este catálogo —
         # independiente de si además matcheó o no contra `lpdiagnosticos`.
-        if cie and len(cie.replace(".", "")) == 3:
+        # Igual que arriba: solo si el valor TIENE forma de CIE-10 (letra + dígitos). Un
+        # "FECHA" o un "0039" que el OCR dejó en el campo del diagnóstico mide 5 o 4
+        # caracteres y no es un código incompleto, es una lectura fallida.
+        if cie and len(cie.replace(".", "")) == 3 and re.fullmatch(r"[A-Z]\d{2}", cie.replace(".", "").upper()):
             motivo_len = f"Código CIE-10 {cie} incompleto (3 caracteres; se esperan 4)"
             problemas.append(f"Posible manipulación del documento: {motivo_len}")
             sospecha_manipulacion = True

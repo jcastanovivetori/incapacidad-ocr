@@ -21,9 +21,9 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 | `preprocess.py` | carga imagen/PDF, **PDF→imágenes (PDFium, sin Poppler)**, resize, base64 |
 | `ocr.py` | backends OCR: `RapidOCRBackend` (ONNX/CPU), `OllamaVisionOCR` (visión local), `StubOCR` (tests). `OllamaError` + `translate_ollama_error` |
 | `extract.py` | extractores: `RuleBasedExtractor`, `OllamaLLMExtractor`, `HybridExtractor`; `normalizar_fechas()` (regla de fecha de inicio); `_split_glued_name()` (nombres pegados) |
-| `reglas_tiempo.py` | **motor de reglas de coherencia TEMPORAL**: `CATALOGO` declarativo (T01…T13), `construir_contexto`, `evaluar` (veredicto operativo), `evaluar_reglas`/`validar_tiempos` (informe CUMPLE/NO_CUMPLE/NO_EVALUABLE), configuración en caliente `cargar_config` (BD > JSON del volumen > defaults) |
+| `reglas_tiempo.py` | **motor de reglas de coherencia TEMPORAL**: `CATALOGO` declarativo (T01…T17; T13/T15/T16/T17 declaradas y **apagadas** por falta de dato o de acceso al histórico), `construir_contexto`, `evaluar` (veredicto operativo), `evaluar_reglas`/`validar_tiempos` (informe CUMPLE/NO_CUMPLE/NO_EVALUABLE), configuración en caliente `cargar_config` (BD > JSON del volumen > defaults) |
 | `validacion_temporal.py` | **API pública** del motor (re-exporta `reglas_tiempo`, sin lógica propia): `validar_registro(registro)` → informe serializable · `python -m incapacidad_ocr.validacion_temporal` imprime el catálogo y la config efectiva |
-| `numeros_es.py` | numerales en español: `normalizar` (saneo OCR), `texto_a_entero`, `duracion_en_texto` (días en **números, letras o las dos**), `numerales_en_texto` (enteros presentes → anclaje del LLM). Lector puro: no aplica reglas de dominio |
+| `numeros_es.py` | numerales en español: `normalizar` (saneo OCR), `texto_a_entero`, `duracion_en_texto` (días en **números, letras o las dos**; exige ANCLA y veta por los dos lados), `duracion_de_celda` (celda de tabla: ancla POSICIONAL, la celda solo puede traer el valor), `numerales_en_texto` (enteros presentes → anclaje del LLM). Lector puro: no aplica reglas de dominio (ni el rango 1..540) |
 | `processor.py` | `IncapacidadProcessor` une OCR+extractor y llama `normalizar_fechas()`. Guarda `MIN_OCR_CHARS` (no estructurar texto vacío → anti-fabricación de PII) |
 | `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo, **validación documental** (`REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion`, `canon_doc`) y **checklist de radicación ante la EPS** (`documentos_checklist_radicacion`, `validar_radicacion`, `Lookups.documentos_radicacion`, `etiqueta_doc`) |
 | `db.py` | MySQL (BD ASTGU): `insertar_staging`, `insertar_alerta`, `listar_staging`, `obtener_staging`, `actualizar_revision`, `actualizar_estado` |
@@ -130,13 +130,30 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   `02 dos dia(s)`, `30 (TREINTA)`, `14 - CATORCE`, `DOS (02)`). **Todo candidato exige un ANCLA**: la unidad
   pegada al valor (`POR 4 DIAS`) o un rótulo de duración en el MISMO renglón (o en un renglón adyacente que
   contenga SOLO el valor) — sin eso, un léxico de numerales dispara en `una fuerza mayor`, en el `8 dia(s)`
-  de la edad y en `hacetresdias` (la queja del paciente). **Cuando hay palabra y dígito manda el DÍGITO** y
+  de la edad y en `hacetresdias` (la queja del paciente). **Y el ancla NO es suficiente:** en un certificado
+  la palabra "días" aparece muchas veces y casi ninguna es la duración de la incapacidad, así que el
+  candidato se veta **por los dos lados** — `_CONTEXTOS_PROHIBIDOS` justo ANTES del valor (edad, horas,
+  semanas, `vigencia`, `valido`, `control`, `radicar`, `tratamiento`) y `_CONTEXTOS_PROHIBIDOS_DER` justo
+  DESPUÉS (`3 dias HABILES` = plazo de trámite, `15 dias DEL MES de agosto` = fórmula de cierre notarial,
+  `3 dias DE EVOLUCION` = relato clínico, `<N> DE <mes>` = día del mes, y `4 HORAS`/`40 SEMANAS`/`3 MESES` =
+  otra unidad de tiempo, que es como el rótulo `Duracion` se llevaba la duración del permiso o del embarazo).
+  Otras dos reglas del lector, las dos por falsos positivos reales: el rótulo escueto exige **PLURAL**
+  (`Dias:`, nunca `Dia:` — en los formularios colombianos `Dia:` es un campo de FECHA) y la frase numeral se
+  lee **COMPLETA** (leer un prefijo da un valor redondo y creíble: `CIENTO OCHENTA` → 100).
+  **Cuando hay palabra y dígito manda el DÍGITO** y
   el desacuerdo se REGISTRA en `incapacidad.dias_letra` (int|None) y `incapacidad.dias_letra_coincide`
   (True/False solo si el documento trae las dos formas; None si trae una): son **instrumentación**, aquí
   NO se juzga si es adulteración (eso es de otro módulo). La señal de fraude respaldada por el corpus es
   **duración vs. rango de fechas**, y cuando `normalizar_fechas()` re-deriva un fin que no cuadraba con los
-  días lo marca con `fecha_fin_recalculada` (aviso, no bloquea). Inventario de formas, degradaciones de OCR
-  y falsos positivos: `dataset-falsedad/duraciones/01_evidencia.md`.
+  días lo marca con `fecha_fin_recalculada` (aviso, no bloquea; solo puede dispararse si el documento traía
+  las DOS cosas). **Ampliar el lector = una línea en el diccionario que toque**, sin lógica nueva:
+  `_UNIDADES` (1..9 y apócopes) · `_ESPECIALES` (10..29, incluidos los pegados `veintiun…`) · `_DECENAS` ·
+  `_CENTENAS`; los rótulos en `_ETIQUETAS_DURACION`, las degradaciones de OCR en `_CORRECCIONES_OCR`, los
+  vetos en las dos listas de contextos. `mil` está **fuera del léxico a propósito** (un millar en palabras es
+  el AÑO de una carta en prosa) pero **sí entra en la frase**, para que `dos mil veintiseis` se rechace
+  entero en vez de leerse a trozos. Inventario de formas, degradaciones de OCR y falsos positivos:
+  `dataset-falsedad/duraciones/01_evidencia.md`; los ataques al anclaje y su resultado, en
+  `tests/test_numeros_es.py` secciones [10]-[13].
 - **Validación de TIEMPOS — validar NO es reconciliar** (`reglas_tiempo.py`, API pública en
   `validacion_temporal.py`): `extract.normalizar_fechas()` sigue siendo el ÚNICO sitio que decide qué
   dato queda (rellena/deriva/sanea); el motor de reglas solo **opina sobre lo que traía el papel**
@@ -197,8 +214,12 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   romperían el patrón de días) — se calculan siempre por diferencia de fechas. **El lector de duraciones en
   letras queda DESACTIVADO aquí** (ni en `RuleBasedExtractor` ni en la fusión del híbrido, donde el LLM
   tampoco vota los días): "siete (07)" es un DÍA DEL MES y "dos mil veintiseis (2026)" el AÑO en palabras —
-  son las formas C3/C5 invertidas, así que entender letras AUMENTA el riesgo en este formato. Ver
-  `erp.mapear_a_staging` (`es_vacaciones`) y `extract._fechas_vacaciones`/`extract.es_formato_vacaciones`.
+  son las formas C3/C5 invertidas, así que entender letras AUMENTA el riesgo en este formato. **El patrón del
+  título (`extract._VACACIONES_ANCHOR`) es el ÚNICO guardián de toda esta regla** y por eso tolera la tilde en
+  las DOS palabras (`Notificación`, `Período`): si no casa, la carta se procesa como incapacidad, se queda sin
+  fechas, el tipo pasa de 13 a 3 y el lector de días devuelve el `7` del "día siete (07) de julio" — o sea
+  exactamente lo que esta regla prohíbe. Ver `erp.mapear_a_staging` (`es_vacaciones`) y
+  `extract._fechas_vacaciones`/`extract.es_formato_vacaciones`.
 - **PDFs multi-página**: cuando el mismo PDF trae la incapacidad JUNTO con otras páginas del trámite
   (certificado de nacido vivo, epicrisis, cédula escaneada...), el OCR se hace página por página y solo se
   usa el texto de la(s) página(s) que traen el ausentismo en sí (`extract.es_pagina_relevante`, ancla por
@@ -211,16 +232,22 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   como días (el patrón tolera que el valor quede en la línea siguiente). "Diagnostico(s):" es una variante más
   del ancla de diagnóstico (además de "Diagnostico principal"). Los rótulos de **días** los resuelve
   `numeros_es` (`Dias de Incapacidad`, `Dias Incapacidad`, `Dias Inc.`, `No.Total dias`, `Duracion`, `Dias:`);
-  el respaldo histórico de `extract._dias_por_etiqueta` solo cubre variantes fuera de esa lista y lleva el
-  guardarraíl `_NUM_DIAS` (máx. 3 cifras, nunca pegado a `/ - . :`) para no leer un AÑO ni el día del mes de
-  una fecha como si fueran la duración.
+  el respaldo histórico de `extract._dias_por_etiqueta` son **dos patrones de RÓTULO** que solo cubren
+  variantes fuera de esa lista, con el guardarraíl `_NUM_DIAS` (máx. 3 cifras, nunca pegado a `/ - . :`) y en
+  **plural** (`el dia 15 de agosto` es una fecha en prosa, y en singular el respaldo devolvía 15). El tercer
+  patrón histórico —número pegado a la unidad SIN rótulo— se **eliminó**: eso ya lo lee `numeros_es` por el
+  ancla de unidad, y allí no había forma de vetar lo que va detrás (`3 dias habiles`), así que era la puerta
+  por la que volvían a entrar las duraciones que el módulo rechaza.
 - **Tabla "DETALLE DE LA INCAPACIDAD"** (formato Clínica del Cesar): 5 columnas (Causa Externa/Diagnóstico/Días
   Inc./Inicio/Finalización) seguidas de sus 5 valores en bloque — se parsea aparte
   (`extract._extraer_detalle_incapacidad`) porque es más fiable que las heurísticas genéricas y evita falsos
   positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.). La celda de días se lee
-  como LÍNEA completa (`_dias_de_celda`): la posición en la tabla ya es el ancla, así que vale el dígito, la
-  palabra o las dos — antes, una celda que no fuera dígitos puros tumbaba TODO el bloque (con su CIE-10 y sus
-  fechas).
+  como LÍNEA completa (`_dias_de_celda` → `numeros_es.duracion_de_celda`): la posición en la tabla ya es el
+  ancla, así que vale el dígito, la palabra o las dos — antes, una celda que no fuera dígitos puros tumbaba
+  TODO el bloque (con su CIE-10 y sus fechas). **La celda solo puede contener el valor**: cuando el OCR
+  desplaza el bloque, en esa columna caen un CIE-10 (`J069`), una dosis (`X 500 MG`) o la paginación
+  (`1 de 1`) — prestarle a la celda un rótulo escrito (`"Dias: " + celda`) las leía como 69, 500 y 1 días, y
+  todas caen dentro de 1..540, así que llegaban a la revisión sin ninguna señal.
 - **Ingesta por lotes — nomenclatura de archivos** (`batch.py`): los documentos llegan **separados**, uno por
   archivo, nombrados `cedula_TIPODOC[_NN].ext` (`parse_nombre`, **sin fecha**). **Llave de caso** = la `cedula`
   (agrupa el trámite; la fecha sale del OCR). `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`; adjuntos

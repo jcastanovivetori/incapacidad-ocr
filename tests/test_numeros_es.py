@@ -26,6 +26,7 @@ except Exception:  # noqa: BLE001
     pass
 
 from incapacidad_ocr.numeros_es import (  # noqa: E402
+    duracion_de_celda,
     duracion_en_texto,
     normalizar,
     numerales_en_texto,
@@ -139,9 +140,21 @@ def test_normalizar() -> None:
           normalizar("Días de Incapacidad:  2"))
     check("doble espacio colapsado",
           normalizar("Dias de Incapacidad:  2") == "dias de incapacidad: 2")
-    check("'3Dian' → '3 dias'", normalizar("3Dian") == "3 dias", normalizar("3Dian"))
+    # "3Dian" ('s' final leída como 'n') YA NO se corrige: medida sobre las 44
+    # entradas reales del corpus, la corrección solo cambiaba el resultado de OTRO
+    # documento y para peor (leía el nº de registro profesional como 1 día). Ver [8].
+    check("'3Dian' se deja como está (la corrección hacía más daño que bien)",
+          normalizar("3Dian") == "3 dian", normalizar("3Dian"))
     check("'Dianostico' NO se toca", "dianostico" in normalizar("Dianostico:"),
           normalizar("Dianostico:"))
+    # La I de DIAS leída como 1 o como l: se recupera el rótulo, pero solo el token
+    # PLURAL y suelto (un "dla" dentro de otra palabra fabricaría días de la nada).
+    check("'D1AS' → 'dias'", normalizar("D1AS DE INCAPACIDAD: 3") == "dias de incapacidad: 3",
+          normalizar("D1AS DE INCAPACIDAD: 3"))
+    check("'DlAS' → 'dias'", normalizar("DlAS DE INCAPACIDAD: 3") == "dias de incapacidad: 3",
+          normalizar("DlAS DE INCAPACIDAD: 3"))
+    check("'MEDLAS' NO se toca (la corrección exige token suelto)",
+          "medlas" in normalizar("MEDLAS"), normalizar("MEDLAS"))
     check("'Incapacldad' → 'incapacidad'",
           normalizar("Dias de Incapacldad:") == "dias de incapacidad:",
           normalizar("Dias de Incapacldad:"))
@@ -175,7 +188,13 @@ def test_formas_solo_numero() -> None:
               "Descripcion: INCAPACIDAD POR 2 DIAS.", {"valor": 2, "origen": "numero"})
     check_dur("A7 pegada 'DeSCripcIOn:INCAPACIDADMEDICADE2DIAS'",
               "DeSCripcIOn:INCAPACIDADMEDICADE2DIAS", {"valor": 2, "origen": "numero"})
-    check_dur("A8 rótulo degradado '3Dian'", "3Dian", {"valor": 3, "origen": "numero"})
+    # A8 era "3Dian" (rótulo degradado). Se decidió NO recuperarlo: la corrección de
+    # OCR que hacía falta convertía el renglón del registro profesional de otro
+    # documento real en una duración de 1 día. En el documento de A8 los días salen
+    # igual del rango de fechas, así que el dato no se pierde.
+    check_dur("A8 '3Dian' → None (la corrección de OCR se retiró a propósito)", "3Dian", None)
+    check_dur("A8 con el rótulo intacto sí se lee ('3 Dias')", "3 Dias",
+              {"valor": 3, "origen": "numero"})
     check_dur("A9 '30 DIAS' como línea suelta", "30 DIAS", {"valor": 30, "origen": "numero"})
     check_dur("A10 rótulo SIN valor → None (no se inventa)",
               "Dias de Incapacidad:\nEstado Civil:", None)
@@ -301,8 +320,168 @@ def test_contrato() -> None:
           solo_num["letra"] is None and solo_num["coincide"] is None, str(solo_num))
 
 
+def test_ancla_no_es_suficiente() -> None:
+    print("[10] Veto por los DOS lados: '<N> DIAS' que NO es la duración → None")
+    # El ancla de unidad la cumple cualquier "N días" del certificado. Lo que
+    # distingue la duración del resto va DETRÁS del valor, así que el veto de la
+    # izquierda no lo veía y todas estas frases entraban como duración.
+    check_dur("plazo de radicación '3 dias habiles'",
+              "La incapacidad debe radicarse dentro de los 3 dias habiles siguientes", None)
+    check_dur("plazo de radicación en LETRAS",
+              "Debe radicarse dentro de los tres dias habiles siguientes", None)
+    check_dur("validez del certificado 'valido por 30 dias'",
+              "Este certificado es valido por 30 dias", None)
+    check_dur("recomendación 'CONTROL EN 3 DIAS'",
+              "RECOMENDACIONES: CONTROL EN 3 DIAS POR CONSULTA EXTERNA", None)
+    check_dur("recomendación en LETRAS 'CONTROL EN TRES DIAS'", "RECOMENDACIONES: CONTROL EN TRES DIAS", None)
+    # La misma frase existe en el corpus medida en HORAS ("CUADRO CLINICO DE 3 HORAS
+    # DE EVOLUCION"): en días es el relato clínico, no la incapacidad.
+    check_dur("relato clínico '3 DIAS DE EVOLUCION'", "CUADRO CLINICO DE 3 DIAS DE EVOLUCION", None)
+    check_dur("relato clínico en LETRAS", "CUADRO CLINICO DE TRES DIAS DE EVOLUCION", None)
+    # Fórmula de cierre de cualquier certificación colombiana: ahí "días" acompaña al
+    # DÍA DEL MES (el falso positivo nº5 del corpus, con el orden invertido).
+    check_dur("cierre notarial 'a los 15 dias del mes de agosto'",
+              "Dada en Malambo a los 15 dias del mes de agosto de 2026", None)
+    check_dur("cierre notarial mixto 'a los quince (15) dias del mes'",
+              "Dada en Malambo a los quince (15) dias del mes de agosto de 2026", None)
+    check_dur("cierre notarial en LETRAS", "Dada en Malambo a los quince dias del mes de agosto", None)
+
+    print("[10b] El rótulo 'Duracion' no alcanza el valor de OTRA duración")
+    # Rótulo REAL de los permisos del corpus. La unidad va a la DERECHA del valor.
+    check_dur("'DURACION DEL PERMISO: 4 HORAS'", "3.DURACION DEL PERMISO: 4 HORAS", None)
+    check_dur("'DURACION: 2 HORAS'", "DURACION: 2 HORAS", None)
+    check_dur("'DURACION: CUATRO HORAS' (en letras)", "DURACION: CUATRO HORAS", None)
+    check_dur("unidad ANTES del valor ('en horas: 8')", "Duracion del reposo en horas: 8", None)
+    check_dur("'DURACION DEL EMBARAZO: 40 SEMANAS'", "DURACION DEL EMBARAZO: 40 SEMANAS", None)
+    check_dur("'Duracion gestacion: 39 semanas'", "Duracion gestacion: 39 semanas", None)
+    check_dur("'DURACION DE LA CONSULTA: 20 MINUTOS'", "DURACION DE LA CONSULTA: 20 MINUTOS", None)
+    check_dur("'Duracion del tratamiento: 3 meses'", "Duracion del tratamiento: 3 meses", None)
+    check_dur("'Duracion: dos meses' (en letras)", "Duracion: dos meses", None)
+    check_dur("'Duracion aproximada: 2 anos'", "Duracion aproximada: 2 anos", None)
+    check_dur("'DURACION DEL TRATAMIENTO: 7 DIAS' (es la fórmula, no la incapacidad)",
+              "DURACION DEL TRATAMIENTO: 7 DIAS", None)
+
+    print("[10c] El veto no se pasa de frenada: estas duraciones SÍ se leen")
+    # El veto se mide JUSTO ANTES del valor. Antes se miraban 40 caracteres del
+    # renglón y una hora o un mes al principio de la frase mataba el dato.
+    check_dur("'se hace entrega de incapacidad por 3 dias'",
+              "Por lo anterior se hace entrega de incapacidad por 3 dias", {"valor": 3})
+    check_dur("'Reposo 24 horas y se otorgan 5 dias de incapacidad'",
+              "Reposo 24 horas y se otorgan 5 dias de incapacidad", {"valor": 5})
+    check_dur("'Control en 1 mes. Incapacidad por 7 dias'",
+              "Control en 1 mes. Incapacidad por 7 dias", {"valor": 7})
+    check_dur("'Gestante de 40 semanas. Incapacidad de 30 dias'",
+              "Gestante de 40 semanas. Incapacidad de 30 dias", {"valor": 30})
+    # "Hora Aten." y "Fecha y Hora Ing:" son texto literal del corpus: basta que el
+    # OCR junte el encabezado con la fila de valores para que caigan en el veto.
+    check_dur("'Hora Aten. 08:23 Dias de Incapacidad: 3'",
+              "Hora Aten. 08:23 Dias de Incapacidad: 3", {"valor": 3})
+    check_dur("'Fecha y Hora Ing: 01/09/2026 08:23 Dias: 3'",
+              "Fecha y Hora Ing: 01/09/2026 08:23 Dias: 3", {"valor": 3})
+    # La unidad seguida de separador NO es un rótulo si detrás no hay valor: antes se
+    # descartaba la unidad y con ella el valor que iba delante.
+    check_dur("'3 DIAS - INICIA <fecha>'", "INCAPACIDAD: 3 DIAS - INICIA 01/09/2026", {"valor": 3})
+    check_dur("'10 DIAS-CALENDARIO'", "Se otorgan 10 DIAS-CALENDARIO", {"valor": 10})
+    check_dur("'30 DIAS : del <fecha> al <fecha>'", "30 DIAS : del 01/09/2026 al 30/09/2026",
+              {"valor": 30})
+
+
+def test_frase_completa_y_rotulos() -> None:
+    print("[11] La frase numeral se lee COMPLETA (nunca un prefijo)")
+    # El prefijo de un numeral español siempre vale MENOS que el total, así que un
+    # recorte no se nota: sale un valor redondo, creíble y en rango.
+    check_dur("'CIENTO OCHENTA' tras un rótulo con complemento",
+              "Dias de incapacidad autorizados: CIENTO OCHENTA", {"valor": 180, "letra": 180})
+    check_dur("'TREINTA Y CINCO' tras 'Duracion del periodo'",
+              "Duracion del periodo: TREINTA Y CINCO", {"valor": 35})
+    check_dur("'TREINTA Y CINCO' tras 'No. Total dias' (rótulo real del corpus)",
+              "No. Total dias de incapacidad: TREINTA Y CINCO", {"valor": 35})
+    check_dur("'ciento cincuenta y dos' con '(CALENDARIO)' en medio",
+              "DIAS DE INCAPACIDAD (CALENDARIO): ciento cincuenta y dos", {"valor": 152})
+    check_dur("'novecientos noventa y nueve'", "Duracion: novecientos noventa y nueve",
+              {"valor": 999})
+    # Y el recorte tampoco puede tapar el dígito que confirmaba el valor.
+    check_dur("mixta larga 'DOSCIENTOS CINCUENTA Y CINCO (255)'",
+              "DIAS: DOSCIENTOS CINCUENTA Y CINCO (255)",
+              {"valor": 255, "origen": "ambos", "letra": 255, "numero": 255, "coincide": True})
+
+    print("[11b] Rótulos: singular de fecha, frontera de palabra y millares")
+    # "Dia:" en singular es SIEMPRE un campo de fecha o prosa en los formularios
+    # colombianos; aceptarlo devolvía el día del mes y pisaba la duración real.
+    check_dur("'EXPEDIDA EL DIA: 27 DE AGOSTO DE 2026'", "EXPEDIDA EL DIA: 27 DE AGOSTO DE 2026", None)
+    check_dur("rejilla 'DIA: 12 MES: 08 ANO: 2026'", "FECHA DE INICIO\nDIA: 12 MES: 08 ANO: 2026", None)
+    check_dur("rejilla en renglones 'Dia: 12'⏎'Mes: 08'",
+              "Fecha de expedicion\nDia: 12\nMes: 08\nAno: 2026", None)
+    check_dur("'FECHA DE EXPEDICION (DIA-MES-ANO)'⏎'27 08 2026'",
+              "FECHA DE EXPEDICION (DIA-MES-ANO)\n27 08 2026", None)
+    # El rótulo no puede empezar DENTRO de otra palabra.
+    check_dur("'GUARDIAS: 3'", "GUARDIAS: 3", None)
+    check_dur("'MEDIAS: 2 PARES'", "MEDIAS: 2 PARES", None)
+    check_dur("'Duraciones anteriores: 9'", "Duraciones anteriores: 9", None)
+    # "mil" no está en el léxico (un millar en palabras es un AÑO), pero SÍ tiene que
+    # casar en la frase: si no, se leía el fragmento anterior o posterior.
+    check_dur("'Duracion: mil ochenta' (no es 80)", "Duracion: mil ochenta", None)
+    check_dur("'Dias de incapacidad: dos mil veintiseis' (no es 2)",
+              "Dias de incapacidad: dos mil veintiseis", None)
+    check_dur("'Duracion: del dos de enero de dos mil veintiseis' (día del mes)",
+              "Duracion: del dos de enero de dos mil veintiseis", None)
+    # Un renglón con DOS números es un trozo de fecha repartido en columnas, no el
+    # valor del rótulo de al lado.
+    check_dur("vecino '15 09 2026' (fecha partida)", "DURACION DIA MES ANO\n15 09 2026", None)
+    check_dur("vecino '27 08 2026' (fecha partida)", "Dias:\n27 08 2026", None)
+    # El rótulo PEGADO es un campo de formulario: el número de delante es el índice
+    # de fila, no la duración. En prosa (con espacios) sí es la unidad del valor.
+    check_dur("'3 DIASDEINCAPACIDAD' (rótulo pegado + índice de fila)", "3 DIASDEINCAPACIDAD", None)
+    check_dur("'se otorgan 5 dias de incapacidad' (prosa: sí es la unidad)",
+              "se otorgan 5 dias de incapacidad", {"valor": 5})
+    # Renglón del REGISTRO PROFESIONAL degradado por el OCR: no es una duración.
+    check_dur("registro profesional '…111222.t1 DIAN'", "Profaslonal ce -,tl 111222.t1 DIAN", None)
+
+    print("[11c] Posición y vecinos")
+    # Gana la primera lectura del documento; una mixta posterior e irrelevante ya no
+    # le quita el campo a la duración real.
+    got = duracion_en_texto("INCAPACIDAD POR 15 DIAS\nFORMULA: DIAS: 3 (TRES) DE TRATAMIENTO")
+    check("la duración real (15) gana a una mixta posterior", got and got["valor"] == 15, str(got))
+    # …pero la PALABRA del mismo dígito en otro renglón sí enriquece la lectura: es
+    # el caso REAL del corpus (la prosa "POR 2 DIAS" va antes del campo mixto).
+    got = duracion_en_texto("Descripcion: INCAPACIDAD POR 2 DIAS.\nDias: 2 (DOS DIAS)")
+    check("la palabra del MISMO dígito en otro renglón se registra",
+          got and (got["valor"], got["letra"], got["coincide"]) == (2, 2, True), str(got))
+    # Se prueban los DOS vecinos: un consecutivo en el renglón siguiente ya no tapa
+    # el valor del anterior (y ése es el caso donde la palabra es el único dato).
+    check_dur("'-DOS'⏎'Duracion'⏎'<consecutivo>'", "-DOS\nDuracion\n0081523489",
+              {"valor": 2, "origen": "letra", "letra": 2})
+    check_dur("'126'⏎'DURACION:'⏎'<consecutivo>'", "126\nDURACION:\n0081523489", {"valor": 126})
+
+
+def test_duracion_de_celda() -> None:
+    print("[12] duracion_de_celda: ancla POSICIONAL (columna 'Dias Inc.' de la tabla)")
+    for celda, esperado in (("3", 3), ("TRES", 3), ("3 (TRES)", 3), ("02 dos dia(s)", 2),
+                            ("DOS (02)", 2), ("14- CATORCE", 14)):
+        got = duracion_de_celda(celda)
+        check(f"celda {celda!r} → {esperado}", got is not None and got["valor"] == esperado,
+              str(got))
+    # Cuando el OCR desplaza el bloque, en esa columna caen un CIE-10, una dosis o la
+    # paginación. Prestarle a la celda un rótulo escrito ("Dias: " + celda) los leía
+    # como 69, 500 y 1 días — todos dentro de 1..540, o sea sin ninguna señal.
+    for celda in ("J069", "A099", "R074", "S420", "R509", "K429", "O039", "B349",
+                  "X 500 MG", "1 de 1", "COMUN", "", "   "):
+        check(f"celda {celda!r} → None (no es una duración)", duracion_de_celda(celda) is None,
+              str(duracion_de_celda(celda)))
+    check("celda None → None", duracion_de_celda(None) is None)
+
+
+def test_contrato_de_tipos() -> None:
+    print("[13] Contrato de tipos: por aquí pasan valores del JSON del LLM")
+    check("normalizar(5) → ''", normalizar(5) == "")
+    check("texto_a_entero(5.0) → None", texto_a_entero(5.0) is None)
+    check("duracion_en_texto(True) → None", duracion_en_texto(True) is None)
+    check("duracion_de_celda(2) → None", duracion_de_celda(2) is None)
+    check("numerales_en_texto(['dos dias']) → set()", numerales_en_texto(["dos dias"]) == set())
+
+
 def test_limitaciones_conocidas() -> None:
-    print("[10] Límites declarados (se prueban para que un cambio los haga visibles)")
+    print("[14] Límites declarados (se prueban para que un cambio los haga visibles)")
     # C4 real: el OCR mete 'Fecha Fin' ENTRE el rótulo y el valor. Permitir saltar
     # renglones intermedios haría fallar el falso positivo nº7 (la rejilla
     # DIA/MES/ANO acaba en un número suelto), así que se prefiere None: el
@@ -314,10 +493,22 @@ def test_limitaciones_conocidas() -> None:
     got = duracion_en_texto("POR 4 DIAS DESDE EL 29-07-26\nPOR 5 DIAS DESDE 09-06-26")
     check("dos duraciones en el texto → devuelve la primera",
           got is not None and got["valor"] == 4, str(got))
+    # Un número SUELTO de 1-2 cifras en el renglón de al lado es indistinguible de la
+    # forma A4 real ("DURACION:"⏎"126"): si es un trozo de fecha que el OCR dejó ahí,
+    # se lee igual. Lo que sí se cierra es el renglón con DOS números (ver [11b]).
+    got = duracion_en_texto("Duracion\n26")
+    check("vecino de un solo número → se lee (no se distingue de A4)",
+          got is not None and got["valor"] == 26, str(got))
+    # "reposo por N dias" NO se veta: en el corpus la duración se escribe justo así
+    # ("SE DA INCAPACIDAD MEDICA POR 4 DIAS"), y vetar "reposo" perdería duraciones
+    # reales. Queda como riesgo asumido y declarado.
+    got = duracion_en_texto("SE RECOMIENDA REPOSO POR 2 DIAS")
+    check("'reposo por 2 dias' se lee (vetarlo costaría duraciones reales)",
+          got is not None and got["valor"] == 2, str(got))
 
 
 def test_numerales_en_texto() -> None:
-    print("[11] numerales_en_texto: material de la guarda de ANCLAJE del LLM")
+    print("[15] numerales_en_texto: material de la guarda de ANCLAJE del LLM")
     # No son duraciones (no se exige ancla): es el conjunto de valores PRESENTES,
     # para poder rechazar una duración que el modelo se haya inventado.
     vals = numerales_en_texto("Dias de Incapacidad: 2 (DOS DIAS) desde 10/06/2026 hasta 11/06/2026")
@@ -333,6 +524,17 @@ def test_numerales_en_texto() -> None:
     check("una fecha no ancla su día/mes",
           numerales_en_texto("DESDE EL 29-07-26 HASTA EL 01/08/26") == set(),
           str(sorted(numerales_en_texto("DESDE EL 29-07-26 HASTA EL 01/08/26"))))
+    # El AÑO ESCRITO EN PALABRAS tampoco ancla: era el único camino por el que el
+    # modelo podía "justificar" un 2 o un 26 en una carta que solo trae el año.
+    check("'dos mil veintiseis (2026)' no ancla nada",
+          numerales_en_texto("de dos mil veintiseis (2026)") == set(),
+          str(sorted(numerales_en_texto("de dos mil veintiseis (2026)"))))
+    # Ni un numeral que el OCR dejó pegado a una palabra que empieza por "dia".
+    check("'dosdiagnosticos' no ancla el 2", numerales_en_texto("dosdiagnosticos") == set(),
+          str(sorted(numerales_en_texto("dosdiagnosticos"))))
+    check("'unadiabetes mellitus' no ancla el 1",
+          numerales_en_texto("unadiabetes mellitus") == set(),
+          str(sorted(numerales_en_texto("unadiabetes mellitus"))))
     check("vacío / None", numerales_en_texto("") == set() and numerales_en_texto(None) == set())
 
 
@@ -349,6 +551,10 @@ def main() -> int:
     test_mixta_y_discrepancia()
     test_falsos_positivos()
     test_contrato()
+    test_ancla_no_es_suficiente()
+    test_frase_completa_y_rotulos()
+    test_duracion_de_celda()
+    test_contrato_de_tipos()
     test_limitaciones_conocidas()
     test_numerales_en_texto()
     print("-" * 64)

@@ -19,6 +19,7 @@ Uso por CLI:   python -m incapacidad_ocr.batch [--extractor rule|hibrido] [--dry
 """
 from __future__ import annotations
 
+import contextlib
 import logging
 import os
 import re
@@ -347,7 +348,14 @@ def procesar_todo(ocr_backend, extractor_name: str = "rule", limite: int = 500,
 
     Las claves del resumen nombran las carpetas del árbol: ``completos`` → ``3_archivo/``;
     ``faltan_soportes``/``datos_por_revisar``/``con_error``/``mal_nombrados`` → sub-carpetas
-    de ``2_revisar/``."""
+    de ``2_revisar/``.
+
+    ``dry_run`` NO exige base de datos. Es deliberado: la corrida en seco ni inserta ni
+    mueve archivos, así que lo único que perdería sin BD son los catálogos — y para eso ya
+    existe la degradación a ``LookupsNulos`` que usa el resto del proyecto. Sirve para
+    probar OCR, extracción y validaciones en un equipo sin MySQL; los IDs del ERP quedarán
+    sin resolver y el resumen lo dice en ``sin_catalogos``.
+    """
     root = INGESTA_ROOT
     if not dry_run:
         asegurar_estructura(root)
@@ -355,7 +363,7 @@ def procesar_todo(ocr_backend, extractor_name: str = "rule", limite: int = 500,
     casos, sueltos = escanear(root)
 
     resumen: dict[str, Any] = {
-        "root": str(root), "extractor": extractor_name,
+        "root": str(root), "extractor": extractor_name, "dry_run": bool(dry_run),
         "casos_total": len(casos), "completos": 0, "faltan_soportes": 0,
         "datos_por_revisar": 0, "con_error": 0, "pendientes_radicacion": 0,
         "mal_nombrados": len(sueltos), "detalle": [],
@@ -366,13 +374,23 @@ def procesar_todo(ocr_backend, extractor_name: str = "rule", limite: int = 500,
 
     if not casos:
         return resumen
-    if not db.db_disponible():
-        resumen["error"] = "Base de datos no disponible."
+
+    hay_bd = db.db_disponible()
+    if not hay_bd and not dry_run:
+        # Sin BD no se puede REGISTRAR, y registrar es el propósito del lote real. Se corta
+        # antes de gastar minutos de OCR cuyo resultado se tiraría.
+        resumen["error"] = ("Base de datos no disponible: el lote no puede registrar en "
+                            "lp_ausentismos_ia. Levanta la BD, o usa la corrida en seco "
+                            "(dry-run) para probar la lectura sin registrar.")
         return resumen
+    resumen["sin_catalogos"] = not hay_bd
 
     hoy = date.today()
-    with db.conexion_mysql() as cx:
-        lookups = erp.Lookups(cx)
+    # Sin BD (solo posible en seco) se entra con conexión nula y lookups degradados: el
+    # `with` de una conexión inexistente no se puede abrir, así que se elige el contexto.
+    ctx_bd = db.conexion_mysql() if hay_bd else contextlib.nullcontext(None)
+    with ctx_bd as cx:
+        lookups = erp.Lookups(cx) if hay_bd else erp.LookupsNulos()
         for i, (caso, archivos) in enumerate(casos.items()):
             if i >= limite:
                 break
@@ -488,15 +506,29 @@ def reiniciar_prueba(root: Optional[Path] = None, limpiar_bd: bool = True) -> di
     for base in salidas:
         resumen["carpetas_podadas"] += _podar_vacias(base)
 
-    if limpiar_bd and resumen["archivos"]:
+    if limpiar_bd:
         if db.db_disponible():
             try:
                 with db.conexion_mysql() as cx:
-                    resumen["bd"] = db.eliminar_staging_por_archivos(cx, resumen["archivos"])
+                    if db.reset_bd_prueba_permitido():
+                        # BD declarada de PRUEBA: se VACÍA staging por completo, que es lo que
+                        # de verdad reinicia la prueba (los catálogos no se tocan: son la
+                        # entrada). Deja la bandeja limpia incluso si en la corrida anterior
+                        # se aprobó o rechazó algo, o si quedaron filas de otros archivos.
+                        resumen["bd"] = db.vaciar_staging_prueba(cx)
+                        resumen["bd"]["modo"] = "vaciado_completo"
+                    elif resumen["archivos"]:
+                        # Sin la declaración explícita se hace lo conservador: borrar SOLO las
+                        # filas pendientes de los archivos que se están reiniciando.
+                        resumen["bd"] = db.eliminar_staging_por_archivos(cx, resumen["archivos"])
+                        resumen["bd"]["modo"] = "por_archivo"
+                        resumen["avisos"].append(
+                            "BD limpiada solo para estos archivos (falta RESET_BD_PRUEBA=1 "
+                            "para vaciar staging por completo).")
             except Exception as exc:  # noqa: BLE001 — el reinicio de archivos ya se hizo; no se pierde
                 log.exception("Reinicio: no se pudo limpiar la BD")
                 resumen["avisos"].append(f"No se pudo limpiar la BD: {str(exc)[:120]}")
-        else:
+        elif resumen["archivos"]:
             resumen["avisos"].append("BD no disponible: las filas de staging anteriores siguen ahí.")
     return resumen
 

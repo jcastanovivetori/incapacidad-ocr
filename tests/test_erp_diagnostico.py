@@ -158,6 +158,23 @@ def test_sin_catalogo_no_dispara() -> None:
           r2["row"]["sospecha_manipulacion"] == 0)
 
 
+def test_basura_ocr_no_dispara() -> None:
+    print("[9] Basura del OCR en el campo del diagnóstico -> NO es sospecha de manipulación")
+    # Medido sobre el corpus real: los 2 únicos falsos positivos de esta señal venían de aquí.
+    # "0039" no empieza por letra y "FECHA" no tiene dígitos: no son códigos falsificados,
+    # son lecturas fallidas. Acusar a un documento legítimo por eso es el error más caro.
+    for basura in ("0039", "FECHA", "IDENTI", "S", "12345"):
+        r = erp.mapear_a_staging(_resultado(basura, "LO QUE SEA"), lookups=LookupsFake())
+        check(f"{basura!r}: sospecha_manipulacion=0", r["row"]["sospecha_manipulacion"] == 0,
+              str(r["row"]["motivo_sospecha"]))
+        check(f"{basura!r}: pero SÍ queda como problema para el auxiliar",
+              any("catálogo" in p or "CIE-10" in p for p in r["problemas"]), str(r["problemas"]))
+    # Contraste: un código BIEN FORMADO que no está en el catálogo sí es sospecha.
+    r = erp.mapear_a_staging(_resultado("Z99.9", "LO QUE SEA"), lookups=LookupsFake())
+    check("Z99.9 (bien formado, no catalogado): sí dispara",
+          r["row"]["sospecha_manipulacion"] == 1, str(r["row"]["motivo_sospecha"]))
+
+
 def main() -> int:
     print("=" * 64)
     print("PRUEBAS erp.py — coincidencia diagnóstico vs. catálogo CIE-10")
@@ -170,6 +187,7 @@ def main() -> int:
     test_codigo_4_caracteres_no_dispara_por_longitud()
     test_helper_umbral_conservador()
     test_sin_catalogo_no_dispara()
+    test_basura_ocr_no_dispara()
     print("-" * 64)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")
     return 1 if _fail else 0

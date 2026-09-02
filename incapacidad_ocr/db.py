@@ -269,6 +269,50 @@ def actualizar_estado(cx, registro_id: int, estado: str, nota: Optional[str] = N
         cur.close()
 
 
+def reset_bd_prueba_permitido() -> bool:
+    """True solo si el entorno declara explícitamente que esta BD es de PRUEBA.
+
+    El vaciado completo de staging (`vaciar_staging_prueba`) es irreversible, y estas mismas
+    funciones apuntan a la BD ASTGU **real** en producción. Por eso no basta con que alguien
+    pulse un botón: hace falta `RESET_BD_PRUEBA=1` en el entorno del servicio, que se pone en
+    el stack de demo (`docker-compose.yml`) y NO debe existir en producción.
+    """
+    return os.environ.get("RESET_BD_PRUEBA", "").strip().lower() in {"1", "true", "si", "yes"}
+
+
+def vaciar_staging_prueba(cx) -> dict[str, int]:
+    """Vacía la tabla de staging y sus alertas para dejar la BD como antes de la prueba.
+
+    Es lo que hace que «Reiniciar prueba» sea de verdad un reinicio: devolver los archivos a
+    la entrada sin limpiar staging deja la bandeja con los registros de la corrida anterior.
+    Los CATÁLOGOS (empleados, diagnósticos, EPS, requisitos) NO se tocan: son la entrada de
+    la prueba, no su resultado.
+
+    Exige `reset_bd_prueba_permitido()`; si no, lanza RuntimeError sin tocar nada.
+    """
+    if not reset_bd_prueba_permitido():
+        raise RuntimeError(
+            "Vaciado de staging no permitido: falta RESET_BD_PRUEBA=1 en el entorno. "
+            "Es la salvaguarda para no vaciar la tabla de una BD de producción.")
+    cur = cx.cursor()
+    try:
+        borradas = {}
+        for tabla in (ALERTAS_TABLE, STAGING_TABLE):   # alertas primero (cuelgan del staging)
+            try:
+                cur.execute(f"SELECT COUNT(*) FROM {tabla}")
+                borradas[tabla] = int(cur.fetchone()[0])
+                cur.execute(f"TRUNCATE TABLE {tabla}")
+            except Exception:  # noqa: BLE001 — una tabla ausente no debe impedir el reinicio
+                borradas[tabla] = 0
+        cx.commit()
+        return {"staging": borradas.get(STAGING_TABLE, 0), "alertas": borradas.get(ALERTAS_TABLE, 0)}
+    except Exception:
+        cx.rollback()
+        raise
+    finally:
+        cur.close()
+
+
 def eliminar_staging_por_archivos(cx, archivos: list[str], solo_pendientes: bool = True) -> dict[str, int]:
     """Borra las filas de staging (y sus alertas) que vinieron de estos archivos.
 

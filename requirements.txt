@@ -5,7 +5,9 @@ PyMuPDF>=1.24        # spans de fuente/tamaño en PDF de texto nativo (authentic
 
 # --- OCR local (elige uno) ---
 rapidocr-onnxruntime>=1.2   # OCR ONNX en CPU, modelos embebidos, sin servicios externos
+numpy>=1.26           # arrays del OCR (ocr.py) y ELA de autenticidad (authenticity.py) — import DIRECTO
 # Ollama: NO requiere paquete pip; se instala aparte (ollama.com) y se llama por HTTP.
+# En Docker el contenedor `ollama` ya lo trae: no instalar además Ollama nativo.
 
 # --- Solo si usas los backends de Ollama (visión/LLM) ---
 httpx>=0.27
@@ -21,3 +23,6 @@ mysql-connector-python>=9.0  # driver MySQL (mismo que la solución de referenci
 # --- Corrida programada (cron) de la ingesta por lotes ---
 apscheduler>=3.10   # scheduler in-process (CronTrigger) para la ingesta masiva
 tzdata>=2024.1      # base de zonas horarias (America/Bogota) en imágenes slim
+
+# --- Utilidades de scripts/ (se ejecutan en el HOST: no van dentro de la imagen) ---
+fpdf2>=2.7          # scripts/guia_a_pdf.py → GUIA_RECEPCION_INCAPACIDADES.pdf
