@@ -115,11 +115,41 @@ CREATE TABLE IF NOT EXISTS lp_ausentismos_ia (
   problemas                    TEXT          NULL,
   documentacion_estado         VARCHAR(20)   NULL,
   documentos_faltantes         VARCHAR(255)  NULL,
+  -- Veredicto TEMPORAL con canal propio (incapacidad_ocr/reglas_tiempo.py): permite
+  -- ordenar la cola por gravedad y distinguir "los tiempos no cuadran" de "no encontré
+  -- la cédula". `fechafin_leida`/`dias_leidos` conservan lo que el documento IMPRIME
+  -- (evidencia): sin ellas, la reconciliación re-deriva el fin y la contradicción
+  -- temporal —la señal de alteración más barata de detectar— desaparece del registro.
+  fechafin_leida               DATE          NULL,
+  dias_leidos                  INT           NULL,
+  alertas_tiempos              VARCHAR(255)  NULL,   -- códigos de regla disparados
+  severidad_tiempos            VARCHAR(10)   NULL,   -- GRAVE / MEDIA / LEVE (la peor)
   -- control del flujo
   estado                       VARCHAR(20)   NOT NULL DEFAULT 'PENDIENTE_REVISION',
   creado_en                    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_ia_estado (estado),
   INDEX idx_ia_empleado (idlpempleado)
+) ENGINE=InnoDB;
+
+-- ------------------------------------------- configuración EN CALIENTE de las reglas
+-- Severidades/umbrales del motor de tiempos EN TABLA: cambiarlos en producción es un
+-- UPDATE, no un despliegue (el código Python va dentro de la imagen Docker). Los
+-- defaults viven en `reglas_tiempo.UMBRALES_DEFAULT` y en el CATALOGO, así que estas
+-- tablas pueden estar VACÍAS o no existir: el motor funciona igual (degrada sin BD).
+-- Prioridad: estas tablas > archivo JSON del volumen > defaults del código.
+CREATE TABLE IF NOT EXISTS lp_reglas_tiempo_ia (
+  codigo         VARCHAR(48) PRIMARY KEY,   -- código del CATALOGO (T01_..., T02_...)
+  severidad      VARCHAR(10)  NULL,         -- GRAVE / MEDIA / LEVE (NULL = deja el default)
+  activa         TINYINT(1)   NULL,         -- 0/1 (NULL = deja el default)
+  nota           VARCHAR(200) NULL,         -- por qué se cambió y quién lo pidió
+  actualizado_en TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS lp_umbrales_tiempo_ia (
+  nombre         VARCHAR(48) PRIMARY KEY,   -- dias_max, dias_sin_respaldo_aviso, ...
+  valor          INT          NOT NULL,     -- entero; fuera de su rango admisible se ignora
+  nota           VARCHAR(200) NULL,
+  actualizado_en TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS lp_alertas_documentacion (

@@ -12,6 +12,8 @@ import json
 import re
 from typing import Any, Protocol
 
+from .numeros_es import duracion_en_texto, numerales_en_texto, texto_a_entero
+
 
 def empty_record() -> dict[str, Any]:
     """Esquema objetivo de una incapacidad (campos en None por defecto)."""
@@ -23,6 +25,15 @@ def empty_record() -> dict[str, Any]:
             "fecha_inicio": None,
             "fecha_fin": None,
             "dias": None,
+            # Duración leída en LETRAS ("DOS") y si concuerda con el dígito del
+            # MISMO campo ("DOS (2)"): 'dias_letra' es int|None y
+            # 'dias_letra_coincide' es True/False solo cuando el documento trae las
+            # dos formas (None si solo trae una). Son INSTRUMENTACIÓN: 'dias' sigue
+            # mandando el DÍGITO cuando existe, y aquí NO se juzga si un desacuerdo
+            # es adulteración — eso es de otro módulo (ver dataset-falsedad/
+            # duraciones/01_evidencia.md §6).
+            "dias_letra": None,
+            "dias_letra_coincide": None,
             "fecha_expedicion": None,
             "tipo": None,
             "origen": None,
@@ -258,6 +269,63 @@ def _days_between(inicio: str | None, fin: str | None) -> int | None:
         return None
     delta = (df - di).days + 1
     return delta if 1 <= delta <= 540 else None
+
+
+# --------------------------------------------------------------------------- #
+# Días de incapacidad: en NÚMEROS, en LETRAS o en las dos ("DOS (2) DIAS")
+# --------------------------------------------------------------------------- #
+# El lector de numerales vive en ``numeros_es`` (formas A1..A10 / B1 / C1..C6 del
+# corpus real, con sus guardarraíles contra el día del mes, el año, la edad, las
+# horas y las semanas de gestación). Aquí solo se CABLEA.
+#
+# Número de 1..3 cifras SUELTO: ni parte de un número más largo (año/consecutivo)
+# ni pegado a una fecha/hora por ``/ - . :``. Es el MISMO guardarraíl que aplica
+# ``numeros_es._RE_NUM`` y es lo que evita leer como duración el año de
+# "Duracion"⏎"DE2026" (daba 202) o el día del mes de "POR 4 DIAS DESDE EL
+# 29-07-26" (daba 29) — los dos falsos positivos que el corpus documenta.
+_NUM_DIAS = r"((?<!\d)(?<![\d][/.\-:])\d{1,3}(?!\d)(?![/.\-:]\d))"
+
+
+def _dias_por_etiqueta(text: str) -> tuple[int | None, int | None, bool | None]:
+    """(días, días_en_letra, coinciden) leídos por rótulo/unidad del documento.
+
+    Delega en ``numeros_es.duracion_en_texto``, que exige un ANCLA (la unidad
+    pegada al valor —"POR 4 DIAS"— o un rótulo de duración en el mismo renglón) y
+    entiende las dos escrituras: "2", "DOS" y "DOS (2)". Cuando hay las dos, el
+    DÍGITO es el valor y la palabra queda registrada para poder compararlas.
+
+    Si el módulo no encuentra nada anclado se cae a los patrones históricos del
+    repo (respaldo para variantes de rótulo que no estén en su lista), ya con el
+    guardarraíl ``_NUM_DIAS`` para no reintroducir los falsos positivos del año y
+    del día del mes.
+    """
+    dur = duracion_en_texto(text)
+    if dur:
+        return dur["valor"], dur["letra"], dur["coincide"]
+    # (sin excluir \n: el valor suele quedar en la línea siguiente, "Duracion:\n126").
+    dias = _first(text, rf"(?i)duraci[oó]n\b[^\d]{{0,10}}{_NUM_DIAS}")
+    if not dias:
+        dias = _first(text, rf"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{{0,15}}{_NUM_DIAS}")
+    return (int(dias) if dias and dias.isdigit() else None), None, None
+
+
+def _dias_de_celda(celda: str) -> tuple[int | None, int | None, bool | None]:
+    """(días, días_en_letra, coinciden) de una CELDA de tabla ("Dias Inc.").
+
+    Aquí el ancla es la POSICIÓN en la tabla (columna fija del formato), más fiable
+    que cualquier rótulo. Como ``duracion_en_texto`` SIEMPRE exige un ancla (y hace
+    bien: es lo que le impide inventar duraciones), se la damos escrita —"Dias:"—
+    en vez de reimplementar el lector: así la celda se lee igual que en el resto
+    del documento, con dígito ("3"), con palabra ("TRES"), con las dos
+    ("3 (TRES)", "02 dos dia(s)") y con sus mismos guardarraíles.
+    """
+    dur = duracion_en_texto("Dias: " + celda)
+    if not dur:
+        return None, None, None
+    valor = dur["valor"]
+    if valor is not None and not (1 <= valor <= 540):  # rango de dominio del repo
+        valor = None
+    return valor, dur["letra"], dur["coincide"]
 
 
 # El OCR confunde dígitos con letras en los códigos (0↔O, 1↔I/l/L, 2↔Z, 5↔S).
@@ -698,10 +766,14 @@ def _extraer_permiso(text: str) -> dict[str, Any]:
 # "Dias Inc." con la descripción del diagnóstico).
 # --------------------------------------------------------------------------- #
 def _extraer_detalle_incapacidad(text: str) -> dict[str, Any] | None:
+    # La celda de días se captura como LÍNEA COMPLETA (no como `\d{1,3}`) para que
+    # el bloque siga casando cuando la duración viene en letras o en las dos formas
+    # ("3 (TRES)", "TRES"); antes, cualquier cosa que no fueran dígitos puros
+    # tumbaba TODO el bloque y con él el CIE-10 y las fechas de la tabla.
     m = re.search(
         r"(?i)detalle\s*de\s*la\s*incapacidad\s*"
         r"causa\s*externa\s*diagnostico\s*dias\s*inc\.?\s*inicio\s*finalizaci[oó]n\s*"
-        r"([^\n]+)\n([^\n]+)\n(\d{1,3})\n(\d{1,2}/\d{1,2}/\d{4})\n(\d{1,2}/\d{1,2}/\d{4})",
+        r"([^\n]+)\n([^\n]+)\n([^\n]{1,40})\n(\d{1,2}/\d{1,2}/\d{4})\n(\d{1,2}/\d{1,2}/\d{4})",
         text,
     )
     if not m:
@@ -711,12 +783,14 @@ def _extraer_detalle_incapacidad(text: str) -> dict[str, Any] | None:
     cie_raw = dxm.group(1).upper() if dxm else None
     desc = (dxm.group(2).strip() if dxm else dx) or None
     code, _fixes = _normalize_cie10(cie_raw) if cie_raw else (None, 99)
-    dias_val = int(dias) if dias.isdigit() and 1 <= int(dias) <= 540 else None
+    dias_val, dias_letra, dias_coincide = _dias_de_celda(dias)
     return {
         "origen": origen.replace("_", " ") or None,
         "cie10": code or cie_raw,  # cruda si el OCR perdió la letra inicial (p.ej. "0820")
         "descripcion": desc,
         "dias": dias_val,
+        "dias_letra": dias_letra,
+        "dias_letra_coincide": dias_coincide,
         "fecha_inicio": _norm_date(fi),
         "fecha_fin": _norm_date(ff),
     }
@@ -813,20 +887,20 @@ class RuleBasedExtractor:
                 rec["incapacidad"]["fecha_fin"] = ff_vac
 
         # --- Días: etiqueta o, como respaldo fiable, calculado desde las fechas ---
-        # "Duracion" + nº (a veces seguido de las letras redundantes: "14-CATORCE").
-        # Las cartas de vacaciones son prosa libre: "el dia siete (07) de julio" (un
-        # DÍA DEL MES, no una duración) engañaría a estos patrones — para ese tipo de
-        # documento se confía solo en la diferencia de fechas (ver más abajo).
-        dias = None
+        # Se leen en NÚMEROS ("2"), en LETRAS ("DOS") y en las dos a la vez
+        # ("DOS (2) DIAS", "02 dos dia(s)") — ver `_dias_por_etiqueta`/`numeros_es`.
+        # VACACIONES: aquí NO se lee ninguna duración, ni por dígito ni por letra. Es
+        # una carta en prosa donde "el dia siete (07) de julio" es un DÍA DEL MES y
+        # "dos mil veintiseis (2026)" el AÑO en palabras: son exactamente las formas
+        # C3/C5 invertidas, así que entender letras AUMENTA el riesgo en este formato
+        # en vez de reducirlo. Los días salen SIEMPRE de la diferencia de fechas
+        # (regla de CLAUDE.md §VACACIONES). Preferimos no leer un día a inventarlo:
+        # el auxiliar corrige en la UI, pero una duración falsa corrompe la nómina.
+        dias_val = dias_letra = dias_letra_coincide = None
         if rec["tipo_documento"] != "vacaciones":
-            # (sin excluir \n: el valor suele quedar en la línea siguiente, "Duracion:\n126").
-            dias = _first(t, r"(?i)duraci[oó]n\b[^\d]{0,10}(\d{1,3})")
-            if not dias:
-                dias = _first(t, r"(?i)d[ií]as?(?:\s*de\s*incapacidad)?\b[^\d\n]{0,15}(\d{1,3})")
-            if not dias:
-                dias = _first(t, r"(?i)(\d{1,3})\s*[\(\-]?\s*(?:un|dos|tres|cuatro|cinco|"
-                                 r"seis|siete|ocho|nueve|diez|quince|veinte|treinta)\w*\s*d[ií]as?")
-        dias_val = int(dias) if dias and dias.isdigit() else None
+            dias_val, dias_letra, dias_letra_coincide = _dias_por_etiqueta(t)
+        rec["incapacidad"]["dias_letra"] = dias_letra
+        rec["incapacidad"]["dias_letra_coincide"] = dias_letra_coincide
         dias_calc = _days_between(rec["incapacidad"]["fecha_inicio"], rec["incapacidad"]["fecha_fin"])
         rec["incapacidad"]["dias"] = dias_val if dias_val is not None else dias_calc
 
@@ -849,6 +923,18 @@ class RuleBasedExtractor:
                         d = int(pre.group(1))
                         if 1 <= d <= 540:
                             rec["incapacidad"]["dias"] = d
+                    elif dias_val is None:
+                        # …o la duración en LETRAS en esa misma posición ("CINCO
+                        # 11/06/2026"). El ancla es POSICIONAL (la palabra pegada a la
+                        # fecha que el rótulo "Dias Fecha Inicia" ya ancló), no un
+                        # léxico suelto: `texto_a_entero` rechaza cualquier palabra que
+                        # no sea un numeral, así que "Comun 11/06/2026" no lee nada.
+                        pal = re.search(r"(?i)(?<![a-zñáéíóú])([a-zñáéíóúü]{2,12})[\s(\-]*$",
+                                        seg[:dm.start()])
+                        d = texto_a_entero(pal.group(1)) if pal else None
+                        if d is not None and 1 <= d <= 540:
+                            rec["incapacidad"]["dias"] = d
+                            rec["incapacidad"]["dias_letra"] = d
 
         # tipo: preferir "Tipo (de) Incapacidad"; el respaldo genérico excluye
         # "Tipo de Usuario/DX/Atención" (lookahead negativo) para no capturar basura.
@@ -918,6 +1004,9 @@ class RuleBasedExtractor:
                 rec["incapacidad"]["fecha_fin"] = detalle["fecha_fin"]
             if detalle["dias"]:
                 rec["incapacidad"]["dias"] = detalle["dias"]
+            if detalle["dias_letra"] is not None:
+                rec["incapacidad"]["dias_letra"] = detalle["dias_letra"]
+                rec["incapacidad"]["dias_letra_coincide"] = detalle["dias_letra_coincide"]
 
         return rec
 
@@ -936,6 +1025,16 @@ Analiza el texto y devuelve ÚNICAMENTE un JSON (sin markdown, sin texto extra) 
   "medico": {"nombre": "", "registro": ""}
 }
 Usa null si un campo no aparece. Las fechas en formato YYYY-MM-DD. 'dias' como número entero.
+
+REGLAS PARA 'dias' (la DURACIÓN de la incapacidad):
+- Devuélvelo SIEMPRE como NÚMERO ENTERO, aunque el documento lo escriba en LETRAS.
+  "DOS" -> 2 · "CATORCE" -> 14 · "DOS (2) DIAS" -> 2 · "02 dos dia(s)" -> 2 · "30 (TREINTA)" -> 30.
+- Si el documento trae la palabra y el dígito y NO concuerdan, devuelve el DÍGITO tal cual (no
+  corrijas nada): la discrepancia la revisa una persona.
+- NO es una fecha: nunca uses el día del mes de "DESDE EL 29-07-2026" ni el año como duración.
+- NO son días de incapacidad: la edad ("31 año(s), 3 mes(es), 22 día(s)"), las horas ("CADA 8
+  HORAS"), las semanas de gestación, las cantidades de medicamento ("1 (Uno)") ni los números de
+  trámite/consecutivo. Si no hay una duración clara, devuelve null (NO la inventes ni la calcules).
 
 Texto del certificado:
 """
@@ -1048,6 +1147,32 @@ def _dates_in_text(text: str) -> set[str]:
     return found
 
 
+def _dias_llm(valor: Any, presentes: set[int] | None) -> int | None:
+    """Duración devuelta por el LLM, ya saneada. None si no es de fiar.
+
+    MISMA guarda de anclaje que las fechas (``_dates_in_text`` + ``grounded``): el
+    valor se acepta solo si su EXPRESIÓN aparece de verdad en el texto OCR — el
+    dígito ("2") **o la palabra** ("DOS"), que es lo que hace que la duración
+    escrita en letras pueda venir del modelo (``numeros_es.numerales_en_texto``).
+    Además se exige entero y el rango de dominio 1..540.
+    """
+    if isinstance(valor, bool):  # True valdría 1: el LLM no debe "votar" así
+        return None
+    if isinstance(valor, int):
+        n = valor
+    elif isinstance(valor, float):
+        n = int(valor) if valor.is_integer() else None  # "dias": 2.0 del JSON
+    elif isinstance(valor, str) and valor.strip().isdigit():
+        n = int(valor.strip())
+    else:
+        n = None
+    if n is None or not (1 <= n <= 540):
+        return None
+    if presentes is not None and n not in presentes:
+        return None  # no está en el documento → alucinación, se descarta
+    return n
+
+
 def _clean_origen(val: Any) -> str | None:
     """Normaliza 'origen' a un valor conocido; descarta basura (códigos, texto largo)."""
     if not isinstance(val, str) or not val.strip():
@@ -1069,11 +1194,18 @@ def _clean_origen(val: Any) -> str | None:
 def _merge_records(rule_rec: dict[str, Any], llm_rec: dict[str, Any], text: str = "") -> dict[str, Any]:
     """Fusiona por campo: el preferido manda si no está vacío; si no, el otro."""
     out = empty_record()
-    for section in out:
+    for section, plantilla in out.items():
+        if not isinstance(plantilla, dict):
+            # "tipo_documento" es un ESCALAR del esquema, no una sección: lo decide
+            # el detector de formato de las REGLAS (incapacidad/permiso/vacaciones),
+            # nunca el LLM. Sin este caso, recorrer la cadena carácter a carácter
+            # revienta la fusión (AttributeError) en cuanto el LLM responde.
+            out[section] = rule_rec.get(section) or plantilla
+            continue
         rsec = rule_rec.get(section) or {}
         lsec = llm_rec.get(section) if isinstance(llm_rec, dict) else {}
         lsec = lsec or {}
-        for key in out[section]:
+        for key in plantilla:
             rv, lv = rsec.get(key), lsec.get(key)
             if (section, key) in _RULE_PREFERRED:
                 out[section][key] = rv if not _empty(rv) else lv
@@ -1105,13 +1237,27 @@ def _merge_records(rule_rec: dict[str, Any], llm_rec: dict[str, Any], text: str 
     inc["fecha_fin"] = grounded(linc.get("fecha_fin"), rinc.get("fecha_fin"))
     inc["fecha_expedicion"] = grounded(linc.get("fecha_expedicion"), rinc.get("fecha_expedicion"))
 
-    # Días: si el inicio está anclado, confiamos en los días de reglas (mismo origen);
-    #       si no, preferimos LLM y luego reglas.
-    if rinc.get("_inicio_anclada") and not _empty(rinc.get("dias")):
+    # --- Días: por orden de fiabilidad de la EVIDENCIA del documento. El valor del
+    #     LLM solo entra al final, y ya anclado al texto y acotado a 1..540.
+    # La palabra leída del documento ("DOS (2) DIAS", o "-DOS" cuando el OCR se comió
+    # el dígito) no se deja pisar por el modelo: es el dato que permite ver luego un
+    # desacuerdo con el rango de fechas, y el modelo tendería a "arreglarlo".
+    letra_del_documento = (
+        rinc.get("dias_letra") is not None and rinc.get("dias_letra_coincide") is not False
+    )
+    if out["tipo_documento"] == "vacaciones":
+        # Los días de una carta de vacaciones se calculan SIEMPRE por diferencia de
+        # fechas (CLAUDE.md §VACACIONES) — que es justo lo que trae el registro de
+        # reglas. El LLM no vota aquí: en esa prosa "(07) de julio" es un día del mes.
+        inc["dias"] = rinc.get("dias")
+    elif rinc.get("_inicio_anclada") and not _empty(rinc.get("dias")):
+        # Inicio anclado al rótulo → los días de reglas vienen del mismo sitio.
+        inc["dias"] = rinc.get("dias")
+    elif letra_del_documento and not _empty(rinc.get("dias")):
         inc["dias"] = rinc.get("dias")
     else:
-        lv, rv = linc.get("dias"), rinc.get("dias")
-        inc["dias"] = lv if not _empty(lv) else rv
+        lv = _dias_llm(linc.get("dias"), numerales_en_texto(text) if text else None)
+        inc["dias"] = lv if lv is not None else rinc.get("dias")
 
     # --- Origen: saneado a valores conocidos (el LLM a veces devuelve basura).
     inc["origen"] = _clean_origen(inc["origen"]) or _clean_origen(rinc.get("origen"))
@@ -1126,7 +1272,9 @@ def normalizar_fechas(rec: dict[str, Any]) -> dict[str, Any]:
       • Si no se está seguro de la fecha de inicio → inicio = fin − (días − 1).
     Y, simétricamente, completa fin o días cuando faltan y se pueden derivar.
     Marca ``fecha_inicio_calculada`` cuando la fecha de inicio fue DERIVADA (no leída),
-    para que el revisor lo vea.
+    y ``fecha_fin_recalculada`` cuando la fecha fin que traía el documento NO cuadraba
+    con los días y hubo que re-derivarla — los dos son AVISOS para el revisor, no
+    bloquean nada.
     """
     from datetime import timedelta
 
@@ -1140,10 +1288,18 @@ def normalizar_fechas(rec: dict[str, Any]) -> dict[str, Any]:
     if n is not None and not (1 <= n <= 540):
         n = None
     inc["fecha_inicio_calculada"] = False
+    inc["fecha_fin_recalculada"] = False
 
     if di and n:
         # Inicio + días confiables → (re)derivar fin si falta o es inconsistente.
         if not df or df < di or (df - di).days + 1 != n:
+            # Si el documento SÍ traía una fecha fin y no cuadra con los días, se
+            # deja constancia: ese desacuerdo duración↔rango de fechas es la señal
+            # de adulteración que respalda la evidencia del corpus (aparece solo en
+            # documentos falsos) y, al re-derivar el fin, dejaría de verse. Aquí no
+            # se juzga nada — solo se marca para el revisor y para quien la analice.
+            if df is not None:
+                inc["fecha_fin_recalculada"] = True
             df = di + timedelta(days=n - 1)
             inc["fecha_fin"] = df.isoformat()
     elif df and n and not di:

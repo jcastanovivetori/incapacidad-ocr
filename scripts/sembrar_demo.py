@@ -1,4 +1,4 @@
-"""Siembra el escenario de demo de la INGESTA por lotes en ``ingesta/inbox/whatsapp``.
+"""Siembra el escenario de demo de la INGESTA por lotes en ``ingesta/1_entrada/whatsapp``.
 
 Deja 5 casos + 1 archivo mal nombrado, con la nomenclatura ``cedula_TIPODOC.ext``
 (la FECHA no va en el nombre: sale del OCR del documento):
@@ -7,7 +7,7 @@ Deja 5 casos + 1 archivo mal nombrado, con la nomenclatura ``cedula_TIPODOC.ext`
   - 1005542119 (MICHAEL, Seg. Estado) INCAPACIDAD + FURAT      → accidente de trabajo, COMPLETO   [sintético]
   - 1095912481 (JAIDER)               VACACIONES               → vacaciones, COMPLETO             [sintético]
   - 1098757631 (YARITZA)              PERMISO                  → licencia remunerada, COMPLETO    [sintético]
-  - documento_suelto.jpeg (sin nomenclatura → se omite / va a sin_nomenclatura)
+  - documento_suelto.jpeg (sin nomenclatura → se omite / va a 2_revisar/mal_nombrados)
 
 Los dos primeros usan documentos REALES de ../Ejemplos; los tres sintéticos se generan
 como imágenes de texto claro (RapidOCR las lee bien). Ejecutar en el HOST (necesita PIL y
@@ -18,12 +18,18 @@ una fuente TTF; usa Arial en Windows o DejaVu en Linux, con respaldo a la fuente
 from __future__ import annotations
 
 import shutil
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 REPO = Path(__file__).resolve().parent.parent
-INBOX = REPO / "ingesta" / "inbox" / "whatsapp"
+sys.path.insert(0, str(REPO))
+# Las carpetas del árbol se toman del runner (única fuente de verdad, no se duplican aquí).
+from incapacidad_ocr.batch import ENTRADA, asegurar_estructura  # noqa: E402
+
+INGESTA = REPO / "ingesta"
+ENTRADA_WA = INGESTA / ENTRADA / "whatsapp"
 EJEMPLOS = REPO.parent / "Ejemplos"
 
 _FUENTES = [
@@ -55,16 +61,17 @@ def render(lines: list[str], path: Path) -> None:
 
 
 def main() -> None:
-    INBOX.mkdir(parents=True, exist_ok=True)
-    for f in INBOX.glob("*"):
+    asegurar_estructura(INGESTA)      # deja el árbol completo (1_entrada/2_revisar/3_archivo/_sistema)
+    ENTRADA_WA.mkdir(parents=True, exist_ok=True)
+    for f in ENTRADA_WA.glob("*"):
         if f.is_file() and f.name != ".gitkeep":  # preserva el marcador de estructura versionado
             f.unlink()
 
     # --- Casos con documentos REALES (../Ejemplos) ---
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_INCAPACIDAD.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "13742111_EPICRISIS.pdf")
-    shutil.copy(EJEMPLOS / "incapacidad.jpeg", INBOX / "63523940_INCAPACIDAD.jpeg")
-    shutil.copy(EJEMPLOS / "incapacidad_.jpeg", INBOX / "documento_suelto.jpeg")  # sin nomenclatura
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_INCAPACIDAD.pdf")
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "13742111_EPICRISIS.pdf")
+    shutil.copy(EJEMPLOS / "incapacidad.jpeg", ENTRADA_WA / "63523940_INCAPACIDAD.jpeg")
+    shutil.copy(EJEMPLOS / "incapacidad_.jpeg", ENTRADA_WA / "documento_suelto.jpeg")  # sin nomenclatura
     print("  copiados: 13742111 (x2), 63523940, documento_suelto")
 
     # --- Casos SINTÉTICOS (texto claro para OCR; la fecha va DENTRO del documento) ---
@@ -79,8 +86,8 @@ def main() -> None:
         "Fecha fin: 2026-06-24",
         "Dias de incapacidad: 10",
         "Medico: Dr. CARLOS PEREZ  Registro: 12345",
-    ], INBOX / "1005542119_INCAPACIDAD.png")
-    shutil.copy(EJEMPLOS / "incapacidad.pdf", INBOX / "1005542119_FURAT.pdf")
+    ], ENTRADA_WA / "1005542119_INCAPACIDAD.png")
+    shutil.copy(EJEMPLOS / "incapacidad.pdf", ENTRADA_WA / "1005542119_FURAT.pdf")
     print("  generado: 1005542119_FURAT.pdf")
 
     render([
@@ -91,7 +98,7 @@ def main() -> None:
         "a partir del primero (01) de julio de dos mil veintiseis (2026)",
         "hasta el quince (15) de julio de dos mil veintiseis (2026).",
         "Departamento de Gestion Humana",
-    ], INBOX / "1095912481_VACACIONES.png")
+    ], ENTRADA_WA / "1095912481_VACACIONES.png")
 
     render([
         "FORMATO SOLICITUD DE PERMISO",
@@ -113,9 +120,9 @@ def main() -> None:
         "AUTORIZADO POR",
         "Nombre: Diana Gelvez",
         "Cargo: Jefe de Gestion Humana",
-    ], INBOX / "1098757631_PERMISO.png")
+    ], ENTRADA_WA / "1098757631_PERMISO.png")
 
-    print(f"OK — escenario sembrado en {INBOX}")
+    print(f"OK — escenario sembrado en {ENTRADA_WA}")
 
 
 if __name__ == "__main__":

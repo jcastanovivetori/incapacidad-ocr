@@ -19,6 +19,8 @@ import unicodedata
 from datetime import date, timedelta
 from typing import Any, Optional
 
+from . import reglas_tiempo
+
 # Estados de recepción (códigos placeholder — confirmar con el catálogo real del ERP).
 ESTADO_RECEPCION = {"ORIGINAL": 1, "WHATSAPP": 2, "CORREO": 3}
 
@@ -147,11 +149,39 @@ def homologar_tipo(texto: str) -> tuple[int, str]:
 
 
 def _safe_date(s: Any) -> Optional[date]:
-    if not isinstance(s, str):
+    """Cadena ``YYYY-MM-DD`` → date (una sola implementación: ``reglas_tiempo.fecha_iso``).
+
+    Es MÁS ESTRICTO que ``date.fromisoformat``, que en Python 3.11+ acepta formas ISO
+    que la columna DATE de MySQL rechaza (semana ``2026-W23-1``, básico ``20260601``) y
+    que ningún documento imprime.
+    """
+    return reglas_tiempo.fecha_iso(s)
+
+
+def _dic(contenedor: Any, clave: str) -> dict[str, Any]:
+    """Sub-dict defensivo: lo que no sea un dict se trata como vacío.
+
+    El registro puede llegar de un cliente del API con otro tipo en cualquier rama (una
+    lista donde se espera un objeto). El repo DEGRADA, no explota — igual que hace
+    ``extract`` con ``isinstance``; el idiom ``or {}`` salvaba la lista vacía pero no la
+    lista con elementos.
+    """
+    valor = contenedor.get(clave) if isinstance(contenedor, dict) else None
+    return valor if isinstance(valor, dict) else {}
+
+
+def _config_tiempos(lookups) -> Any:
+    """Config de las reglas de tiempos guardada en BD, si el ``lookups`` sabe leerla.
+
+    Sin BD (``LookupsNulos``) o sin las tablas → None y el motor sigue con el archivo del
+    volumen y los defaults del código. Mismo patrón que ``documentos_requeridos``.
+    """
+    leer = getattr(lookups, "config_reglas_tiempo", None)
+    if leer is None:
         return None
     try:
-        return date.fromisoformat(s)
-    except ValueError:
+        return leer()
+    except Exception:  # noqa: BLE001 — BD/tabla ausente: no es un error del documento
         return None
 
 
@@ -165,6 +195,7 @@ class Lookups:
         self._cache_dx: dict[str, tuple[Optional[int], Optional[str]]] = {}
         self._entidades: Optional[list[tuple[int, str, int, str]]] = None  # (id, nombre_norm, tipo, nombre)
         self._empleados_nombre: Optional[list[tuple[int, str, str, str]]] = None  # (id, nombre, eps, clave)
+        self._cfg_tiempos: Optional[dict[str, Any]] = None
 
     def _query(self, sql: str, params: tuple):
         cur = self._cx.cursor()
@@ -257,6 +288,22 @@ class Lookups:
             return []
         return [f[0] for f in filas]
 
+    def config_reglas_tiempo(self) -> dict[str, Any]:
+        """Severidades/umbrales del motor de tiempos guardados en BD (una vez por corrida).
+
+        Es la vía para cambiarlos en producción sin volver a desplegar. Si las tablas no
+        existen (BD sin `sql/migracion_reglas_tiempo.sql`) devuelve ``{}`` y el motor sigue
+        con el archivo del volumen y los defaults del código.
+        """
+        if self._cfg_tiempos is None:
+            from .db import leer_config_reglas_tiempo  # import perezoso (no exige mysql)
+
+            try:
+                self._cfg_tiempos = leer_config_reglas_tiempo(self._cx)
+            except Exception:  # noqa: BLE001
+                self._cfg_tiempos = {}
+        return self._cfg_tiempos
+
 
 class LookupsNulos:
     """Sin BD: todo None (la validación marcará los IDs como pendientes de revisión)."""
@@ -278,6 +325,11 @@ class LookupsNulos:
 
     def documentos_requeridos(self, id_entidad, id_tipo):  # noqa: ARG002
         return []
+
+    def config_reglas_tiempo(self):
+        """Sin BD: no hay config en tabla → el motor usa el archivo del volumen y los
+        defaults del código (las reglas siguen evaluándose, no se "apagan")."""
+        return None
 
 
 # --------------------------------------------------------------------------- #
@@ -325,11 +377,13 @@ def _observaciones_permiso(etiqueta_tipo: Optional[str], perm: dict[str, Any]) -
 
 
 def _num_dias(v: Any) -> Optional[int]:
-    if isinstance(v, int):
-        return v
-    if isinstance(v, str) and v.strip().isdigit():
-        return int(v.strip())
-    return None
+    """Valor → entero (una sola implementación: ``reglas_tiempo.entero_dias``).
+
+    Rechaza ``bool`` (``True`` no es "un día"), dígitos Unicode no decimales (``²``:
+    ``isdigit()`` los acepta y ``int()`` revienta) y cadenas larguísimas; acepta el signo
+    para que un ``-3`` llegue a la regla de rango en vez de morir como "no se detectó".
+    """
+    return reglas_tiempo.entero_dias(v)
 
 
 def mapear_a_staging(
@@ -339,22 +393,27 @@ def mapear_a_staging(
     hoy: Optional[date] = None,
     overrides: Optional[dict[str, Any]] = None,
     documentos_presentes=None,
+    config_reglas=None,
 ) -> dict[str, Any]:
     """Construye la fila staging desde el resultado de ``process()``. No toca la BD.
 
     ``overrides`` permite que el AUXILIAR corrija/complete a mano los campos
     obligatorios (cédula, CIE-10, EPS, fecha de inicio, días, nombre, tipo); esos
     valores MANDAN sobre lo leído por el OCR y se vuelven a resolver los lookups.
+
+    ``config_reglas`` (``reglas_tiempo.ConfigReglas``) permite al lote cargar UNA vez la
+    configuración de severidades/umbrales y reutilizarla en todo el lote; si no se pasa,
+    se carga aquí (BD > archivo > defaults del código).
     """
     hoy = hoy or date.today()
     lookups = lookups or LookupsNulos()
     overrides = {k: v for k, v in (overrides or {}).items() if v not in (None, "")}
-    inc = resultado.get("incapacidad", {}) or {}
-    pac = inc.get("paciente", {}) or {}
-    ent = inc.get("entidad", {}) or {}
-    inca = inc.get("incapacidad", {}) or {}
-    diag = inc.get("diagnostico", {}) or {}
-    perm = inc.get("permiso", {}) or {}
+    inc = _dic(resultado, "incapacidad")
+    pac = _dic(inc, "paciente")
+    ent = _dic(inc, "entidad")
+    inca = _dic(inc, "incapacidad")
+    diag = _dic(inc, "diagnostico")
+    perm = _dic(inc, "permiso")
     # PERMISO (licencia remunerada/no remunerada): no lleva diagnóstico ni EPS.
     es_permiso = inc.get("tipo_documento") == "permiso"
     # VACACIONES (carta de notificación de periodo): tampoco lleva diagnóstico, EPS
@@ -371,29 +430,37 @@ def mapear_a_staging(
     nombre_ocr = overrides.get("paciente") or pac.get("nombre")
     fecha_inicio_calculada = bool(inca.get("fecha_inicio_calculada")) and "fecha_inicio" not in overrides
 
+    # Configuración de las reglas de tiempos (severidades/umbrales). Se relee por corrida:
+    # BD > archivo del volumen > defaults del código. Aquí ya se necesita porque el rango
+    # de días válido (1..540 por defecto) es uno de esos umbrales.
+    cfg_tiempos = config_reglas or reglas_tiempo.cargar_config(datos_bd=_config_tiempos(lookups))
+    dias_min = cfg_tiempos.umbrales["dias_min"]
+    dias_max = cfg_tiempos.umbrales["dias_max"]
+
     # Nunca se escribe una fecha inválida en la fila (protege el INSERT contra un
     # día/mes imposible que se cuele del OCR, del LLM o de un tecleo manual — MySQL
     # rechaza el registro completo con un 500 si llega algo como "2016-06-54").
-    if fecha_inicio and not _safe_date(fecha_inicio):
-        fecha_inicio = None
-    if fecha_fin and not _safe_date(fecha_fin):
-        fecha_fin = None
-    estado = (estado_recepcion or "WHATSAPP").upper()
+    # Se guarda la forma CANÓNICA, no la cadena original: validar con `_safe_date` y
+    # escribir el texto tal cual dejaría pasar un ISO que MySQL DATE no entiende y la
+    # fila quedaría incoherente consigo misma (fechavencimiento calculado desde otra
+    # fecha que la escrita).
+    _di_ef, _df_ef = _safe_date(fecha_inicio), _safe_date(fecha_fin)
+    fecha_inicio = _di_ef.isoformat() if _di_ef else None
+    fecha_fin = _df_ef.isoformat() if _df_ef else None
+    estado = str(estado_recepcion or "WHATSAPP").upper()
     if estado not in ESTADO_RECEPCION:
         estado = "WHATSAPP"
 
     # Regla del cliente (también al corregir a mano): si NO hay fecha de inicio pero sí
     # fecha final + días → inicio = fin − (días − 1). Recalcula al editar los días/el fin.
-    if not fecha_inicio and fecha_fin and num_dias and 1 <= num_dias <= 540:
-        _df = _safe_date(fecha_fin)
-        if _df:
-            fecha_inicio = (_df - timedelta(days=num_dias - 1)).isoformat()
-            fecha_inicio_calculada = True
+    if not fecha_inicio and _df_ef and num_dias and dias_min <= num_dias <= dias_max:
+        fecha_inicio = (_df_ef - timedelta(days=num_dias - 1)).isoformat()
+        fecha_inicio_calculada = True
     # Simétrico: si hay inicio + fin pero NO días, se calculan por diferencia (inclusive).
     # Cubre p.ej. vacaciones donde el inicio vino del nombre del archivo y el fin del OCR.
     if fecha_inicio and fecha_fin and not num_dias:
         _di, _df = _safe_date(fecha_inicio), _safe_date(fecha_fin)
-        if _di and _df and 1 <= (_df - _di).days + 1 <= 540:
+        if _di and _df and dias_min <= (_df - _di).days + 1 <= dias_max:
             num_dias = (_df - _di).days + 1
 
     problemas: list[str] = []
@@ -431,7 +498,10 @@ def mapear_a_staging(
         problemas.append("No se identificó si el permiso es remunerado o no remunerado")
         _faltan("tipo", "Tipo de permiso", None)
 
+    # Nivel tecleado: se valida contra el catálogo (un id inexistente rompería la FK).
     id_nivel = _num_dias(overrides.get("nivel"))
+    if id_nivel not in ETIQUETAS_NIVEL:
+        id_nivel = None
     if id_nivel is None:
         id_nivel = NIVEL_INCAPACIDAD_DEFAULT.get(id_tipo) if id_tipo is not None else None
 
@@ -485,28 +555,58 @@ def mapear_a_staging(
                 problemas.append("EPS no identificada en el documento")
             _faltan("eps", "EPS / Entidad", eps)
 
+    # --- VEREDICTO TEMPORAL (motor de reglas: incapacidad_ocr/reglas_tiempo.py) --------
+    # Valida la COHERENCIA de los tiempos sobre los valores LEÍDOS del documento (o
+    # tecleados por el auxiliar), nunca sobre los derivados por la reconciliación: ver la
+    # invariante "validar NO es reconciliar" en ese módulo y en CLAUDE.md. El motor MARCA
+    # y explica con código de regla + severidad; NUNCA rechaza: el auxiliar decide.
+    ctx_tiempos = reglas_tiempo.construir_contexto(
+        inca, hoy=hoy, overrides=overrides,
+        inicio_efectivo=fecha_inicio, fin_efectivo=fecha_fin, dias_efectivo=num_dias,
+        tipo_documento=inc.get("tipo_documento") if isinstance(inc, dict) else None,
+        id_tipo=id_tipo,
+    )
+    veredicto = reglas_tiempo.evaluar(ctx_tiempos, cfg_tiempos)
+    problemas.extend(veredicto.problemas)
+    # Campos que el motor ya explicó: evita decirle al auxiliar "no se detectó" un dato
+    # que SÍ se leyó (y que el hallazgo acaba de citar con su valor y su motivo).
+    campos_explicados = {h.campo for h in veredicto.hallazgos if h.exige_revision}
+
     # Fechas / días (campos obligatorios). Una fecha de inicio CALCULADA (fin − días)
     # es un valor válido según la regla del cliente: NO bloquea, pero se avisa en la UI
     # (campo ``fecha_inicio_calculada``) para que el revisor lo confirme si quiere.
+    # El valor que se registra en ``campos_faltantes`` es el CRUDO leído (no None): así el
+    # formulario muestra qué había en el papel aunque no se pudiera usar.
     if not fecha_inicio:
-        problemas.append("No se detectó la fecha de inicio")
-        _faltan("fecha_inicio", "Fecha de inicio", None)
-    if not num_dias:
-        problemas.append("No se detectó el número de días")
-        _faltan("dias", "Días de incapacidad", None)
-    elif not (1 <= num_dias <= 540):
-        problemas.append(f"Número de días fuera de rango (={num_dias})")
+        if "fecha_inicio" not in campos_explicados:
+            problemas.append("No se detectó la fecha de inicio")
+        _faltan("fecha_inicio", "Fecha de inicio", ctx_tiempos.inicio_crudo)
+    if num_dias is None:
+        if "dias" not in campos_explicados:
+            problemas.append("No se detectó el número de días")
+        _faltan("dias", "Días de incapacidad", ctx_tiempos.dias_crudo)
+    elif not (dias_min <= num_dias <= dias_max):
+        # Suelo NO configurable: un valor fuera de rango no es usable para la fila (deja
+        # `Numerodias`/`fechavencimiento` en NULL) aunque se desactive la regla T03.
+        if "dias" not in campos_explicados:
+            problemas.append(f"Número de días fuera de rango (={num_dias})")
         _faltan("dias", "Días de incapacidad", num_dias)
 
     fecha_venc = None
     di = _safe_date(fecha_inicio)
-    if di and num_dias and 1 <= num_dias <= 540:
+    if di and num_dias and dias_min <= num_dias <= dias_max:
         fecha_venc = (di + timedelta(days=num_dias)).isoformat()  # inicio + dias
+    # Un valor de días inutilizable no viaja a la fila (la columna es INT y el ERP lo
+    # promueve tal cual): queda NULL y el auxiliar lo teclea.
+    dias_fila = num_dias if (num_dias is not None and dias_min <= num_dias <= dias_max) else None
 
-    # "Confianza": completitud de los campos núcleo (no tenemos score de OCR aún).
+    # "Confianza": completitud de lo que se LEYÓ del documento (no hay score de OCR aún).
+    # Un valor DERIVADO por regla NO cuenta como leído: si contara, la UI mostraría 100%
+    # de confianza sobre una fecha de inicio que el documento no imprime.
     # Los permisos y vacaciones no llevan CIE-10, así que no cuenta para su completitud.
-    nucleo = [cedula, fecha_inicio, num_dias] if (es_permiso or es_vacaciones) \
-        else [cedula, cie, fecha_inicio, num_dias]
+    inicio_leido_para_confianza = None if fecha_inicio_calculada else fecha_inicio
+    nucleo = [cedula, inicio_leido_para_confianza, dias_fila] if (es_permiso or es_vacaciones) \
+        else [cedula, cie, inicio_leido_para_confianza, dias_fila]
     confianza = round(sum(1 for x in nucleo if x) / len(nucleo), 3)
 
     # Requisitos documentales. Si el lote pasa los documentos REALES presentes del caso
@@ -543,7 +643,7 @@ def mapear_a_staging(
         "fecharegistro": hoy.isoformat(),
         "fechaaccidente": None,
         "fechainicio": fecha_inicio,
-        "Numerodias": num_dias,
+        "Numerodias": dias_fila,
         "fechavencimiento": fecha_venc,
         "numeroorden": overrides.get("numeroorden"),
         "observaciones": observaciones,
@@ -566,12 +666,30 @@ def mapear_a_staging(
         "problemas": "; ".join(problemas) or None,
         "documentacion_estado": doc_estado,
         "documentos_faltantes": ", ".join(faltantes) or None,
+        # EVIDENCIA temporal: lo que el documento IMPRIME, aunque no cuadre con la fila.
+        # Sin estas dos columnas la reconciliación re-deriva el fin y la contradicción
+        # (la señal de alteración más barata de detectar) desaparece del registro.
+        "fechafin_leida": ctx_tiempos.fin_leido.isoformat() if ctx_tiempos.fin_leido else None,
+        "dias_leidos": ctx_tiempos.dias_leido,
+        # Canal propio del veredicto temporal: permite ordenar la cola por gravedad y
+        # distinguir "los tiempos no cuadran" de "no encontré la cédula".
+        "alertas_tiempos": ("; ".join(veredicto.codigos) or None),
+        "severidad_tiempos": veredicto.severidad_max,
         "estado": "PENDIENTE_REVISION",
     }
     return {
         "row": row,
         "requiere_revision": len(problemas) > 0,
         "problemas": problemas,
+        # Veredicto temporal estructurado y COMPLETO (veredicto global, estado de cada
+        # regla —incluidas las que cumplen y las que no se pudieron comprobar—, evidencia
+        # leída vs. derivada, resumen y configuración aplicada), para que la UI lo muestre
+        # aparte, la cola se pueda priorizar y el hallazgo sea auditable. Reutiliza el
+        # recorrido de `evaluar` (no vuelve a evaluar el catálogo).
+        "tiempos": reglas_tiempo.validar_tiempos(ctx_tiempos, cfg_tiempos, veredicto),
+        "hallazgos_tiempos": [h.como_dict() for h in veredicto.hallazgos],
+        "severidad_tiempos": veredicto.severidad_max,
+        "avisos_tiempos": veredicto.avisos,
         "campos_faltantes": faltantes_campos,
         "tipo_ausentismo": etiqueta_tipo,
         "nivel_incapacidad": ETIQUETAS_NIVEL.get(id_nivel),

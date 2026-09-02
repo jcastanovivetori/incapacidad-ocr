@@ -18,7 +18,7 @@ Principios de diseño:
 ```mermaid
 flowchart TB
     subgraph HOST["Host (Windows o Linux) - bind mount INGESTA_HOST_ROOT -> /data/ingesta"]
-        FS[("Arbol /data/ingesta: inbox -> work -> procesados/incompletos/cuarentena")]
+        FS[("Arbol /data/ingesta: 1_entrada -> _sistema/work -> 3_archivo | 2_revisar")]
         WSCHED["Arranque sin login: Docker Engine como servicio (Linux/Win Server)\nO Programador de tareas de Windows -> docker compose exec (Win headless)"]
     end
 
@@ -55,7 +55,7 @@ flowchart TB
 3. **OCR del documento base:** solo los archivos con `TIPODOC` base (`INCAPACIDAD`/`PERMISO`/`VACACIONES`) se pasan a `IncapacidadProcessor`; obtiene tipo de ausentismo, cédula, fechas, CIE-10, EPS. Los adjuntos **no se OCR-ean** (se reconocen por su nombre).
 4. **Escritura + checkpoint fenced (una sola transacción):** `db.insertar_staging_tx` (sin commit interno) y `UPDATE ... SET estado='HECHO', staging_id=? WHERE id=? AND worker_id=? AND lease_token=? AND estado='EN_PROCESO'`. Si `rowcount=0`, el worker perdió el lease → `ROLLBACK` + skip. Es la barrera dura contra la doble inserción.
 5. **Completitud del caso (single-writer):** un **único escritor por caso**, bajo `GET_LOCK('caso_'||caso_id)`, evalúa `presentes`/`documentacion_estado`/alerta tras drenar los documentos del caso (§7.4).
-6. **Movimiento físico (último paso, best-effort y reconciliable):** se escribe a `_tmp/` del volumen destino y luego `os.replace`. La correctitud vive en MySQL, no en el move; el estado del move (`estado_move ∈ {PENDIENTE_MOVER, MOVIDO}`) se reconcilia.
+6. **Movimiento físico (último paso, best-effort y reconciliable):** se escribe a `_sistema/tmp/` del volumen destino y luego `os.replace`. La correctitud vive en MySQL, no en el move; el estado del move (`estado_move ∈ {PENDIENTE_MOVER, MOVIDO}`) se reconcilia.
 
 ## 3. Nomenclatura de archivos (contrato de entrada)
 
@@ -72,9 +72,9 @@ Los documentos llegan **separados** (un archivo por documento). La agrupación y
 | `NN` | (opcional) 2 dígitos si hay varios del mismo tipo | `_01`, `_02`, … |
 | `ext` | `pdf` \| `jpg` \| `jpeg` \| `png` | |
 
-**La FECHA no va en el nombre:** el sistema la toma del **OCR del documento base** y con ella organiza la salida (`procesados/…/AAAA/MM/DD`). Se eligió así porque es más simple y menos propenso a error para quien nombra los soportes.
+**La FECHA no va en el nombre:** el sistema la toma del **OCR del documento base** y con ella organiza la salida (`3_archivo/…/AAAA/MM/DD`). Se eligió así porque es más simple y menos propenso a error para quien nombra los soportes.
 
-**Llave de caso** = la **`cedula`**. Todos los archivos con la misma cédula (en el inbox) forman un trámite. Si un mismo empleado tuviera dos trámites distintos en el mismo lote, el caso se marca para revisión (se detectan **varios documentos base**).
+**Llave de caso** = la **`cedula`**. Todos los archivos con la misma cédula (en `1_entrada/`) forman un trámite. Si un mismo empleado tuviera dos trámites distintos en el mismo lote, el caso se marca para revisión (se detectan **varios documentos base**).
 
 **Vocabulario `TIPODOC`:**
 - **Base (uno por caso — el ÚNICO que se OCR-ea/extrae):** `INCAPACIDAD` · `PERMISO` · `VACACIONES`.
@@ -93,9 +93,9 @@ Licencia de maternidad:
 
 **Cotejo de seguridad:** la cédula del nombre se compara con la que el OCR lee de la incapacidad; si no coinciden → `requiere_revision`. **Nunca se cruzan cédulas distintas** en un mismo caso.
 
-**PII en el nombre (Ley 1581):** la cédula aparece en el nombre **de entrada** (carpeta `inbox`, transitoria, con ACL y volumen cifrado). Al mover a `procesados/`, el sistema **renombra a nombres sin PII** (`NN_<tipo>.<ext>` bajo `case_id` sin cédula, §4.2/§4.4) y los logs redactan la cédula.
+**PII en el nombre (Ley 1581):** la cédula aparece en el nombre del archivo, tanto en la entrada (`1_entrada/`) como en la salida. **Decisión 2026-09-01:** al mover a la salida se **conserva el nombre original** (`13742111_INCAPACIDAD.pdf`) en vez del renombrado sin PII (`NN_<tipo>.<ext>`) que planteaba la versión anterior de este plan — se priorizó la **trazabilidad** contra lo que envió el punto de recepción sobre la minimización en el nombre. Sigue vigente lo demás: el **directorio** no lleva cédula ni diagnóstico (solo nombre de persona y fecha, §4.2), los **logs redactan** la cédula y el volumen es **local con ACL y cifrado**. Si el requisito de minimización se endurece, el renombrado se reactiva en `batch._mover` (es el único punto que decide el nombre destino).
 
-**Archivos que no siguen la convención → `inbox/sin_nomenclatura/`:** el sistema intenta (a) clasificar por OCR (§7.2) y (b) auto-agrupar por la **cédula leída del documento**; si sigue ambiguo → bucket de revisión humana (nunca se fuerza a un caso ni se cruzan cédulas). El camino primario y determinista es la nomenclatura.
+**Archivos que no siguen la convención → `2_revisar/mal_nombrados/`:** el sistema intenta (a) clasificar por OCR (§7.2) y (b) auto-agrupar por la **cédula leída del documento**; si sigue ambiguo → bucket de revisión humana (nunca se fuerza a un caso ni se cruzan cédulas). El camino primario y determinista es la nomenclatura.
 
 ## 4. Estructura de carpetas y máquina de estados
 
@@ -103,27 +103,36 @@ Licencia de maternidad:
 
 Todo cuelga de `/data/ingesta` (bind mount del host). El estado autoritativo vive en MySQL; el árbol refleja el avance físico y es reconstruible. El árbol destino se acorta agresivamente porque las rutas las consumen herramientas del host Windows (Explorer, antivirus, backup) donde MAX_PATH=260 aplica y el prefijo `\\?\` no es emitible desde el contenedor Linux.
 
+**Tres zonas numeradas** que se leen en el orden del flujo (`1_entrada` → `2_revisar` → `3_archivo`) más un área interna `_sistema/`. La numeración fija el orden en el explorador de archivos y el `_` deja lo interno al final. **Invariante: cada archivo está en exactamente UNA zona** → «¿dónde quedó?» tiene una sola respuesta. La zona `2_revisar/` concentra TODO lo que espera acción humana (antes estaba repartido entre `inbox/sin_nomenclatura`, `incompletos/` y `cuarentena/`). Versión para RH: `ingesta/LEEME.md`.
+
 ```
 /data/ingesta/                         # INGESTA_ROOT (bind mount INGESTA_HOST_ROOT)
-├── inbox/                             # CONTRATO DE ENTRADA: archivos con NOMENCLATURA (§3).
-│   ├── whatsapp/  correo/  original/  #   subarbol -> deriva estado_recepcion (§7.7); RH puede
-│   │   └── {cedula}_{TIPODOC}[_NN].{ext}         #   crear mas subcarpetas: el escaneo es RECURSIVO
-│   └── sin_nomenclatura/              # archivos mal nombrados -> fallback OCR + revision (§3)
-├── work/                             # area interna (mismo volumen)
-│   ├── recepcion/                    # estabilidad verificada + saneo de nombres
-│   ├── procesando/<instancia>/       # en OCR (claim real en MySQL)
-│   └── validando/                    # doc base listo, evaluando requisitos del caso
-├── procesados/<Nombre persona>/<AAAA>/<MM>/<DD>/   # COMPLETOS, organizados por persona y fecha (§4.2)
-├── incompletos/<Nombre persona>/<AAAA>/<MM>/<DD>/  # falta doc requerido; espera adjuntos con deadline
-├── cuarentena/<case_id>/             # fallo tecnico -> retry/diagnostico
-├── duplicados/<yyyymm>/              # hash ya visto EN EL MISMO CASO (auditoria breve)
-├── archivo/<yyyymm>.zip              # retencion fria comprimida (respeta retencion LEGAL, §9.4)
-├── _tmp/                             # escrituras temporales EN EL VOLUMEN DESTINO (siempre)
-├── _control/                         # centinela on-demand (encola fila SOLICITADO, no auto-borra)
-└── logs/ingesta-YYYYMMDD.ndjson      # journal SIN PII (sin cedula)
+├── 1_entrada/                         # CONTRATO DE ENTRADA: archivos con NOMENCLATURA (§3).
+│   └── whatsapp/ correo/ ventanilla/  #   subarbol -> deriva estado_recepcion (§7.7); RH puede
+│       └── {cedula}_{TIPODOC}[_NN].{ext}         #   crear mas subcarpetas: el escaneo es RECURSIVO
+│
+├── 2_revisar/                         # TODO lo que necesita ACCION HUMANA, en un solo lugar
+│   ├── mal_nombrados/                 #   no cumplen la nomenclatura -> fallback OCR + revision (§3)
+│   ├── faltan_soportes/<Nombre persona>/<AAAA>/<MM>/<DD>/    #   falta doc requerido; deadline adjuntos
+│   ├── datos_por_revisar/<Nombre persona>/<AAAA>/<MM>/<DD>/  #   soportes OK, el DATO necesita revision
+│   └── con_error/<case_id>/           #   fallo tecnico -> retry/diagnostico
+│
+├── 3_archivo/<Nombre persona>/<AAAA>/<MM>/<DD>/   # COMPLETOS, organizados por persona y fecha (§4.2)
+│
+└── _sistema/                          # interno del runner (nadie navega aqui)
+    ├── logs/ingesta-YYYYMMDD.ndjson   # journal SIN PII (sin cedula)
+    ├── tmp/                           # escrituras temporales EN EL VOLUMEN DESTINO (siempre)
+    ├── control/                       # centinela on-demand (encola fila SOLICITADO, no auto-borra)
+    ├── work/                          # [FASE 2] recepcion/ · procesando/<instancia>/ · validando/
+    ├── duplicados/<yyyymm>/           # [FASE 2] hash ya visto EN EL MISMO CASO (auditoria breve)
+    └── retencion/<yyyymm>.zip         # [FASE 2] retencion fria comprimida (respeta plazo LEGAL, §9.4)
 ```
 
-**Regla de oro:** una transición nunca escribe "in situ". Se escribe SIEMPRE a `_tmp/` del volumen destino y luego **un** `os.replace`. Un crash deja el caso en **exactamente una** carpeta o, a lo sumo, un archivo en `_tmp/` sin fila (reconciliable). Los nombres destino son cortos: `NN_<tipo>.<ext>` donde `NN` viene de una fuente serializada (§4.4).
+Dentro de `2_revisar/` hay **una sub-carpeta por MOTIVO** (no una sola de "pendientes"): que falte un soporte exige pedirlo a la persona, mientras que un caso con soportes completos pero con `problemas` de OCR/lookups solo exige que el auxiliar confirme el dato en la UI. Implementado hoy: `1_entrada`, `2_revisar/*`, `3_archivo`, `_sistema/logs`. `_sistema/tmp` y `_sistema/control` se crean vacías (las usa la Fase 2) para que el árbol no cambie al implementarlas. `retencion/` es lo que en la versión anterior de este plan se llamaba `archivo/`: se renombró para no chocar con `3_archivo/` (que es el historial navegable de RH, no almacenamiento frío).
+
+Migración desde el árbol anterior (`inbox/`, `procesados/`, `incompletos/`, `cuarentena/`, `logs/`): `python scripts/migrar_estructura_ingesta.py [--dry-run]` — mueve el contenido conservando la sub-ruta, no sobre-escribe y es idempotente. Además el escáner **sigue leyendo** un `inbox/` viejo si existe (`batch.ENTRADA_LEGACY`) para no dejar documentos huérfanos.
+
+**Regla de oro:** una transición nunca escribe "in situ". Se escribe SIEMPRE a `_sistema/tmp/` del volumen destino y luego **un** `os.replace`. Un crash deja el caso en **exactamente una** carpeta o, a lo sumo, un archivo en `_sistema/tmp/` sin fila (reconciliable). Los nombres destino son cortos: `NN_<tipo>.<ext>` donde `NN` viene de una fuente serializada (§4.4).
 
 ### 4.2 Identidad del caso (sin PII en la ruta)
 
@@ -133,36 +142,40 @@ Todo cuelga de `/data/ingesta` (bind mount del host). El estado autoritativo viv
 - La **cédula nunca se embebe en `case_id`**: el vínculo `case_id→cédula/idlpempleado` vive solo en la BD con ACL. El auxiliar ve la cédula en la UI leída de la BD, no en el nombre de carpeta ni en el log.
 - Siempre ASCII, minúsculas, `[a-z0-9-]`, sin nombres reservados de Windows (CON/PRN/AUX/NUL/COM1-9/LPT1-9), sin punto/espacio final, corto para MAX_PATH.
 
-**Organización de `procesados/` e `incompletos/` (para RH):** a diferencia del `case_id` interno, las carpetas de salida se organizan de forma **navegable por RH**: `<Nombre persona>/<AAAA>/<MM>/<DD>/`, donde el nombre es **primer nombre + primer apellido** (tomado de la incapacidad vía el catálogo — `extract.primer_nombre_apellido` sobre el nombre canónico resuelto por cédula) y la fecha es la de **inicio de la incapacidad**. Así RH ve el historial de ausentismos de una persona de un vistazo. Es una decisión de producto para el caso de uso de RH: el nombre es PII, pero se acepta en la ruta sobre un volumen **local, con ACL y cifrado**; la **cédula y el diagnóstico NO** van en la ruta (siguen solo en la BD). El saneo del nombre de carpeta (ASCII, sin caracteres inválidos, longitud acotada) evita problemas de FS/MAX_PATH.
+**Organización de `3_archivo/` y de las sub-carpetas por caso de `2_revisar/` (para RH):** a diferencia del `case_id` interno, las carpetas de salida se organizan de forma **navegable por RH**: `<Nombre persona>/<AAAA>/<MM>/<DD>/`, donde el nombre es **primer nombre + primer apellido** (tomado de la incapacidad vía el catálogo — `extract.primer_nombre_apellido` sobre el nombre canónico resuelto por cédula) y la fecha es la de **inicio de la incapacidad** (si el OCR no la leyó → `sin_fecha`). Así RH ve el historial de ausentismos de una persona de un vistazo. Es una decisión de producto para el caso de uso de RH: el nombre es PII, pero se acepta en la ruta sobre un volumen **local, con ACL y cifrado**; la **cédula y el diagnóstico NO** van en el **directorio** (siguen solo en la BD — el nombre de archivo sí conserva la cédula, §3). El saneo del nombre de carpeta (ASCII, sin caracteres inválidos, longitud acotada) evita problemas de FS/MAX_PATH.
 
 ### 4.3 Máquina de estados (caso = carpeta física; estado autoritativo = MySQL)
 
 ```
-RECIBIDO(inbox) --estable+dedup(caso,hash)--> ESTABLE(recepcion) --parse nombre / OCR base--> CLASIFICADO
-      | dup en mismo caso                                                                    | llave de caso del nombre (§3)
-      v                                                                                      v
-  DUPLICADO(duplicados)                                                             AGRUPADO (caso_id resuelto)
-                                                                                             | claim fenced (SKIP LOCKED)
-                                                                                             v
-                                                                                 PROCESANDO(procesando/<instancia>)
-                                                                                             | drenados TODOS los docs del caso
-                                                                                             v
-                                                                             VALIDANDO (single-writer por caso, §7.4)
-                        +----------------------------------------------------------------------+-------------------------------+
-                        v                                                                      v                               v
-              COMPLETO(procesados)                                            INCOMPLETO(incompletos)                     ERROR(cuarentena)
+RECIBIDO(1_entrada) --estable+dedup(caso,hash)--> ESTABLE(recepcion) --parse nombre / OCR base--> CLASIFICADO
+      | dup en mismo caso                                                                        | llave de caso del nombre (§3)
+      v                                                                                          v
+  DUPLICADO(_sistema/duplicados)                                                        AGRUPADO (caso_id resuelto)
+                                                                                                 | claim fenced (SKIP LOCKED)
+                                                                                                 v
+                                                                          PROCESANDO(_sistema/work/procesando/<instancia>)
+                                                                                                 | drenados TODOS los docs del caso
+                                                                                                 v
+                                                                                 VALIDANDO (single-writer por caso, §7.4)
+                        +------------------------------------------------------------------------+---------------------------------+
+                        v                                                                        v                                 v
+              COMPLETO(3_archivo)                                    INCOMPLETO(2_revisar/faltan_soportes            ERROR(2_revisar/con_error)
+         (o 2_revisar/datos_por_revisar                                 | datos_por_revisar si nada falta)
+          si quedan problemas de OCR)
     (INSERT staging PENDIENTE_REVISION,                        (INSERT staging PENDIENTE_REVISION,           (fallo tecnico; retry backoff;
      documentacion_estado=COMPLETA)                             doc_estado=INCOMPLETA + ALERTA;               escalada a Ollama DIFERIDA)
                         | cierre revision + gracia + retencion LEGAL          | adjunto tardio -> re-AGRUPADO (transaccion §7.1)
                         v                                                     | vence deadline -> queda INCOMPLETO (visible al auxiliar)
-                 ARCHIVADO(archivo, comprimido, NO purgado bajo plazo legal)
+              ARCHIVADO(_sistema/retencion, comprimido, NO purgado bajo plazo legal)
 ```
 
 La revisión humana **no** es un estado de carpeta: ocurre en `lp_ausentismos_ia` vía la UI. Tanto `COMPLETO` como `INCOMPLETO` insertan en staging (`PENDIENTE_REVISION`); la diferencia es `documentacion_estado`/`documentos_faltantes` + alerta. Si llega un adjunto tardío y la fila ya está `APROBADO`/`RECHAZADO`, **no se muta** la fila terminal; se crea alerta/nueva revisión. Los casos `INCOMPLETO` con deadline vigente **bloquean la aprobación** en la UI ("esperando soportes hasta DD/MM").
 
 ### 4.4 Nombres de archivo dentro del caso (sin colisión)
 
-El contador `NN` de `NN_<tipo>.<ext>` se deriva de una **fuente serializada** (columna `secuencia_caso` en el ledger bajo el lock del caso, o del `doc_id`/`hash`), no lo eligen workers independientes. El `os.replace` destino **debe fallar si el nombre ya existe** (no sobre-escribir); una colisión inesperada manda a cuarentena.
+**Hoy (decisión 2026-09-01):** se **conserva el nombre de entrada** (`{cedula}_{TIPODOC}[_NN].{ext}`), que ya es único dentro del caso porque el `_NN` lo pone quien nombra el archivo (§3). La colisión posible es que llegue dos veces el mismo nombre para el mismo caso: el `os.replace` destino **debe fallar si el nombre ya existe** (no sobre-escribir) y el caso se manda a `2_revisar/con_error/`.
+
+**Si se reactiva el renombrado sin PII** (`NN_<tipo>.<ext>`, §3): el contador `NN` se deriva de una **fuente serializada** (columna `secuencia_caso` en el ledger bajo el lock del caso, o del `doc_id`/`hash`), no lo eligen workers independientes.
 
 ## 5. Programación cron + on-demand multiplataforma (Windows/Linux)
 
@@ -203,14 +216,14 @@ La conexión que sostiene `GET_LOCK` queda ociosa durante todo el drain; el **ke
 
 1. **Endpoint** `POST /api/lote` (servicio `web`, `127.0.0.1:8000`): inserta `lp_ingesta_corridas(disparo='ON_DEMAND_API', estado='SOLICITADO')` y responde **202** con el `id`. `GET /api/lote/{id}` da progreso para el botón "Procesar ahora".
 2. **CLI:** `docker compose exec ocr-worker python -m incapacidad_ocr.batch run --once`.
-3. **Archivo centinela:** soltar un archivo en `/data/ingesta/_control/`. El poll **inserta una fila `SOLICITADO`** y solo entonces borra el centinela (si el drain ya está en curso, la solicitud sobrevive como fila y se encadena).
+3. **Archivo centinela:** soltar un archivo en `/data/ingesta/_sistema/control/`. El poll **inserta una fila `SOLICITADO`** y solo entonces borra el centinela (si el drain ya está en curso, la solicitud sobrevive como fila y se encadena).
 
 Trigger por **poll**, no watchdog/inotify: las APIs de eventos de FS divergen por SO y no son fiables cruzando el bind-mount; un `stat` cada 30 s es trivial y portable.
 
 ### 5.3 Recuperación tras caída/reinicio
 
 - Supervisión por `restart: unless-stopped` + arranque del runtime al boot según el host.
-- **Reconciliación de arranque** (§6.4): marca filas `EN_PROCESO` huérfanas como reencolables; **reintenta los `HECHO` con `estado_move=PENDIENTE_MOVER`** (archivos varados en `work/`).
+- **Reconciliación de arranque** (§6.4): marca filas `EN_PROCESO` huérfanas como reencolables; **reintenta los `HECHO` con `estado_move=PENDIENTE_MOVER`** (archivos varados en `_sistema/work/`).
 - **Procesos worker en Windows:** se crean en un **Job Object** con `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE` (mueren con el padre); además cada worker verifica su `lease_token`/generación en cada claim y se autotermina si caducó.
 
 ## 6. Procesamiento masivo (workers, cola, idempotencia, escala)
@@ -234,7 +247,7 @@ Con N workers y sesiones ONNX usando todos los cores se produce N×cores hilos y
 
 ### 6.3 Cola + idempotencia = tabla ledger en MySQL
 
-**`lp_ingesta_documentos`** es la cola durable y la fuente del claim. El escáner recorre `inbox/`, verifica estabilidad y `tamaño>0` (§9.2), calcula `hash=sha256(contenido)` y hace `INSERT IGNORE` con **UNIQUE `(caso_id, hash)`** (dedup dentro del caso) + índice no único sobre `hash`.
+**`lp_ingesta_documentos`** es la cola durable y la fuente del claim. El escáner recorre `1_entrada/`, verifica estabilidad y `tamaño>0` (§9.2), calcula `hash=sha256(contenido)` y hace `INSERT IGNORE` con **UNIQUE `(caso_id, hash)`** (dedup dentro del caso) + índice no único sobre `hash`.
 
 **Claim (con índice compuesto obligatorio):**
 ```sql
@@ -298,7 +311,7 @@ La agrupación es por la **cédula del nombre** (llave de caso, §3), sin OCR. L
 
 Con la nomenclatura, **el tipo de cada archivo se lee de su nombre** (`TIPODOC`): determinista, 100% local y sin coste de OCR para los adjuntos. El OCR se reserva para el documento base (extracción de datos, no clasificación).
 
-**Fallback por OCR** (solo `sin_nomenclatura/` o `TIPODOC` no reconocible): clasificación por texto (regex sobre OCR), reproducible y auditable (guarda `evidencia`). Si un PDF trae varios documentos juntos, se clasifica por página (requiere el texto por página, `read_pages()`, §8.2 — mejora opcional). El catálogo de anclas normaliza también los `TIPODOC` del nombre a códigos canónicos.
+**Fallback por OCR** (solo `2_revisar/mal_nombrados/` o `TIPODOC` no reconocible): clasificación por texto (regex sobre OCR), reproducible y auditable (guarda `evidencia`). Si un PDF trae varios documentos juntos, se clasifica por página (requiere el texto por página, `read_pages()`, §8.2 — mejora opcional). El catálogo de anclas normaliza también los `TIPODOC` del nombre a códigos canónicos.
 
 **Núcleo (de `extract.py`):** `INCAPACIDAD`, `PERMISO`, `VACACIONES`.
 
@@ -368,7 +381,7 @@ Del documento **base** vía `erp.mapear_a_staging()` (permiso→7/12, vacaciones
 
 ### 7.7 Estado de recepción por sub-árbol
 
-`estado_recepcion` se deriva por sub-árbol/convención de carpeta (`inbox/whatsapp/`, `inbox/correo/`, `inbox/original/`), con default `WHATSAPP` y override por caso; así el flag `original` e `idlpestadosrecepausentismos` no quedan mal etiquetados.
+`estado_recepcion` se deriva por sub-árbol/convención de carpeta (`1_entrada/whatsapp/`, `1_entrada/correo/`, `1_entrada/ventanilla/`), con default `WHATSAPP` y override por caso; así el flag `original` e `idlpestadosrecepausentismos` no quedan mal etiquetados.
 
 ## 8. Integración con `incapacidad-ocr` y flujo de revisión humana
 
@@ -379,7 +392,7 @@ Misma imagen Docker, en-proceso:
 - `erp.Lookups(cx)` + `erp.mapear_a_staging(...)` → `row` con `estado="PENDIENTE_REVISION"`, `documentacion_estado`, `documentos_faltantes`, `requiere_revision`, `campos_faltantes`.
 - `db.insertar_staging(cx, row)` / `insertar_staging_tx(cur, row)` para escribir en `lp_ausentismos_ia`.
 
-Nunca se toca `lpausentismos`; el batch jamás auto-aprueba. La API HTTP no se usa para el lote (hop de red que serializa PII, sin agrupación/movimiento/cuarentena, acopla throughput a uvicorn).
+Nunca se toca `lpausentismos`; el batch jamás auto-aprueba. La API HTTP no se usa para el lote (hop de red que serializa PII, sin agrupación/movimiento/manejo de errores, acopla throughput a uvicorn).
 
 ### 8.2 Cambios necesarios en el core
 
@@ -402,14 +415,14 @@ Nunca se toca `lpausentismos`; el batch jamás auto-aprueba. La API HTTP no se u
 | `config.py` | Config tipada CLI > env > TOML > defaults; reutiliza `db.db_config()`; secretos solo por env; fail-fast. |
 | `scheduler.py` | Daemon APScheduler (Cron + poll) cuando corre en contenedor; callback con keepalive del lock; reaper y reconciliación de arranque. |
 | `runner.py` | Punto de entrada único: escanear → agrupar por nombre → pool → evaluación single-writer por caso → consolidar. |
-| `escaner.py` | Recorre `inbox/`, verifica estabilidad+tamaño, `sha256`, `INSERT IGNORE` `(caso_id,hash)`, **parseo de nomenclatura → llave de caso + tipo**, prioridad; `GET_LOCK('ingesta_scan')`. |
+| `escaner.py` | Recorre `1_entrada/`, verifica estabilidad+tamaño, `sha256`, `INSERT IGNORE` `(caso_id,hash)`, **parseo de nomenclatura → llave de caso + tipo**, prioridad; `GET_LOCK('ingesta_scan')`. |
 | `worker.py` | Proceso persistente (Job Object en Windows): initializer, loop reclamar(fenced)→heartbeat-bg→(OCR si base)→map→checkpoint fenced→mover; reconstruye conexión ante socket muerto; recicla cada N docs. |
 | `claim.py` | `SKIP LOCKED` + `UPDATE EN_PROCESO` con `worker_id`+`lease_token`; verifica generación de corrida. |
 | `caso.py` | Modelo del caso, agrupación por llave del nombre, transacción de re-agrupación bajo `GET_LOCK('caso_...')`; fallback por OCR. |
 | `clasificador.py` | Parseo de `TIPODOC` del nombre → código canónico; clasificación por OCR de fallback. |
 | `validador.py` | Single-writer por caso: `presentes`→`validar_documentacion`→staging + alerta idempotente. |
 | `layout.py` | Árbol acortado, rutas por estado, saneo multiplataforma, `case_id` sin cédula, nombres `NN_<tipo>` desde fuente serializada. |
-| `fs_atomico.py` | Escribir SIEMPRE a `_tmp/` + `os.replace`; move best-effort con `estado_move`; reintentos ante `WinError 32`; reconciliación de moves. |
+| `fs_atomico.py` | Escribir SIEMPRE a `_sistema/tmp/` + `os.replace`; move best-effort con `estado_move`; reintentos ante `WinError 32`; reconciliación de moves. |
 | `cola_ollama.py` | Cola separada de baja prioridad hacia Ollama, concurrencia 1–2, diferible. |
 | `recuperacion.py` | Reaper/reconciliación (doc, corrida, moves pendientes) por lease/heartbeat. |
 | `retencion.py` | Archivado/purga separando retención operativa de legal (§9.4). |
@@ -422,7 +435,7 @@ Nunca se toca `lpausentismos`; el batch jamás auto-aprueba. La API HTTP no se u
 
 | Clase | Ejemplos | Acción |
 |---|---|---|
-| **Transitorio** | DB timeout, socket MySQL muerto, deadlock, IO | Reintento: 3 intentos, backoff exponencial base 2 s ×2 tope 30 s + jitter; socket muerto → reconstruir conexión. Agotados → cuarentena con sidecar `.error.json` (sin PII). |
+| **Transitorio** | DB timeout, socket MySQL muerto, deadlock, IO | Reintento: 3 intentos, backoff exponencial base 2 s ×2 tope 30 s + jitter; socket muerto → reconstruir conexión. Agotados → `2_revisar/con_error/` con sidecar `.error.json` (sin PII). |
 | **Permanente** | PDF corrupto, formato no soportado, OCR base `< MIN_OCR_CHARS` | Cuarentena directa. Base ilegible → escalada a Ollama diferida (cola separada) antes de rendir. |
 | **Datos incompletos (no es error)** | Faltan campos / falta un documento requerido | Staging `PENDIENTE_REVISION` con `problemas`/`documentos_faltantes` + alerta. Es el propósito de staging. |
 
@@ -431,7 +444,7 @@ Un **adjunto legítimo** (sin documento base) se asocia al caso y se enlaza en e
 ### 9.2 Estabilidad de archivos y movimiento
 
 - **Estabilidad no solo por size+mtime** (poco fiable sobre gRPC-FUSE/SMB): se combina con apertura exclusiva / rename-probe dentro del contenedor + edad mínima. **Hashear solo tras verificar estabilidad y `tamaño>0`.** Se recomienda al feeder el patrón atómico en origen (`escribir a .part → renombrar`). Se ignora basura: `.part`, `.tmp`, `.crdownload`, `~$*`, `.DS_Store`, `Thumbs.db`, `desktop.ini`, 0 bytes.
-- **Movimiento best-effort y reconciliable:** escribir SIEMPRE a `_tmp/` + `os.replace` (probado empíricamente en el bind-mount destino); es el último paso, tras el commit fenced. Estado en `estado_move`; la reconciliación reintenta los `HECHO` con archivo aún en `work/`. Reintentos con backoff ante `WinError 32` (Defender/indexador); se recomienda excluir `INGESTA_ROOT` del escaneo en tiempo real.
+- **Movimiento best-effort y reconciliable:** escribir SIEMPRE a `_sistema/tmp/` + `os.replace` (probado empíricamente en el bind-mount destino); es el último paso, tras el commit fenced. Estado en `estado_move`; la reconciliación reintenta los `HECHO` con archivo aún en `_sistema/work/`. Reintentos con backoff ante `WinError 32` (Defender/indexador); se recomienda excluir `INGESTA_ROOT` del escaneo en tiempo real.
 
 ### 9.3 Configuración
 
@@ -463,10 +476,10 @@ Precedencia **CLI > env > TOML > defaults**. Secretos solo por env/Docker secret
 ### 9.4 Seguridad / PII (Ley 1581 de Colombia)
 
 - **100% local / on-premise:** RapidOCR y reglas sin internet; Ollama local. Nada de PII sale en runtime.
-- **`case_id` sin cédula:** solo `<yyyymmdd>-<shorthash>`. El vínculo con cédula/idlpempleado vive solo en BD con ACL. La cédula del nombre de entrada es transitoria (`inbox`) y se elimina al renombrar en `procesados/`.
+- **`case_id` sin cédula:** solo `<yyyymmdd>-<shorthash>`. El vínculo con cédula/idlpempleado vive solo en BD con ACL. La cédula SÍ queda en el nombre de archivo, también en la salida (decisión 2026-09-01, §3); nunca en el nombre de directorio.
 - **Logs sin PII:** filtro de redacción que prohíbe `texto_plano`, campos del documento, nombre de archivo y cualquier cédula; se referencia por `doc_id=hash` y `case_id`.
 - **Nombres en disco sin diagnóstico, CIE-10 ni cédula**; volumen cifrado (BitLocker/LUKS); ACL restringida al usuario del servicio; web atado a `127.0.0.1`.
-- **Retención legal vs operativa:** el ERP guarda datos estructurados, no la imagen fuente; los soportes tienen periodo legal de conservación. La retención operativa (limpiar `work/`, comprimir a `archivo/`) es libre; la legal **nunca borra la única copia del original** por debajo del periodo legal (a confirmar con jurídico), y **nunca se purga un caso no-terminal** (sin revisar).
+- **Retención legal vs operativa:** el ERP guarda datos estructurados, no la imagen fuente; los soportes tienen periodo legal de conservación. La retención operativa (limpiar `_sistema/work/`, comprimir a `_sistema/retencion/`) es libre; la legal **nunca borra la única copia del original** por debajo del periodo legal (a confirmar con jurídico), y **nunca se purga un caso no-terminal** (sin revisar).
 
 ### 9.5 Serialización y locks
 
@@ -482,7 +495,7 @@ Todos *connection-scoped*; se autoliberan al caer la conexión (crash-safe), agn
 ### 9.6 Observabilidad
 
 - Log JSON con `RotatingFileHandler` y redacción de PII (incluye cédula).
-- **Resumen por corrida** (JSON + fila en `lp_ingesta_corridas`): docs vistos/procesados/incompletos/errores/cuarentena/omitidos, moves pendientes, duración, throughput, workers, host.
+- **Resumen por corrida** (JSON + fila en `lp_ingesta_corridas`): docs vistos/completos/faltan_soportes/con_error/mal_nombrados/omitidos, moves pendientes, duración, throughput, workers, host.
 - Métricas de RSS por worker (psutil), profundidad de cola, ETA; textfile `.prom` local opcional.
 
 ### 9.7 Límites de columnas
@@ -498,13 +511,13 @@ Migraciones en `sql/init.sql`: `lp_ingesta_documentos` (con `hash` indexado no �
 Parser de nomenclatura (`{cedula}_{TIPODOC}[_NN]` → llave de caso (cédula) + tipo, con normalización y validación) y `clasificador.py` (mapea `TIPODOC`→código canónico; anclas de texto para el fallback). `erp.REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion` single-writer, `mapear_a_staging(..., documentos_presentes=None)` con degradación `NO_EVALUADA`. Cotejo cédula-nombre ↔ cédula-OCR de la incapacidad → `requiere_revision`. Opcional (fallback): `read_pages()` + refuerzo de `es_pagina_relevante`. Tests contra `../Ejemplos`. Validar Windows y Linux.
 
 ### Fase 2 — Runner por lotes (on-demand, un host)
-Subpaquete `incapacidad_ocr/batch/` (config, layout con `case_id` sin cédula y nombres serializados, `fs_atomico` con `_tmp` siempre + `estado_move`, escaner con estabilidad robusta + `(caso_id,hash)` + parseo de nomenclatura, claim fenced, worker con heartbeat-bg + reconexión + Job Object en Windows, validador single-writer, runner, observ, cli). Pool `spawn`, ONNX 1 hilo, extractor `rule`, PDF en streaming, checkpoint fenced, move reconciliable, cuarentena, aviso de dedup semántica, `--once`/`--dry-run`. Benchmark de dimensionamiento.
+Subpaquete `incapacidad_ocr/batch/` (config, layout con `case_id` sin cédula y nombres serializados, `fs_atomico` con `_sistema/tmp` siempre + `estado_move`, escaner con estabilidad robusta + `(caso_id,hash)` + parseo de nomenclatura, claim fenced, worker con heartbeat-bg + reconexión + Job Object en Windows, validador single-writer, runner, observ, cli). Pool `spawn`, ONNX 1 hilo, extractor `rule`, PDF en streaming, checkpoint fenced, move reconciliable, `2_revisar/con_error`, aviso de dedup semántica, `--once`/`--dry-run`. Benchmark de dimensionamiento.
 
 ### Fase 3 — Scheduler y despliegue
 `scheduler.py` (Cron + poll + keepalive del lock + reaper/reconciliación de arranque, incl. moves pendientes). Servicio `ocr-worker` en `docker-compose.yml` (misma imagen, `restart: unless-stopped`, `depends_on db healthy`, bind mount, profile `[ingesta]`). Despliegue por host (Linux / Windows Server con servicio de contenedores / Windows headless con Programador de tareas). Endpoint `POST /api/lote` (202) + `GET /api/lote[/{id}]`. Centinela que encola fila `SOLICITADO`. Runbook: arranque sin login probado, `LongPathsEnabled`, exclusión de AV.
 
 ### Fase 4 — Robustez, reanudabilidad y Ollama fuera del hot path
-`recuperacion.py` (reaper por lease+heartbeat, reconciliación de moves, tope de intentos→cuarentena). `cola_ollama.py`: escalada a Ollama diferida en cola separada, concurrencia 1–2, nunca inline. Reintentos por clase de error + sidecar `.error.json`; `maxtasksperchild` + watchdog RSS; move reconciliable; backoff ante `WinError 32`. Log JSON con redacción PII + resumen por corrida. Pruebas de caos: matar worker a mitad de un doc largo, doble disparo (cron+on-demand), reboot en frío, re-drop de duplicados, socket MySQL muerto, colisión de nombres, adjunto tardío sobre fila terminal.
+`recuperacion.py` (reaper por lease+heartbeat, reconciliación de moves, tope de intentos→`con_error`). `cola_ollama.py`: escalada a Ollama diferida en cola separada, concurrencia 1–2, nunca inline. Reintentos por clase de error + sidecar `.error.json`; `maxtasksperchild` + watchdog RSS; move reconciliable; backoff ante `WinError 32`. Log JSON con redacción PII + resumen por corrida. Pruebas de caos: matar worker a mitad de un doc largo, doble disparo (cron+on-demand), reboot en frío, re-drop de duplicados, socket MySQL muerto, colisión de nombres, adjunto tardío sobre fila terminal.
 
 ### Fase 5 — Retención, agrupación avanzada, UI y escala horizontal
 Upsert idempotente de alertas + cierre a RESUELTA; `retencion.py` con separación operativa/legal; refinamiento del fallback de agrupación (acción "fusionar/separar" en la UI); dedup semántica avanzada; UI "Procesar ahora" + barra de estado + bloqueo de aprobación de INCOMPLETO con deadline; métricas `.prom`. Escalado horizontal opcional (`INGESTA_MULTI_HOST`) validado con 2 instancias sobre la misma carpeta+BD.
@@ -519,10 +532,10 @@ Upsert idempotente de alertas + cierre a RESUELTA; `retencion.py` con separació
 | 4 | **Dedup equivocada** (mismo byte legítimo entre casos). | UNIQUE `(caso_id, hash)`; `hash` indexado no único para aviso; dedup semántica por clave natural como aviso. |
 | 5 | **Lock de corrida soltado ocioso** → doble drain. | Keepalive (`SELECT 1` cada ~60 s); fencing del claim como defensa dura. |
 | 6 | **Agrupación real** (canales entregan documentos sueltos). | Nomenclatura de archivos `{cedula}_{TIPODOC}` (la fecha sale del OCR) como camino primario determinista; auto-agrupación por OCR solo como fallback. |
-| 7 | **Move no atómico / archivo varado en `work/`**. | Escribir siempre a `_tmp/` + `os.replace`; move best-effort reconciliable con `estado_move`; reconciliación reintenta `HECHO` no movidos; la correctitud vive en MySQL. |
+| 7 | **Move no atómico / archivo varado en `_sistema/work/`**. | Escribir siempre a `_tmp/` + `os.replace`; move best-effort reconciliable con `estado_move`; reconciliación reintenta `HECHO` no movidos; la correctitud vive en MySQL. |
 | 8 | **Estabilidad de archivo sobre gRPC-FUSE/SMB** (OCR truncado). | Apertura exclusiva/rename-probe + edad mínima + `tamaño>0`; patrón `.part`→rename en origen. |
 | 9 | **Procesos worker huérfanos en Windows**. | Job Object `KILL_ON_JOB_CLOSE`; verificación de `lease_token`/generación en cada claim. |
-| 10 | **Colisión de nombres `NN_<tipo>`** dentro del caso. | Secuencia desde fuente serializada; `os.replace` falla si existe → cuarentena. |
+| 10 | **Colisión de nombres `NN_<tipo>`** dentro del caso. | Secuencia desde fuente serializada; `os.replace` falla si existe → `2_revisar/con_error/`. |
 | 11 | **Filesort O(n²) en el claim** con backlog grande. | Índice compuesto `(estado, prioridad, caso_id, id)`; backoff en claim vacío. |
 | 12 | **Conexión MySQL persistente muere** (reinicio/`wait_timeout`). | Reconstruir conexión + `Lookups` ante `OperationalError`; statement-timeout; ping tras inactividad. |
 | 13 | **Ollama serial bloquea el hot path**. | Escalada diferida en cola separada, concurrencia 1–2, timeout agresivo; nunca inline. |

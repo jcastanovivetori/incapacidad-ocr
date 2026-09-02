@@ -6,6 +6,7 @@ from typing import Any
 
 from .extract import Extractor, RuleBasedExtractor, empty_record, normalizar_fechas
 from .ocr import OCRBackend, get_ocr_backend
+from .reglas_tiempo import CLAVE_SNAPSHOT, snapshot_leidos
 
 # Mínimo de caracteres de OCR para intentar estructurar. Por debajo, NO se llama al
 # extractor: un LLM puede INVENTAR un registro completo a partir de texto vacío
@@ -39,6 +40,16 @@ class IncapacidadProcessor:
             return out
         # extract() devuelve el registro completo (paciente/entidad/incapacidad/…).
         rec = self.extractor.extract(texto_plano)
+        # FOTO de los tiempos tal como los LEYÓ el extractor, antes de reconciliar. Es la
+        # EVIDENCIA que necesita el motor de reglas (`reglas_tiempo`): `normalizar_fechas`
+        # completa lo que falta y re-deriva una fecha fin que no cuadre con los días, así
+        # que sin esta foto la contradicción temporal —la señal de alteración más barata de
+        # detectar— se pierde antes de llegar al auxiliar. Va aquí, no dentro de
+        # `normalizar_fechas`, para que la reconciliación siga siendo el único lugar que
+        # toca los valores y este módulo el único que decide qué se conserva.
+        inca = rec.get("incapacidad") if isinstance(rec, dict) else None
+        if isinstance(inca, dict):
+            inca[CLAVE_SNAPSHOT] = snapshot_leidos(inca)
         normalizar_fechas(rec)  # reconciliación única de fechas/días (regla del cliente)
         out["incapacidad"] = rec
         return out

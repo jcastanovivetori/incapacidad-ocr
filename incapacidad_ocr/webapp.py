@@ -73,7 +73,8 @@ def _job_programado() -> None:
     try:
         r = _correr_lote(INGESTA_EXTRACTOR if INGESTA_EXTRACTOR in VALID_EXTRACTOR else "rule")
         logger.info("Lote programado: %s", {k: r.get(k) for k in
-                    ("procesados", "incompletos", "cuarentena", "sin_nomenclatura", "en_curso")})
+                    ("completos", "faltan_soportes", "datos_por_revisar", "con_error",
+                     "mal_nombrados", "en_curso")})
     except Exception:
         logger.exception("Error en la corrida programada del lote")
 # Estados del flujo de revisión humana.
@@ -82,11 +83,36 @@ ESTADO_PENDIENTE, ESTADO_APROBADO, ESTADO_RECHAZADO = "PENDIENTE_REVISION", "APR
 CAMPOS_OVERRIDE = {"cedula", "cie10", "eps", "fecha_inicio", "fecha_fin", "dias", "paciente", "tipo", "nivel", "numeroorden"}
 
 
+# Largo máximo de un override de texto: el de la columna más ancha que alimenta
+# (`paciente_leido` VARCHAR(120)). Un valor más largo no sale del formulario.
+MAX_LARGO_OVERRIDE = 120
+
+
 def _limpiar_overrides(campos) -> dict:
-    """Acepta solo las claves conocidas (lista blanca) con valores no vacíos."""
+    """Acepta solo las claves conocidas (lista blanca) con valores no vacíos y ESCALARES.
+
+    Filtrar solo las CLAVES no basta: un cliente puede mandar un dict/lista o una cadena
+    kilométrica en una clave válida y reventar capas de abajo (o la columna de la BD). Los
+    valores que no se entienden se descartan en la frontera y se registran por CLAVE (sin
+    el valor: puede ser PII). Un valor escalar raro pero corto SÍ pasa a propósito — el
+    motor de tiempos sabe explicarlo ("el número de días leído no es un entero utilizable").
+    """
     if not isinstance(campos, dict):
         return {}
-    return {k: v for k, v in campos.items() if k in CAMPOS_OVERRIDE and v not in (None, "")}
+    limpio, ignorados = {}, []
+    for k, v in campos.items():
+        if k not in CAMPOS_OVERRIDE or v is None or v == "":
+            continue
+        if isinstance(v, bool) or not isinstance(v, (str, int, float)):
+            ignorados.append(k)
+            continue
+        if isinstance(v, str) and len(v) > MAX_LARGO_OVERRIDE:
+            ignorados.append(k)
+            continue
+        limpio[k] = v
+    if ignorados:
+        logger.info("Overrides ignorados por formato (solo claves): %s", sorted(ignorados))
+    return limpio
 
 
 def _mapear_staging(result: dict, estado_recepcion: str, overrides: dict | None = None) -> dict:
@@ -426,7 +452,7 @@ def staging_uno(registro_id: int) -> JSONResponse:
 
 @app.get("/api/lote/pendientes")
 def lote_pendientes() -> JSONResponse:
-    """Cuenta lo que hay en la carpeta de ingesta 'sin procesar' (para el botón de la UI)."""
+    """Cuenta lo que espera en la zona de entrada de la ingesta (para el botón de la UI)."""
     try:
         return JSONResponse(batch.contar_pendientes())
     except Exception:
@@ -436,10 +462,12 @@ def lote_pendientes() -> JSONResponse:
 
 @app.post("/api/lote/procesar")
 def lote_procesar(extractor: str = Body("rule", embed=True)) -> JSONResponse:
-    """Procesa TODOS los documentos de la carpeta 'sin procesar' (ingesta masiva por lotes).
+    """Procesa TODOS los documentos de la zona de entrada (ingesta masiva por lotes).
 
     Agrupa por nomenclatura, OCR-ea el documento base, valida requisitos por tipo, registra
-    en staging (`PENDIENTE_REVISION`) y mueve los archivos a procesados/incompletos/cuarentena.
+    en staging (`PENDIENTE_REVISION`) y mueve los archivos a `3_archivo/` (completos) o a
+    `2_revisar/` (una sub-carpeta por motivo: mal nombrados / faltan soportes /
+    datos por revisar / con error).
     """
     extr = extractor if extractor in VALID_EXTRACTOR else "rule"
     if not db.db_disponible():
@@ -451,6 +479,30 @@ def lote_procesar(extractor: str = Body("rule", embed=True)) -> JSONResponse:
         raise HTTPException(status_code=500, detail="Error en el procesamiento por lotes.") from None
     if resumen.get("en_curso"):
         raise HTTPException(status_code=409, detail=resumen["error"])
+    return JSONResponse(resumen)
+
+
+@app.post("/api/lote/reiniciar")
+def lote_reiniciar(limpiar_bd: bool = Body(True, embed=True)) -> JSONResponse:
+    """Devuelve los documentos a `1_entrada/` para poder repetir la prueba con el mismo lote.
+
+    Procesar el lote MUEVE los archivos fuera de la entrada, así que sin esto una demo solo se
+    puede hacer una vez. Si hay semilla (`_sistema/semilla/`) se restaura el estado inicial exacto;
+    si no, se devuelve lo que haya en `2_revisar/` y `3_archivo/` sin borrar nada. Detalle en
+    `batch.reiniciar_prueba`.
+
+    Toma el MISMO lock que la corrida del lote: reiniciar mientras se procesa movería archivos que
+    un worker está leyendo (→ 409, como la corrida manual solapada).
+    """
+    if not _lote_lock.acquire(blocking=False):
+        raise HTTPException(status_code=409, detail="Hay una corrida del lote en curso; espera a que termine.")
+    try:
+        resumen = batch.reiniciar_prueba(limpiar_bd=bool(limpiar_bd))
+    except Exception:
+        logger.exception("Error reiniciando la prueba de la ingesta")
+        raise HTTPException(status_code=500, detail="Error al reiniciar la prueba.") from None
+    finally:
+        _lote_lock.release()
     return JSONResponse(resumen)
 
 

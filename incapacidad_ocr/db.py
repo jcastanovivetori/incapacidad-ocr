@@ -68,6 +68,49 @@ def insertar_staging(cx, row: dict[str, Any]) -> int:
         cur.close()
 
 
+REGLAS_TIEMPO_TABLE = "lp_reglas_tiempo_ia"
+UMBRALES_TIEMPO_TABLE = "lp_umbrales_tiempo_ia"
+
+
+def leer_config_reglas_tiempo(cx) -> dict[str, Any]:
+    """Config del motor de tiempos guardada en BD → forma que entiende `reglas_tiempo`.
+
+    Es la vía para cambiar una severidad o un umbral en producción SIN volver a
+    desplegar (el código Python va dentro de la imagen). Si las tablas no existen
+    todavía (BD anterior a `sql/migracion_reglas_tiempo.sql`, o el esquema real del ERP
+    sin migrar), se devuelve ``{}``: el motor sigue con el archivo/los defaults —
+    la misma degradación que `Lookups.documentos_requeridos`.
+    """
+    datos: dict[str, Any] = {}
+    cur = cx.cursor()
+    try:
+        try:
+            cur.execute(f"SELECT codigo, severidad, activa FROM {REGLAS_TIEMPO_TABLE}")
+            reglas = {}
+            for codigo, severidad, activa in cur.fetchall():
+                ajuste: dict[str, Any] = {}
+                if severidad is not None:
+                    ajuste["severidad"] = severidad
+                if activa is not None:
+                    ajuste["activa"] = bool(activa)
+                if ajuste:
+                    reglas[str(codigo)] = ajuste
+            if reglas:
+                datos["reglas"] = reglas
+        except Exception:  # noqa: BLE001 — tabla ausente: se sigue con los defaults
+            pass
+        try:
+            cur.execute(f"SELECT nombre, valor FROM {UMBRALES_TIEMPO_TABLE}")
+            umbrales = {str(n): v for n, v in cur.fetchall() if v is not None}
+            if umbrales:
+                datos["umbrales"] = umbrales
+        except Exception:  # noqa: BLE001
+            pass
+    finally:
+        cur.close()
+    return datos
+
+
 def _iso_fechas(filas: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """DATE/TIMESTAMP → str para que sean serializables a JSON."""
     import datetime as _dt
@@ -138,6 +181,10 @@ _COLS_ACTUALIZABLES = {
     "idlpnivelincapacidad", "idlpentidad", "tipoentidad", "idlpestadosrecepausentismos", "cedula_leida",
     "codigo_diagnostico_leido", "eps_leida", "paciente_leido", "problemas",
     "documentacion_estado", "documentos_faltantes",
+    # El veredicto temporal se RECALCULA al guardar (el auxiliar corrigió las fechas/días).
+    # `fechafin_leida`/`dias_leidos` NO están aquí a propósito: son la EVIDENCIA de lo que
+    # el documento imprimía y no se pisan con una corrección manual.
+    "alertas_tiempos", "severidad_tiempos",
 }
 
 
@@ -182,6 +229,49 @@ def actualizar_estado(cx, registro_id: int, estado: str, nota: Optional[str] = N
                         (estado, int(registro_id)))
         cx.commit()
         return cur.rowcount > 0
+    except Exception:
+        cx.rollback()
+        raise
+    finally:
+        cur.close()
+
+
+def eliminar_staging_por_archivos(cx, archivos: list[str], solo_pendientes: bool = True) -> dict[str, int]:
+    """Borra las filas de staging (y sus alertas) que vinieron de estos archivos.
+
+    Es el apoyo del REINICIO DE PRUEBA (`batch.reiniciar_prueba`): deja la BD como antes de
+    la corrida para poder repetir el lote sobre los mismos documentos.
+
+    Deliberadamente NO existe un borrado masivo: se filtra por `archivo_origen` con la lista
+    exacta de archivos que se están reiniciando, porque estas mismas funciones apuntan a la BD
+    ASTGU **real** en producción y un DELETE sin filtro ahí sería catastrófico. Por el mismo
+    motivo `solo_pendientes` está activo por defecto: lo que un auxiliar ya aprobó o rechazó
+    es una decisión humana y no se toca.
+    """
+    if not archivos:
+        return {"staging": 0, "alertas": 0}
+    marcadores = ", ".join(["%s"] * len(archivos))
+    cur = cx.cursor()
+    try:
+        # Las alertas primero: cuelgan del id de staging (id_ausentismo_ia).
+        cond = f"archivo_origen IN ({marcadores})"
+        params = list(archivos)
+        if solo_pendientes:
+            cond += " AND estado = %s"
+            params.append("PENDIENTE_REVISION")
+        cur.execute(f"SELECT id FROM {STAGING_TABLE} WHERE {cond}", tuple(params))
+        ids = [f[0] for f in cur.fetchall()]
+        alertas = 0
+        if ids:
+            m_ids = ", ".join(["%s"] * len(ids))
+            try:
+                cur.execute(f"DELETE FROM {ALERTAS_TABLE} WHERE id_ausentismo_ia IN ({m_ids})", tuple(ids))
+                alertas = cur.rowcount
+            except Exception:  # noqa: BLE001 — la tabla de alertas puede no existir en algunos entornos
+                alertas = 0
+            cur.execute(f"DELETE FROM {STAGING_TABLE} WHERE id IN ({m_ids})", tuple(ids))
+        cx.commit()
+        return {"staging": len(ids), "alertas": alertas}
     except Exception:
         cx.rollback()
         raise

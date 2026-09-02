@@ -108,19 +108,31 @@ Ejemplo (accidente de trabajo):
   1005542119_FURAT.pdf
 ```
 
-**Estructura de carpetas** (en la raíz del repo, montada en el contenedor como `/data/ingesta`):
+**Estructura de carpetas** — **tres zonas numeradas** que se leen en el orden del flujo (en la raíz del repo, montada en el contenedor como `/data/ingesta`). Guía dentro de la propia carpeta: [`ingesta/LEEME.md`](ingesta/LEEME.md).
 
 ```
 ingesta/
-├── inbox/whatsapp | correo | original/   # AQUÍ se dejan los documentos (con nomenclatura).
-│   │                                      #   RH puede crear subcarpetas: el escaneo es recursivo.
-│   └── sin_nomenclatura/                  # los mal nombrados caen aquí (se omiten)
-├── procesados/<Nombre persona>/<AAAA>/<MM>/<DD>/   # COMPLETOS, organizados por persona y fecha
-├── incompletos/<Nombre persona>/<AAAA>/<MM>/<DD>/  # falta un soporte requerido → genera alerta
-└── cuarentena/<caso>/                              # fallo técnico
+├── 1_entrada/            # AQUÍ se dejan los documentos (con nomenclatura)
+│   ├── whatsapp/         #   sub-carpeta = canal → estado de recepción
+│   ├── correo/           #   RH puede crear más subcarpetas: el escaneo es recursivo
+│   └── ventanilla/
+│
+├── 2_revisar/            # NECESITA ACCIÓN HUMANA
+│   ├── mal_nombrados/    #   no cumplen la nomenclatura → renombrar y volver a 1_entrada
+│   ├── faltan_soportes/<Nombre persona>/<AAAA>/<MM>/<DD>/     #   falta un soporte → alerta
+│   ├── datos_por_revisar/<Nombre persona>/<AAAA>/<MM>/<DD>/   #   soportes OK, el dato necesita revisión
+│   └── con_error/<caso>/ #   fallo técnico
+│
+├── 3_archivo/<Nombre persona>/<AAAA>/<MM>/<DD>/   # LISTO: historial de los casos COMPLETOS
+│
+└── _sistema/             # logs y temporales del runner (nadie navega aquí)
 ```
 
-En `procesados/` e `incompletos/` los documentos quedan organizados por **persona → año → mes → día**, para revisar fácil el historial de un empleado. El nombre de la carpeta es **primer nombre + primer apellido** (tomado de la incapacidad vía el catálogo, p.ej. `LEONARDO GARNICA`), y la fecha es la de **inicio de la incapacidad**.
+Cada documento termina en **una sola** de las tres zonas, así que «¿dónde quedó?» tiene una respuesta única: si está en `2_revisar/` alguien tiene que hacer algo, y si está en `3_archivo/` está listo.
+
+En `3_archivo/` y en las sub-carpetas por persona de `2_revisar/` los documentos quedan organizados por **persona → año → mes → día**, para revisar fácil el historial de un empleado. El nombre de la carpeta es **primer nombre + primer apellido** (tomado de la incapacidad vía el catálogo, p.ej. `LEONARDO GARNICA`), y la fecha es la de **inicio de la incapacidad** (si el OCR no la leyó, queda en `sin_fecha`).
+
+> Vienes del árbol anterior (`inbox/` · `procesados/` · `incompletos/` · `cuarentena/`)? `python scripts/migrar_estructura_ingesta.py [--dry-run]` lo migra conservando las sub-rutas. El runner además **sigue leyendo** un `inbox/` viejo si existe, para no dejar documentos huérfanos.
 
 **Documentos requeridos por tipo** (mínimo la incapacidad; el resto según el tipo — la tabla `lprequisitos_eps` manda, con estos valores por defecto):
 
@@ -134,8 +146,9 @@ En `procesados/` e `incompletos/` los documentos quedan organizados por **person
 | Permiso / Vacaciones / Prelicencia | solo el documento base |
 
 **Cómo usarlo:**
-- **UI:** en el panel **«Procesamiento por lotes»** pulsa **«⚙ Procesar todos»** → agrupa, procesa y registra todo lo del `inbox`; el resumen muestra completos/incompletos y la **bandeja** de abajo lista los registros para revisar/aprobar.
-- **API:** `POST /api/lote/procesar` (equivale al botón) · `GET /api/lote/pendientes` (cuenta la carpeta).
+- **UI:** en el panel **«Procesamiento por lotes»** pulsa **«⚙ Procesar todos»** → agrupa, procesa y registra todo lo de `1_entrada/`; el resumen muestra completos / faltan soportes / datos por revisar / con error y la **bandeja** de abajo lista los registros para revisar/aprobar.
+- **API:** `POST /api/lote/procesar` (equivale al botón) · `GET /api/lote/pendientes` (cuenta la entrada).
+- **Crear el árbol** en un servidor nuevo: `python -m incapacidad_ocr.batch --init`.
 - **CLI:** `docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --dry-run` (reporta sin escribir) · `... python -m incapacidad_ocr.batch` (procesa).
 - **Programada (cron):** define `INGESTA_CRON` para que el lote corra solo (p.ej. cada día a las 2am). Desactivada si la variable está vacía. La corrida manual y la programada comparten un lock (no se solapan).
   ```bash
@@ -164,11 +177,18 @@ Los archivos base se OCR-ean con RapidOCR + reglas; los adjuntos **no** se OCR-e
   "paciente":     {"nombre": "...", "documento_tipo": "CC", "documento_numero": "..."},
   "entidad":      {"eps": "...", "ips_prestador": "..."},
   "incapacidad":  {"fecha_inicio": "YYYY-MM-DD", "fecha_fin": "YYYY-MM-DD", "dias": 0,
+                   "dias_letra": 0, "dias_letra_coincide": true,
                    "fecha_expedicion": "YYYY-MM-DD", "tipo": "...", "origen": "..."},
   "diagnostico":  {"cie10": "J06.9", "descripcion": "..."},
   "medico":       {"nombre": "...", "registro": "..."}
 }
 ```
+
+Los documentos reales escriben los días en **números** (`2`), en **letras** (`DOS`) o en las dos formas
+(`DOS (2) DIAS`). `dias` es el valor a usar (cuando hay las dos, manda el **dígito**); `dias_letra` es lo
+que decía la palabra y `dias_letra_coincide` si palabra y dígito cuadran (`null` si el documento solo trae
+una de las dos formas). Los dos últimos son **informativos** para la revisión humana: aquí no se decide si
+un desacuerdo es un documento adulterado.
 
 ## Requisitos mínimos
 

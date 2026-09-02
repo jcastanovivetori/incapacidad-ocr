@@ -74,23 +74,37 @@ Si falta un soporte, **igual se puede enviar**: el sistema lo registra como **in
 
 ## 5. Dónde se dejan
 
-Los archivos, **ya nombrados**, se depositan en la **carpeta de entrada del servidor** (`inbox`), en la subcarpeta según el canal por el que llegaron:
+Los archivos, **ya nombrados**, se depositan en la **carpeta de entrada del servidor** — `1_entrada` —, en la subcarpeta según el canal por el que llegaron:
 
 ```
-inbox/whatsapp/    ← llegaron por WhatsApp
-inbox/correo/      ← llegaron por correo
-inbox/original/    ← físico / ventanilla
+ingesta/
+└── 1_entrada/
+    ├── whatsapp/     ← llegaron por WhatsApp
+    ├── correo/       ← llegaron por correo
+    └── ventanilla/   ← físico / escaneados en ventanilla
 ```
 
-*(El mecanismo exacto para llevarlos ahí —carpeta compartida, bot, etc.— se define en la implementación; lo importante para el punto de recepción es el **formato y el nombre**.)*
+**`1_entrada` es la única carpeta donde el punto de recepción escribe.** Se pueden crear subcarpetas dentro (por día, por sede…): el sistema busca de forma recursiva.
+
+Las otras dos carpetas de la ingesta las llena **el sistema**, y solo hay que mirar una:
+
+| Carpeta | Qué significa | Qué hacer |
+|---|---|---|
+| `2_revisar/mal_nombrados/` | El nombre no se pudo interpretar | Renombrar bien y volver a dejarlo en `1_entrada/` |
+| `2_revisar/faltan_soportes/` | El caso quedó registrado pero falta un documento | Pedir el soporte; cuando llegue, dejarlo en `1_entrada/` con la misma cédula |
+| `2_revisar/datos_por_revisar/` | Los documentos están completos, pero algo no se leyó con certeza | Nada en la carpeta: el auxiliar lo confirma en la aplicación |
+| `2_revisar/con_error/` | Falló el procesamiento | Reportar a sistemas |
+| `3_archivo/` | Caso **completo** — historial por persona/año/mes/día | Nada: es la consulta |
+
+*(El mecanismo exacto para llevar los archivos a `1_entrada` —carpeta compartida, bot, etc.— se define en la implementación; lo importante para el punto de recepción es el **formato y el nombre**.)*
 
 ## 6. Qué hace el sistema después
 
 1. **Agrupa** los archivos por cédula (un caso por trámite) y **lee la fecha del propio documento**.
 2. **Lee** la incapacidad y saca los datos (paciente, diagnóstico, fechas, tipo).
 3. **Valida** que estén los soportes requeridos según el tipo.
-4. **Registra** el caso para revisión y lo **organiza** en el servidor por **persona → año → mes → día** (para consultar fácil el historial de un empleado).
-5. Si falta algo o algo no se leyó bien, lo **marca para revisión** (no se pierde nada).
+4. **Registra** el caso para revisión y **mueve** los archivos de `1_entrada/` a `3_archivo/`, organizados por **persona → año → mes → día** (para consultar fácil el historial de un empleado).
+5. Si falta algo o algo no se leyó bien, lo deja en `2_revisar/` y lo **marca para revisión** (no se pierde nada).
 
 El auxiliar solo **revisa y aprueba** (o completa lo que falte); ya no digita.
 
@@ -99,5 +113,6 @@ El auxiliar solo **revisa y aprueba** (o completa lo que falte); ya no digita.
 - ✅ Un documento = un archivo, bien nombrado (`cédula_TIPO`).
 - ✅ Misma cédula para todos los archivos de un mismo trámite (la fecha la pone el sistema).
 - ✅ Fotos derechas y legibles (o mejor, PDF).
+- ✅ Dejarlos **solo** en `1_entrada/` (las carpetas `2_revisar/` y `3_archivo/` las maneja el sistema).
 - ❌ No juntar varios documentos en un solo PDF.
-- ❌ No usar nombres como `IMG_2026.jpg` o `escaneo.pdf` → el sistema no sabe de quién es y lo manda a "revisar manual".
+- ❌ No usar nombres como `IMG_2026.jpg` o `escaneo.pdf` → el sistema no sabe de quién es y lo manda a `2_revisar/mal_nombrados/`.

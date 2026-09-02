@@ -1,0 +1,74 @@
+{
+  "_que_es_esto": [
+    "Configuracion EN CALIENTE del motor de reglas de tiempos (incapacidad_ocr/reglas_tiempo.py).",
+    "Sirve para cambiar SEVERIDADES, activar/desactivar reglas y mover UMBRALES sin volver a",
+    "desplegar la imagen: el codigo Python vive dentro del contenedor, este archivo vive en el",
+    "volumen montado. JSON no admite comentarios, asi que TODA clave que empieza por '_' se",
+    "ignora al leer: usalas para dejar notas como estas."
+  ],
+  "_donde_va": [
+    "Copiar este archivo como  ingesta/_sistema/control/reglas_tiempo.json  (esa carpeta es el",
+    "bind mount /data/ingesta del contenedor). Otra ruta: variable de entorno",
+    "REGLAS_TIEMPO_CONFIG=/ruta/al/archivo.json",
+    "Se relee en CADA corrida: se guarda el archivo y el siguiente documento ya usa los",
+    "valores nuevos. No hace falta reiniciar nada.",
+    "Prioridad: tabla en BD (lp_reglas_tiempo_ia / lp_umbrales_tiempo_ia) > este archivo >",
+    "defaults del codigo. Sin BD y sin archivo el motor funciona igual con los defaults."
+  ],
+  "_si_algo_esta_mal_escrito": [
+    "Cada entrada se valida por separado: una severidad que no existe, un umbral que no es",
+    "entero o fuera de su rango admisible, o un codigo de regla desconocido, se IGNORAN y se",
+    "reportan en 'avisos_config' del veredicto. Nunca se desactiva una regla en silencio y",
+    "nunca se tumba el procesamiento de un documento por un error de este archivo."
+  ],
+
+  "reglas": {
+    "_severidades_validas": "GRAVE y MEDIA mandan el caso a revision humana; LEVE solo informa (no bloquea)",
+    "_ejemplo_bajar_de_tono": "si una regla resulta ruidosa en produccion, bajarla a LEVE antes de desactivarla",
+
+    "T01_DURACION_VS_RANGO":          { "severidad": "GRAVE", "activa": true },
+    "T02_FIN_ANTES_DE_INICIO":        { "severidad": "GRAVE", "activa": true },
+    "T03_DIAS_FUERA_DE_RANGO":        { "severidad": "GRAVE", "activa": true },
+    "T04_RANGO_MAYOR_AL_MAXIMO":      { "severidad": "GRAVE", "activa": true },
+    "T05_DIAS_NO_NUMERICO":           { "severidad": "MEDIA", "activa": true },
+    "T06_FECHA_INICIO_ILEGIBLE":      { "severidad": "MEDIA", "activa": true },
+    "T07_FECHA_FIN_ILEGIBLE":         { "severidad": "MEDIA", "activa": true },
+    "T08_DURACION_SIN_RESPALDO":      { "severidad": "MEDIA", "activa": true },
+    "T09_INICIO_EN_FUTURO":           { "severidad": "MEDIA", "activa": true },
+    "T10_INICIO_MUY_ANTIGUO":         { "severidad": "LEVE",  "activa": true },
+    "T11_FIN_REESCRITO_SIN_EVIDENCIA": { "severidad": "GRAVE", "activa": true },
+    "T12_DIAS_LETRA_DISCREPA":        { "severidad": "MEDIA", "activa": true },
+
+    "_T13": [
+      "T13_DIA_SEMANA_INCONSISTENTE viene DESACTIVADA de fabrica y no debe activarse todavia:",
+      "el registro no publica el dia de la semana impreso, asi que hoy queda 'no evaluable'.",
+      "La version 'por posicion' de esa comprobacion marca documentos LEGITIMOS cuando el OCR",
+      "desordena las celdas (evidencia: dataset-falsedad, caso L14)."
+    ],
+    "T13_DIA_SEMANA_INCONSISTENTE":   { "severidad": "LEVE",  "activa": false }
+  },
+
+  "umbrales": {
+    "_dias_min_max": "rango legal de una incapacidad (1..540). Admisible: dias_min 1..30, dias_max 1..1095",
+    "dias_min": 1,
+    "dias_max": 540,
+
+    "_dias_sin_respaldo_aviso": [
+      "Duracion a partir de la cual se avisa cuando NO hay fecha fin con la que cruzarla.",
+      "180 es frontera de dominio (tramite pensional), no un numero ajustado al corpus.",
+      "Una licencia de maternidad (126 dias) queda por debajo a proposito. Admisible: 1..1095"
+    ],
+    "dias_sin_respaldo_aviso": 180,
+
+    "_ventana_temporal": [
+      "Margen a futuro y antiguedad maxima de la fecha de inicio respecto a HOY.",
+      "El plazo real de radicacion esta PENDIENTE de confirmar con el cliente: por eso",
+      "T10_INICIO_MUY_ANTIGUO es LEVE. Admisible: dias_futuro_max 0..365, dias_antiguedad_max 30..36500"
+    ],
+    "dias_futuro_max": 30,
+    "dias_antiguedad_max": 730,
+
+    "_desfase_tolerado_dias": "tolerancia del cruce duracion vs rango; 0 = exacto. Admisible: 0..5",
+    "desfase_tolerado_dias": 0
+  }
+}

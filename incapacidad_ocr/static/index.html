@@ -262,6 +262,9 @@
         </div>
       </div>
       <div id="erpProblemas" style="display:none; margin-top:12px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; padding:10px 14px; border-radius:10px; font-size:13.5px;"></div>
+      <!-- Veredicto de TIEMPOS aparte de los problemas de lookup: "los tiempos no cuadran"
+           no es lo mismo que "no encontré la cédula" (motor: incapacidad_ocr/reglas_tiempo.py). -->
+      <div id="erpTiempos" style="display:none; margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13.5px;"></div>
       <div class="erp-actions">
         <button class="btn ok sm" id="aprobar">✓ Aprobar</button>
         <button class="btn ghost sm" id="guardar">Guardar para revisión</button>
@@ -274,12 +277,13 @@
   <!-- Procesamiento por lotes: carpeta "sin procesar" -->
   <div class="panel" id="lote">
     <div class="res-head">
-      <h2 style="font-size:18px;">Procesamiento por lotes <small style="color:var(--muted);font-weight:400;">carpeta «sin procesar»</small></h2>
+      <h2 style="font-size:18px;">Procesamiento por lotes <small style="color:var(--muted);font-weight:400;">carpeta <code>ingesta/1_entrada</code></small></h2>
       <span class="pill" id="lotePend" style="background:#eef2ff;color:#4338ca;">—</span>
       <span class="pill" id="loteProg" style="background:#f1f5f9;color:#475569;">⏱ programación: —</span>
-      <button class="btn ok" id="procesarTodos" style="margin-left:auto;">⚙ Procesar todos</button>
+      <button class="dl" id="reiniciarPrueba" style="margin-left:auto;" title="Devuelve los documentos a 1_entrada para repetir la prueba con el mismo lote">↺ Reiniciar prueba</button>
+      <button class="btn ok" id="procesarTodos" style="margin-left:0;">⚙ Procesar todos</button>
     </div>
-    <p class="hint">Los documentos se dejan en la carpeta de ingesta con la nomenclatura <code>cedula_AAAAMMDD_TIPODOC.ext</code> (p.ej. <code>13742111_20260609_INCAPACIDAD.pdf</code>, <code>..._EPICRISIS.pdf</code>). «Procesar todos» los agrupa por trámite, OCR-ea la incapacidad, valida los soportes requeridos por tipo, los registra en <code>lp_ausentismos_ia</code> y los mueve a <code>procesados/</code> o <code>incompletos/</code>.</p>
+    <p class="hint">Los documentos se dejan en <code>ingesta/1_entrada/&lt;whatsapp|correo|ventanilla&gt;/</code> con la nomenclatura <code>cedula_TIPODOC.ext</code> (p.ej. <code>13742111_INCAPACIDAD.pdf</code>, <code>13742111_EPICRISIS.pdf</code> — la fecha la lee el sistema del documento). «Procesar todos» los agrupa por cédula, OCR-ea la incapacidad, valida los soportes requeridos por tipo, los registra en <code>lp_ausentismos_ia</code> y los mueve a <code>3_archivo/</code> si el caso quedó completo, o a <code>2_revisar/</code> si necesita acción humana.</p>
     <div id="loteResultado" style="display:none; margin-top:6px;"></div>
   </div>
 
@@ -720,7 +724,7 @@ async function cargarPendientes() {
   try {
     const r = await fetch("/api/lote/pendientes"); const d = await r.json();
     $("lotePend").textContent = `${d.con_nomenclatura} pend. · ${d.casos} casos` +
-      (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura` : "");
+      (d.mal_nombrados ? ` · ${d.mal_nombrados} mal nombrados` : "");
   } catch { $("lotePend").textContent = "—"; }
   try {
     const e = await (await fetch("/api/lote/estado")).json();
@@ -735,6 +739,42 @@ async function cargarPendientes() {
   } catch {}
 }
 
+// Reiniciar la prueba: devuelve los documentos a 1_entrada para volver a correr el mismo lote.
+// Se confirma antes porque, además de mover archivos, borra las filas de staging PENDIENTES de
+// esos documentos (lo ya aprobado o rechazado por el auxiliar no se toca).
+$("reiniciarPrueba").addEventListener("click", async () => {
+  if (!confirm("¿Reiniciar la prueba?\n\nLos documentos vuelven a 1_entrada y se borran las filas " +
+               "PENDIENTES de staging de esos archivos.\nLo ya aprobado o rechazado NO se toca."))
+    return;
+  const btn = $("reiniciarPrueba");
+  const antes = btn.textContent;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Reiniciando…';
+  const out = $("loteResultado");
+  try {
+    const r = await fetch("/api/lote/reiniciar", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ limpiar_bd: true }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || ("HTTP " + r.status));
+    const bd = d.bd || {};
+    out.style.display = "block";
+    out.innerHTML = `<div style="background:#eff6ff;border:1px solid #93c5fd;color:#1e40af;padding:10px 14px;border-radius:10px;">` +
+      `↺ Prueba reiniciada (modo <b>${escapeHtml(d.modo)}</b>): <b>${d.restaurados}</b> documentos en <code>1_entrada/</code>` +
+      (d.descartados ? ` · ${d.descartados} descartados de las zonas de salida` : "") +
+      (bd.staging ? ` · ${bd.staging} filas de staging borradas` : "") +
+      (d.avisos && d.avisos.length ? `<br>⚠️ ${d.avisos.map(escapeHtml).join("<br>⚠️ ")}` : "") +
+      `</div>`;
+    await cargarPendientes();
+    await cargarBandeja();
+  } catch (err) {
+    out.style.display = "block";
+    out.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:10px;">✗ ${escapeHtml(err.message)}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = antes;
+  }
+});
+
 $("procesarTodos").addEventListener("click", async () => {
   const btn = $("procesarTodos");
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Procesando lote…';
@@ -747,8 +787,8 @@ $("procesarTodos").addEventListener("click", async () => {
     const d = await r.json();
     if (!r.ok) throw new Error(d.detail || ("HTTP " + r.status));
     let html = `<div style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:10px 14px;border-radius:10px;">` +
-      `✓ Lote procesado: <b>${d.procesados}</b> completos · <b>${d.incompletos}</b> incompletos · <b>${d.cuarentena}</b> en cuarentena` +
-      (d.sin_nomenclatura ? ` · ${d.sin_nomenclatura} sin nomenclatura (omitidos)` : "") +
+      `✓ Lote procesado: <b>${d.completos}</b> completos → <code>3_archivo/</code> · <b>${d.faltan_soportes}</b> faltan soportes · <b>${d.datos_por_revisar}</b> datos por revisar · <b>${d.con_error}</b> con error → <code>2_revisar/</code>` +
+      (d.mal_nombrados ? ` · ${d.mal_nombrados} mal nombrados (omitidos)` : "") +
       (d.error ? `<br>⚠️ ${escapeHtml(d.error)}` : "") + `</div>`;
     if (d.detalle && d.detalle.length) {
       html += '<div class="bandeja-scroll"><table class="bandeja" style="margin-top:10px;"><thead><tr>' +

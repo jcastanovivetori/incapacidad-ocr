@@ -21,18 +21,21 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 | `preprocess.py` | carga imagen/PDF, **PDF→imágenes (PDFium, sin Poppler)**, resize, base64 |
 | `ocr.py` | backends OCR: `RapidOCRBackend` (ONNX/CPU), `OllamaVisionOCR` (visión local), `StubOCR` (tests). `OllamaError` + `translate_ollama_error` |
 | `extract.py` | extractores: `RuleBasedExtractor`, `OllamaLLMExtractor`, `HybridExtractor`; `normalizar_fechas()` (regla de fecha de inicio); `_split_glued_name()` (nombres pegados) |
+| `reglas_tiempo.py` | **motor de reglas de coherencia TEMPORAL**: `CATALOGO` declarativo (T01…T13), `construir_contexto`, `evaluar` (veredicto operativo), `evaluar_reglas`/`validar_tiempos` (informe CUMPLE/NO_CUMPLE/NO_EVALUABLE), configuración en caliente `cargar_config` (BD > JSON del volumen > defaults) |
+| `validacion_temporal.py` | **API pública** del motor (re-exporta `reglas_tiempo`, sin lógica propia): `validar_registro(registro)` → informe serializable · `python -m incapacidad_ocr.validacion_temporal` imprime el catálogo y la config efectiva |
+| `numeros_es.py` | numerales en español: `normalizar` (saneo OCR), `texto_a_entero`, `duracion_en_texto` (días en **números, letras o las dos**), `numerales_en_texto` (enteros presentes → anclaje del LLM). Lector puro: no aplica reglas de dominio |
 | `processor.py` | `IncapacidadProcessor` une OCR+extractor y llama `normalizar_fechas()`. Guarda `MIN_OCR_CHARS` (no estructurar texto vacío → anti-fabricación de PII) |
 | `erp.py` | `mapear_a_staging()` (JSON→fila staging), `Lookups` (cédula/CIE/EPS + nombre canónico), homologación de tipo, **validación documental** (`REQUISITOS_DEFAULT`, `EQUIVALENCIAS_DOC`, `validar_documentacion`, `canon_doc`) |
 | `db.py` | MySQL (BD ASTGU): `insertar_staging`, `insertar_alerta`, `listar_staging`, `obtener_staging`, `actualizar_revision`, `actualizar_estado` |
-| `batch.py` | **Ingesta masiva por lotes**: escanea `INGESTA_ROOT/inbox`, agrupa por nomenclatura del nombre, OCR-ea solo el doc base, valida requisitos por tipo, inserta en staging + alerta, mueve a `procesados/`/`incompletos/`/`cuarentena/`. `parse_nombre`, `procesar_todo`, `contar_pendientes` |
+| `batch.py` | **Ingesta masiva por lotes**: escanea `INGESTA_ROOT/1_entrada`, agrupa por nomenclatura del nombre, OCR-ea solo el doc base, valida requisitos por tipo, inserta en staging + alerta, mueve a `3_archivo/` o `2_revisar/…`. `parse_nombre`, `procesar_todo`, `contar_pendientes`, `asegurar_estructura` |
 | `webapp.py` | API FastAPI + estado del flujo (`PENDIENTE_REVISION`/`APROBADO`/`RECHAZADO`) + endpoints de lote |
 | `static/index.html` | UI de una sola página (vanilla JS): procesar, formulario de revisión editable, bandeja, **panel "Procesar todos"** (lote) |
 | `cli.py` · `python -m incapacidad_ocr.batch` | CLI de un doc (`cli`) · CLI del lote (`batch [--extractor rule\|hibrido] [--dry-run]`) |
 
 **Endpoints:** `POST /api/procesar` (multipart) · `POST /api/mapear` (preview con correcciones) ·
 `POST /api/registrar` (INSERT con `estado`) · `POST /api/revisar` (aprobar/rechazar/guardar) ·
-`GET /api/staging[?estado=]` · `GET /api/staging/{id}` · **`GET /api/lote/pendientes`** (cuenta la carpeta) ·
-**`POST /api/lote/procesar`** (procesa todo el `inbox`) · **`GET /api/lote/estado`** (corrida programada) · `GET /api/health`.
+`GET /api/staging[?estado=]` · `GET /api/staging/{id}` · **`GET /api/lote/pendientes`** (cuenta la entrada) ·
+**`POST /api/lote/procesar`** (procesa todo `1_entrada/`) · **`GET /api/lote/estado`** (corrida programada) · `GET /api/health`.
 
 ## Comandos
 
@@ -50,8 +53,13 @@ docker compose exec ollama ollama pull qwen2.5vl:3b   # modelo visión/OCR (lent
 docker exec ocr-db mysql -uocr -pocr ASTGU -e "SELECT id,estado,paciente_leido,fechainicio,Numerodias FROM lp_ausentismos_ia ORDER BY id;"
 
 # Pruebas (local, fuera de Docker):
-python tests/test_processor.py          # unitarias deterministas (StubOCR + RapidOCR si está)
-python tests/test_ejemplos_reales.py    # evalúa los 8 documentos reales de ../Ejemplos
+python tests/test_processor.py           # unitarias deterministas (StubOCR + RapidOCR si está)
+python tests/test_validacion_temporal.py # motor de tiempos: reglas, config en caliente, integración
+python tests/test_ejemplos_reales.py     # evalúa los 8 documentos reales de ../Ejemplos
+
+# Reglas de tiempos: ver el catálogo y la configuración EFECTIVA (comprobar un cambio en caliente):
+python -m incapacidad_ocr.validacion_temporal
+docker compose exec incapacidad-ocr python -m incapacidad_ocr.validacion_temporal
 
 # Local sin Docker:
 pip install -r requirements.txt
@@ -70,30 +78,37 @@ curl.exe -s -X POST http://localhost:8000/api/procesar \
 ### Ingesta masiva por lotes
 
 La carpeta `ingesta/` (raíz del repo) se monta en el contenedor como `/data/ingesta` (bind mount en
-`docker-compose.yml`). Los feeders dejan los documentos en `ingesta/inbox/<whatsapp|correo|original>/`
-con la **nomenclatura** `cedula_TIPODOC[_NN].ext` (ver §Reglas de dominio).
+`docker-compose.yml`). **Tres zonas numeradas** (`1_entrada/` → `2_revisar/` → `3_archivo/`) + `_sistema/`;
+el árbol y su porqué están en `ingesta/LEEME.md` (documento para RH). Los feeders dejan los documentos
+en `ingesta/1_entrada/<whatsapp|correo|ventanilla>/` con la **nomenclatura** `cedula_TIPODOC[_NN].ext`
+(ver §Reglas de dominio).
 
 ```bash
 # Botón "Procesar todos" de la UI == este endpoint:
-curl.exe -s http://localhost:8000/api/lote/pendientes                                   # cuenta el inbox
+curl.exe -s http://localhost:8000/api/lote/pendientes                                   # cuenta 1_entrada
 curl.exe -s -X POST http://localhost:8000/api/lote/procesar -H "Content-Type: application/json" -d '{"extractor":"rule"}'
 
 # CLI equivalente (dentro del contenedor):
 docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --dry-run           # reporta sin insertar/mover
 docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --extractor rule    # procesa de verdad
+docker compose exec incapacidad-ocr python -m incapacidad_ocr.batch --init              # solo crea el árbol
 
-# Sembrar el escenario de prueba (5 casos + 1 mal nombrado, con nomenclatura) — correr en el HOST:
+# Migrar un árbol viejo (inbox/procesados/incompletos/cuarentena) — correr en el HOST:
+python scripts/migrar_estructura_ingesta.py --dry-run    # reporta
+python scripts/migrar_estructura_ingesta.py              # mueve conservando sub-rutas
+
+# Sembrar el escenario de prueba en 1_entrada/whatsapp (5 casos + 1 mal nombrado) — en el HOST:
 python scripts/sembrar_demo.py
 #   13742111  INCAPACIDAD+EPICRISIS  -> enf. general COMPLETO
 #   63523940  INCAPACIDAD            -> enf. general INCOMPLETO (falta HISTORIA_CLINICA -> alerta)
 #   1005542119 INCAPACIDAD+FURAT     -> accidente de trabajo COMPLETO   (sintético)
 #   1095912481 VACACIONES            -> vacaciones COMPLETO             (sintético)
 #   1098757631 PERMISO               -> licencia remunerada COMPLETO    (sintético)
-#   documento_suelto.jpeg            -> sin nomenclatura (se omite)
+#   documento_suelto.jpeg            -> mal nombrado (se omite -> 2_revisar/mal_nombrados/)
 # Los reales salen de ../Ejemplos; los sintéticos son imágenes de texto (RapidOCR las lee).
 
 # Corrida PROGRAMADA (cron in-process, APScheduler). Vacío = desactivada.
-INGESTA_CRON='0 2 * * *' docker compose up -d incapacidad-ocr    # procesa el inbox cada día 02:00
+INGESTA_CRON='0 2 * * *' docker compose up -d incapacidad-ocr    # procesa 1_entrada cada día 02:00
 INGESTA_CRON='*/5 * * * *' docker compose up -d incapacidad-ocr  # cada 5 min (demo)
 docker compose up -d incapacidad-ocr                             # sin INGESTA_CRON -> desactivada
 curl.exe -s http://localhost:8000/api/lote/estado                # {programado, cron, proxima_ejecucion, en_curso}
@@ -105,6 +120,37 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   (inclusivo) y marcar `fecha_inicio_calculada` (aviso, no bloquea). Toda la reconciliación vive en
   `extract.normalizar_fechas()` y se reaplica en `erp.mapear_a_staging()` al corregir días/fin a mano.
 - **`fechavencimiento = fechainicio + Numerodias`** (no inclusivo). **`dias` válido = 1..540**.
+- **Días en NÚMEROS y en LETRAS** (`numeros_es.duracion_en_texto`, cableado en `RuleBasedExtractor`): los
+  documentos reales escriben la duración como `2`, como `DOS` y como las dos a la vez (`DOS (2) DIAS`,
+  `02 dos dia(s)`, `30 (TREINTA)`, `14 - CATORCE`, `DOS (02)`). **Todo candidato exige un ANCLA**: la unidad
+  pegada al valor (`POR 4 DIAS`) o un rótulo de duración en el MISMO renglón (o en un renglón adyacente que
+  contenga SOLO el valor) — sin eso, un léxico de numerales dispara en `una fuerza mayor`, en el `8 dia(s)`
+  de la edad y en `hacetresdias` (la queja del paciente). **Cuando hay palabra y dígito manda el DÍGITO** y
+  el desacuerdo se REGISTRA en `incapacidad.dias_letra` (int|None) y `incapacidad.dias_letra_coincide`
+  (True/False solo si el documento trae las dos formas; None si trae una): son **instrumentación**, aquí
+  NO se juzga si es adulteración (eso es de otro módulo). La señal de fraude respaldada por el corpus es
+  **duración vs. rango de fechas**, y cuando `normalizar_fechas()` re-deriva un fin que no cuadraba con los
+  días lo marca con `fecha_fin_recalculada` (aviso, no bloquea). Inventario de formas, degradaciones de OCR
+  y falsos positivos: `dataset-falsedad/duraciones/01_evidencia.md`.
+- **Validación de TIEMPOS — validar NO es reconciliar** (`reglas_tiempo.py`, API pública en
+  `validacion_temporal.py`): `extract.normalizar_fechas()` sigue siendo el ÚNICO sitio que decide qué
+  dato queda (rellena/deriva/sanea); el motor de reglas solo **opina sobre lo que traía el papel**
+  (lee, compara, califica y explica) y **nunca escribe** `fecha_inicio`/`fecha_fin`/`dias`. Por eso una
+  regla solo puede EXIGIR campos `*_leido`/`*_crudo` del contexto (`CAMPOS_EXIGIBLES`, verificado en
+  `tests/test_validacion_temporal.py` incluso sobre el código fuente de cada regla): opinar sobre un
+  valor DERIVADO marcaría documentos legítimos a los que el pipeline solo les completó un hueco.
+  La evidencia se conserva porque `processor` guarda una **foto** de los tiempos leídos
+  (`reglas_tiempo.CLAVE_SNAPSHOT`) ANTES de reconciliar, y llega al ERP en `fechafin_leida`/`dias_leidos`.
+  Tres estados por regla: **CUMPLE / NO_CUMPLE / NO_EVALUABLE** (un dato ausente NO es una violación).
+  Severidades: **GRAVE/MEDIA** entran en `problemas` (→ `requiere_revision`, la aprobación pide
+  confirmación como siempre), **LEVE** solo avisa. El motor **jamás rechaza solo**: marca y explica.
+  **Añadir una regla = añadir un objeto a `reglas_tiempo.CATALOGO`** (receta paso a paso justo encima de
+  esa tupla; el motor no se toca). **Cambiar severidad/umbral o apagar una regla SIN desplegar**:
+  tablas `lp_reglas_tiempo_ia`/`lp_umbrales_tiempo_ia` (`sql/migracion_reglas_tiempo.sql`) o el JSON del
+  volumen `ingesta/_sistema/control/reglas_tiempo.json` (plantilla comentada en
+  `config/reglas_tiempo.example.json`, ruta alterna por `REGLAS_TIEMPO_CONFIG`) — prioridad **BD >
+  archivo > defaults del código**, se relee en cada corrida y una config mal escrita se ignora entrada
+  por entrada con aviso (nunca apaga una regla en silencio ni tumba el mapeo).
 - **Nombres pegados** (`HERNANDEZSANDOVAL`): el **nombre del catálogo** (vía cédula→empleado) es
   autoritativo; `_split_glued_name()` es solo respaldo genérico. Si la cédula no resuelve, intentar por nombre.
 - **Lookups:** cédula→`idlpempleado`, CIE-10→`idlpdiagnosticos` (compara **sin punto**), EPS→`idlpentidad`
@@ -136,8 +182,11 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   paréntesis ("...a partir del veintinueve (29) de mayo... (2026)... hasta el seis (6) de julio... (2026)"),
   puede traer VARIOS periodos consecutivos — se toma la primera fecha tras "a partir del" y la última tras
   "hasta el". Los días NO se buscan por etiqueta en este formato (frases tipo "el día siete (07) de julio"
-  romperían el patrón de días) — se calculan siempre por diferencia de fechas. Ver `erp.mapear_a_staging`
-  (`es_vacaciones`) y `extract._fechas_vacaciones`/`extract.es_formato_vacaciones`.
+  romperían el patrón de días) — se calculan siempre por diferencia de fechas. **El lector de duraciones en
+  letras queda DESACTIVADO aquí** (ni en `RuleBasedExtractor` ni en la fusión del híbrido, donde el LLM
+  tampoco vota los días): "siete (07)" es un DÍA DEL MES y "dos mil veintiseis (2026)" el AÑO en palabras —
+  son las formas C3/C5 invertidas, así que entender letras AUMENTA el riesgo en este formato. Ver
+  `erp.mapear_a_staging` (`es_vacaciones`) y `extract._fechas_vacaciones`/`extract.es_formato_vacaciones`.
 - **PDFs multi-página**: cuando el mismo PDF trae la incapacidad JUNTO con otras páginas del trámite
   (certificado de nacido vivo, epicrisis, cédula escaneada...), el OCR se hace página por página y solo se
   usa el texto de la(s) página(s) que traen el ausentismo en sí (`extract.es_pagina_relevante`, ancla por
@@ -148,22 +197,44 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   "Fecha de Emisión" (Clínica Medical Duarte) también cuenta como fecha de inicio en licencias de maternidad de
   ese formato; "Fecha de Terminación" (a veces el OCR la pega: "Fecha Determinacion") como fecha fin; "Duración"
   como días (el patrón tolera que el valor quede en la línea siguiente). "Diagnostico(s):" es una variante más
-  del ancla de diagnóstico (además de "Diagnostico principal").
+  del ancla de diagnóstico (además de "Diagnostico principal"). Los rótulos de **días** los resuelve
+  `numeros_es` (`Dias de Incapacidad`, `Dias Incapacidad`, `Dias Inc.`, `No.Total dias`, `Duracion`, `Dias:`);
+  el respaldo histórico de `extract._dias_por_etiqueta` solo cubre variantes fuera de esa lista y lleva el
+  guardarraíl `_NUM_DIAS` (máx. 3 cifras, nunca pegado a `/ - . :`) para no leer un AÑO ni el día del mes de
+  una fecha como si fueran la duración.
 - **Tabla "DETALLE DE LA INCAPACIDAD"** (formato Clínica del Cesar): 5 columnas (Causa Externa/Diagnóstico/Días
   Inc./Inicio/Finalización) seguidas de sus 5 valores en bloque — se parsea aparte
   (`extract._extraer_detalle_incapacidad`) porque es más fiable que las heurísticas genéricas y evita falsos
-  positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.).
+  positivos (tomar "Dias Inc." como si fuera la descripción del diagnóstico, etc.). La celda de días se lee
+  como LÍNEA completa (`_dias_de_celda`): la posición en la tabla ya es el ancla, así que vale el dígito, la
+  palabra o las dos — antes, una celda que no fuera dígitos puros tumbaba TODO el bloque (con su CIE-10 y sus
+  fechas).
 - **Ingesta por lotes — nomenclatura de archivos** (`batch.py`): los documentos llegan **separados**, uno por
   archivo, nombrados `cedula_TIPODOC[_NN].ext` (`parse_nombre`, **sin fecha**). **Llave de caso** = la `cedula`
   (agrupa el trámite; la fecha sale del OCR). `TIPODOC` base (único que se OCR-ea) = `INCAPACIDAD`/`PERMISO`/`VACACIONES`; adjuntos
   (solo se verifican por nombre, no se OCR-ean) = `FURAT`/`FURIPS`/`EPICRISIS`/`HISTORIA`/`NACIDOVIVO`/
   `REGISTROCIVIL`/`DEFUNCION`/`CEDULA`/`FORMULA`/`ORDEN`/`OTRO`. La cédula del nombre se **coteja** con la que
-  el OCR lee de la incapacidad (mismatch → se anota en `problemas`); **nunca se cruzan cédulas distintas**. Los
-  mal nombrados van a `inbox/sin_nomenclatura/` (se omiten). El `inbox` puede tener subcarpetas de RH (escaneo
-  recursivo). Los casos se mueven a `procesados/`/`incompletos/` **organizados por `<Nombre persona>/AAAA/MM/DD`**
-  — nombre = primer nombre + primer apellido del catálogo (`extract.primer_nombre_apellido` sobre el nombre
-  canónico resuelto por cédula); fecha = inicio de la incapacidad. La cédula/diagnóstico NO van en la ruta.
+  el OCR lee de la incapacidad (mismatch → se anota en `problemas`); **nunca se cruzan cédulas distintas**.
   Diseño completo en `PLAN_INGESTA_MASIVA.md`.
+- **Ingesta por lotes — estructura de carpetas** (`batch.py`, constantes al inicio del módulo; documento para
+  RH en `ingesta/LEEME.md`): **tres zonas numeradas** que se leen en orden de flujo, más un área interna.
+  `1_entrada/<whatsapp|correo|ventanilla>/` (lo único que se escribe a mano; sub-carpeta → estado de recepción,
+  `original` sigue aceptándose como sinónimo de `ventanilla`; RH puede anidar más subcarpetas, el escaneo es
+  **recursivo**) → `2_revisar/{mal_nombrados,faltan_soportes,datos_por_revisar,con_error}/` (**todo lo que necesita
+  acción humana**, junto, con **una sub-carpeta por MOTIVO**: falta un soporte ≠ el soporte está y el
+  dato necesita revisión → la carpeta dice qué hacer) → `3_archivo/` (historial de los COMPLETOS) → `_sistema/{logs,tmp,control}/`.
+  **Invariante: cada archivo termina en exactamente UNA zona** → "¿dónde quedó?" tiene respuesta única.
+  `3_archivo/` y las sub-carpetas por caso de `2_revisar/` (`faltan_soportes`, `datos_por_revisar`) se
+  organizan por **`<Nombre persona>/AAAA/MM/DD`** — nombre = primer nombre
+  + primer apellido del catálogo (`extract.primer_nombre_apellido` sobre el nombre canónico resuelto por
+  cédula); fecha = inicio de la incapacidad (si el OCR no la leyó → `sin_fecha`). La cédula y el diagnóstico
+  NO van en el **directorio**; el **nombre de archivo** sí conserva la cédula (decisión 2026-09-01: se prefirió
+  trazabilidad contra lo que envió RH sobre el renombrado sin PII del plan §4.4 — el volumen es local con ACL).
+  Las claves del resumen del lote nombran las carpetas:
+  `completos`/`faltan_soportes`/`datos_por_revisar`/`con_error`/`mal_nombrados`.
+  `asegurar_estructura()` (o `batch --init`) crea el árbol; `scripts/migrar_estructura_ingesta.py` migra el
+  árbol viejo (`inbox`/`procesados`/`incompletos`/`cuarentena`) y el runner **sigue leyendo** un `inbox/` viejo
+  si existe (ver `ENTRADA_LEGACY`) para no dejar documentos huérfanos.
 - **Validación documental por tipo** (`erp.validar_documentacion`): el conjunto de `TIPODOC` presentes del caso
   se cruza contra los requeridos por el tipo — `lprequisitos_eps` (por `idlpentidad+idlptipoausentismo`,
   `obligatorio=1`) prevalece; si no hay filas, `erp.REQUISITOS_DEFAULT`. Se aplican **grupos de equivalencia**
@@ -181,6 +252,12 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
 - **Imports perezosos** de `httpx`/`rapidocr`/`mysql.connector` (el módulo importa aunque falte la dependencia).
 - **`moondream` NO sirve** para OCR (captioning); usar `qwen2.5vl:3b` para visión.
 - **Híbrido** es el extractor por defecto (RapidOCR + LLM fusionados, degrada a solo reglas si Ollama no está).
+  **Guardas anti-alucinación de `_merge_records`** (probadas con un `StubLLM` en `tests/test_processor.py`, sin
+  Ollama): las fechas del LLM se aceptan solo si aparecen en el texto OCR (`_dates_in_text`) y **los días
+  igual** (`_dias_llm` + `numeros_es.numerales_en_texto`: el dígito **o la palabra** tienen que estar en el
+  documento), con entero forzado y rango 1..540. Si las reglas leyeron la duración con doble evidencia
+  (dígito y palabra que concuerdan) o con el inicio anclado, **manda reglas**. `tipo_documento` es un escalar
+  del esquema y lo fija el detector de formato de las REGLAS, nunca el LLM.
 - **Permisos manuscritos → usar `ocr=ollama` (visión), no RapidOCR.** Validado contra 12 documentos reales de
   `H:\Gruppo\archivos\Ausentismos`: RapidOCR (texto impreso) lee muy mal la letra manuscrita en los formularios
   de permiso (nombre/cédula/fechas quedan irreconocibles); Ollama visión (`qwen2.5vl`) mejora sustancialmente
@@ -210,4 +287,6 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   desde el host se ve al instante en el contenedor (no requiere reconstruir). El contenedor (usuario no-root)
   **escribe** ahí para mover archivos — en Docker Desktop Windows el bind mount lo permite. La ingesta por lotes
   **no tiene ledger/dedup ni concurrencia** todavía (es la Fase 2 del plan): reprocesar es seguro solo porque los
-  archivos se mueven fuera del `inbox` al terminar.
+  archivos se mueven fuera de `1_entrada/` al terminar.
+- **`_sistema/tmp` y `_sistema/control` se crean pero AÚN NO se usan** (son de la Fase 2 del plan: escrituras
+  atómicas y centinela on-demand). Están en el árbol para que la estructura no cambie al implementarlas.
