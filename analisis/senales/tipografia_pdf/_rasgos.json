@@ -1,0 +1,6240 @@
+[
+ {
+  "archivo": "FALSA-01.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "8b682a83",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word 2010",
+   "Producer": "Microsoft® Word 2010",
+   "CreationDate": "D:20260715210250-05'00'",
+   "ModDate": "D:20260715210250-05'00'",
+   "Author": "ROGER",
+   "Title": ""
+  },
+  "fuentes": {
+   "Arial": 148,
+   "Arial,Bold": 94,
+   "Courier New,Bold": 88,
+   "Calibri": 2,
+   "Times New Roman,Bold": 1
+  },
+  "detalle": {
+   "Courier New,Bold": {
+    "familia": "Courier New",
+    "embebida": true,
+    "peso": 300,
+    "subset": false,
+    "raiz": "Courier New,Bold",
+    "familia_norm": "couriernew"
+   },
+   "Arial": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 220,
+    "subset": false,
+    "raiz": "Arial",
+    "familia_norm": "arial"
+   },
+   "Arial,Bold": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial,Bold",
+    "familia_norm": "arial"
+   },
+   "Calibri": {
+    "familia": "Calibri",
+    "embebida": true,
+    "peso": 260,
+    "subset": false,
+    "raiz": "Calibri",
+    "familia_norm": "calibri"
+   },
+   "Times New Roman,Bold": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 210,
+    "subset": false,
+    "raiz": "Times New Roman,Bold",
+    "familia_norm": "timesnewroman"
+   }
+  },
+  "familias": {
+   "arial": 242,
+   "couriernew": 88,
+   "calibri": 2,
+   "timesnewroman": 1
+  },
+  "tamanos": {
+   "1.0": 4,
+   "2.0": 1,
+   "4.5": 13,
+   "5.0": 37,
+   "5.5": 9,
+   "6.0": 11,
+   "7.0": 239,
+   "8.0": 2,
+   "12.0": 17
+  },
+  "modos": {
+   "FILL": 333
+  },
+  "n_texto": 333,
+  "n_img": 5,
+  "chars": 1650,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 333,
+    "n_img": 5,
+    "fuentes_pag": [
+     "Arial",
+     "Arial,Bold",
+     "Calibri",
+     "Courier New,Bold",
+     "Times New Roman,Bold"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.022
+ },
+ {
+  "archivo": "FALSA-02.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "5c66d97e",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word 2016",
+   "Producer": "Microsoft® Word 2016",
+   "CreationDate": "D:20260519161349-05'00'",
+   "ModDate": "D:20260519161349-05'00'",
+   "Author": "Mayle",
+   "Title": ""
+  },
+  "fuentes": {
+   "Arial": 209,
+   "Arial,Bold": 129,
+   "Courier New,Bold": 36,
+   "Times New Roman": 3
+  },
+  "detalle": {
+   "Courier New,Bold": {
+    "familia": "Courier New",
+    "embebida": true,
+    "peso": 300,
+    "subset": false,
+    "raiz": "Courier New,Bold",
+    "familia_norm": "couriernew"
+   },
+   "Arial": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 220,
+    "subset": false,
+    "raiz": "Arial",
+    "familia_norm": "arial"
+   },
+   "Arial,Bold": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial,Bold",
+    "familia_norm": "arial"
+   },
+   "Times New Roman": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 200,
+    "subset": false,
+    "raiz": "Times New Roman",
+    "familia_norm": "timesnewroman"
+   }
+  },
+  "familias": {
+   "arial": 338,
+   "couriernew": 36,
+   "timesnewroman": 3
+  },
+  "tamanos": {
+   "1.56": 2,
+   "6.0": 23,
+   "6.96": 343,
+   "8.04": 4,
+   "9.96": 5
+  },
+  "modos": {
+   "FILL": 377
+  },
+  "n_texto": 377,
+  "n_img": 6,
+  "chars": 1196,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 377,
+    "n_img": 6,
+    "fuentes_pag": [
+     "Arial",
+     "Arial,Bold",
+     "Courier New,Bold",
+     "Times New Roman"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.008
+ },
+ {
+  "archivo": "FALSA-03.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha8": "28c4a946",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word LTSC",
+   "Producer": "4-Heights™ PDF Library 3.4.0.6904 (http://www.pdf-tools.com)",
+   "CreationDate": "D:20260609164647-05'00'",
+   "ModDate": "D:20260729190454Z",
+   "Author": "HP 240 G9",
+   "Title": ""
+  },
+  "fuentes": {
+   "ArialMT": 146,
+   "Arial-BoldMT": 37,
+   "CourierNewPS-BoldMT": 36,
+   "TimesNewRomanPS-BoldMT": 19,
+   "ACWIYO+ArialMT": 4,
+   "TimesNewRomanPSMT": 2
+  },
+  "detalle": {
+   "CourierNewPS-BoldMT": {
+    "familia": "Courier New",
+    "embebida": true,
+    "peso": 300,
+    "subset": false,
+    "raiz": "CourierNewPS-BoldMT",
+    "familia_norm": "couriernew"
+   },
+   "TimesNewRomanPSMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 200,
+    "subset": false,
+    "raiz": "TimesNewRomanPSMT",
+    "familia_norm": "timesnewroman"
+   },
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "TimesNewRomanPS-BoldMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 210,
+    "subset": false,
+    "raiz": "TimesNewRomanPS-BoldMT",
+    "familia_norm": "timesnewroman"
+   },
+   "ACWIYO+ArialMT": {
+    "familia": "",
+    "embebida": true,
+    "peso": 0,
+    "subset": true,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   }
+  },
+  "familias": {
+   "arial": 187,
+   "couriernew": 36,
+   "timesnewroman": 21
+  },
+  "tamanos": {
+   "0.96": 2,
+   "3.48": 1,
+   "3.96": 1,
+   "6.48": 4,
+   "6.96": 3,
+   "8.04": 59,
+   "8.52": 21,
+   "9.0": 94,
+   "9.48": 32,
+   "9.96": 15,
+   "12.0": 12
+  },
+  "modos": {
+   "FILL": 244
+  },
+  "n_texto": 244,
+  "n_img": 12,
+  "chars": 893,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 244,
+    "n_img": 12,
+    "fuentes_pag": [
+     "ACWIYO+ArialMT",
+     "Arial-BoldMT",
+     "ArialMT",
+     "CourierNewPS-BoldMT",
+     "TimesNewRomanPS-BoldMT",
+     "TimesNewRomanPSMT"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.203
+ },
+ {
+  "archivo": "FALSA-04.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "e0ee54fd",
+  "tipo": "pdf",
+  "eof": 6,
+  "startxref": 6,
+  "prev": 5,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Adobe Acrobat Reader (iOS)",
+   "Producer": "Adobe Acrobat Mobile Paper Capture Plug-in with ClearScan",
+   "CreationDate": "D:20250804174118-05'00'",
+   "ModDate": "D:20250902100134-05'00'",
+   "Author": "",
+   "Title": ""
+  },
+  "fuentes": {
+   "*Arial-12402": 149,
+   "*Helvetica-Bold-12400": 114,
+   "*Verdana-Bold-12404": 38,
+   "*Helvetica-Bold-12399": 15,
+   "*Times New Roman-12358": 8,
+   "*Times New Roman-12396": 7,
+   "*Times New Roman-Italic-12360": 6,
+   "*Times New Roman-12389": 6,
+   "*Times New Roman-Bold-12382": 5,
+   "*Times New Roman-Italic-12381": 5,
+   "*Times New Roman-Italic-12375": 5,
+   "*Times New Roman-Italic-12385": 4,
+   "*Times New Roman-Italic-12380": 4,
+   "*Times New Roman-12372": 4,
+   "*Times New Roman-12391": 3,
+   "*Times New Roman-Italic-12386": 3,
+   "*Times New Roman-Italic-12373": 3,
+   "*Times New Roman-BoldItalic-12371": 3,
+   "*Times New Roman-Italic-12388": 3,
+   "*Times New Roman-Italic-12362": 3,
+   "*Helvetica-Bold-12401": 3,
+   "*Times New Roman-12370": 2,
+   "*Times New Roman-12361": 2,
+   "*Times New Roman-12363": 2,
+   "*Times New Roman-BoldItalic-12394": 2,
+   "*Times New Roman-12392": 2,
+   "*Arial-12403": 2,
+   "*Times New Roman-Italic-12369": 2,
+   "*Times New Roman-Bold-12383": 2,
+   "*Times New Roman-Bold-12365": 2,
+   "*Times New Roman-BoldItalic-12367": 2,
+   "*Times New Roman-Bold-12364": 2,
+   "*Times New Roman-12397": 1,
+   "*Source Sans Pro-12398": 1,
+   "*Times New Roman-BoldItalic-12395": 1,
+   "*Times New Roman-Italic-12393": 1,
+   "*Times New Roman-BoldItalic-12390": 1,
+   "*Times New Roman-Italic-12387": 1,
+   "*Times New Roman-Italic-12384": 1,
+   "*Times New Roman-12379": 1,
+   "*Times New Roman-12378": 1,
+   "*Times New Roman-12377": 1,
+   "*Times New Roman-Italic-12374": 1,
+   "*Times New Roman-BoldItalic-12376": 1,
+   "*Arial": 1,
+   "*Times New Roman-Italic-12368": 1,
+   "*Times New Roman-Bold-12366": 1,
+   "*Times New Roman-Bold-12359": 1
+  },
+  "detalle": {
+   "*Verdana-Bold-12404": {
+    "familia": "*Verdana-Bold-12404",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Verdana-Bold-12404",
+    "familia_norm": "*verdana-bold-12404"
+   },
+   "*Times New Roman-12391": {
+    "familia": "*Times New Roman-12391",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12391",
+    "familia_norm": "*timesnewroman-12391"
+   },
+   "*Times New Roman-Italic-12386": {
+    "familia": "*Times New Roman-Italic-12386",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12386",
+    "familia_norm": "*timesnewroman-italic-12386"
+   },
+   "*Times New Roman-Italic-12360": {
+    "familia": "*Times New Roman-Italic-12360",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12360",
+    "familia_norm": "*timesnewroman-italic-12360"
+   },
+   "*Times New Roman-Italic-12373": {
+    "familia": "*Times New Roman-Italic-12373",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12373",
+    "familia_norm": "*timesnewroman-italic-12373"
+   },
+   "*Times New Roman-12396": {
+    "familia": "*Times New Roman-12396",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12396",
+    "familia_norm": "*timesnewroman-12396"
+   },
+   "*Times New Roman-12397": {
+    "familia": "*Times New Roman-12397",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12397",
+    "familia_norm": "*timesnewroman-12397"
+   },
+   "*Times New Roman-12389": {
+    "familia": "*Times New Roman-12389",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12389",
+    "familia_norm": "*timesnewroman-12389"
+   },
+   "*Source Sans Pro-12398": {
+    "familia": "*Source Sans Pro-12398",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Source Sans Pro-12398",
+    "familia_norm": "*sourcesanspro-12398"
+   },
+   "*Times New Roman-12358": {
+    "familia": "*Times New Roman-12358",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12358",
+    "familia_norm": "*timesnewroman-12358"
+   },
+   "*Times New Roman-12370": {
+    "familia": "*Times New Roman-12370",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12370",
+    "familia_norm": "*timesnewroman-12370"
+   },
+   "*Times New Roman-Italic-12385": {
+    "familia": "*Times New Roman-Italic-12385",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12385",
+    "familia_norm": "*timesnewroman-italic-12385"
+   },
+   "*Times New Roman-12361": {
+    "familia": "*Times New Roman-12361",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12361",
+    "familia_norm": "*timesnewroman-12361"
+   },
+   "*Times New Roman-Bold-12382": {
+    "familia": "*Times New Roman-Bold-12382",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12382",
+    "familia_norm": "*timesnewroman-bold-12382"
+   },
+   "*Times New Roman-12363": {
+    "familia": "*Times New Roman-12363",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12363",
+    "familia_norm": "*timesnewroman-12363"
+   },
+   "*Times New Roman-BoldItalic-12371": {
+    "familia": "*Times New Roman-BoldItalic-12371",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12371",
+    "familia_norm": "*timesnewroman-bolditalic-12371"
+   },
+   "*Times New Roman-BoldItalic-12394": {
+    "familia": "*Times New Roman-BoldItalic-12394",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12394",
+    "familia_norm": "*timesnewroman-bolditalic-12394"
+   },
+   "*Times New Roman-BoldItalic-12395": {
+    "familia": "*Times New Roman-BoldItalic-12395",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12395",
+    "familia_norm": "*timesnewroman-bolditalic-12395"
+   },
+   "*Arial-12402": {
+    "familia": "*Arial-12402",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Arial-12402",
+    "familia_norm": "*arial-12402"
+   },
+   "*Times New Roman-Italic-12393": {
+    "familia": "*Times New Roman-Italic-12393",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12393",
+    "familia_norm": "*timesnewroman-italic-12393"
+   },
+   "*Times New Roman-12392": {
+    "familia": "*Times New Roman-12392",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12392",
+    "familia_norm": "*timesnewroman-12392"
+   },
+   "*Times New Roman-Italic-12381": {
+    "familia": "*Times New Roman-Italic-12381",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12381",
+    "familia_norm": "*timesnewroman-italic-12381"
+   },
+   "*Helvetica-Bold-12399": {
+    "familia": "*Helvetica-Bold-12399",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Helvetica-Bold-12399",
+    "familia_norm": "*helvetica-bold-12399"
+   },
+   "*Times New Roman-Italic-12388": {
+    "familia": "*Times New Roman-Italic-12388",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12388",
+    "familia_norm": "*timesnewroman-italic-12388"
+   },
+   "*Times New Roman-BoldItalic-12390": {
+    "familia": "*Times New Roman-BoldItalic-12390",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12390",
+    "familia_norm": "*timesnewroman-bolditalic-12390"
+   },
+   "*Times New Roman-Italic-12380": {
+    "familia": "*Times New Roman-Italic-12380",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12380",
+    "familia_norm": "*timesnewroman-italic-12380"
+   },
+   "*Times New Roman-Italic-12387": {
+    "familia": "*Times New Roman-Italic-12387",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12387",
+    "familia_norm": "*timesnewroman-italic-12387"
+   },
+   "*Arial-12403": {
+    "familia": "*Arial-12403",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Arial-12403",
+    "familia_norm": "*arial-12403"
+   },
+   "*Times New Roman-Italic-12375": {
+    "familia": "*Times New Roman-Italic-12375",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12375",
+    "familia_norm": "*timesnewroman-italic-12375"
+   },
+   "*Times New Roman-Italic-12369": {
+    "familia": "*Times New Roman-Italic-12369",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12369",
+    "familia_norm": "*timesnewroman-italic-12369"
+   },
+   "*Helvetica-Bold-12400": {
+    "familia": "*Helvetica-Bold-12400",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Helvetica-Bold-12400",
+    "familia_norm": "*helvetica-bold-12400"
+   },
+   "*Times New Roman-Bold-12383": {
+    "familia": "*Times New Roman-Bold-12383",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12383",
+    "familia_norm": "*timesnewroman-bold-12383"
+   },
+   "*Times New Roman-Italic-12384": {
+    "familia": "*Times New Roman-Italic-12384",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12384",
+    "familia_norm": "*timesnewroman-italic-12384"
+   },
+   "*Times New Roman-12379": {
+    "familia": "*Times New Roman-12379",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12379",
+    "familia_norm": "*timesnewroman-12379"
+   },
+   "*Times New Roman-12378": {
+    "familia": "*Times New Roman-12378",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12378",
+    "familia_norm": "*timesnewroman-12378"
+   },
+   "*Times New Roman-12377": {
+    "familia": "*Times New Roman-12377",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12377",
+    "familia_norm": "*timesnewroman-12377"
+   },
+   "*Times New Roman-Italic-12374": {
+    "familia": "*Times New Roman-Italic-12374",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12374",
+    "familia_norm": "*timesnewroman-italic-12374"
+   },
+   "*Times New Roman-12372": {
+    "familia": "*Times New Roman-12372",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-12372",
+    "familia_norm": "*timesnewroman-12372"
+   },
+   "*Times New Roman-Italic-12362": {
+    "familia": "*Times New Roman-Italic-12362",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12362",
+    "familia_norm": "*timesnewroman-italic-12362"
+   },
+   "*Times New Roman-Bold-12365": {
+    "familia": "*Times New Roman-Bold-12365",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12365",
+    "familia_norm": "*timesnewroman-bold-12365"
+   },
+   "*Times New Roman-BoldItalic-12376": {
+    "familia": "*Times New Roman-BoldItalic-12376",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12376",
+    "familia_norm": "*timesnewroman-bolditalic-12376"
+   },
+   "*Arial": {
+    "familia": "*Arial",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Arial",
+    "familia_norm": "*arial"
+   },
+   "*Helvetica-Bold-12401": {
+    "familia": "*Helvetica-Bold-12401",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Helvetica-Bold-12401",
+    "familia_norm": "*helvetica-bold-12401"
+   },
+   "*Times New Roman-Italic-12368": {
+    "familia": "*Times New Roman-Italic-12368",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Italic-12368",
+    "familia_norm": "*timesnewroman-italic-12368"
+   },
+   "*Times New Roman-BoldItalic-12367": {
+    "familia": "*Times New Roman-BoldItalic-12367",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-BoldItalic-12367",
+    "familia_norm": "*timesnewroman-bolditalic-12367"
+   },
+   "*Times New Roman-Bold-12366": {
+    "familia": "*Times New Roman-Bold-12366",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12366",
+    "familia_norm": "*timesnewroman-bold-12366"
+   },
+   "*Times New Roman-Bold-12364": {
+    "familia": "*Times New Roman-Bold-12364",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12364",
+    "familia_norm": "*timesnewroman-bold-12364"
+   },
+   "*Times New Roman-Bold-12359": {
+    "familia": "*Times New Roman-Bold-12359",
+    "embebida": true,
+    "peso": 500,
+    "subset": false,
+    "raiz": "*Times New Roman-Bold-12359",
+    "familia_norm": "*timesnewroman-bold-12359"
+   }
+  },
+  "familias": {
+   "*arial-12402": 149,
+   "*helvetica-bold-12400": 114,
+   "*verdana-bold-12404": 38,
+   "*helvetica-bold-12399": 15,
+   "*timesnewroman-12358": 8,
+   "*timesnewroman-12396": 7,
+   "*timesnewroman-italic-12360": 6,
+   "*timesnewroman-12389": 6,
+   "*timesnewroman-bold-12382": 5,
+   "*timesnewroman-italic-12381": 5,
+   "*timesnewroman-italic-12375": 5,
+   "*timesnewroman-italic-12385": 4,
+   "*timesnewroman-italic-12380": 4,
+   "*timesnewroman-12372": 4,
+   "*timesnewroman-12391": 3,
+   "*timesnewroman-italic-12386": 3,
+   "*timesnewroman-italic-12373": 3,
+   "*timesnewroman-bolditalic-12371": 3,
+   "*timesnewroman-italic-12388": 3,
+   "*timesnewroman-italic-12362": 3,
+   "*helvetica-bold-12401": 3,
+   "*timesnewroman-12370": 2,
+   "*timesnewroman-12361": 2,
+   "*timesnewroman-12363": 2,
+   "*timesnewroman-bolditalic-12394": 2,
+   "*timesnewroman-12392": 2,
+   "*arial-12403": 2,
+   "*timesnewroman-italic-12369": 2,
+   "*timesnewroman-bold-12383": 2,
+   "*timesnewroman-bold-12365": 2,
+   "*timesnewroman-bolditalic-12367": 2,
+   "*timesnewroman-bold-12364": 2,
+   "*timesnewroman-12397": 1,
+   "*sourcesanspro-12398": 1,
+   "*timesnewroman-bolditalic-12395": 1,
+   "*timesnewroman-italic-12393": 1,
+   "*timesnewroman-bolditalic-12390": 1,
+   "*timesnewroman-italic-12387": 1,
+   "*timesnewroman-italic-12384": 1,
+   "*timesnewroman-12379": 1,
+   "*timesnewroman-12378": 1,
+   "*timesnewroman-12377": 1,
+   "*timesnewroman-italic-12374": 1,
+   "*timesnewroman-bolditalic-12376": 1,
+   "*arial": 1,
+   "*timesnewroman-italic-12368": 1,
+   "*timesnewroman-bold-12366": 1,
+   "*timesnewroman-bold-12359": 1
+  },
+  "tamanos": {
+   "4.0": 1,
+   "6.0": 5,
+   "8.0": 5,
+   "8.5": 2,
+   "9.0": 4,
+   "9.5": 1,
+   "10.0": 5,
+   "11.0": 5,
+   "11.5": 3,
+   "12.0": 114,
+   "12.5": 3,
+   "13.0": 8,
+   "13.5": 38,
+   "14.0": 2,
+   "14.5": 2,
+   "15.0": 132,
+   "16.5": 1,
+   "17.0": 2,
+   "17.5": 15,
+   "18.0": 2,
+   "19.0": 4,
+   "19.5": 2,
+   "20.0": 5,
+   "21.0": 8,
+   "23.0": 6,
+   "26.0": 1,
+   "26.5": 3,
+   "29.0": 13,
+   "30.0": 7,
+   "32.5": 3,
+   "40.0": 7,
+   "47.96": 18,
+   "54.35": 1,
+   "67.14": 1
+  },
+  "modos": {
+   "FILL": 429
+  },
+  "n_texto": 429,
+  "n_img": 31,
+  "chars": 1844,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 429,
+    "n_img": 31,
+    "fuentes_pag": [
+     "*Arial",
+     "*Arial-12402",
+     "*Arial-12403",
+     "*Helvetica-Bold-12399",
+     "*Helvetica-Bold-12400",
+     "*Helvetica-Bold-12401",
+     "*Source Sans Pro-12398",
+     "*Times New Roman-12358",
+     "*Times New Roman-12361",
+     "*Times New Roman-12363",
+     "*Times New Roman-12370",
+     "*Times New Roman-12372",
+     "*Times New Roman-12377",
+     "*Times New Roman-12378",
+     "*Times New Roman-12379",
+     "*Times New Roman-12389",
+     "*Times New Roman-12391",
+     "*Times New Roman-12392",
+     "*Times New Roman-12396",
+     "*Times New Roman-12397",
+     "*Times New Roman-Bold-12359",
+     "*Times New Roman-Bold-12364",
+     "*Times New Roman-Bold-12365",
+     "*Times New Roman-Bold-12366",
+     "*Times New Roman-Bold-12382",
+     "*Times New Roman-Bold-12383",
+     "*Times New Roman-BoldItalic-12367",
+     "*Times New Roman-BoldItalic-12371",
+     "*Times New Roman-BoldItalic-12376",
+     "*Times New Roman-BoldItalic-12390",
+     "*Times New Roman-BoldItalic-12394",
+     "*Times New Roman-BoldItalic-12395",
+     "*Times New Roman-Italic-12360",
+     "*Times New Roman-Italic-12362",
+     "*Times New Roman-Italic-12368",
+     "*Times New Roman-Italic-12369",
+     "*Times New Roman-Italic-12373",
+     "*Times New Roman-Italic-12374",
+     "*Times New Roman-Italic-12375",
+     "*Times New Roman-Italic-12380",
+     "*Times New Roman-Italic-12381",
+     "*Times New Roman-Italic-12384",
+     "*Times New Roman-Italic-12385",
+     "*Times New Roman-Italic-12386",
+     "*Times New Roman-Italic-12387",
+     "*Times New Roman-Italic-12388",
+     "*Times New Roman-Italic-12393",
+     "*Verdana-Bold-12404"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12391",
+    "tam": 23.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12386",
+    "tam": 23.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12391",
+    "tam": 23.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12373",
+    "tam": 29.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12397",
+    "tam": 26.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Source Sans Pro-12398",
+    "tam": 26.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12396",
+    "tam": 40.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12370",
+    "tam": 19.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12385",
+    "tam": 11.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12385",
+    "tam": 11.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12361",
+    "tam": 17.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12382",
+    "tam": 13.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12363",
+    "tam": 13.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12371",
+    "tam": 12.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12371",
+    "tam": 12.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12394",
+    "tam": 14.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12394",
+    "tam": 14.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12395",
+    "tam": 9.5,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 15
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12393",
+    "tam": 18.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12392",
+    "tam": 8.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12391",
+    "tam": 23.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12386",
+    "tam": 23.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12381",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12381",
+    "tam": 10.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12373",
+    "tam": 29.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12388",
+    "tam": 11.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12390",
+    "tam": 30.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12389",
+    "tam": 30.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12388",
+    "tam": 11.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12388",
+    "tam": 11.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12380",
+    "tam": 9.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12392",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12387",
+    "tam": 13.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12403",
+    "tam": 19.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12403",
+    "tam": 19.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12375",
+    "tam": 20.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12375",
+    "tam": 20.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12380",
+    "tam": 9.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12385",
+    "tam": 11.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12386",
+    "tam": 23.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12369",
+    "tam": 26.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12385",
+    "tam": 11.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12381",
+    "tam": 10.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12382",
+    "tam": 13.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12383",
+    "tam": 8.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12382",
+    "tam": 13.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12382",
+    "tam": 13.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12383",
+    "tam": 8.5,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12382",
+    "tam": 13.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12381",
+    "tam": 10.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12381",
+    "tam": 10.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12384",
+    "tam": 54.35,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12379",
+    "tam": 18.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12378",
+    "tam": 67.14,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12380",
+    "tam": 9.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12380",
+    "tam": 9.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12377",
+    "tam": 11.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12375",
+    "tam": 20.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12375",
+    "tam": 20.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12375",
+    "tam": 20.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 13
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12374",
+    "tam": 16.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12373",
+    "tam": 29.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12372",
+    "tam": 6.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12372",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12372",
+    "tam": 6.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12372",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12362",
+    "tam": 32.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12362",
+    "tam": 32.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 15
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12371",
+    "tam": 12.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12365",
+    "tam": 21.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Verdana-Bold-12404",
+    "tam": 13.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12376",
+    "tam": 6.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial",
+    "tam": 47.96,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 47.96,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12370",
+    "tam": 19.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Arial-12402",
+    "tam": 15.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 14
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12369",
+    "tam": 26.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12401",
+    "tam": 8.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12368",
+    "tam": 14.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12401",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12401",
+    "tam": 8.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 14
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12367",
+    "tam": 29.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-BoldItalic-12367",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12365",
+    "tam": 21.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12366",
+    "tam": 14.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12364",
+    "tam": 19.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12364",
+    "tam": 19.5,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 13
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12400",
+    "tam": 12.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12363",
+    "tam": 13.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12362",
+    "tam": 32.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12361",
+    "tam": 17.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Italic-12360",
+    "tam": 21.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-Bold-12359",
+    "tam": 4.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "*Helvetica-Bold-12399",
+    "tam": 17.5,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "*Times New Roman-12358",
+    "tam": 29.0,
+    "nchars": 2
+   }
+  ],
+  "area_img_max_frac": 1.022
+ },
+ {
+  "archivo": "FALSA-05.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "8aeee4cd",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word para Microsoft 365",
+   "Producer": "Microsoft® Word para Microsoft 365",
+   "CreationDate": "D:20251112140027-05'00'",
+   "ModDate": "D:20251112140027-05'00'",
+   "Author": "WinuE",
+   "Title": ""
+  },
+  "fuentes": {
+   "Arial-BoldMT": 144,
+   "ArialMT": 135,
+   "PalatinoLinotype-Roman": 23,
+   "BCDGEE+Arial-BoldMT": 1
+  },
+  "detalle": {
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "BCDGEE+Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": true,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "PalatinoLinotype-Roman": {
+    "familia": "Palatino Linotype",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "PalatinoLinotype-Roman",
+    "familia_norm": "palatinolinotype"
+   }
+  },
+  "familias": {
+   "arial": 280,
+   "palatinolinotype": 23
+  },
+  "tamanos": {
+   "3.0": 1,
+   "8.04": 28,
+   "8.52": 229,
+   "9.0": 45
+  },
+  "modos": {
+   "FILL": 303
+  },
+  "n_texto": 303,
+  "n_img": 1,
+  "chars": 1106,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 303,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "BCDGEE+Arial-BoldMT",
+     "PalatinoLinotype-Roman"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.027
+ },
+ {
+  "archivo": "FALSA-06.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "9dcb4e35",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "EPSON Scan",
+   "CreationDate": "D:20250917084923-05'00'",
+   "ModDate": "D:20250917084923-05'00'",
+   "Author": "",
+   "Title": ""
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 1.0
+ },
+ {
+  "archivo": "FALSA-07.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "9603c77b",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word para Microsoft 365",
+   "Producer": "Microsoft® Word para Microsoft 365",
+   "CreationDate": "D:20260423140439-05'00'",
+   "ModDate": "D:20260423140439-05'00'",
+   "Author": "WinuE",
+   "Title": ""
+  },
+  "fuentes": {
+   "Arial-BoldMT": 142,
+   "ArialMT": 139,
+   "PalatinoLinotype-Roman": 22,
+   "BCDGEE+Arial-BoldMT": 1
+  },
+  "detalle": {
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "BCDGEE+Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": true,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "PalatinoLinotype-Roman": {
+    "familia": "Palatino Linotype",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "PalatinoLinotype-Roman",
+    "familia_norm": "palatinolinotype"
+   }
+  },
+  "familias": {
+   "arial": 282,
+   "palatinolinotype": 22
+  },
+  "tamanos": {
+   "3.0": 1,
+   "5.52": 1,
+   "8.04": 28,
+   "8.52": 232,
+   "9.0": 42
+  },
+  "modos": {
+   "FILL": 304
+  },
+  "n_texto": 304,
+  "n_img": 1,
+  "chars": 1090,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 304,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "BCDGEE+Arial-BoldMT",
+     "PalatinoLinotype-Roman"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.027
+ },
+ {
+  "archivo": "FALSA-08.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "ed2a4eeb",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 24-04-2026 13.38"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.913
+ },
+ {
+  "archivo": "FALSA-09.jpeg",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "d5b72739",
+  "tipo": "imagen",
+  "n_texto": 0
+ },
+ {
+  "archivo": "FALSA-10.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "717d3aad",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 2,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft Word",
+   "Producer": "",
+   "CreationDate": "D:20260609162430+00'00'",
+   "ModDate": "D:20260609162430+00'00'",
+   "Author": "usuario",
+   "Title": ""
+  },
+  "fuentes": {
+   "Calibri": 191,
+   "Arial-BoldMT": 51,
+   "BCDGEE+Calibri": 3
+  },
+  "detalle": {
+   "Calibri": {
+    "familia": "Calibri",
+    "embebida": true,
+    "peso": 260,
+    "subset": false,
+    "raiz": "Calibri",
+    "familia_norm": "calibri"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "BCDGEE+Calibri": {
+    "familia": "Calibri",
+    "embebida": true,
+    "peso": 260,
+    "subset": true,
+    "raiz": "Calibri",
+    "familia_norm": "calibri"
+   }
+  },
+  "familias": {
+   "calibri": 194,
+   "arial": 51
+  },
+  "tamanos": {
+   "1.0": 1,
+   "8.0": 1,
+   "9.0": 32,
+   "10.0": 140,
+   "11.0": 29,
+   "12.0": 42
+  },
+  "modos": {
+   "FILL": 245
+  },
+  "n_texto": 245,
+  "n_img": 8,
+  "chars": 839,
+  "n_paginas": 2,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 244,
+    "n_img": 8,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "BCDGEE+Calibri",
+     "Calibri"
+    ]
+   },
+   {
+    "i": 1,
+    "n_texto": 1,
+    "n_img": 0,
+    "fuentes_pag": [
+     "Calibri"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.027
+ },
+ {
+  "archivo": "FALSA-11.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha8": "d86ae595",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 16-05-2026 09.20"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 2,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.915
+ },
+ {
+  "archivo": "FALSA-12.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "d08cba3f",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 13-08-2026 08.51"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 2,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.911
+ },
+ {
+  "archivo": "FALSA-13.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "99d74f47",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 13-08-2026 08.52 (1)"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 2,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.939
+ },
+ {
+  "archivo": "FALSA-14.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha8": "758d3aff",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 13-08-2026 08.52"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 2,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.944
+ },
+ {
+  "archivo": "FALSA-15.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha8": "58c1e091",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word LTSC",
+   "Producer": "Microsoft® Word LTSC",
+   "CreationDate": "D:20260715072157-05'00'",
+   "ModDate": "D:20260715072157-05'00'",
+   "Author": "YUSETH",
+   "Title": ""
+  },
+  "fuentes": {
+   "ArialMT": 118,
+   "Arial-BoldMT": 66,
+   "CourierNewPS-BoldMT": 53,
+   "TimesNewRomanPS-BoldMT": 17,
+   "TimesNewRomanPSMT": 1
+  },
+  "detalle": {
+   "CourierNewPS-BoldMT": {
+    "familia": "Courier New",
+    "embebida": true,
+    "peso": 300,
+    "subset": false,
+    "raiz": "CourierNewPS-BoldMT",
+    "familia_norm": "couriernew"
+   },
+   "TimesNewRomanPSMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 200,
+    "subset": false,
+    "raiz": "TimesNewRomanPSMT",
+    "familia_norm": "timesnewroman"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "TimesNewRomanPS-BoldMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 210,
+    "subset": false,
+    "raiz": "TimesNewRomanPS-BoldMT",
+    "familia_norm": "timesnewroman"
+   }
+  },
+  "familias": {
+   "arial": 184,
+   "couriernew": 53,
+   "timesnewroman": 18
+  },
+  "tamanos": {
+   "0.96": 1,
+   "6.48": 1,
+   "6.96": 3,
+   "8.04": 2,
+   "8.52": 21,
+   "9.0": 148,
+   "9.48": 32,
+   "9.96": 18,
+   "10.58": 13,
+   "11.06": 1,
+   "12.0": 15
+  },
+  "modos": {
+   "FILL": 255
+  },
+  "n_texto": 255,
+  "n_img": 15,
+  "chars": 674,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 255,
+    "n_img": 15,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "CourierNewPS-BoldMT",
+     "TimesNewRomanPS-BoldMT",
+     "TimesNewRomanPSMT"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.053
+ },
+ {
+  "archivo": "REAL-01.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "sha8": "d86ae595",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 16-05-2026 09.20"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 2,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.915
+ },
+ {
+  "archivo": "REAL-02.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "f858510e",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word 2021",
+   "Producer": "Microsoft® Word 2021",
+   "CreationDate": "D:20260611094220-05'00'",
+   "ModDate": "D:20260611094220-05'00'",
+   "Author": "silvia.carrizales",
+   "Title": ""
+  },
+  "fuentes": {
+   "Calibri": 1
+  },
+  "detalle": {
+   "Calibri": {
+    "familia": "Calibri",
+    "embebida": true,
+    "peso": 260,
+    "subset": false,
+    "raiz": "Calibri",
+    "familia_norm": "calibri"
+   }
+  },
+  "familias": {
+   "calibri": 1
+  },
+  "tamanos": {
+   "12.0": 1
+  },
+  "modos": {
+   "FILL": 1
+  },
+  "n_texto": 1,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 1,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Calibri"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.844
+ },
+ {
+  "archivo": "REAL-03.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "b68fe146",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 10-06-2026 10.41"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.907
+ },
+ {
+  "archivo": "REAL-04.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "38f40c48",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "pdftopdf filter",
+   "Producer": "iOS Version 26.2.1 (Build 23C71) Quartz PDFContext",
+   "CreationDate": "D:20260713014435Z00'00'",
+   "ModDate": "D:20260713014435Z00'00'",
+   "Author": "",
+   "Title": "Foto"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.821
+ },
+ {
+  "archivo": "REAL-05.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "087739e6",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "Solicitud de Permiso Angela Meneses "
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 4,
+  "chars": 0,
+  "n_paginas": 2,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   },
+   {
+    "i": 1,
+    "n_texto": 0,
+    "n_img": 2,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.916
+ },
+ {
+  "archivo": "REAL-06.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "eddf194a",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "intsig.com pdf producer",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "CamScanner",
+   "Title": "CamScanner 09-06-2026 16.53"
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.911
+ },
+ {
+  "archivo": "REAL-07.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "d6482e2a",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "iText 2.0.8 (by lowagie.com)",
+   "CreationDate": "D:20260710110358-05'00'",
+   "ModDate": "D:20260710110358-05'00'",
+   "Author": "",
+   "Title": ""
+  },
+  "fuentes": {
+   "Helvetica": 48,
+   "ArialMT": 27,
+   "Arial-BoldMT": 27
+  },
+  "detalle": {
+   "Helvetica": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 0,
+    "subset": false,
+    "raiz": "Helvetica",
+    "familia_norm": "arial"
+   },
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 400,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 400,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   }
+  },
+  "familias": {
+   "arial": 102
+  },
+  "tamanos": {
+   "25.0": 4,
+   "30.0": 49,
+   "35.0": 1,
+   "40.0": 48
+  },
+  "modos": {
+   "FILL": 102
+  },
+  "n_texto": 102,
+  "n_img": 2,
+  "chars": 1919,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 102,
+    "n_img": 2,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "Helvetica"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.003
+ },
+ {
+  "archivo": "REAL-08.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "100e7770",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "",
+   "CreationDate": "",
+   "ModDate": "",
+   "Author": "",
+   "Title": ""
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 1.0
+ },
+ {
+  "archivo": "REAL-09.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "aa3512d4",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "iLovePDF",
+   "CreationDate": "",
+   "ModDate": "D:20260717234722Z",
+   "Author": "",
+   "Title": ""
+  },
+  "fuentes": {},
+  "detalle": {},
+  "familias": {},
+  "tamanos": {},
+  "modos": {},
+  "n_texto": 0,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 0,
+    "n_img": 1,
+    "fuentes_pag": []
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.999
+ },
+ {
+  "archivo": "REAL-10.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "e25d5211",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft Word",
+   "Producer": "",
+   "CreationDate": "D:20260722200648+00'00'",
+   "ModDate": "D:20260722200648+00'00'",
+   "Author": "E.S.E. HOSPITAL SAN <NOMBRE> DE DIOS DE LEBRIJA",
+   "Title": "Historíco de Urgencias"
+  },
+  "fuentes": {
+   "ArialMT": 555,
+   "Arial-BoldMT": 360,
+   "TimesNewRomanPSMT": 25,
+   "Arial-BoldItalicMT": 8,
+   "BCDGEE+ArialMT": 1
+  },
+  "detalle": {
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "BCDGEE+ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": true,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "TimesNewRomanPSMT": {
+    "familia": "Times New Roman",
+    "embebida": true,
+    "peso": 200,
+    "subset": false,
+    "raiz": "TimesNewRomanPSMT",
+    "familia_norm": "timesnewroman"
+   },
+   "Arial-BoldItalicMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldItalicMT",
+    "familia_norm": "arial"
+   }
+  },
+  "familias": {
+   "arial": 924,
+   "timesnewroman": 25
+  },
+  "tamanos": {
+   "1.0": 1,
+   "5.0": 12,
+   "6.0": 68,
+   "7.0": 314,
+   "7.5": 1,
+   "8.0": 427,
+   "9.0": 24,
+   "10.0": 101,
+   "11.0": 1
+  },
+  "modos": {
+   "FILL": 949
+  },
+  "n_texto": 949,
+  "n_img": 2,
+  "chars": 3113,
+  "n_paginas": 2,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 734,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "BCDGEE+ArialMT",
+     "TimesNewRomanPSMT"
+    ]
+   },
+   {
+    "i": 1,
+    "n_texto": 215,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Arial-BoldItalicMT",
+     "Arial-BoldMT",
+     "ArialMT",
+     "TimesNewRomanPSMT"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.037
+ },
+ {
+  "archivo": "REAL-11.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "c672e270",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 2,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft Word",
+   "Producer": "",
+   "CreationDate": "D:20260719004021+00'00'",
+   "ModDate": "D:20260719004021+00'00'",
+   "Author": "E.S.E. HOSPITAL SAN <NOMBRE> DE DIOS DE LEBRIJA",
+   "Title": "ORDEN DE INCAPACIDAD"
+  },
+  "fuentes": {
+   "ArialMT": 241,
+   "Arial-BoldMT": 174,
+   "BCDGEE+ArialMT": 1
+  },
+  "detalle": {
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "BCDGEE+ArialMT": {
+    "familia": "Arial",
+    "embebida": true,
+    "peso": 220,
+    "subset": true,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   }
+  },
+  "familias": {
+   "arial": 416
+  },
+  "tamanos": {
+   "6.0": 33,
+   "7.0": 246,
+   "8.0": 57,
+   "10.0": 78,
+   "11.02": 2
+  },
+  "modos": {
+   "FILL": 416
+  },
+  "n_texto": 416,
+  "n_img": 5,
+  "chars": 1288,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 416,
+    "n_img": 5,
+    "fuentes_pag": [
+     "Arial-BoldMT",
+     "ArialMT",
+     "BCDGEE+ArialMT"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 31
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 14
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 19
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 22
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 10.0,
+    "nchars": 31
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 10.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 18
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 6.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 14
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 10
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 14
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 6
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 9
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 8
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 19
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 30
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 16
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 3
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 2
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 7.0,
+    "nchars": 12
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 7.0,
+    "nchars": 4
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "Arial-BoldMT",
+    "tam": 8.0,
+    "nchars": 11
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 5
+   },
+   {
+    "pagina": 0,
+    "base": "BCDGEE+ArialMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 19
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 1
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 7
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 25
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 16
+   },
+   {
+    "pagina": 0,
+    "base": "ArialMT",
+    "tam": 8.0,
+    "nchars": 6
+   }
+  ],
+  "area_img_max_frac": 0.305
+ },
+ {
+  "archivo": "REAL-12.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "942de664",
+  "tipo": "imagen",
+  "n_texto": 0
+ },
+ {
+  "archivo": "REAL-13.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "b6e8beb6",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": false,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "",
+   "Producer": "Microsoft: Print To PDF",
+   "CreationDate": "D:20260610140923-05'00'",
+   "ModDate": "D:20260610140923-05'00'",
+   "Author": "",
+   "Title": "Incapacidad.pdf"
+  },
+  "fuentes": {
+   "CIDFont+F2": 24,
+   "CIDFont+F1": 21
+  },
+  "detalle": {
+   "CIDFont+F1": {
+    "familia": "Z@R2A02.tmp",
+    "embebida": true,
+    "peso": 3472,
+    "subset": false,
+    "raiz": "CIDFont+F1",
+    "familia_norm": "z@r2a02.tmp"
+   },
+   "CIDFont+F2": {
+    "familia": "Z@R2A13.tmp",
+    "embebida": true,
+    "peso": 4200,
+    "subset": false,
+    "raiz": "CIDFont+F2",
+    "familia_norm": "z@r2a13.tmp"
+   }
+  },
+  "familias": {
+   "z@r2a13.tmp": 24,
+   "z@r2a02.tmp": 21
+  },
+  "tamanos": {
+   "327.68": 45
+  },
+  "modos": {
+   "FILL": 45
+  },
+  "n_texto": 45,
+  "n_img": 3,
+  "chars": 887,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 45,
+    "n_img": 3,
+    "fuentes_pag": [
+     "CIDFont+F1",
+     "CIDFont+F2"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.009
+ },
+ {
+  "archivo": "REAL-14.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "691e0af0",
+  "tipo": "pdf",
+  "eof": 2,
+  "startxref": 2,
+  "prev": 1,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word 2021",
+   "Producer": "Microsoft® Word 2021",
+   "CreationDate": "D:20260610070813-05'00'",
+   "ModDate": "D:20260610070813-05'00'",
+   "Author": "silvia.carrizales",
+   "Title": ""
+  },
+  "fuentes": {
+   "Calibri": 1
+  },
+  "detalle": {
+   "Calibri": {
+    "familia": "Calibri",
+    "embebida": true,
+    "peso": 260,
+    "subset": false,
+    "raiz": "Calibri",
+    "familia_norm": "calibri"
+   }
+  },
+  "familias": {
+   "calibri": 1
+  },
+  "tamanos": {
+   "12.0": 1
+  },
+  "modos": {
+   "FILL": 1
+  },
+  "n_texto": 1,
+  "n_img": 1,
+  "chars": 0,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 1,
+    "n_img": 1,
+    "fuentes_pag": [
+     "Calibri"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.811
+ },
+ {
+  "archivo": "REAL-15.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "sha8": "28c4a946",
+  "tipo": "pdf",
+  "eof": 1,
+  "startxref": 1,
+  "prev": 0,
+  "linearized": false,
+  "objstm": true,
+  "incremental_obj": 0,
+  "meta": {
+   "Creator": "Microsoft® Word LTSC",
+   "Producer": "4-Heights™ PDF Library 3.4.0.6904 (http://www.pdf-tools.com)",
+   "CreationDate": "D:20260609164647-05'00'",
+   "ModDate": "D:20260729190454Z",
+   "Author": "HP 240 G9",
+   "Title": ""
+  },
+  "fuentes": {
+   "ArialMT": 146,
+   "Arial-BoldMT": 37,
+   "CourierNewPS-BoldMT": 36,
+   "TimesNewRomanPS-BoldMT": 19,
+   "ACWIYO+ArialMT": 4,
+   "TimesNewRomanPSMT": 2
+  },
+  "detalle": {
+   "CourierNewPS-BoldMT": {
+    "familia": "Courier New",
+    "embebida": true,
+    "peso": 300,
+    "subset": false,
+    "raiz": "CourierNewPS-BoldMT",
+    "familia_norm": "couriernew"
+   },
+   "TimesNewRomanPSMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 200,
+    "subset": false,
+    "raiz": "TimesNewRomanPSMT",
+    "familia_norm": "timesnewroman"
+   },
+   "ArialMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 220,
+    "subset": false,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   },
+   "Arial-BoldMT": {
+    "familia": "Arial",
+    "embebida": false,
+    "peso": 235,
+    "subset": false,
+    "raiz": "Arial-BoldMT",
+    "familia_norm": "arial"
+   },
+   "TimesNewRomanPS-BoldMT": {
+    "familia": "Times New Roman",
+    "embebida": false,
+    "peso": 210,
+    "subset": false,
+    "raiz": "TimesNewRomanPS-BoldMT",
+    "familia_norm": "timesnewroman"
+   },
+   "ACWIYO+ArialMT": {
+    "familia": "",
+    "embebida": true,
+    "peso": 0,
+    "subset": true,
+    "raiz": "ArialMT",
+    "familia_norm": "arial"
+   }
+  },
+  "familias": {
+   "arial": 187,
+   "couriernew": 36,
+   "timesnewroman": 21
+  },
+  "tamanos": {
+   "0.96": 2,
+   "3.48": 1,
+   "3.96": 1,
+   "6.48": 4,
+   "6.96": 3,
+   "8.04": 59,
+   "8.52": 21,
+   "9.0": 94,
+   "9.48": 32,
+   "9.96": 15,
+   "12.0": 12
+  },
+  "modos": {
+   "FILL": 244
+  },
+  "n_texto": 244,
+  "n_img": 12,
+  "chars": 893,
+  "n_paginas": 1,
+  "paginas": [
+   {
+    "i": 0,
+    "n_texto": 244,
+    "n_img": 12,
+    "fuentes_pag": [
+     "ACWIYO+ArialMT",
+     "Arial-BoldMT",
+     "ArialMT",
+     "CourierNewPS-BoldMT",
+     "TimesNewRomanPS-BoldMT",
+     "TimesNewRomanPSMT"
+    ]
+   }
+  ],
+  "texto_sobre_imagen": [],
+  "area_img_max_frac": 0.203
+ },
+ {
+  "archivo": "REAL-16.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha8": "272d0d3d",
+  "tipo": "imagen",
+  "n_texto": 0
+ }
+]

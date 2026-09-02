@@ -1,0 +1,932 @@
+[
+ {
+  "archivo": "FALSA-01.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "FIRMA_MEDICO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-07-14",
+   "fecha_fin": "2026-07-14",
+   "dias": 1
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-07-14",
+   "fecha_fin": "2026-07-14",
+   "dias": 1
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-07-14 + 1 dias = fin 2026-07-14",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 1,
+  "fila_fechainicio": "2026-07-14",
+  "fila_fechavencimiento": "2026-07-15",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-02.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DX_INEXISTENTE"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-05-18",
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-05-18",
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=None fin=2026-05-18 dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-03.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "senales_gt": [
+   "TIPOGRAFIA_MIXTA"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 29
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 29
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": 29,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-04.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "FECHAS_INCOHERENTES"
+  ],
+  "temporal_gt": true,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-05.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DIAS_VS_DIAGNOSTICO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2025-11-10",
+   "fecha_fin": "2025-11-11",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2025-11-10",
+   "fecha_fin": "2025-11-11",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2025-11-10 + 2 dias = fin 2025-11-11",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2025-11-10",
+  "fila_fechavencimiento": "2025-11-12",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-06.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "SIN_MOTIVO_REGISTRADO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "2/3",
+  "crudo": {
+   "fecha_inicio": "2025-09-15",
+   "fecha_fin": null,
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2025-09-15",
+   "fecha_fin": "2025-09-16",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "solo un par de datos: no hay tercer dato que pueda contradecir",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2025-09-15",
+  "fila_fechavencimiento": "2025-09-17",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-07.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DX_NOMBRE_DISTINTO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-04-20",
+   "fecha_fin": "2026-04-20",
+   "dias": 1
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-04-20",
+   "fecha_fin": "2026-04-20",
+   "dias": 1
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-04-20 + 1 dias = fin 2026-04-20",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 1,
+  "fila_fechainicio": "2026-04-20",
+  "fila_fechavencimiento": "2026-04-21",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-08.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "FIRMA_MEDICO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2025-10-31",
+   "fecha_fin": "2025-11-01",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2025-10-31",
+   "fecha_fin": "2025-11-01",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2025-10-31 + 2 dias = fin 2025-11-01",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2025-10-31",
+  "fila_fechavencimiento": "2025-11-02",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-09.jpeg",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DX_INEXISTENTE",
+   "DX_FORMATO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-05",
+   "fecha_fin": "2026-07-06",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-05",
+   "fecha_fin": "2026-06-06",
+   "dias": 2
+  },
+  "fin_reescrito": true,
+  "inicio_descartado": false,
+  "ref": "INCOHERENTE",
+  "ref_detalle": "inicio=2026-06-05 + 2 dias (inclusive) => fin esperado 2026-06-06, pero el documento dice fin=2026-07-06 (delta 30 dias)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-06-05",
+  "fila_fechavencimiento": "2026-06-07",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-10.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DX_INEXISTENTE"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-06-09 + 2 dias = fin 2026-06-10",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-06-09",
+  "fila_fechavencimiento": "2026-06-11",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-11.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "senales_gt": [
+   "DX_INEXISTENTE"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "2/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-05-14",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-05-13",
+   "fecha_fin": "2026-05-14",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "solo un par de datos: no hay tercer dato que pueda contradecir",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-05-13",
+  "fila_fechavencimiento": "2026-05-15",
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-12.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "SIN_MOTIVO_REGISTRADO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-13.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "DX_NOMBRE_DISTINTO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-14.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "senales_gt": [
+   "SIN_MOTIVO_REGISTRADO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "FALSA-15.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "senales_gt": [
+   "DX_NOMBRE_DISTINTO"
+  ],
+  "temporal_gt": false,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-01.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "2/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-05-14",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-05-13",
+   "fecha_fin": "2026-05-14",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "solo un par de datos: no hay tercer dato que pueda contradecir",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-05-13",
+  "fila_fechavencimiento": "2026-05-15",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-02.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": "2026-06-10",
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-03.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": "2026-06-10",
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-04.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": "2026-07-12",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-07-12",
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=2026-07-12 fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": "2026-07-12",
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-05.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "0/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-06.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-06-09 + 2 dias = fin 2026-06-10",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-06-09",
+  "fila_fechavencimiento": "2026-06-11",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-07.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-07-10",
+   "fecha_fin": "2026-07-23",
+   "dias": 14
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-07-10",
+   "fecha_fin": "2026-07-23",
+   "dias": 14
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-07-10 + 14 dias = fin 2026-07-23",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 14,
+  "fila_fechainicio": "2026-07-10",
+  "fila_fechavencimiento": "2026-07-24",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-08.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-06",
+   "fecha_fin": "2026-06-06",
+   "dias": 1
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-06",
+   "fecha_fin": "2026-06-06",
+   "dias": 1
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-06-06 + 1 dias = fin 2026-06-06",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 1,
+  "fila_fechainicio": "2026-06-06",
+  "fila_fechavencimiento": "2026-06-07",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-09.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-06-07",
+   "fecha_fin": "2026-10-10",
+   "dias": 126
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-07",
+   "fecha_fin": "2026-10-10",
+   "dias": 126
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-06-07 + 126 dias = fin 2026-10-10",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 126,
+  "fila_fechainicio": "2026-06-07",
+  "fila_fechavencimiento": "2026-10-11",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-10.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=None fin=None dias=2)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-11.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-07-18",
+   "fecha_fin": "2026-07-19",
+   "dias": 2
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-07-18",
+   "fecha_fin": "2026-07-19",
+   "dias": 2
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-07-18 + 2 dias = fin 2026-07-19",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 2,
+  "fila_fechainicio": "2026-07-18",
+  "fila_fechavencimiento": "2026-07-20",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-12.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-05-25",
+   "fecha_fin": "2026-05-27",
+   "dias": 3
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-05-25",
+   "fecha_fin": "2026-05-27",
+   "dias": 3
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-05-25 + 3 dias = fin 2026-05-27",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 3,
+  "fila_fechainicio": "2026-05-25",
+  "fila_fechavencimiento": "2026-05-28",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-13.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "3/3",
+  "crudo": {
+   "fecha_inicio": "2026-05-24",
+   "fecha_fin": "2026-06-22",
+   "dias": 30
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-05-24",
+   "fecha_fin": "2026-06-22",
+   "dias": 30
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "inicio=2026-05-24 + 30 dias = fin 2026-06-22",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 30,
+  "fila_fechainicio": "2026-05-24",
+  "fila_fechavencimiento": "2026-06-23",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-14.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "2/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-06-11",
+   "dias": 3
+  },
+  "normalizado": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-11",
+   "dias": 3
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "COHERENTE",
+  "ref_detalle": "solo un par de datos: no hay tercer dato que pueda contradecir",
+  "marca_incoherencia": false,
+  "marca_falta_dato": false,
+  "requiere_revision": true,
+  "fila_Numerodias": 3,
+  "fila_fechainicio": "2026-06-09",
+  "fila_fechavencimiento": "2026-06-12",
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-15.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 29
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 29
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": 29,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ },
+ {
+  "archivo": "REAL-16.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "senales_gt": [],
+  "temporal_gt": false,
+  "datos_leidos": "1/3",
+  "crudo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 202
+  },
+  "normalizado": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 202
+  },
+  "fin_reescrito": false,
+  "inicio_descartado": false,
+  "ref": "NO_EVALUABLE",
+  "ref_detalle": "solo 1/3 datos temporales leidos (inicio=None fin=None dias=202)",
+  "marca_incoherencia": false,
+  "marca_falta_dato": true,
+  "requiere_revision": true,
+  "fila_Numerodias": 202,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "excepcion": null
+ }
+]

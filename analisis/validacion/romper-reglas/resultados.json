@@ -1,0 +1,806 @@
+[
+  {
+    "caso": "A1 todo nulo",
+    "entrada": {
+      "fecha_inicio": null,
+      "fecha_fin": null,
+      "dias": null
+    },
+    "esperado": "no explota; deja los tres nulos",
+    "obtenido": {
+      "fecha_inicio": null,
+      "fecha_fin": null,
+      "dias": null,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A2 campos ausentes (dict vacio)",
+    "entrada": {},
+    "esperado": "no explota",
+    "obtenido": {
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A3 fecha imposible 2026-02-30 + dias 3",
+    "entrada": {
+      "fecha_inicio": "2026-02-30",
+      "dias": 3
+    },
+    "esperado": "descarta la fecha invalida y SEÑALA que la fecha leida es invalida",
+    "obtenido": {
+      "fecha_inicio": "2026-02-30",
+      "dias": 3,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A4 dias = 0",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 0
+    },
+    "esperado": "dias fuera de 1..540 -> se ignora y se SEÑALA",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 0,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A5 dias negativo",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": -5
+    },
+    "esperado": "dias fuera de rango -> se ignora y se SEÑALA",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "dias": -5,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A6 dias enorme (99999) con inicio y fin coherentes",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-10",
+      "dias": 99999
+    },
+    "esperado": "SEÑALA la incoherencia (doc dice 99999, fechas dicen 10)",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-10",
+      "dias": 10,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A7 fin ANTERIOR al inicio, con dias",
+    "entrada": {
+      "fecha_inicio": "2026-06-10",
+      "fecha_fin": "2026-06-01",
+      "dias": 3
+    },
+    "esperado": "SEÑALA fin<inicio (senal de alteracion), no lo arregla en silencio",
+    "obtenido": {
+      "fecha_inicio": "2026-06-10",
+      "fecha_fin": "2026-06-12",
+      "dias": 3,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A8 fin ANTERIOR al inicio, SIN dias",
+    "entrada": {
+      "fecha_inicio": "2026-06-10",
+      "fecha_fin": "2026-06-01"
+    },
+    "esperado": "SEÑALA fin<inicio conservando ambas fechas leidas",
+    "obtenido": {
+      "fecha_inicio": null,
+      "fecha_fin": "2026-06-01",
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A9 dias como str '5' (tipos mezclados)",
+    "entrada": {
+      "fecha_fin": "2026-06-10",
+      "dias": "5"
+    },
+    "esperado": "inicio = fin-(5-1) = 2026-06-06 + fecha_inicio_calculada=True",
+    "obtenido": {
+      "fecha_fin": "2026-06-10",
+      "dias": "5",
+      "fecha_inicio_calculada": true,
+      "fecha_inicio": "2026-06-06"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A10 dias como str con espacios ' 5 '",
+    "entrada": {
+      "fecha_fin": "2026-06-10",
+      "dias": " 5 "
+    },
+    "esperado": "igual que A9 (mismo criterio que erp._num_dias, que si hace strip)",
+    "obtenido": {
+      "fecha_fin": "2026-06-10",
+      "dias": " 5 ",
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A11 dias como float 5.0",
+    "entrada": {
+      "fecha_fin": "2026-06-10",
+      "dias": 5.0
+    },
+    "esperado": "igual que A9 (5 dias) o bien SEÑALAR tipo no soportado",
+    "obtenido": {
+      "fecha_fin": "2026-06-10",
+      "dias": 5.0,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A12 dias booleano True (bool ES int en Python)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-10",
+      "dias": true
+    },
+    "esperado": "True no es un numero de dias -> ignorar y SEÑALAR",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-01",
+      "dias": true,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A13 dias str NO numerico 'DOS'",
+    "entrada": {
+      "fecha_fin": "2026-06-10",
+      "dias": "DOS"
+    },
+    "esperado": "no explota; dias no evaluable",
+    "obtenido": {
+      "fecha_fin": "2026-06-10",
+      "dias": "DOS",
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A14 dias str digito UNICODE no decimal '\\u00b2' (superindice 2)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": "²"
+    },
+    "esperado": "no explota (isdigit() es True pero int() revienta)",
+    "obtenido": {
+      "_EXCEPCION": "ValueError: invalid literal for int() with base 10: '²'",
+      "_traza": [
+        "    n = int(raw_n) if (isinstance(raw_n, int) or (isinstance(raw_n, str) and str(raw_n).isdigit())) else None",
+        "        ~~~^^^^^^^",
+        "ValueError: invalid literal for int() with base 10: '²'"
+      ]
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A15 fechas como int (tipo mezclado donde se espera str)",
+    "entrada": {
+      "fecha_inicio": 20260601,
+      "fecha_fin": 20260610,
+      "dias": 10
+    },
+    "esperado": "no explota; fechas no evaluables",
+    "obtenido": {
+      "fecha_inicio": 20260601,
+      "fecha_fin": 20260610,
+      "dias": 10,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A16 'incapacidad' no es dict (lista)",
+    "entrada": {
+      "incapacidad": [
+        1,
+        2
+      ]
+    },
+    "esperado": "no explota (guarda isinstance)",
+    "obtenido": {
+      "incapacidad": [
+        1,
+        2
+      ]
+    },
+    "ok": null,
+    "nota": "deberia estar guardado por el isinstance de extract.py:1134"
+  },
+  {
+    "caso": "A17 año bisiesto: 2028-02-27 + 3 dias",
+    "entrada": {
+      "fecha_inicio": "2028-02-27",
+      "dias": 3
+    },
+    "esperado": "fin = 2028-02-29 (2028 es bisiesto)",
+    "obtenido": {
+      "fecha_inicio": "2028-02-27",
+      "dias": 3,
+      "fecha_inicio_calculada": false,
+      "fecha_fin": "2028-02-29"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A18 año NO bisiesto: 2026-02-27 + 3 dias",
+    "entrada": {
+      "fecha_inicio": "2026-02-27",
+      "dias": 3
+    },
+    "esperado": "fin = 2026-03-01",
+    "obtenido": {
+      "fecha_inicio": "2026-02-27",
+      "dias": 3,
+      "fecha_inicio_calculada": false,
+      "fecha_fin": "2026-03-01"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A19 cambio de año: 2026-12-30 + 5 dias",
+    "entrada": {
+      "fecha_inicio": "2026-12-30",
+      "dias": 5
+    },
+    "esperado": "fin = 2027-01-03",
+    "obtenido": {
+      "fecha_inicio": "2026-12-30",
+      "dias": 5,
+      "fecha_inicio_calculada": false,
+      "fecha_fin": "2027-01-03"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A20 fin+dias sin inicio cruzando año: fin 2027-01-02, dias 5",
+    "entrada": {
+      "fecha_fin": "2027-01-02",
+      "dias": 5
+    },
+    "esperado": "inicio = 2026-12-29, fecha_inicio_calculada=True",
+    "obtenido": {
+      "fecha_fin": "2027-01-02",
+      "dias": 5,
+      "fecha_inicio_calculada": true,
+      "fecha_inicio": "2026-12-29"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A21 limite 540 exacto (inicio+dias)",
+    "entrada": {
+      "fecha_inicio": "2026-01-01",
+      "dias": 540
+    },
+    "esperado": "fin = 2027-06-24 (540 inclusivo) y dias se conserva",
+    "obtenido": {
+      "fecha_inicio": "2026-01-01",
+      "dias": 540,
+      "fecha_inicio_calculada": false,
+      "fecha_fin": "2027-06-24"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A22 limite 541 (fuera de rango) con inicio",
+    "entrada": {
+      "fecha_inicio": "2026-01-01",
+      "dias": 541
+    },
+    "esperado": "dias fuera de rango -> ignorar y SEÑALAR",
+    "obtenido": {
+      "fecha_inicio": "2026-01-01",
+      "dias": 541,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A23 span de 541 dias por fechas, sin dias leidos",
+    "entrada": {
+      "fecha_inicio": "2026-01-01",
+      "fecha_fin": "2027-06-25"
+    },
+    "esperado": "span 541 > 540 -> SEÑALAR span fuera de rango",
+    "obtenido": {
+      "fecha_inicio": "2026-01-01",
+      "fecha_fin": "2027-06-25",
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": "diff=540 pasa el saneo (0<=540<=540) pero dias=541 no pasa 1..540"
+  },
+  {
+    "caso": "A24 inicio == fin, sin dias",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-01"
+    },
+    "esperado": "dias = 1",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-01",
+      "fecha_inicio_calculada": false,
+      "dias": 1
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A25 fecha con formato ISO 'semana' 2026-W23-1 (basura que ISO acepta)",
+    "entrada": {
+      "fecha_inicio": "2026-W23-1",
+      "dias": 3
+    },
+    "esperado": "no aceptar una fecha que ningun documento imprime; o al menos SEÑALAR",
+    "obtenido": {
+      "fecha_inicio": "2026-W23-1",
+      "dias": 3,
+      "fecha_inicio_calculada": false,
+      "fecha_fin": "2026-06-03"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "A26 CONTRADICCION fuerte: inicio+fin+dias los tres leidos e incompatibles",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-30",
+      "dias": 3
+    },
+    "esperado": "SEÑALAR incoherencia (30 dias impresos vs 3) -> a revision humana",
+    "obtenido": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-03",
+      "dias": 3,
+      "fecha_inicio_calculada": false
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B1 contradiccion inicio/fin/dias, ya 'normalizada' por extract",
+    "entrada": "extract(A26) -> mapear",
+    "esperado": "requiere_revision=True con problema de coherencia de tiempos",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-04",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": "entra el registro YA reescrito por normalizar_fechas"
+  },
+  {
+    "caso": "B2 contradiccion cruda (sin pasar por extract)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "fecha_fin": "2026-06-30",
+      "dias": 3
+    },
+    "esperado": "requiere_revision=True con problema de coherencia de tiempos",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-04",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B3 fecha de inicio CALCULADA (propiedad clave del frente)",
+    "entrada": {
+      "fecha_fin": "2026-06-10",
+      "dias": "5"
+    },
+    "esperado": "NINGUNA regla dispara por el valor calculado: aviso, no violacion; y la confianza NO debe contar el inicio calculado como leido",
+    "obtenido": {
+      "fechainicio": "2026-06-06",
+      "Numerodias": 5,
+      "fechavencimiento": "2026-06-11",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": true,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B4 dias = 0 llega al veredicto",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 0
+    },
+    "esperado": "problema 'dias fuera de rango' o 'no se detecto'; nunca fila limpia",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 0,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "No se detectó el número de días"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.25
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B5 dias negativo llega al veredicto",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": -5
+    },
+    "esperado": "problema explicito de dias invalidos",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": -5,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "Número de días fuera de rango (=-5)"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B6 dias enorme 99999",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 99999
+    },
+    "esperado": "problema 'Numero de dias fuera de rango (=99999)'",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 99999,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "Número de días fuera de rango (=99999)"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B7 dias enorme via OVERRIDE del auxiliar (dias='99999')",
+    "entrada": "overrides={'dias':'99999'}",
+    "esperado": "problema de rango; fechavencimiento NO se calcula",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 99999,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "Número de días fuera de rango (=99999)"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B8 override 'dias' con digito unicode no decimal ('\\u00b2')",
+    "entrada": "overrides={'dias':'\\u00b2'}  (llega por POST, lista blanca lo acepta)",
+    "esperado": "no 500: se ignora o se SEÑALA como valor invalido",
+    "obtenido": {
+      "_EXCEPCION": "ValueError: invalid literal for int() with base 10: '²'",
+      "_traza": [
+        "  File \str(_REPO / "incapacidad_ocr/erp.py/"), line 331, in _num_dias",
+        "    return int(v.strip())",
+        "ValueError: invalid literal for int() with base 10: '²'"
+      ]
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B9 override 'fecha_inicio' imposible '2026-02-30'",
+    "entrada": "overrides={'fecha_inicio':'2026-02-30'}",
+    "esperado": "se descarta la fecha (no romper el INSERT) y se SEÑALA que era invalida",
+    "obtenido": {
+      "fechainicio": null,
+      "Numerodias": 3,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "No se detectó la fecha de inicio"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.25
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B10 override 'fecha_fin' anterior al inicio",
+    "entrada": "overrides={'fecha_fin':'2026-05-01'} con inicio 2026-06-10",
+    "esperado": "problema explicito: fin anterior al inicio",
+    "obtenido": {
+      "fechainicio": "2026-06-10",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-13",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B11 fechavencimiento = inicio + dias (NO inclusivo)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 10
+    },
+    "esperado": "fechainicio=2026-06-01, Numerodias=10, fechavencimiento=2026-06-11",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": 10,
+      "fechavencimiento": "2026-06-11",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B12 'incapacidad' anidada es una LISTA no vacia (p.ej. lo devuelve el LLM)",
+    "entrada": "{'incapacidad': {'incapacidad': [1]}}",
+    "esperado": "no explota (degradar, como LookupsNulos)",
+    "obtenido": {
+      "_EXCEPCION": "AttributeError: 'list' object has no attribute 'get'"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B13 'paciente' es una LISTA no vacia",
+    "entrada": "{'incapacidad': {'paciente': ['X'], 'incapacidad': {...}}}",
+    "esperado": "no explota",
+    "obtenido": {
+      "_EXCEPCION": "AttributeError: 'list' object has no attribute 'get'"
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B14 resultado vacio total",
+    "entrada": "{}",
+    "esperado": "fila con problemas de campos faltantes, sin caida",
+    "obtenido": {
+      "fechainicio": null,
+      "Numerodias": null,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "No se detectó la fecha de inicio",
+        "No se detectó el número de días"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.0
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B15 dias float 5.0 (tipo mezclado)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": 5.0
+    },
+    "esperado": "5 dias, o problema explicito de tipo; no 'no se detecto'",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": null,
+      "fechavencimiento": null,
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento",
+        "No se detectó el número de días"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.25
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "B16 dias True (bool)",
+    "entrada": {
+      "fecha_inicio": "2026-06-01",
+      "dias": true
+    },
+    "esperado": "True no es un numero de dias -> SEÑALAR",
+    "obtenido": {
+      "fechainicio": "2026-06-01",
+      "Numerodias": true,
+      "fechavencimiento": "2026-06-02",
+      "problemas": [
+        "No se detectó la cédula del paciente",
+        "No se detectó el código de diagnóstico (CIE-10)",
+        "EPS no identificada en el documento"
+      ],
+      "requiere_revision": true,
+      "fecha_inicio_calculada": false,
+      "confianza_ocr": 0.5
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "C1 existe un motor de reglas declarativo",
+    "entrada": "importlib.find_spec(incapacidad_ocr.{reglas,reglas_tiempo,validaciones,motor})",
+    "esperado": "un modulo con reglas DECLARADAS (añadir regla = añadir declaracion)",
+    "obtenido": {
+      "modulo_encontrado": false,
+      "ficheros_*regla*": []
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "C2 severidades/umbrales configurables sin redespliegue",
+    "entrada": "buscar severidad GRAVE/MEDIA/LEVE y umbral 540 en config externa",
+    "esperado": "umbrales y severidades en config externa (json/yaml/env/BD)",
+    "obtenido": {
+      "540_hardcodeado_en": [
+        "erp.py:387",
+        "erp.py:396",
+        "erp.py:497",
+        "erp.py:503",
+        "extract.py:1140",
+        "extract.py:1156",
+        "extract.py:1162",
+        "extract.py:260",
+        "extract.py:714",
+        "extract.py:850",
+        "numeros_es.py:297",
+        "numeros_es.py:6"
+      ]
+    },
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "C3 severidad inexistente / regla desactivada",
+    "entrada": "config con severidad 'CATASTROFICA' o regla enabled=false",
+    "esperado": "el motor ignora la severidad desconocida y respeta el switch",
+    "obtenido": "NO APLICABLE: no hay motor ni config; los 'problemas' son strings sin severidad, generados por 'if' inline en erp.mapear_a_staging",
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "C4 dos reglas contradictorias",
+    "entrada": "regla X dice CUMPLE y regla Y dice VIOLA sobre el mismo campo",
+    "esperado": "el motor conserva ambas y gana la de mayor severidad (trazable)",
+    "obtenido": "NO APLICABLE: no hay registro de reglas; la contradiccion hoy se resuelve por ORDEN DE ESCRITURA de los 'if' y se pierde el dato leido",
+    "ok": null,
+    "nota": ""
+  },
+  {
+    "caso": "C5 columnas para auditar lo LEIDO vs lo CALCULADO",
+    "entrada": "sql/init.sql lp_ausentismos_ia",
+    "esperado": "columnas fecha_fin_leida / dias_leidos (como cedula_leida)",
+    "obtenido": {
+      "columnas_*_leida*": [
+        "cedula_leida",
+        "codigo_diagnostico_leido",
+        "eps_leida",
+        "paciente_leido"
+      ]
+    },
+    "ok": null,
+    "nota": ""
+  }
+]

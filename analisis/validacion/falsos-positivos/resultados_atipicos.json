@@ -1,0 +1,540 @@
+[
+ {
+  "id": "LA_1DIA",
+  "hoy": "2026-09-02",
+  "titulo": "Incapacidad de UN día (inicio == fin)",
+  "por_que": "span=1 y dias=1: el conteo inclusivo tiene que dar CUMPLE, no off-by-one",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-20",
+   "dias": 1,
+   "dias_letra": 1
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-20",
+   "dias": 1,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-08-20",
+  "fila_fechavencimiento": "2026-08-21",
+  "fila_numerodias": 1,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LB_PRORROGA_1",
+  "hoy": "2026-09-02",
+  "titulo": "Incapacidad inicial 3 días (antecedente de la prórroga)",
+  "por_que": "documento normal; sirve de antecedente del siguiente",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-17",
+   "fecha_fin": "2026-08-19",
+   "dias": 3,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-17",
+   "fecha_fin": "2026-08-19",
+   "dias": 3,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-08-17",
+  "fila_fechavencimiento": "2026-08-20",
+  "fila_numerodias": 3,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LB_PRORROGA_2",
+  "hoy": "2026-09-02",
+  "titulo": "PRÓRROGA que empieza justo al día siguiente de la anterior",
+  "por_que": "contiguo y legítimo: ni T15 (solapamiento) ni T16 (prórroga) deben opinar",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-24",
+   "dias": 5,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-24",
+   "dias": 5,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-08-20",
+  "fila_fechavencimiento": "2026-08-25",
+  "fila_numerodias": 5,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LC_FIN_DE_ANIO",
+  "hoy": "2026-12-30",
+  "titulo": "Incapacidad que cruza el fin de año (7 días)",
+  "por_que": "el año cambia entre inicio y fin: span=7 == dias=7 (radicado el 30/12)",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-12-28",
+   "fecha_fin": "2027-01-03",
+   "dias": 7,
+   "dias_letra": 7
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-12-28",
+   "fecha_fin": "2027-01-03",
+   "dias": 7,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-12-28",
+  "fila_fechavencimiento": "2027-01-04",
+  "fila_numerodias": 7,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LD_MATERNIDAD_126",
+  "hoy": "2026-09-02",
+  "titulo": "Licencia de maternidad de 126 días (numérica)",
+  "por_que": "126 < dias_sin_respaldo_aviso(180) y span=126: no debe marcarse",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": "2026-10-04",
+   "dias": 126,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": "2026-10-04",
+   "dias": 126,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-06-01",
+  "fila_fechavencimiento": "2026-10-05",
+  "fila_numerodias": 126,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LD_MATERNIDAD_SURA",
+  "hoy": "2026-09-02",
+  "titulo": "Licencia de maternidad 126 días, formato SURA en palabras",
+  "por_que": "mismo caso con fechas escritas y duración en palabra",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": "2026-10-04",
+   "dias": 126,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": "2026-10-04",
+   "dias": 126,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-06-01",
+  "fila_fechavencimiento": "2026-10-05",
+  "fila_numerodias": 126,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LE_SOLO_INICIO",
+  "hoy": "2026-09-02",
+  "titulo": "El OCR solo pudo leer la FECHA DE INICIO",
+  "por_que": "un solo dato NO es una contradicción: todo lo demás debe ser NO_EVALUABLE",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": null,
+   "dias": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": null,
+   "dias": null,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-08-20",
+  "fila_fechavencimiento": null,
+  "fila_numerodias": null,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LE_SOLO_DIAS",
+  "hoy": "2026-09-02",
+  "titulo": "El OCR solo pudo leer los DÍAS",
+  "por_que": "idem: un solo dato no puede contradecir nada",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 3,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 3,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "fila_numerodias": 3,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LE_SOLO_FIN",
+  "hoy": "2026-09-02",
+  "titulo": "El OCR solo pudo leer la FECHA FIN",
+  "por_que": "idem",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-08-22",
+   "dias": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": "2026-08-22",
+   "dias": null,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "fila_numerodias": null,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LF_VACACIONES_FUTURAS",
+  "hoy": "2026-09-02",
+  "titulo": "Vacaciones notificadas con 45 días de antelación",
+  "por_que": "una NOTIFICACIÓN de vacaciones es por definición futura; T09_INICIO_EN_FUTURO (MEDIA, margen 30 días) no debería mandarla a revisión",
+  "espera_revision": false,
+  "tipo_documento": "vacaciones",
+  "leido": {
+   "fecha_inicio": "2026-10-17",
+   "fecha_fin": "2026-11-01",
+   "dias": 16,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-10-17",
+   "fecha_fin": "2026-11-01",
+   "dias": 16,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "REVISAR",
+  "severidad_tiempos": "MEDIA",
+  "exige_revision_tiempos": true,
+  "hallazgos": [
+   {
+    "codigo": "T09_INICIO_EN_FUTURO",
+    "severidad": "MEDIA",
+    "mensaje": "La fecha de inicio (2026-10-17) está en el futuro, más de 30 día(s) después de hoy (2026-09-02)",
+    "afirma": "la fecha de inicio está en el futuro más allá del margen admitido",
+    "campo": "fecha_inicio"
+   }
+  ],
+  "alertas_tiempos_fila": "T09_INICIO_EN_FUTURO",
+  "severidad_tiempos_fila": "MEDIA",
+  "fila_fechainicio": "2026-10-17",
+  "fila_fechavencimiento": "2026-11-02",
+  "fila_numerodias": 16,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LG_VACACIONES_2_PERIODOS",
+  "hoy": "2026-09-02",
+  "titulo": "Vacaciones en DOS periodos separados",
+  "por_que": "el span se come el hueco entre periodos; ninguna regla debe acusar al documento",
+  "espera_revision": false,
+  "tipo_documento": "vacaciones",
+  "leido": {
+   "fecha_inicio": "2026-05-04",
+   "fecha_fin": "2026-07-10",
+   "dias": 68,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-05-04",
+   "fecha_fin": "2026-07-10",
+   "dias": 68,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "COHERENTE",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": "2026-05-04",
+  "fila_fechavencimiento": "2026-07-11",
+  "fila_numerodias": 68,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LH_RETROACTIVA",
+  "hoy": "2026-09-02",
+  "titulo": "Incapacidad RETROACTIVA (expedida 2 días después del inicio)",
+  "por_que": "la retroactividad es legítima y frecuente: T14 es LEVE y no debe bloquear",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-22",
+   "dias": 3,
+   "dias_letra": 3
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-22",
+   "dias": 3,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "AVISOS",
+  "severidad_tiempos": "LEVE",
+  "exige_revision_tiempos": false,
+  "hallazgos": [
+   {
+    "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+    "severidad": "LEVE",
+    "mensaje": "El certificado se expidió el 2026-08-22, 2 día(s) DESPUÉS de que la incapacidad empezara (2026-08-20): confirmar que es una incapacidad retroactiva",
+    "afirma": "el certificado se expidió después de que la incapacidad empezara",
+    "campo": "fecha_inicio"
+   }
+  ],
+  "alertas_tiempos_fila": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+  "severidad_tiempos_fila": "LEVE",
+  "fila_fechainicio": "2026-08-20",
+  "fila_fechavencimiento": "2026-08-23",
+  "fila_numerodias": 3,
+  "avisos_tiempos": [
+   "El certificado se expidió el 2026-08-22, 2 día(s) DESPUÉS de que la incapacidad empezara (2026-08-20): confirmar que es una incapacidad retroactiva"
+  ]
+ },
+ {
+  "id": "LI_NO_INCLUSIVO",
+  "hoy": "2026-09-02",
+  "titulo": "Emisor con convención NO inclusiva (fin = día de reintegro)",
+  "por_que": "RIESGO conocido: si algún emisor imprime en 'Fecha Fin' el día de REINTEGRO, T01 (GRAVE) marca desfase +1 en un documento legítimo. El corpus no trae ninguno (4/4 reales son inclusivos) — se mide para dejar el número",
+  "espera_revision": null,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-23",
+   "dias": 3,
+   "dias_letra": 3
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-08-20",
+   "fecha_fin": "2026-08-22",
+   "dias": 3,
+   "inicio_calculada": false,
+   "fin_recalculada": true
+  },
+  "veredicto": "REVISAR",
+  "severidad_tiempos": "GRAVE",
+  "exige_revision_tiempos": true,
+  "hallazgos": [
+   {
+    "codigo": "T01_DURACION_VS_RANGO",
+    "severidad": "GRAVE",
+    "mensaje": "Los tiempos del documento no cuadran: el rango 2026-08-20 → 2026-08-23 son 4 día(s), pero declara 3 día(s) (con esos días la fecha fin sería 2026-08-22; desfase de 1 día(s))",
+    "afirma": "los días declarados no coinciden con el rango de fechas impreso",
+    "campo": "dias"
+   }
+  ],
+  "alertas_tiempos_fila": "T01_DURACION_VS_RANGO",
+  "severidad_tiempos_fila": "GRAVE",
+  "fila_fechainicio": "2026-08-20",
+  "fila_fechavencimiento": "2026-08-23",
+  "fila_numerodias": 3,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LJ_PRELICENCIA_FUTURA",
+  "hoy": "2026-09-02",
+  "titulo": "Prelicencia de maternidad que empieza en 45 días",
+  "por_que": "la prelicencia se expide ANTES del parto; con margen de 30 días T09 (MEDIA) marca el documento",
+  "espera_revision": null,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-10-17",
+   "fecha_fin": "2027-02-19",
+   "dias": 126,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-10-17",
+   "fecha_fin": "2027-02-19",
+   "dias": 126,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "REVISAR",
+  "severidad_tiempos": "MEDIA",
+  "exige_revision_tiempos": true,
+  "hallazgos": [
+   {
+    "codigo": "T09_INICIO_EN_FUTURO",
+    "severidad": "MEDIA",
+    "mensaje": "La fecha de inicio (2026-10-17) está en el futuro, más de 30 día(s) después de hoy (2026-09-02)",
+    "afirma": "la fecha de inicio está en el futuro más allá del margen admitido",
+    "campo": "fecha_inicio"
+   }
+  ],
+  "alertas_tiempos_fila": "T09_INICIO_EN_FUTURO",
+  "severidad_tiempos_fila": "MEDIA",
+  "fila_fechainicio": "2026-10-17",
+  "fila_fechavencimiento": "2027-02-20",
+  "fila_numerodias": 126,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LK_ANIO_TRAS_DURACION",
+  "hoy": "2026-09-02",
+  "titulo": "Rótulo 'Duracion' seguido del AÑO (caso R16 del corpus)",
+  "por_que": "el informe de aritmetica_fechas midió que el pipeline leía dias=202 aquí (documento REAL): con 202 > 180 T08 (MEDIA) marcaría el documento",
+  "espera_revision": false,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "SIN_DATOS",
+  "severidad_tiempos": null,
+  "exige_revision_tiempos": false,
+  "hallazgos": [],
+  "alertas_tiempos_fila": null,
+  "severidad_tiempos_fila": null,
+  "fila_fechainicio": null,
+  "fila_fechavencimiento": null,
+  "fila_numerodias": null,
+  "avisos_tiempos": []
+ },
+ {
+  "id": "LN_LARGA_SIN_FIN",
+  "hoy": "2026-09-02",
+  "titulo": "Incapacidad legítima de 210 días sin fecha fin impresa",
+  "por_que": "una prórroga larga de enfermedad general existe; T08 (MEDIA, umbral 180) la manda a revisión sin que haya ninguna contradicción",
+  "espera_revision": null,
+  "tipo_documento": "incapacidad",
+  "leido": {
+   "fecha_inicio": "2026-02-01",
+   "fecha_fin": null,
+   "dias": 210,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-02-01",
+   "fecha_fin": "2026-08-29",
+   "dias": 210,
+   "inicio_calculada": false,
+   "fin_recalculada": false
+  },
+  "veredicto": "REVISAR",
+  "severidad_tiempos": "MEDIA",
+  "exige_revision_tiempos": true,
+  "hallazgos": [
+   {
+    "codigo": "T08_DURACION_SIN_RESPALDO",
+    "severidad": "MEDIA",
+    "mensaje": "Duración larga (210 días) sin fecha fin en el documento con la que cruzarla: confirmar contra el papel (umbral de aviso: 180 días)",
+    "afirma": "duración por encima del umbral de aviso y sin rango de fechas que la respalde",
+    "campo": "dias"
+   }
+  ],
+  "alertas_tiempos_fila": "T08_DURACION_SIN_RESPALDO",
+  "severidad_tiempos_fila": "MEDIA",
+  "fila_fechainicio": "2026-02-01",
+  "fila_fechavencimiento": "2026-08-30",
+  "fila_numerodias": 210,
+  "avisos_tiempos": []
+ }
+]

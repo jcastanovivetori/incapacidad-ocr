@@ -1,0 +1,178 @@
+[
+ {
+  "caso": "dias como lista",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias como dict",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias booleano True",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias float 3.5",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias digito unicode",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias cadena larguisima",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "dias negativo",
+  "resultado": "OK veredicto=REVISAR codigos=['T03_DIAS_FUERA_DE_RANGO']"
+ },
+ {
+  "caso": "fecha como dict",
+  "resultado": "OK veredicto=REVISAR codigos=['T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "fecha ISO de semana",
+  "resultado": "OK veredicto=REVISAR codigos=['T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "fecha basica 20260820",
+  "resultado": "OK veredicto=REVISAR codigos=['T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "fecha con hora",
+  "resultado": "OK veredicto=REVISAR codigos=['T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "foto que no es dict",
+  "resultado": "OK veredicto=COHERENTE codigos=[]"
+ },
+ {
+  "caso": "foto con tipos raros",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO', 'T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "todo None",
+  "resultado": "OK veredicto=SIN_DATOS codigos=[]"
+ },
+ {
+  "caso": "bloque vacio",
+  "resultado": "OK veredicto=SIN_DATOS codigos=[]"
+ },
+ {
+  "caso": "año 1",
+  "resultado": "OK veredicto=AVISOS codigos=['T10_INICIO_MUY_ANTIGUO']"
+ },
+ {
+  "caso": "año 9999",
+  "resultado": "OK veredicto=REVISAR codigos=['T09_INICIO_EN_FUTURO']"
+ },
+ {
+  "caso": "erp:dias como lista",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias como dict",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias booleano True",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias float 3.5",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias digito unicode",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias cadena larguisima",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO dias=None venc=None"
+ },
+ {
+  "caso": "erp:dias negativo",
+  "resultado": "OK alertas=T03_DIAS_FUERA_DE_RANGO dias=None venc=None"
+ },
+ {
+  "caso": "erp:fecha como dict",
+  "resultado": "OK alertas=T06_FECHA_INICIO_ILEGIBLE dias=3 venc=None"
+ },
+ {
+  "caso": "erp:fecha ISO de semana",
+  "resultado": "OK alertas=T06_FECHA_INICIO_ILEGIBLE dias=3 venc=None"
+ },
+ {
+  "caso": "erp:fecha basica 20260820",
+  "resultado": "OK alertas=T06_FECHA_INICIO_ILEGIBLE dias=3 venc=None"
+ },
+ {
+  "caso": "erp:fecha con hora",
+  "resultado": "OK alertas=T06_FECHA_INICIO_ILEGIBLE dias=3 venc=None"
+ },
+ {
+  "caso": "erp:foto que no es dict",
+  "resultado": "OK alertas=None dias=3 venc=2026-08-23"
+ },
+ {
+  "caso": "erp:foto con tipos raros",
+  "resultado": "OK alertas=T05_DIAS_NO_NUMERICO; T06_FECHA_INICIO_ILEGIBLE dias=3 venc=2026-08-23"
+ },
+ {
+  "caso": "erp:todo None",
+  "resultado": "OK alertas=None dias=None venc=None"
+ },
+ {
+  "caso": "erp:bloque vacio",
+  "resultado": "OK alertas=None dias=None venc=None"
+ },
+ {
+  "caso": "erp:año 1",
+  "resultado": "OK alertas=T10_INICIO_MUY_ANTIGUO dias=3 venc=0001-01-04"
+ },
+ {
+  "caso": "erp:año 9999",
+  "resultado": "EXCEPCION OverflowError: date value out of range"
+ },
+ {
+  "caso": "ov:override dias lista",
+  "resultado": "OK veredicto=REVISAR codigos=['T05_DIAS_NO_NUMERICO']"
+ },
+ {
+  "caso": "ov:override fecha dict",
+  "resultado": "OK veredicto=REVISAR codigos=['T06_FECHA_INICIO_ILEGIBLE']"
+ },
+ {
+  "caso": "ov:override fecha vacia",
+  "resultado": "OK veredicto=REVISAR codigos=['T07_FECHA_FIN_ILEGIBLE']"
+ },
+ {
+  "caso": "ov:override expedicion basura",
+  "resultado": "OK veredicto=COHERENTE codigos=[]"
+ },
+ {
+  "caso": "config:{'reglas': 'no-es-dict'}",
+  "avisos": [
+   "prueba: 'reglas' debe ser un objeto código→{severidad,activa}"
+  ]
+ },
+ {
+  "caso": "config:{'umbrales': {'dias_max': '540'}}",
+  "avisos": [
+   "prueba: umbral dias_max debe ser un entero (llegó str)"
+  ]
+ },
+ {
+  "caso": "config:{'reglas': {'T99_NO_EXISTE': {'severidad': 'GRAVE'}}}",
+  "avisos": [
+   "prueba: regla desconocida 'T99_NO_EXISTE' (se ignora)"
+  ]
+ },
+ {
+  "caso": "config:{'umbrales': {'dias_min': 20, 'dias_max': 5}}",
+  "avisos": [
+   "prueba: dias_min (20) > dias_max (5): se conservan los valores anteriores"
+  ]
+ }
+]

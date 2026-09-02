@@ -1,0 +1,1394 @@
+{
+  "familia": "dx_catalogo",
+  "catalogo": null,
+  "medicion": {
+    "falsas_detectadas": 2,
+    "falsas_totales": 12,
+    "reales_marcadas": 0,
+    "reales_totales": 14,
+    "falsas_detectadas_con_experimental": 4,
+    "reales_marcadas_con_experimental": 2
+  },
+  "resultados": [
+    {
+      "archivo": "FALSA-01.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "M545",
+      "dx_leido": "M545",
+      "desc_impresa": "LUMBAGO, NO ESPECIFICADO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: M545"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "M545 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "LUMBAGO"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-02.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "R505",
+      "dx_leido": "R505",
+      "desc_impresa": "EXTRACCIONDE MUELA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: R505"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "R505 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "dispara",
+          "detalle": "MUELA -> capitulo(s) K, codigo es R"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [
+        "DX_CAPITULO_INCOHERENTE"
+      ],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)  [+exp: DX_CAPITULO_INCOHERENTE]"
+    },
+    {
+      "archivo": "FALSA-03.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "N23X",
+      "dx_leido": "N23X",
+      "desc_impresa": "COLICORENAL, NOESPECIFICADO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: N23X"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "N23X (4 caracteres, relleno X)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "RENAL"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-04.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "M545",
+      "dx_leido": "M545",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: M545"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "M545 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-05.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "dispara",
+          "detalle": "hay etiqueta de DX relacionado/secundario pero ningun codigo principal"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "dispara",
+          "detalle": "sin candidato CIE-10 junto a una etiqueta de diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [
+        "DX_SIN_PRINCIPAL"
+      ],
+      "marca_con_catalogo": [],
+      "veredicto": "no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]"
+    },
+    {
+      "archivo": "FALSA-06.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "N2O0",
+      "dx_leido": "N200",
+      "desc_impresa": "CALCULO DELRINON",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: N2O0"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "N200 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "RINON"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-07.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "AO99",
+      "dx_leido": "A099",
+      "desc_impresa": "GASTROENTERISTIS Y COLITIS NOESPECIFICADA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: AO99"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "A099 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "GASTROENTERI+COLITIS"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-08.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "O200",
+      "dx_leido": "O200",
+      "desc_impresa": "AMENAZADEABORTO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: O200"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "O200 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "ABORTO"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-09.jpeg",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "A09",
+      "dx_leido": "A09",
+      "desc_impresa": "Intoxicacion",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: A09"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "dispara",
+          "detalle": "impreso 'A09' = 3 caracteres; el catalogo exige 4 (seria 'A09X' o 'A090'..'A099')"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "INTOXICACION"
+        }
+      },
+      "marca_dura": [
+        "DX_FORMATO_LONGITUD"
+      ],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "MARCA: DX_FORMATO_LONGITUD"
+    },
+    {
+      "archivo": "FALSA-10.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "Aoo",
+      "dx_leido": "A00",
+      "desc_impresa": "Intoxicacion Alimentaria",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: Aoo"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "dispara",
+          "detalle": "impreso 'Aoo' = 3 caracteres; el catalogo exige 4 (seria 'A00X' o 'A000'..'A009')"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "INTOXICACION"
+        }
+      },
+      "marca_dura": [
+        "DX_FORMATO_LONGITUD"
+      ],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "MARCA: DX_FORMATO_LONGITUD"
+    },
+    {
+      "archivo": "FALSA-11.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "G43",
+      "dx_leido": "G43",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: G43"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "dispara",
+          "detalle": "impreso 'G43' = 3 caracteres; el catalogo exige 4 (seria 'G43X' o 'G430'..'G439')"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [
+        "DX_FORMATO_LONGITUD"
+      ],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "MARCA: DX_FORMATO_LONGITUD"
+    },
+    {
+      "archivo": "FALSA-12.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "H1O2",
+      "dx_leido": "H102",
+      "desc_impresa": "OTRASCONJUNTIVITISAGUDAS",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: H1O2"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "H102 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "CONJUNTIVITIS"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-13.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "r509",
+      "dx_leido": "R509",
+      "desc_impresa": "Sindromefebril enestudio",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: r509"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "R509 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "FEBRIL"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-14.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "B349",
+      "dx_leido": "B349",
+      "desc_impresa": "INFECCIONVIRAL.NOESPECIFICADA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: B349"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "B349 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "INFECCIONVIRAL+VIRAL"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "FALSA-15.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "S09.9",
+      "dx_leido": "S099",
+      "desc_impresa": "TRAUMANO ESPECIFICADO DECABEZA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: S09.9"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "S099 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "TRAUMA"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-01.pdf",
+      "etiqueta": "real",
+      "cuarentena": true,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "G43",
+      "dx_leido": "G43",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: G43"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "dispara",
+          "detalle": "impreso 'G43' = 3 caracteres; el catalogo exige 4 (seria 'G43X' o 'G430'..'G439')"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [
+        "DX_FORMATO_LONGITUD"
+      ],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "MARCA: DX_FORMATO_LONGITUD"
+    },
+    {
+      "archivo": "REAL-02.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "R51X",
+      "dx_leido": "R51X",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "revisar",
+          "detalle": "'NO REGISTRA' presente pero hay codigo R51X; posible mezcla de columnas"
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: R51X"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "R51X (4 caracteres, relleno X)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-03.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "A099",
+      "dx_leido": "A099",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "revisar",
+          "detalle": "'NO REGISTRA' presente pero hay codigo A099; posible mezcla de columnas"
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: A099"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "A099 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-04.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "S80.1",
+      "dx_leido": "S801",
+      "desc_impresa": "CONTUSIONDELLADODERECHODELAPIERNA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: S80.1"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "S801 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "CONTUSION"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-05.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "permiso",
+      "aplica": false,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "no_aplica (sin DX por tipo de documento)"
+    },
+    {
+      "archivo": "REAL-06.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "M939",
+      "dx_leido": "M939",
+      "desc_impresa": "OSTEOCONDROPATIA,NOESPECIFICADA",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: M939"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "M939 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "OSTEO"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-07.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "dispara",
+          "detalle": "hay etiqueta de DX relacionado/secundario pero ningun codigo principal"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "dispara",
+          "detalle": "sin candidato CIE-10 junto a una etiqueta de diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [
+        "DX_SIN_PRINCIPAL"
+      ],
+      "marca_con_catalogo": [],
+      "veredicto": "no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]"
+    },
+    {
+      "archivo": "REAL-08.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "permiso",
+      "aplica": false,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "no_aplica (sin DX por tipo de documento)"
+    },
+    {
+      "archivo": "REAL-09.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "O829",
+      "dx_leido": "O829",
+      "desc_impresa": "PARTO POR CESAREA, SIN OTRA ESPECIFICACION",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: O829"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "O829 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "PARTO+CESAREA"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-10.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": false,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "no_aplica",
+          "detalle": "tipo de documento sin diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "no_aplica (sin DX por tipo de documento)"
+    },
+    {
+      "archivo": "REAL-11.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "M54.5",
+      "dx_leido": "M545",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: M54.5"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "M545 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-12.jpeg",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "RO74",
+      "dx_leido": "R074",
+      "desc_impresa": "DOLORENELPECHO,NOESPECIFICADO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: RO74"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "R074 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "DOLORENELPECHO"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-13.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "S520",
+      "dx_leido": "S520",
+      "desc_impresa": "FRACTURADE LA EPIFISIS SUPERIORDELCUBITO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: S520"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "S520 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "FRACTURA"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-14.pdf",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "S836",
+      "dx_leido": "S836",
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: S836"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "S836 (4 caracteres)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-15.pdf",
+      "etiqueta": "real",
+      "cuarentena": true,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": "N23X",
+      "dx_leido": "N23X",
+      "desc_impresa": "COLICORENAL, NOESPECIFICADO",
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_NO_LEIDO": {
+          "estado": "ok",
+          "detalle": "codigo aislado: N23X"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "ok",
+          "detalle": "N23X (4 caracteres, relleno X)"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU); no se afirma inexistencia"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "falta el catalogo lpdiagnosticos (ASTGU)"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "ok",
+          "detalle": "RENAL"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [],
+      "marca_con_catalogo": [],
+      "veredicto": "limpio (formato ok; catalogo no verificado)"
+    },
+    {
+      "archivo": "REAL-16.jpeg",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "tipo": "incapacidad",
+      "aplica": true,
+      "dx_crudo": null,
+      "dx_leido": null,
+      "desc_impresa": null,
+      "checks": {
+        "DX_AUSENTE_EN_DOC": {
+          "estado": "ok",
+          "detalle": ""
+        },
+        "DX_SIN_PRINCIPAL": {
+          "estado": "dispara",
+          "detalle": "hay etiqueta de DX relacionado/secundario pero ningun codigo principal"
+        },
+        "DX_NO_LEIDO": {
+          "estado": "dispara",
+          "detalle": "sin candidato CIE-10 junto a una etiqueta de diagnostico"
+        },
+        "DX_FORMATO_LONGITUD": {
+          "estado": "no_verificable",
+          "detalle": "no hay codigo legible que validar"
+        },
+        "DX_INEXISTENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        },
+        "DX_NOMBRE_DISTINTO": {
+          "estado": "no_verificable",
+          "detalle": "sin descripcion impresa utilizable"
+        },
+        "DX_CAPITULO_INCOHERENTE": {
+          "estado": "no_verificable",
+          "detalle": "sin codigo legible"
+        }
+      },
+      "marca_dura": [],
+      "marca_experimental": [
+        "DX_SIN_PRINCIPAL"
+      ],
+      "marca_con_catalogo": [],
+      "veredicto": "no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]"
+    }
+  ]
+}

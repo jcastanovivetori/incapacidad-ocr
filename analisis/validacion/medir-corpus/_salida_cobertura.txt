@@ -1,0 +1,17 @@
+documentos evaluables donde T01 NO puede opinar: 13
+  F02 (f) leido=None→2026-05-18/1  num=['18/05/2026', '18/05/2026'] palabra=[]
+  F04 (f) leido=None→None/2  num=[] palabra=['25SEPTIEMBRE']
+  F06 (f) leido=2025-09-15→None/2  num=['15/09/2025', '16/09/2025'] palabra=[]
+  F12 (f) leido=None→None/None  num=['5/12/25'] palabra=[]
+  F13 (f) leido=None→None/None  num=['12/08/2026'] palabra=[]
+  F14 (f) leido=None→None/2  num=['25/02/2026'] palabra=[]
+  R02 (r) leido=2026-06-10→None/None  num=['10/06/2026', '10/06/2026', '11/06/2026'] palabra=[]
+  R03 (r) leido=2026-06-10→None/None  num=['10/06/2026', '10/06/2026', '10/06/2026', '11/06/2026', '10/06/2026'] palabra=[]
+  R04 (r) leido=2026-07-12→None/None  num=['11/7/2026', '11/7/2026', '11/7/2026', '11/7/2026', '12/7/2026'] palabra=[]
+  R05 (r) leido=None→None/None  num=[] palabra=[]
+  R10 (r) leido=None→None/2  num=[] palabra=[]
+  R14 (r) leido=None→2026-06-11/3  num=[] palabra=[]
+  R16 (r) leido=None→None/None  num=[] palabra=['09JUNIO', '09JUNIO']
+
+CON fecha en el texto OCR que el extractor no publica (recuperable): 10 ['F02', 'F04', 'F06', 'F12', 'F13', 'F14', 'R02', 'R03', 'R04', 'R16']
+SIN ninguna fecha aprovechable en el texto: 3 ['R05', 'R10', 'R14']

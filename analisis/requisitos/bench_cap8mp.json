@@ -1,0 +1,355 @@
+{
+  "entorno": {
+    "etiqueta": "C: OCR_MAX_PIXELS=8MP (resto igual)",
+    "fecha_utc": "2026-09-02T06:36:16+00:00",
+    "host": "DESKTOP-NM1K6H5",
+    "so": "Windows 11 10.0.26200",
+    "python": "3.14.5",
+    "cpu_modelo": "12th Gen Intel(R) Core(TM) i7-1255U",
+    "cores_fisicos": 10,
+    "cores_logicos": 12,
+    "ram_total_mb": 32400,
+    "ram_disponible_mb_inicio": 11153,
+    "hilos_onnx": 1,
+    "hilos_onnx_capados_ok": true,
+    "pdf_render_scale": 3.0,
+    "max_pdf_pages": 30,
+    "ocr_max_pixels": 8000000,
+    "repeats": 1,
+    "dedup": true,
+    "onnxruntime": "1.27.0",
+    "onnx_providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ]
+  },
+  "arranque": {
+    "import_s": 0.01,
+    "backend_init_s": 0.3,
+    "warmup_primer_doc_s": 6.16,
+    "warmup_doc": "REAL-04.pdf",
+    "warmup_curva_s": [
+      6.16,
+      3.46,
+      3.82
+    ],
+    "sobrecoste_1a_inferencia_s": 2.7,
+    "rss_base_mb": 38.9,
+    "rss_tras_import_mb": 39.3,
+    "ram_arranque_mb": 102.2
+  },
+  "condiciones_por_pasada": [
+    {
+      "pasada": 1,
+      "cpu_sistema_pct_antes": 25.8,
+      "top_procesos_ajenos": [
+        {
+          "pid": 0,
+          "nombre": "System Idle Process",
+          "cpu_pct": 910.1
+        },
+        {
+          "pid": 7648,
+          "nombre": "MsMpEng.exe",
+          "cpu_pct": 32.9
+        },
+        {
+          "pid": 17884,
+          "nombre": "GoogleDriveFS.exe",
+          "cpu_pct": 29.2
+        },
+        {
+          "pid": 41904,
+          "nombre": "Code.exe",
+          "cpu_pct": 22.0
+        },
+        {
+          "pid": 45076,
+          "nombre": "Code.exe",
+          "cpu_pct": 14.0
+        },
+        {
+          "pid": 28016,
+          "nombre": "msedgewebview2.exe",
+          "cpu_pct": 13.3
+        }
+      ],
+      "ram_disponible_mb": 11155,
+      "duracion_s": 47.2,
+      "cpu_propia_s": 45.3,
+      "cpu_sistema_ocupada_s": 252.4,
+      "cpu_sistema_pct_despues": 33.9,
+      "cpu_ajena_s": 207.1,
+      "pct_cpu_ajena": 82.1
+    }
+  ],
+  "resumen": {
+    "global": {
+      "n": 5,
+      "min": 3.86,
+      "p50": 9.42,
+      "p90": 15.94,
+      "max": 15.94,
+      "media": 9.43
+    },
+    "global_cpu_s": {
+      "n": 5,
+      "min": 3.56,
+      "p50": 9.14,
+      "p90": 15.25,
+      "max": 15.25,
+      "media": 9.05
+    },
+    "por_tipo": {
+      "imagen": {
+        "n": 1,
+        "min": 3.86,
+        "p50": 3.86,
+        "p90": 3.86,
+        "max": 3.86,
+        "media": 3.86
+      },
+      "pdf_1pag": {
+        "n": 4,
+        "min": 4.22,
+        "p50": 9.42,
+        "p90": 15.94,
+        "max": 15.94,
+        "media": 10.83
+      }
+    },
+    "por_tipo_cpu_s": {
+      "imagen": {
+        "n": 1,
+        "min": 3.56,
+        "p50": 3.56,
+        "p90": 3.56,
+        "max": 3.56,
+        "media": 3.56
+      },
+      "pdf_1pag": {
+        "n": 4,
+        "min": 4.0,
+        "p50": 9.14,
+        "p90": 15.25,
+        "max": 15.25,
+        "media": 10.42
+      }
+    },
+    "fases_s": {
+      "render_s": {
+        "n": 5,
+        "min": 0.01,
+        "p50": 0.06,
+        "p90": 1.83,
+        "max": 1.83,
+        "media": 0.59
+      },
+      "ocr_s": {
+        "n": 5,
+        "min": 3.85,
+        "p50": 9.36,
+        "p90": 14.92,
+        "max": 14.92,
+        "media": 8.84
+      },
+      "combinar_s": {
+        "n": 5,
+        "min": 0.0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "media": 0.0
+      },
+      "extract_s": {
+        "n": 5,
+        "min": 0.0,
+        "p50": 0.0,
+        "p90": 0.01,
+        "max": 0.01,
+        "media": 0.0
+      }
+    },
+    "reparto_pct": {
+      "render_s": 6.3,
+      "ocr_s": 93.7,
+      "combinar_s": 0.0,
+      "extract_s": 0.0
+    },
+    "s_por_pagina_pdf": {
+      "n": 4,
+      "min": 4.22,
+      "p50": 9.42,
+      "p90": 15.94,
+      "max": 15.94,
+      "media": 10.83
+    },
+    "nucleos_efectivos": {
+      "n": 5,
+      "min": 0.92,
+      "p50": 0.96,
+      "p90": 0.97,
+      "max": 0.97,
+      "media": 0.95
+    },
+    "mediana_por_pasada_s": [
+      9.42
+    ]
+  },
+  "ram": {
+    "ram_arranque_mb": 102.2,
+    "ram_pico_mb": 1589.1,
+    "doc_del_pico": "FALSA-04.pdf",
+    "tipo_del_pico": "pdf_1pag",
+    "peak_wset_proceso_mb": 1665.8,
+    "rss_final_mb": 111.4,
+    "nota_peak_wset": "peak_wset es el pico de WORKING SET de todo el proceso que reporta Windows (incluye páginas reclamables/arenas de ONNX). Para dimensionar RAM por worker usar ram_pico_mb (RSS muestreado)."
+  },
+  "documentos": [
+    {
+      "archivo": "<usuario>\\AppData\\Local\\Temp\\sub\\REAL-04.pdf",
+      "nombre": "REAL-04.pdf",
+      "sha8": "38f40c48",
+      "tipo": "pdf_1pag",
+      "paginas": 1,
+      "mp_pagina_mayor": 4.4,
+      "bytes": 168808,
+      "cpu_s_min": 4.0,
+      "cpu_s_mediana": 4.0,
+      "rss_inicio_mb": 111.5,
+      "render_s": 0.046,
+      "ocr_s": 4.169,
+      "combinar_s": 0.0001,
+      "extract_s": 0.0012,
+      "total_s": 4.216,
+      "cpu_propia_s": 4.0,
+      "chars_ocr": 964,
+      "ocr_vacio": false,
+      "pico_rss_mb": 904.8,
+      "total_mediana_s": 4.22,
+      "total_max_s": 4.22,
+      "totales_por_pasada_s": [
+        4.216
+      ],
+      "control_run_s": null,
+      "s_por_pagina": 4.22
+    },
+    {
+      "archivo": "<usuario>\\AppData\\Local\\Temp\\sub\\REAL-07.pdf",
+      "nombre": "REAL-07.pdf",
+      "sha8": "d6482e2a",
+      "tipo": "pdf_1pag",
+      "paginas": 1,
+      "mp_pagina_mayor": 72.3,
+      "bytes": 12450,
+      "cpu_s_min": 15.25,
+      "cpu_s_mediana": 15.25,
+      "rss_inicio_mb": 107.3,
+      "render_s": 1.01,
+      "ocr_s": 14.92,
+      "combinar_s": 0.0001,
+      "extract_s": 0.0035,
+      "total_s": 15.935,
+      "cpu_propia_s": 15.25,
+      "chars_ocr": 1387,
+      "ocr_vacio": false,
+      "pico_rss_mb": 1555.0,
+      "total_mediana_s": 15.94,
+      "total_max_s": 15.94,
+      "totales_por_pasada_s": [
+        15.935
+      ],
+      "control_run_s": null,
+      "s_por_pagina": 15.94
+    },
+    {
+      "archivo": "<usuario>\\AppData\\Local\\Temp\\sub\\REAL-12.jpeg",
+      "nombre": "REAL-12.jpeg",
+      "sha8": "942de664",
+      "tipo": "imagen",
+      "paginas": 1,
+      "mp_pagina_mayor": 0.9,
+      "bytes": 115834,
+      "cpu_s_min": 3.56,
+      "cpu_s_mediana": 3.56,
+      "rss_inicio_mb": 108.4,
+      "render_s": 0.01,
+      "ocr_s": 3.847,
+      "combinar_s": 0.0001,
+      "extract_s": 0.0036,
+      "total_s": 3.86,
+      "cpu_propia_s": 3.56,
+      "chars_ocr": 801,
+      "ocr_vacio": false,
+      "pico_rss_mb": 221.4,
+      "total_mediana_s": 3.86,
+      "total_max_s": 3.86,
+      "totales_por_pasada_s": [
+        3.86
+      ],
+      "control_run_s": null,
+      "s_por_pagina": 3.86
+    },
+    {
+      "archivo": "<usuario>\\AppData\\Local\\Temp\\sub\\REAL-14.pdf",
+      "nombre": "REAL-14.pdf",
+      "sha8": "691e0af0",
+      "tipo": "pdf_1pag",
+      "paginas": 1,
+      "mp_pagina_mayor": 4.4,
+      "bytes": 226962,
+      "cpu_s_min": 9.14,
+      "cpu_s_mediana": 9.14,
+      "rss_inicio_mb": 109.7,
+      "render_s": 0.058,
+      "ocr_s": 9.357,
+      "combinar_s": 0.0,
+      "extract_s": 0.0014,
+      "total_s": 9.416,
+      "cpu_propia_s": 9.14,
+      "chars_ocr": 1244,
+      "ocr_vacio": false,
+      "pico_rss_mb": 908.3,
+      "total_mediana_s": 9.42,
+      "total_max_s": 9.42,
+      "totales_por_pasada_s": [
+        9.416
+      ],
+      "control_run_s": null,
+      "s_por_pagina": 9.42
+    },
+    {
+      "archivo": "<usuario>\\AppData\\Local\\Temp\\sub\\FALSA-04.pdf",
+      "nombre": "FALSA-04.pdf",
+      "sha8": "e0ee54fd",
+      "tipo": "pdf_1pag",
+      "paginas": 1,
+      "mp_pagina_mayor": 86.5,
+      "bytes": 1612996,
+      "cpu_s_min": 13.3,
+      "cpu_s_mediana": 13.3,
+      "rss_inicio_mb": 110.4,
+      "render_s": 1.83,
+      "ocr_s": 11.902,
+      "combinar_s": 0.0001,
+      "extract_s": 0.0051,
+      "total_s": 13.739,
+      "cpu_propia_s": 13.3,
+      "chars_ocr": 987,
+      "ocr_vacio": false,
+      "pico_rss_mb": 1589.1,
+      "total_mediana_s": 13.74,
+      "total_max_s": 13.74,
+      "totales_por_pasada_s": [
+        13.739
+      ],
+      "control_run_s": null,
+      "s_por_pagina": 13.74
+    }
+  ],
+  "duplicados_omitidos": [],
+  "control_vs_fases": {
+    "control_medido": false,
+    "delta_mediano_s": null
+  }
+}

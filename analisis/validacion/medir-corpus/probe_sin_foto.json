@@ -1,0 +1,70 @@
+{
+ "caso1_fin_completado": {
+  "entrada": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": null,
+   "dias": 5
+  },
+  "registro_guardado": {
+   "fecha_inicio": "2026-06-01",
+   "fecha_fin": "2026-06-05",
+   "dias": 5,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "con_foto": {
+   "veredicto": "COHERENTE",
+   "cobertura": 0.538,
+   "t01": "NO_EVALUABLE"
+  },
+  "sin_foto": {
+   "veredicto": "COHERENTE",
+   "cobertura": 0.846,
+   "t01": "CUMPLE"
+  }
+ },
+ "caso2_fin_rederivado": {
+  "papel": {
+   "fecha_inicio": "2026-06-05",
+   "fecha_fin": "2026-07-06",
+   "dias": 2
+  },
+  "registro_con_marca": {
+   "fecha_inicio": "2026-06-05",
+   "fecha_fin": "2026-06-06",
+   "dias": 2,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": true
+  },
+  "registro_sin_marca": {
+   "fecha_inicio": "2026-06-05",
+   "fecha_fin": "2026-06-06",
+   "dias": 2,
+   "fecha_inicio_calculada": false
+  },
+  "con_foto": {
+   "veredicto": "REVISAR",
+   "codigos": [
+    "T01_DURACION_VS_RANGO"
+   ]
+  },
+  "sin_foto_con_marca": {
+   "veredicto": "REVISAR",
+   "codigos": [
+    "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+   ]
+  },
+  "sin_foto_sin_marca": {
+   "veredicto": "COHERENTE",
+   "codigos": [],
+   "cobertura": 0.846
+  }
+ },
+ "caso3_corpus_F09": {
+  "archivo_json": "FALSA-09.json",
+  "veredicto": "COHERENTE",
+  "codigos": [],
+  "cobertura": 0.846,
+  "papel_dice": "Desde:05/06/2026 - Hasta:06/07/2026, 'Dias de incapacidad:02'"
+ }
+}

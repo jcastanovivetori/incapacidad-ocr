@@ -1,0 +1,1077 @@
+{
+  "generado": "2026-09-02T00:21:39",
+  "familia": "dias_vs_diagnostico",
+  "referencia_historica": false,
+  "totales": {
+    "corpus": 31,
+    "utilizable": 26,
+    "cuarentena": 5,
+    "falsas": 12,
+    "reales": 14,
+    "pares_legibles": 10,
+    "falsas_detectadas": 1,
+    "reales_marcadas": 0,
+    "reales_aviso": 0,
+    "reales_revision": 1,
+    "familia_declarada": 1,
+    "familia_detectada": 1
+  },
+  "documentos": [
+    {
+      "archivo": "FALSA-01.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "FIRMA_MEDICO"
+      ],
+      "dias": 1,
+      "cie_capitulo": "M",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-02.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DX_INEXISTENTE"
+      ],
+      "dias": null,
+      "cie_capitulo": "R",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-03.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "si",
+      "senales_declaradas": [
+        "TIPOGRAFIA_MIXTA"
+      ],
+      "dias": 29,
+      "cie_capitulo": "N",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-04.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "FECHAS_INCOHERENTES"
+      ],
+      "dias": null,
+      "cie_capitulo": "M",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-05.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DIAS_VS_DIAGNOSTICO"
+      ],
+      "dias": 2,
+      "cie_capitulo": "O",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": true,
+      "veredicto": "SOSPECHA",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "SOSPECHA",
+          "dias=2 < minimo legal 14 del bloque O00-O08 (CST art. 237 (2 a 4 semanas de descanso remunerado))"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": [
+        "DIAS_BAJO_MINIMO_LEGAL_ABORTO"
+      ]
+    },
+    {
+      "archivo": "FALSA-06.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "SIN_MOTIVO_REGISTRADO"
+      ],
+      "dias": 2,
+      "cie_capitulo": "N",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": false,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-07.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DX_NOMBRE_DISTINTO"
+      ],
+      "dias": 1,
+      "cie_capitulo": "A",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-08.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "FIRMA_MEDICO"
+      ],
+      "dias": 2,
+      "cie_capitulo": "O",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": false,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-09.jpeg",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DX_INEXISTENTE",
+        "DX_FORMATO"
+      ],
+      "dias": 2,
+      "cie_capitulo": "C",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-10.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DX_INEXISTENTE"
+      ],
+      "dias": 2,
+      "cie_capitulo": "A",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-11.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "si",
+      "senales_declaradas": [
+        "DX_INEXISTENTE"
+      ],
+      "dias": 2,
+      "cie_capitulo": "G",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-12.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "SIN_MOTIVO_REGISTRADO"
+      ],
+      "dias": null,
+      "cie_capitulo": "H",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias+cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-13.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "DX_NOMBRE_DISTINTO"
+      ],
+      "dias": null,
+      "cie_capitulo": "S",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias+cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-14.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "no",
+      "senales_declaradas": [
+        "SIN_MOTIVO_REGISTRADO"
+      ],
+      "dias": null,
+      "cie_capitulo": "B",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias+cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "FALSA-15.pdf",
+      "etiqueta": "falsa",
+      "cuarentena": "si",
+      "senales_declaradas": [
+        "DX_NOMBRE_DISTINTO"
+      ],
+      "dias": null,
+      "cie_capitulo": "S",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-01.pdf",
+      "etiqueta": "real",
+      "cuarentena": "si",
+      "senales_declaradas": [],
+      "dias": 2,
+      "cie_capitulo": "G",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-02.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": null,
+      "cie_capitulo": "B",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias+cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-03.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": null,
+      "cie_capitulo": "A",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias+cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-04.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": null,
+      "cie_capitulo": "S",
+      "cie10": null,
+      "cie_fuente": "ocr_anclado",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta dias"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-05.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": null,
+      "cie_capitulo": null,
+      "cie10": null,
+      "cie_fuente": null,
+      "cie_confianza": "NULA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_APLICA",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_APLICA",
+          "el documento no es una incapacidad (sin diagnostico por diseno)"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_EVALUABLE",
+          "sin dias"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-06.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 2,
+      "cie_capitulo": "M",
+      "cie10": null,
+      "cie_fuente": "ocr_anclado",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": false,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-07.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 14,
+      "cie_capitulo": "O",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "OK",
+          "dias dentro del rango fijado por norma para el bloque O00-O08"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-08.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 1,
+      "cie_capitulo": null,
+      "cie10": null,
+      "cie_fuente": null,
+      "cie_confianza": "NULA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_APLICA",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_APLICA",
+          "el documento no es una incapacidad (sin diagnostico por diseno)"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-09.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 126,
+      "cie_capitulo": "O",
+      "cie10": null,
+      "cie_fuente": "ocr_anclado",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "OK",
+          "dias dentro del rango fijado por norma para el bloque O80-O84 / Z37"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "OK",
+          "incapacidad prolongada con diagnostico legible"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-10.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 2,
+      "cie_capitulo": "J",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-11.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 2,
+      "cie_capitulo": "M",
+      "cie10": null,
+      "cie_fuente": "capa_texto",
+      "cie_confianza": "ALTA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-12.jpeg",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 3,
+      "cie_capitulo": "R",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-13.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 30,
+      "cie_capitulo": "S",
+      "cie10": null,
+      "cie_fuente": "ocr_anclado",
+      "cie_confianza": "ALTA",
+      "prorroga": true,
+      "tiene_capa_texto": true,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "OK",
+          "incapacidad prolongada con diagnostico legible"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-14.pdf",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 3,
+      "cie_capitulo": "S",
+      "cie10": null,
+      "cie_fuente": "ocr_anclado",
+      "cie_confianza": "ALTA",
+      "prorroga": false,
+      "tiene_capa_texto": false,
+      "veredicto": "OK",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "OK",
+          "par (cie10, dias) legible con confianza ALTA"
+        ],
+        "PISO_LEGAL": [
+          "NO_APLICA",
+          "el diagnostico no cae en un bloque con duracion fijada por norma"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-15.pdf",
+      "etiqueta": "real",
+      "cuarentena": "si",
+      "senales_declaradas": [],
+      "dias": 29,
+      "cie_capitulo": "N",
+      "cie10": null,
+      "cie_fuente": "extractor",
+      "cie_confianza": "BAJA",
+      "prorroga": null,
+      "tiene_capa_texto": true,
+      "veredicto": "NO_EVALUABLE",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10_confiable"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "NO_APLICA",
+          "incapacidad corta (<30 dias)"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    },
+    {
+      "archivo": "REAL-16.jpeg",
+      "etiqueta": "real",
+      "cuarentena": "no",
+      "senales_declaradas": [],
+      "dias": 202,
+      "cie_capitulo": null,
+      "cie10": null,
+      "cie_fuente": null,
+      "cie_confianza": "NULA",
+      "prorroga": null,
+      "tiene_capa_texto": false,
+      "veredicto": "REVISION",
+      "checks": {
+        "DXDIAS_PAR_LEGIBLE": [
+          "NO_EVALUABLE",
+          "falta cie10"
+        ],
+        "PISO_LEGAL": [
+          "NO_EVALUABLE",
+          "sin par (dx, dias) de confianza"
+        ],
+        "DIAS_LARGOS_SIN_DX_VERIFICABLE": [
+          "REVISION",
+          "dias=202 (prolongada) y el diagnostico no se pudo leer con confianza -> ningun check de la familia puede validarla"
+        ],
+        "DIAS_VS_DX_RANGO_HISTORICO": [
+          "SIN_INSUMO",
+          "no existe referencia_dias_por_dx.json: hace falta el historico del ERP (ASTGU.lpausentismos)"
+        ]
+      },
+      "sospechas": []
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+ "parte1_layout": [
+  {
+   "caso": "P1_VALOR_ANTES_DEL_ROTULO",
+   "verdad": "inicio real 2026-07-11, fin real 2026-07-12, 2 dias (documento coherente)",
+   "leido": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": null
+   },
+   "efectivo": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": "2026-07-13",
+    "dias": 2
+   },
+   "codigos": [],
+   "severidad": null,
+   "exige_revision": false,
+   "mensajes": []
+  },
+  {
+   "caso": "P2_SURA_CELDAS_INVERTIDAS",
+   "verdad": "inicio real 2026-07-10, fin real 2026-07-23, 14 dias (documento coherente)",
+   "leido": {
+    "fecha_inicio": "2026-07-23",
+    "fecha_fin": "2026-07-10",
+    "dias": 10,
+    "dias_letra": null
+   },
+   "efectivo": {
+    "fecha_inicio": "2026-07-23",
+    "fecha_fin": "2026-08-01",
+    "dias": 10
+   },
+   "codigos": [
+    "T02_FIN_ANTES_DE_INICIO"
+   ],
+   "severidad": "GRAVE",
+   "exige_revision": true,
+   "mensajes": [
+    "La fecha fin leída (2026-07-10) es ANTERIOR a la de inicio (2026-07-23): el rango es imposible"
+   ]
+  },
+  {
+   "caso": "P3_SURA_FIN_DE_ANIO",
+   "verdad": "inicio real 2026-12-28, fin real 2027-01-03 (documento coherente)",
+   "leido": {
+    "fecha_inicio": "2027-12-28",
+    "fecha_fin": "2026-01-03",
+    "dias": null,
+    "dias_letra": null
+   },
+   "efectivo": {
+    "fecha_inicio": "2027-12-28",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "codigos": [
+    "T02_FIN_ANTES_DE_INICIO",
+    "T09_INICIO_EN_FUTURO"
+   ],
+   "severidad": "GRAVE",
+   "exige_revision": true,
+   "mensajes": [
+    "La fecha fin leída (2026-01-03) es ANTERIOR a la de inicio (2027-12-28): el rango es imposible",
+    "La fecha de inicio (2027-12-28) está en el futuro, más de 30 día(s) después de hoy (2026-09-02)"
+   ]
+  },
+  {
+   "caso": "P4_FECHAS_MMDD",
+   "verdad": "inicio real 2026-07-10, fin real 2026-07-12, 3 dias (documento coherente)",
+   "leido": {
+    "fecha_inicio": "2026-10-07",
+    "fecha_fin": "2026-12-07",
+    "dias": 3,
+    "dias_letra": null
+   },
+   "efectivo": {
+    "fecha_inicio": "2026-10-07",
+    "fecha_fin": "2026-10-09",
+    "dias": 3
+   },
+   "codigos": [
+    "T01_DURACION_VS_RANGO",
+    "T09_INICIO_EN_FUTURO"
+   ],
+   "severidad": "GRAVE",
+   "exige_revision": true,
+   "mensajes": [
+    "Los tiempos del documento no cuadran: el rango 2026-10-07 → 2026-12-07 son 62 día(s), pero declara 3 día(s) (con esos días la fecha fin sería 2026-10-09; desfase de 59 día(s))",
+    "La fecha de inicio (2026-10-07) está en el futuro, más de 30 día(s) después de hoy (2026-09-02)"
+   ]
+  }
+ ],
+ "parte2_solape": [
+  {
+   "id": "R01",
+   "sha8": "d86ae595",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R02",
+   "sha8": "f858510e",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R03",
+   "sha8": "b68fe146",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R04",
+   "sha8": "38f40c48",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R05",
+   "sha8": "087739e6",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R06",
+   "sha8": "eddf194a",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R07",
+   "sha8": "d6482e2a",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R08",
+   "sha8": "100e7770",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R09",
+   "sha8": "aa3512d4",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R10",
+   "sha8": "e25d5211",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R11",
+   "sha8": "c672e270",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R12",
+   "sha8": "942de664",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R13",
+   "sha8": "b6e8beb6",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R14",
+   "sha8": "691e0af0",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R15",
+   "sha8": "28c4a946",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "id": "R16",
+   "sha8": "272d0d3d",
+   "periodos_multiples": false,
+   "motivo_periodos": null,
+   "authenticity_fechas_dias": false,
+   "motivo_authenticity": null,
+   "codigos_motor": []
+  },
+  {
+   "caso": "duplicado",
+   "authenticity": "Los días declarados (2) no coinciden con el rango de fechas del documento (2026-06-05 a 2026-07-06 = 32 días)",
+   "motor": [
+    "Los tiempos del documento no cuadran: el rango 2026-06-05 → 2026-07-06 son 32 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2026-06-06; desfase de 30 día(s))"
+   ],
+   "offbyone_authenticity": false,
+   "offbyone_motor": [
+    "T01_DURACION_VS_RANGO"
+   ]
+  }
+ ]
+}

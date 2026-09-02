@@ -1,0 +1,4612 @@
+{
+ "generado_por": "validacion/medir-corpus/medir_motor.py",
+ "hoy_fijado": "2026-09-02",
+ "huellas_codigo": {
+  "extract.py": "27f5fc882b4e0c35",
+  "erp.py": "fcd48b542046df80",
+  "reglas_tiempo.py": "eb320f2a51641c50",
+  "validacion_temporal.py": "aa13e158a828ff18",
+  "processor.py": "8dc23242ed611dd6",
+  "numeros_es.py": "8b723afc05c66776"
+ },
+ "config_medida": "config_por_defecto() (defaults del codigo)",
+ "config_del_entorno": {
+  "fuentes": [
+   "codigo"
+  ],
+  "avisos": []
+ },
+ "reglas_en_catalogo": 17,
+ "documentos": [
+  {
+   "id": "F01",
+   "archivo": "FALSA-01.pdf",
+   "etiqueta": "falsa",
+   "sha8": "8b682a83",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "FIRMA_MEDICO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-01.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1513,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-14",
+     "fecha_fin": "2026-07-14",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-14",
+     "fecha_fin_cruda": "2026-07-14",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-14",
+     "fecha_fin_efectiva": "2026-07-14",
+     "dias_efectivo": 1
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-14",
+     "fecha_fin": "2026-07-14",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-14",
+     "fecha_fin_cruda": "2026-07-14",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-14",
+     "fecha_fin_efectiva": "2026-07-14",
+     "dias_efectivo": 1
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-07-14",
+    "fecha_fin": "2026-07-14",
+    "dias": 1,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-07-14",
+    "fin": "2026-07-14",
+    "dias": 1,
+    "span": 1,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-07-14",
+    "dias_leidos": 1,
+    "fechainicio_fila": "2026-07-14",
+    "fechavencimiento_fila": "2026-07-15",
+    "numerodias_fila": 1,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F02",
+   "archivo": "FALSA-02.pdf",
+   "etiqueta": "falsa",
+   "sha8": "5c66d97e",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DX_INEXISTENTE"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-02.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1179,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.154,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-18",
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-18",
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": "2026-05-18",
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-18",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-18",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-18",
+     "fecha_fin_efectiva": "2026-05-18",
+     "dias_efectivo": 1
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-18",
+    "dias": 1,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": "2026-05-18",
+    "dias": 1,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-05-18",
+    "dias_leidos": 1,
+    "fechainicio_fila": "2026-05-18",
+    "fechavencimiento_fila": "2026-05-19",
+    "numerodias_fila": 1,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico R50.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F03",
+   "archivo": "FALSA-03.pdf",
+   "etiqueta": "falsa",
+   "sha8": "28c4a946",
+   "ext": "pdf",
+   "cuarentena": true,
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Reales/REAL-15.pdf)",
+   "gt_senales": [
+    "TIPOGRAFIA_MIXTA"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-03.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1272,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 29,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "29"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 29
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 4,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "4"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 4
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 4,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": 4,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 4,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": 4,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "Posible manipulación del documento: Código CIE-10 N23 incompleto (3 caracteres; se esperan 4)",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "F04",
+   "archivo": "FALSA-04.pdf",
+   "etiqueta": "falsa",
+   "sha8": "e0ee54fd",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "FECHAS_INCOHERENTES"
+   ],
+   "gt_temporal": true,
+   "ocr_json": "FALSA-04.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 994,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 2,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-10 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "F05",
+   "archivo": "FALSA-05.pdf",
+   "etiqueta": "falsa",
+   "sha8": "8aeee4cd",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DIAS_VS_DIAGNOSTICO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-05.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1031,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-11-10",
+     "fecha_fin": "2025-11-11",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-11-10",
+     "fecha_fin_cruda": "2025-11-11",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-11-10",
+     "fecha_fin_efectiva": "2025-11-11",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-11-10",
+     "fecha_fin": "2025-11-11",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-11-10",
+     "fecha_fin_cruda": "2025-11-11",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-11-10",
+     "fecha_fin_efectiva": "2025-11-11",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2025-11-10",
+    "fecha_fin": "2025-11-11",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2025-11-10",
+    "fin": "2025-11-11",
+    "dias": 2,
+    "span": 2,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2025-11-11",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2025-11-10",
+    "fechavencimiento_fila": "2025-11-12",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico Q07.3 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F06",
+   "archivo": "FALSA-06.pdf",
+   "etiqueta": "falsa",
+   "sha8": "9dcb4e35",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-06.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1015,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-09-15",
+     "fecha_fin": "2025-09-16",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-09-15",
+     "fecha_fin_cruda": "2025-09-16",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-09-15",
+     "fecha_fin_efectiva": "2025-09-16",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.615,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-09-15",
+     "fecha_fin": null,
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-09-15",
+     "fecha_fin_cruda": null,
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-09-15",
+     "fecha_fin_efectiva": "2025-09-16",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2025-09-15",
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2025-09-15",
+    "fin": null,
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 2,
+    "fechainicio_fila": "2025-09-15",
+    "fechavencimiento_fila": "2025-09-17",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico N20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F07",
+   "archivo": "FALSA-07.pdf",
+   "etiqueta": "falsa",
+   "sha8": "9603c77b",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-07.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1160,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-04-20",
+     "fecha_fin": "2026-04-20",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-04-20",
+     "fecha_fin_cruda": "2026-04-20",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-04-20",
+     "fecha_fin_efectiva": "2026-04-20",
+     "dias_efectivo": 1
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-04-20",
+     "fecha_fin": "2026-04-20",
+     "dias": 1,
+     "dias_letra": 1,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-04-20",
+     "fecha_fin_cruda": "2026-04-20",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-04-20",
+     "fecha_fin_efectiva": "2026-04-20",
+     "dias_efectivo": 1
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-04-20",
+    "fecha_fin": "2026-04-20",
+    "dias": 1,
+    "dias_letra": 1,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-04-20",
+    "fin": "2026-04-20",
+    "dias": 1,
+    "span": 1,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-04-20",
+    "dias_leidos": 1,
+    "fechainicio_fila": "2026-04-20",
+    "fechavencimiento_fila": "2026-04-21",
+    "numerodias_fila": 1,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F08",
+   "archivo": "FALSA-08.pdf",
+   "etiqueta": "falsa",
+   "sha8": "ed2a4eeb",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "FIRMA_MEDICO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-08.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 899,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-10-31",
+     "fecha_fin": "2025-11-01",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-10-31",
+     "fecha_fin_cruda": "2025-11-01",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-10-31",
+     "fecha_fin_efectiva": "2025-11-01",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2025-10-31",
+     "fecha_fin": "2025-11-01",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2025-10-31",
+     "fecha_fin_cruda": "2025-11-01",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2025-10-31",
+     "fecha_fin_efectiva": "2025-11-01",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2025-10-31",
+    "fecha_fin": "2025-11-01",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2025-10-31",
+    "fin": "2025-11-01",
+    "dias": 2,
+    "span": 2,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2025-11-01",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2025-10-31",
+    "fechavencimiento_fila": "2025-11-02",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico O20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F09",
+   "archivo": "FALSA-09.jpeg",
+   "etiqueta": "falsa",
+   "sha8": "d5b72739",
+   "ext": "jpeg",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DX_INEXISTENTE",
+    "DX_FORMATO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-09.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 821,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-05",
+     "fecha_fin": "2026-06-06",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-05",
+     "fecha_fin_cruda": "2026-06-06",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-05",
+     "fecha_fin_efectiva": "2026-06-06",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "REVISAR",
+    "exige_revision": true,
+    "severidad_max": "GRAVE",
+    "puntaje": 60,
+    "cobertura": 0.923,
+    "codigos": [
+     "T01_DURACION_VS_RANGO"
+    ],
+    "problemas": [
+     "Los tiempos del documento no cuadran: el rango 2026-06-05 → 2026-07-06 son 32 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2026-06-06; desfase de 30 día(s))"
+    ],
+    "avisos": [],
+    "no_cumplen": [
+     "T01_DURACION_VS_RANGO"
+    ],
+    "cumplen": [
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-05",
+     "fecha_fin": "2026-07-06",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-05",
+     "fecha_fin_cruda": "2026-07-06",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": true,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-05",
+     "fecha_fin_efectiva": "2026-06-06",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-05",
+    "fecha_fin": "2026-07-06",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-06-05",
+    "fin": "2026-07-06",
+    "dias": 2,
+    "span": 32,
+    "desfase": 30,
+    "incoherente": true,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": "T01_DURACION_VS_RANGO",
+    "severidad_tiempos": "GRAVE",
+    "fechafin_leida": "2026-07-06",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-06-05",
+    "fechavencimiento_fila": "2026-06-07",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [
+     "T01_DURACION_VS_RANGO"
+    ],
+    "problemas": [
+     "Cédula CED-05 no encontrada en empleados",
+     "Diagnóstico C10.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "Los tiempos del documento no cuadran: el rango 2026-06-05 → 2026-07-06 son 32 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2026-06-06; desfase de 30 día(s))"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F10",
+   "archivo": "FALSA-10.pdf",
+   "etiqueta": "falsa",
+   "sha8": "717d3aad",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DX_INEXISTENTE"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-10.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 933,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-09",
+     "fecha_fin": "2026-06-10",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-09",
+     "fecha_fin_cruda": "2026-06-10",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-10",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-09",
+     "fecha_fin": "2026-06-10",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-09",
+     "fecha_fin_cruda": "2026-06-10",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-10",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-06-09",
+    "fin": "2026-06-10",
+    "dias": 2,
+    "span": 2,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-06-10",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-06-09",
+    "fechavencimiento_fila": "2026-06-11",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-06 no encontrada en empleados",
+     "Diagnóstico IDENTI no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F11",
+   "archivo": "FALSA-11.pdf",
+   "etiqueta": "falsa",
+   "sha8": "d86ae595",
+   "ext": "pdf",
+   "cuarentena": true,
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Reales/REAL-01.pdf)",
+   "gt_senales": [
+    "DX_INEXISTENTE"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-11.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1127,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-14",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-14",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-13",
+     "fecha_fin_efectiva": "2026-05-14",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.462,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-14",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-14",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-13",
+     "fecha_fin_efectiva": "2026-05-14",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-14",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": "2026-05-14",
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-05-14",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-05-13",
+    "fechavencimiento_fila": "2026-05-15",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "Posible manipulación del documento: Código CIE-10 G43 incompleto (3 caracteres; se esperan 4)",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "F12",
+   "archivo": "FALSA-12.pdf",
+   "etiqueta": "falsa",
+   "sha8": "d08cba3f",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-12.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 951,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico H10.2 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "F13",
+   "archivo": "FALSA-13.pdf",
+   "etiqueta": "falsa",
+   "sha8": "99d74f47",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-13.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 948,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico S19.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "F14",
+   "archivo": "FALSA-14.pdf",
+   "etiqueta": "falsa",
+   "sha8": "758d3aff",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-14.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 915,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 2,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico B34.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "F15",
+   "archivo": "FALSA-15.pdf",
+   "etiqueta": "falsa",
+   "sha8": "58c1e091",
+   "ext": "pdf",
+   "cuarentena": true,
+   "motivo_cuarentena": "misma cedula, contenido distinto (pareja: Reales/REAL-15.pdf)",
+   "gt_senales": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "gt_temporal": false,
+   "ocr_json": "FALSA-15.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1231,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico S09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R01",
+   "archivo": "REAL-01.pdf",
+   "etiqueta": "real",
+   "sha8": "d86ae595",
+   "ext": "pdf",
+   "cuarentena": true,
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Falsas/FALSA-11.pdf)",
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-01.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1127,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-14",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-14",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-13",
+     "fecha_fin_efectiva": "2026-05-14",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.462,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-05-14",
+     "dias": 2,
+     "dias_letra": 2,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-05-14",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-13",
+     "fecha_fin_efectiva": "2026-05-14",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-14",
+    "dias": 2,
+    "dias_letra": 2,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": "2026-05-14",
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-05-14",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-05-13",
+    "fechavencimiento_fila": "2026-05-15",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "Posible manipulación del documento: Código CIE-10 G43 incompleto (3 caracteres; se esperan 4)",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R02",
+   "archivo": "REAL-02.pdf",
+   "etiqueta": "real",
+   "sha8": "f858510e",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-02.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1287,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-10",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": "2026-06-10",
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-10",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-10",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-10",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": "2026-06-10",
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-10",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-10",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": "2026-06-10"
+   },
+   "B_referencia": {
+    "inicio": "2026-06-10",
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": "2026-06-10",
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-02 no encontrada en empleados",
+     "Diagnóstico B04.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R03",
+   "archivo": "REAL-03.pdf",
+   "etiqueta": "real",
+   "sha8": "b68fe146",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-03.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1450,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-10",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": "2026-06-10",
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-10",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-10",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-10",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": "2026-06-10",
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-10",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-10",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": "2026-06-10"
+   },
+   "B_referencia": {
+    "inicio": "2026-06-10",
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": "2026-06-10",
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-03 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R04",
+   "archivo": "REAL-04.pdf",
+   "etiqueta": "real",
+   "sha8": "38f40c48",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-04.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 964,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-12",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-12",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-12",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-12",
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-12",
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-12",
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-07-12",
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": "2026-07-12",
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-24 no encontrada en empleados",
+     "Diagnóstico S80.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R05",
+   "archivo": "REAL-05.pdf",
+   "etiqueta": "real",
+   "sha8": "087739e6",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-05.json",
+   "tipo_documento": "permiso",
+   "chars_ocr": 1022,
+   "A_almacenado": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "No se detectó la cédula del paciente",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R06",
+   "archivo": "REAL-06.pdf",
+   "etiqueta": "real",
+   "sha8": "eddf194a",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-06.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1486,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-09",
+     "fecha_fin": "2026-06-10",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-09",
+     "fecha_fin_cruda": "2026-06-10",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-10",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-09",
+     "fecha_fin": "2026-06-10",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-09",
+     "fecha_fin_cruda": "2026-06-10",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-10",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-06-09",
+    "fin": "2026-06-10",
+    "dias": 2,
+    "span": 2,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-06-10",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-06-09",
+    "fechavencimiento_fila": "2026-06-11",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-11 no encontrada en empleados",
+     "Diagnóstico M93.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R07",
+   "archivo": "REAL-07.pdf",
+   "etiqueta": "real",
+   "sha8": "d6482e2a",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-07.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1218,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-10",
+     "fecha_fin": "2026-07-23",
+     "dias": 14,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-10",
+     "fecha_fin_cruda": "2026-07-23",
+     "dias_crudo": "14"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-10",
+     "fecha_fin_efectiva": "2026-07-23",
+     "dias_efectivo": 14
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-10",
+     "fecha_fin": "2026-07-23",
+     "dias": 14,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-10",
+     "fecha_fin_cruda": "2026-07-23",
+     "dias_crudo": "14"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-10",
+     "fecha_fin_efectiva": "2026-07-23",
+     "dias_efectivo": 14
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-07-10",
+    "fin": "2026-07-23",
+    "dias": 14,
+    "span": 14,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-07-23",
+    "dias_leidos": 14,
+    "fechainicio_fila": "2026-07-10",
+    "fechavencimiento_fila": "2026-07-24",
+    "numerodias_fila": 14,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-23 no encontrada en empleados",
+     "Diagnóstico 0039 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R08",
+   "archivo": "REAL-08.pdf",
+   "etiqueta": "real",
+   "sha8": "100e7770",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-08.json",
+   "tipo_documento": "permiso",
+   "chars_ocr": 1113,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-06",
+     "fecha_fin": "2026-06-06",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-06",
+     "fecha_fin_cruda": "2026-06-06",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-06",
+     "fecha_fin_efectiva": "2026-06-06",
+     "dias_efectivo": 1
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-06",
+     "fecha_fin": "2026-06-06",
+     "dias": 1,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-06",
+     "fecha_fin_cruda": "2026-06-06",
+     "dias_crudo": "1"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-06",
+     "fecha_fin_efectiva": "2026-06-06",
+     "dias_efectivo": 1
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-06",
+    "fecha_fin": "2026-06-06",
+    "dias": 1,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-06-06",
+    "fin": "2026-06-06",
+    "dias": 1,
+    "span": 1,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-06-06",
+    "dias_leidos": 1,
+    "fechainicio_fila": "2026-06-06",
+    "fechavencimiento_fila": "2026-06-07",
+    "numerodias_fila": 1,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "Cédula CED-13 no encontrada en empleados"
+    ],
+    "n_problemas": 2,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R09",
+   "archivo": "REAL-09.pdf",
+   "etiqueta": "real",
+   "sha8": "aa3512d4",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-09.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1179,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-07",
+     "fecha_fin": "2026-10-10",
+     "dias": 126,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-07",
+     "fecha_fin_cruda": "2026-10-10",
+     "dias_crudo": "126"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-07",
+     "fecha_fin_efectiva": "2026-10-10",
+     "dias_efectivo": 126
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-06-07",
+     "fecha_fin": "2026-10-10",
+     "dias": 126,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-06-07",
+     "fecha_fin_cruda": "2026-10-10",
+     "dias_crudo": "126"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-07",
+     "fecha_fin_efectiva": "2026-10-10",
+     "dias_efectivo": 126
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-06-07",
+    "fecha_fin": "2026-10-10",
+    "dias": 126,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-06-07",
+    "fin": "2026-10-10",
+    "dias": 126,
+    "span": 126,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-10-10",
+    "dias_leidos": 126,
+    "fechainicio_fila": "2026-06-07",
+    "fechavencimiento_fila": "2026-10-11",
+    "numerodias_fila": 126,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-15 no encontrada en empleados",
+     "Diagnóstico O82.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R10",
+   "archivo": "REAL-10.pdf",
+   "etiqueta": "real",
+   "sha8": "e25d5211",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-10.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 3152,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": 2,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 2,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico J33.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "n_problemas": 4,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R11",
+   "archivo": "REAL-11.pdf",
+   "etiqueta": "real",
+   "sha8": "c672e270",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-11.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1326,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-18",
+     "fecha_fin": "2026-07-19",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-18",
+     "fecha_fin_cruda": "2026-07-19",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-18",
+     "fecha_fin_efectiva": "2026-07-19",
+     "dias_efectivo": 2
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-07-18",
+     "fecha_fin": "2026-07-19",
+     "dias": 2,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-07-18",
+     "fecha_fin_cruda": "2026-07-19",
+     "dias_crudo": "2"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-07-18",
+     "fecha_fin_efectiva": "2026-07-19",
+     "dias_efectivo": 2
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-07-18",
+    "fecha_fin": "2026-07-19",
+    "dias": 2,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-07-18",
+    "fin": "2026-07-19",
+    "dias": 2,
+    "span": 2,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-07-19",
+    "dias_leidos": 2,
+    "fechainicio_fila": "2026-07-18",
+    "fechavencimiento_fila": "2026-07-20",
+    "numerodias_fila": 2,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R12",
+   "archivo": "REAL-12.jpeg",
+   "etiqueta": "real",
+   "sha8": "942de664",
+   "ext": "jpeg",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-12.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 801,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-05-25",
+     "fecha_fin": "2026-05-27",
+     "dias": 3,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-05-25",
+     "fecha_fin_cruda": "2026-05-27",
+     "dias_crudo": "3"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-25",
+     "fecha_fin_efectiva": "2026-05-27",
+     "dias_efectivo": 3
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-05-25",
+     "fecha_fin": "2026-05-27",
+     "dias": 3,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-05-25",
+     "fecha_fin_cruda": "2026-05-27",
+     "dias_crudo": "3"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-25",
+     "fecha_fin_efectiva": "2026-05-27",
+     "dias_efectivo": 3
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-05-25",
+    "fecha_fin": "2026-05-27",
+    "dias": 3,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-05-25",
+    "fin": "2026-05-27",
+    "dias": 3,
+    "span": 3,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-05-27",
+    "dias_leidos": 3,
+    "fechainicio_fila": "2026-05-25",
+    "fechavencimiento_fila": "2026-05-28",
+    "numerodias_fila": 3,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-16 no encontrada en empleados",
+     "Diagnóstico R07.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R13",
+   "archivo": "REAL-13.pdf",
+   "etiqueta": "real",
+   "sha8": "b6e8beb6",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-13.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 864,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-05-24",
+     "fecha_fin": "2026-06-22",
+     "dias": 30,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-05-24",
+     "fecha_fin_cruda": "2026-06-22",
+     "dias_crudo": "30"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-24",
+     "fecha_fin_efectiva": "2026-06-22",
+     "dias_efectivo": 30
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T01_DURACION_VS_RANGO",
+     "T02_FIN_ANTES_DE_INICIO",
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T04_RANGO_MAYOR_AL_MAXIMO",
+     "T05_DIAS_NO_NUMERICO",
+     "T06_FECHA_INICIO_ILEGIBLE",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T09_INICIO_EN_FUTURO",
+     "T10_INICIO_MUY_ANTIGUO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA",
+     "T12_DIAS_LETRA_DISCREPA"
+    ],
+    "no_evaluables": {
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado"
+    },
+    "leido": {
+     "fecha_inicio": "2026-05-24",
+     "fecha_fin": "2026-06-22",
+     "dias": 30,
+     "dias_letra": 30,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": "2026-05-24",
+     "fecha_fin_cruda": "2026-06-22",
+     "dias_crudo": "30"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-05-24",
+     "fecha_fin_efectiva": "2026-06-22",
+     "dias_efectivo": 30
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": "2026-05-24",
+    "fecha_fin": "2026-06-22",
+    "dias": 30,
+    "dias_letra": 30,
+    "dias_letra_coincide": true,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": "2026-05-24",
+    "fin": "2026-06-22",
+    "dias": 30,
+    "span": 30,
+    "desfase": 0,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": true
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-06-22",
+    "dias_leidos": 30,
+    "fechainicio_fila": "2026-05-24",
+    "fechavencimiento_fila": "2026-06-23",
+    "numerodias_fila": 30,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-07 no encontrada en empleados",
+     "Diagnóstico S52.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R14",
+   "archivo": "REAL-14.pdf",
+   "etiqueta": "real",
+   "sha8": "691e0af0",
+   "ext": "pdf",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-14.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1244,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-06-11",
+     "dias": 3,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-06-11",
+     "dias_crudo": "3"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-11",
+     "dias_efectivo": 3
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T07_FECHA_FIN_ILEGIBLE",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": "2026-06-11",
+     "dias": 3,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": "2026-06-11",
+     "dias_crudo": "3"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": true,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": "2026-06-09",
+     "fecha_fin_efectiva": "2026-06-11",
+     "dias_efectivo": 3
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-06-11",
+    "dias": 3,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": "2026-06-11",
+    "dias": 3,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": "2026-06-11",
+    "dias_leidos": 3,
+    "fechainicio_fila": "2026-06-09",
+    "fechavencimiento_fila": "2026-06-12",
+    "numerodias_fila": 3,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-20 no encontrada en empleados",
+     "Diagnóstico S83.6 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "n_problemas": 3,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": true
+   }
+  },
+  {
+   "id": "R15",
+   "archivo": "REAL-15.pdf",
+   "etiqueta": "real",
+   "sha8": "28c4a946",
+   "ext": "pdf",
+   "cuarentena": true,
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Falsas/FALSA-03.pdf); ademas misma cedula que Falsas/FALSA-15.pdf con contenido distinto",
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-15.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 1272,
+   "A_almacenado": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 29,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "29"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 29
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "COHERENTE",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T08_DURACION_SIN_RESPALDO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 4,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "4"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 4
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 4,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": 4,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": 4,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": 4,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "Posible manipulación del documento: Código CIE-10 N23 incompleto (3 caracteres; se esperan 4)",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  },
+  {
+   "id": "R16",
+   "archivo": "REAL-16.jpeg",
+   "etiqueta": "real",
+   "sha8": "272d0d3d",
+   "ext": "jpeg",
+   "cuarentena": false,
+   "motivo_cuarentena": null,
+   "gt_senales": [],
+   "gt_temporal": false,
+   "ocr_json": "REAL-16.json",
+   "tipo_documento": "incapacidad",
+   "chars_ocr": 889,
+   "A_almacenado": {
+    "veredicto": "REVISAR",
+    "exige_revision": true,
+    "severidad_max": "MEDIA",
+    "puntaje": 80,
+    "cobertura": 0.308,
+    "codigos": [
+     "T08_DURACION_SIN_RESPALDO"
+    ],
+    "problemas": [
+     "Duración larga (202 días) sin fecha fin en el documento con la que cruzarla: confirmar contra el papel (umbral de aviso: 180 días)"
+    ],
+    "avisos": [],
+    "no_cumplen": [
+     "T08_DURACION_SIN_RESPALDO"
+    ],
+    "cumplen": [
+     "T03_DIAS_FUERA_DE_RANGO",
+     "T05_DIAS_NO_NUMERICO",
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": 202,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": "202"
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": 202
+    }
+   },
+   "B_pipeline": {
+    "veredicto": "SIN_DATOS",
+    "exige_revision": false,
+    "severidad_max": null,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "codigos": [],
+    "problemas": [],
+    "avisos": [],
+    "no_cumplen": [],
+    "cumplen": [
+     "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+    ],
+    "no_evaluables": {
+     "T01_DURACION_VS_RANGO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+     "T02_FIN_ANTES_DE_INICIO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T03_DIAS_FUERA_DE_RANGO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T04_RANGO_MAYOR_AL_MAXIMO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "T05_DIAS_NO_NUMERICO": "no se pudo comprobar: falta algún valor de días en el documento",
+     "T06_FECHA_INICIO_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento",
+     "T07_FECHA_FIN_ILEGIBLE": "no se pudo comprobar: falta algún valor de fecha fin en el documento",
+     "T08_DURACION_SIN_RESPALDO": "no se pudo comprobar: falta el número de días impreso en el documento",
+     "T09_INICIO_EN_FUTURO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T10_INICIO_MUY_ANTIGUO": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+     "T12_DIAS_LETRA_DISCREPA": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras",
+     "T14_EXPEDICION_POSTERIOR_AL_INICIO": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+    },
+    "leido": {
+     "fecha_inicio": null,
+     "fecha_fin": null,
+     "dias": null,
+     "dias_letra": null,
+     "fecha_expedicion": null,
+     "prorroga_declarada": null,
+     "fecha_inicio_cruda": null,
+     "fecha_fin_cruda": null,
+     "dias_crudo": null
+    },
+    "derivado": {
+     "fecha_inicio_calculada": false,
+     "fecha_fin_recalculada": false,
+     "fin_original_no_conservado": false,
+     "fecha_inicio_efectiva": null,
+     "fecha_fin_efectiva": null,
+     "dias_efectivo": null
+    }
+   },
+   "B_crudo_extractor": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null,
+    "dias_letra_coincide": null,
+    "fecha_expedicion": null
+   },
+   "B_referencia": {
+    "inicio": null,
+    "fin": null,
+    "dias": null,
+    "span": null,
+    "desfase": null,
+    "incoherente": false,
+    "invertido": false,
+    "dias_fuera_rango": false,
+    "tripleta_completa": false
+   },
+   "C_staging": {
+    "requiere_revision": true,
+    "alertas_tiempos": null,
+    "severidad_tiempos": null,
+    "fechafin_leida": null,
+    "dias_leidos": null,
+    "fechainicio_fila": null,
+    "fechavencimiento_fila": null,
+    "numerodias_fila": null,
+    "hallazgos_tiempos": [],
+    "problemas": [
+     "Cédula CED-14 no encontrada en empleados",
+     "Diagnóstico FECHA no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "n_problemas": 5,
+    "avisos_tiempos": [],
+    "vencimiento_coherente": null
+   }
+  }
+ ]
+}

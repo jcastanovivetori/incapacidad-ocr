@@ -1,0 +1,2092 @@
+[
+ {
+  "id": "R01",
+  "sha8": "d86ae595",
+  "archivo": "REAL-01.pdf",
+  "cuarentena": true,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-05-16",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.462,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.462,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": "2026-05-14",
+   "dias_crudo": 2,
+   "dias_letra": 2
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-05-13",
+   "fecha_fin": "2026-05-14",
+   "dias": 2,
+   "fecha_inicio_calculada": true,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 2
+ },
+ {
+  "id": "R02",
+  "sha8": "f858510e",
+  "archivo": "REAL-02.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-13",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-06-10",
+   "fin_crudo": null,
+   "dias_crudo": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": null
+ },
+ {
+  "id": "R03",
+  "sha8": "b68fe146",
+  "archivo": "REAL-03.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-13",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-06-10",
+   "fin_crudo": null,
+   "dias_crudo": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": null
+ },
+ {
+  "id": "R04",
+  "sha8": "38f40c48",
+  "archivo": "REAL-04.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-07-15",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-07-12",
+   "fin_crudo": null,
+   "dias_crudo": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-07-12",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": null
+ },
+ {
+  "id": "R05",
+  "sha8": "087739e6",
+  "archivo": "REAL-05.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-09-02",
+    "veredicto": "SIN_DATOS",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "SIN_DATOS",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": null,
+   "dias_crudo": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": null
+ },
+ {
+  "id": "R06",
+  "sha8": "eddf194a",
+  "archivo": "REAL-06.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-12",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-06-09",
+   "fin_crudo": "2026-06-10",
+   "dias_crudo": 2,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 2
+ },
+ {
+  "id": "R07",
+  "sha8": "d6482e2a",
+  "archivo": "REAL-07.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-07-13",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-07-10",
+   "fin_crudo": "2026-07-23",
+   "dias_crudo": 14,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-07-10",
+   "fecha_fin": "2026-07-23",
+   "dias": 14,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 14
+ },
+ {
+  "id": "R08",
+  "sha8": "100e7770",
+  "archivo": "REAL-08.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-09",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-06-06",
+   "fin_crudo": "2026-06-06",
+   "dias_crudo": 1,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-06",
+   "fecha_fin": "2026-06-06",
+   "dias": 1,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 1
+ },
+ {
+  "id": "R09",
+  "sha8": "aa3512d4",
+  "archivo": "REAL-09.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-10",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-06-07",
+   "fin_crudo": "2026-10-10",
+   "dias_crudo": 126,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-07",
+   "fecha_fin": "2026-10-10",
+   "dias": 126,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 126
+ },
+ {
+  "id": "R10",
+  "sha8": "e25d5211",
+  "archivo": "REAL-10.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": null,
+   "dias_crudo": 2,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 2,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 2
+ },
+ {
+  "id": "R11",
+  "sha8": "c672e270",
+  "archivo": "REAL-11.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-07-21",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-07-18",
+   "fin_crudo": "2026-07-19",
+   "dias_crudo": 2,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-07-18",
+   "fecha_fin": "2026-07-19",
+   "dias": 2,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 2
+ },
+ {
+  "id": "R12",
+  "sha8": "942de664",
+  "archivo": "REAL-12.jpeg",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-05-28",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.846,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-05-25",
+   "fin_crudo": "2026-05-27",
+   "dias_crudo": 3,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-05-25",
+   "fecha_fin": "2026-05-27",
+   "dias": 3,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 3
+ },
+ {
+  "id": "R13",
+  "sha8": "b6e8beb6",
+  "archivo": "REAL-13.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-05-27",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.923,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": "2026-05-24",
+   "fin_crudo": "2026-06-22",
+   "dias_crudo": 30,
+   "dias_letra": 30
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-05-24",
+   "fecha_fin": "2026-06-22",
+   "dias": 30,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 30
+ },
+ {
+  "id": "R14",
+  "sha8": "691e0af0",
+  "archivo": "REAL-14.pdf",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-06-12",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.385,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": "2026-06-11",
+   "dias_crudo": 3,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-11",
+   "dias": 3,
+   "fecha_inicio_calculada": true,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 3
+ },
+ {
+  "id": "R15",
+  "sha8": "28c4a946",
+  "archivo": "REAL-15.pdf",
+  "cuarentena": true,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "COHERENTE",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.308,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": null,
+   "dias_crudo": 4,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 4,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 29
+ },
+ {
+  "id": "R16",
+  "sha8": "272d0d3d",
+  "archivo": "REAL-16.jpeg",
+  "cuarentena": false,
+  "escenarios": {
+   "radicacion": {
+    "hoy": "2026-09-02",
+    "veredicto": "SIN_DATOS",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   },
+   "corte_corpus": {
+    "hoy": "2026-09-02",
+    "veredicto": "SIN_DATOS",
+    "severidad_max": null,
+    "exige_revision": false,
+    "puntaje": 100,
+    "cobertura": 0.077,
+    "hallazgos": [],
+    "no_evaluables": [
+     {
+      "codigo": "T01_DURACION_VS_RANGO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido",
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T02_FIN_ANTES_DE_INICIO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T03_DIAS_FUERA_DE_RANGO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T04_RANGO_MAYOR_AL_MAXIMO",
+      "faltan": [
+       "inicio_leido",
+       "fin_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento"
+     },
+     {
+      "codigo": "T05_DIAS_NO_NUMERICO",
+      "faltan": [
+       "dias_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de días en el documento"
+     },
+     {
+      "codigo": "T06_FECHA_INICIO_ILEGIBLE",
+      "faltan": [
+       "inicio_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha de inicio en el documento"
+     },
+     {
+      "codigo": "T07_FECHA_FIN_ILEGIBLE",
+      "faltan": [
+       "fin_crudo"
+      ],
+      "motivo": "no se pudo comprobar: falta algún valor de fecha fin en el documento"
+     },
+     {
+      "codigo": "T08_DURACION_SIN_RESPALDO",
+      "faltan": [
+       "dias_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento"
+     },
+     {
+      "codigo": "T09_INICIO_EN_FUTURO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T10_INICIO_MUY_ANTIGUO",
+      "faltan": [
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento"
+     },
+     {
+      "codigo": "T12_DIAS_LETRA_DISCREPA",
+      "faltan": [
+       "dias_leido",
+       "dias_letra"
+      ],
+      "motivo": "no se pudo comprobar: falta el número de días impreso en el documento, la duración escrita en letras"
+     },
+     {
+      "codigo": "T14_EXPEDICION_POSTERIOR_AL_INICIO",
+      "faltan": [
+       "expedicion_leida",
+       "inicio_leido"
+      ],
+      "motivo": "no se pudo comprobar: falta la fecha de expedición del certificado, la fecha de inicio impresa en el documento"
+     }
+    ]
+   }
+  },
+  "leido": {
+   "inicio_crudo": null,
+   "fin_crudo": null,
+   "dias_crudo": null,
+   "dias_letra": null
+  },
+  "efectivo": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false,
+   "fecha_fin_recalculada": false
+  },
+  "dataset_dias": 202
+ }
+]

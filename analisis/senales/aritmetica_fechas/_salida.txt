@@ -1,0 +1,93 @@
+AUTOPRUEBA con casos sinteticos (sin PII):
+  [OK ] coherente inclusivo
+        esperado=[] obtenido=[] impreso=2026-06-10/2026-06-12/3 
+  [OK ] off-by-one (emisor con convencion NO inclusiva)
+        esperado=['AF01_TRIPLE_IMPRESA_INCOHERENTE'] obtenido=['AF01_TRIPLE_IMPRESA_INCOHERENTE'] impreso=2026-06-10/2026-06-12/2 
+  [OK ] desfase grueso (mes alterado)
+        esperado=['AF01_TRIPLE_IMPRESA_INCOHERENTE'] obtenido=['AF01_TRIPLE_IMPRESA_INCOHERENTE'] impreso=2026-06-05/2026-07-06/2 
+  [OK ] solo fin+dias -> el pipeline CALCULA el inicio: NO es evidencia
+        esperado=[] obtenido=[] impreso=None/2026-06-12/3 falta_impreso:inicio
+  [OK ] rango invertido
+        esperado=['AF01_TRIPLE_IMPRESA_INCOHERENTE', 'AF02_RANGO_INVERTIDO'] obtenido=['AF01_TRIPLE_IMPRESA_INCOHERENTE', 'AF02_RANGO_INVERTIDO'] impreso=2026-06-12/2026-06-10/3 
+  [OK ] dias fuera de 1..540
+        esperado=['AF03_DIAS_FUERA_DE_RANGO'] obtenido=['AF03_DIAS_FUERA_DE_RANGO'] impreso=2026-06-10/None/None falta_impreso:fin+dias
+  [OK ] dia de la semana que no cuadra (formato escrito)
+        esperado=['AF04_DIA_SEMANA_INCONSISTENTE'] obtenido=['AF04_DIA_SEMANA_INCONSISTENTE'] impreso=None/None/3 falta_impreso:inicio+fin
+  [OK ] fecha fuera de calendario
+        esperado=['AF05_FECHA_FUERA_DE_CALENDARIO'] obtenido=['AF05_FECHA_FUERA_DE_CALENDARIO'] impreso=None/2026-03-05/3 falta_impreso:inicio
+  [OK ] dos lecturas de dias que se contradicen -> no se juzga
+        esperado=[] obtenido=[] impreso=2026-06-10/2026-06-12/None falta_impreso:dias
+  -> 9/9 casos sinteticos correctos
+
+======================================================================================================================
+SONDA aritmetica_fechas — una linea por documento (la tripleta se relee del texto, NO del JSON normalizado)
+======================================================================================================================
+F01 8b682a83 FALSA               COHERENTE   checks=-          impreso[inicio=2026-07-14 fin=2026-07-14 dias=1] fuentes[etiqueta_inicio/etiqueta_fin/dias+digitos]
+F02 5c66d97e FALSA               COHERENTE   checks=-          impreso[inicio=2026-05-18 fin=2026-05-18 dias=1] fuentes[prosa_desde/prosa_hasta/prosa_por_n_dias]
+F03 28c4a946 FALSA [CUARENTENA]  SOSPECHOSO  checks=AF01,AF06  impreso[inicio=2026-07-29 fin=2029-07-01 dias=4] fuentes[prosa_desde/prosa_hasta/prosa_por_n_dias]
+      -> AF01_TRIPLE_IMPRESA_INCOHERENTE nivel=ALTA desfase_dias=1065 esperado_fin_inclusivo=2026-08-01 clase=grueso confirmable_sin_ocr=None
+      -> AF06_ANIO_ATIPICO nivel=MEDIA anio_modal=2026 n_patas=1
+F04 e0ee54fd FALSA               SOSPECHOSO  checks=AF01       impreso[inicio=2025-09-02 fin=2025-09-04 dias=2] fuentes[escrita_sura/escrita_sura/duracion+palabra_antes]
+      -> AF01_TRIPLE_IMPRESA_INCOHERENTE nivel=ALTA desfase_dias=1 esperado_fin_inclusivo=2025-09-03 clase=off_by_one confirmable_sin_ocr=True
+F05 8aeee4cd FALSA               COHERENTE   checks=-          impreso[inicio=2025-11-10 fin=2025-11-11 dias=2] fuentes[etiqueta_inicio/etiqueta_fin/dias+digitos,prosa_por_n_dias]
+F06 9dcb4e35 FALSA               NO_APLICA   checks=-          impreso[inicio=2025-09-15 fin=None dias=2] fuentes[etiqueta_inicio/None/dias+digitos,prosa_por_n_dias] falta_impreso:fin
+F07 9603c77b FALSA               COHERENTE   checks=-          impreso[inicio=2026-04-20 fin=2026-04-20 dias=1] fuentes[etiqueta_inicio/etiqueta_fin/dias+digitos,prosa_por_n_dias]
+F08 ed2a4eeb FALSA               COHERENTE   checks=-          impreso[inicio=2025-10-31 fin=2025-11-01 dias=2] fuentes[etiqueta_inicio/etiqueta_fin/dias+digitos]
+F09 d5b72739 FALSA               SOSPECHOSO  checks=AF01       impreso[inicio=2026-06-05 fin=2026-07-06 dias=2] fuentes[prosa_desde/prosa_hasta/dias+digitos]
+      -> AF01_TRIPLE_IMPRESA_INCOHERENTE nivel=ALTA desfase_dias=30 esperado_fin_inclusivo=2026-06-06 clase=grueso confirmable_sin_ocr=False
+F10 717d3aad FALSA               COHERENTE   checks=-          impreso[inicio=2026-06-09 fin=2026-06-10 dias=2] fuentes[prosa_desde/prosa_hasta/dias+digitos]
+F11 d86ae595 FALSA [CUARENTENA]  NO_APLICA   checks=-          impreso[inicio=None fin=2026-05-14 dias=2] fuentes[None/etiqueta_fin/dias+digitos] falta_impreso:inicio
+F12 d08cba3f FALSA               NO_APLICA   checks=-          impreso[inicio=None fin=None dias=None] fuentes[None/None/None] falta_impreso:inicio+fin+dias
+F13 99d74f47 FALSA               NO_APLICA   checks=-          impreso[inicio=None fin=None dias=None] fuentes[None/None/None] falta_impreso:inicio+fin+dias
+F14 758d3aff FALSA               NO_APLICA   checks=-          impreso[inicio=None fin=None dias=None] fuentes[None/None/None] falta_impreso:inicio+fin+dias
+F15 58c1e091 FALSA [CUARENTENA]  NO_APLICA   checks=-          impreso[inicio=None fin=None dias=None] fuentes[None/None/None] falta_impreso:inicio+fin+dias
+R01 d86ae595 REAL  [CUARENTENA]  NO_APLICA   checks=-          impreso[inicio=None fin=2026-05-14 dias=2] fuentes[None/etiqueta_fin/dias+digitos] falta_impreso:inicio
+R02 f858510e REAL                NO_APLICA   checks=-          impreso[inicio=2026-06-10 fin=None dias=None] fuentes[etiqueta_inicio/None/None] falta_impreso:fin+dias
+R03 b68fe146 REAL                NO_APLICA   checks=-          impreso[inicio=2026-06-10 fin=None dias=None] fuentes[etiqueta_inicio/None/None] falta_impreso:fin+dias
+R04 38f40c48 REAL                NO_APLICA   checks=-          impreso[inicio=2026-07-12 fin=None dias=None] fuentes[etiqueta_inicio/None/None] falta_impreso:fin+dias
+R05 087739e6 REAL                NO_APLICA   checks=-          impreso[inicio=None fin=None dias=None] fuentes[None/None/None] falta_impreso:inicio+fin+dias
+R06 eddf194a REAL                NO_APLICA   checks=-          impreso[inicio=2026-06-09 fin=2026-06-10 dias=None] fuentes[etiqueta_inicio/etiqueta_fin/None] falta_impreso:dias
+R07 d6482e2a REAL                COHERENTE   checks=-          impreso[inicio=2026-07-10 fin=2026-07-23 dias=14] fuentes[escrita_sura/escrita_sura/duracion+palabra_despues]
+R08 100e7770 REAL                NO_APLICA   checks=-          impreso[inicio=None fin=2026-06-06 dias=None] fuentes[None/prosa_hasta/None] falta_impreso:inicio+dias
+R09 aa3512d4 REAL                COHERENTE   checks=-          impreso[inicio=2026-06-07 fin=2026-10-10 dias=126] fuentes[emision_como_inicio/etiqueta_fin/duracion+digitos]
+R10 e25d5211 REAL                NO_APLICA   checks=-          impreso[inicio=None fin=None dias=2] fuentes[None/None/dias+digitos] falta_impreso:inicio+fin
+R11 c672e270 REAL                COHERENTE   checks=-          impreso[inicio=2026-07-18 fin=2026-07-19 dias=2] fuentes[etiqueta_inicio/etiqueta_fin/dias+digitos]
+R12 942de664 REAL                NO_APLICA   checks=-          impreso[inicio=2026-05-25 fin=2026-05-27 dias=None] fuentes[etiqueta_inicio/etiqueta_fin/None] falta_impreso:dias
+R13 b6e8beb6 REAL                COHERENTE   checks=-          impreso[inicio=2026-05-24 fin=2026-06-22 dias=30] fuentes[prosa_desde/prosa_hasta/dias+digitos]
+R14 691e0af0 REAL                NO_APLICA   checks=-          impreso[inicio=None fin=2026-06-11 dias=3] fuentes[None/etiqueta_fin/dias+digitos] falta_impreso:inicio
+R15 28c4a946 REAL  [CUARENTENA]  SOSPECHOSO  checks=AF01,AF06  impreso[inicio=2026-07-29 fin=2029-07-01 dias=4] fuentes[prosa_desde/prosa_hasta/prosa_por_n_dias]
+      -> AF01_TRIPLE_IMPRESA_INCOHERENTE nivel=ALTA desfase_dias=1065 esperado_fin_inclusivo=2026-08-01 clase=grueso confirmable_sin_ocr=None
+      -> AF06_ANIO_ATIPICO nivel=MEDIA anio_modal=2026 n_patas=1
+R16 272d0d3d REAL                NO_APLICA   checks=-          impreso[inicio=2026-06-09 fin=2026-06-09 dias=None] fuentes[escrita_sura/escrita_sura/None] falta_impreso:dias
+
+======================================================================================================================
+MEDICION (los documentos en CUARENTENA quedan FUERA de estos conteos)
+======================================================================================================================
+corpus total                 : 31 documentos (15 falsas / 16 reales)
+en cuarentena (excluidos)    : 5 -> ['F03', 'F11', 'F15', 'R01', 'R15']
+FALSAS detectadas            : 2/12  -> ['F04', 'F09']
+REALES marcadas (falsos pos.): 0/14  -> []
+tripleta impresa COMPLETA    : falsas 8/12 · reales 4/14   (el resto = NO_APLICA por diseño)
+cuarentena que SI dispara    : ['F03', 'R15']
+   AF01_TRIPLE_IMPRESA_INCOHERENTE    falsas=2  reales=0  (total corpus evaluable=2)
+   AF02_RANGO_INVERTIDO               falsas=0  reales=0  (total corpus evaluable=0)
+   AF03_DIAS_FUERA_DE_RANGO           falsas=0  reales=0  (total corpus evaluable=0)
+   AF04_DIA_SEMANA_INCONSISTENTE      falsas=0  reales=0  (total corpus evaluable=0)
+   AF05_FECHA_FUERA_DE_CALENDARIO     falsas=0  reales=0  (total corpus evaluable=0)
+   AF06_ANIO_ATIPICO                  falsas=0  reales=0  (total corpus evaluable=0)
+
+desfase (span_impreso - dias_impreso) por documento con tripleta completa:
+   F01 FALSA span=1     dias=1    desfase=0
+   F02 FALSA span=1     dias=1    desfase=0
+   F04 FALSA span=3     dias=2    desfase=1
+   F05 FALSA span=2     dias=2    desfase=0
+   F07 FALSA span=1     dias=1    desfase=0
+   F08 FALSA span=2     dias=2    desfase=0
+   F09 FALSA span=32    dias=2    desfase=30
+   F10 FALSA span=2     dias=2    desfase=0
+   R07 REAL  span=14    dias=14   desfase=0
+   R09 REAL  span=126   dias=126  desfase=0
+   R11 REAL  span=2     dias=2    desfase=0
+   R13 REAL  span=30    dias=30   desfase=0
+
+detalle completo (con nombres de archivo) -> <dataset-falsedad>\senales\aritmetica_fechas\resultados.json

@@ -1,0 +1,226 @@
+{
+ "A_alcance": [
+  {
+   "sonda": "fecha_imposible",
+   "foto": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 3,
+    "dias_letra": null
+   },
+   "codigos": []
+  },
+  {
+   "sonda": "dias_0",
+   "foto": {
+    "fecha_inicio": "2026-08-20",
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null
+   },
+   "codigos": []
+  },
+  {
+   "sonda": "dias_900",
+   "foto": {
+    "fecha_inicio": "2026-08-20",
+    "fecha_fin": null,
+    "dias": null,
+    "dias_letra": null
+   },
+   "codigos": []
+  },
+  {
+   "sonda": "dias_palabra_rara",
+   "foto": {
+    "fecha_inicio": "2026-08-20",
+    "fecha_fin": null,
+    "dias": 258,
+    "dias_letra": 258
+   },
+   "codigos": [
+    "T08_DURACION_SIN_RESPALDO"
+   ]
+  }
+ ],
+ "B_overrides": [
+  {
+   "caso": "B1 corrige SOLO fecha_fin (los dias venian derivados del fin viejo)",
+   "overrides": {
+    "fecha_fin": "2026-08-22"
+   },
+   "alertas": "T01_DURACION_VS_RANGO",
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento",
+    "Los tiempos del documento no cuadran: el rango 2026-08-20 → 2026-08-22 son 3 día(s), pero declara 9 día(s) (con esos días la fecha fin sería 2026-08-28; desfase de -6 día(s))"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-29",
+    "Numerodias": 9,
+    "fechafin_leida": "2026-08-22",
+    "dias_leidos": 9
+   }
+  },
+  {
+   "caso": "B2 teclea dias=0",
+   "overrides": {
+    "dias": 0
+   },
+   "alertas": "T03_DIAS_FUERA_DE_RANGO",
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento",
+    "El número de días leído (=0) está fuera del rango válido 1..540"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-23",
+    "Numerodias": 3,
+    "fechafin_leida": "2026-08-22",
+    "dias_leidos": 0
+   }
+  },
+  {
+   "caso": "B3 teclea dias='dos'",
+   "overrides": {
+    "dias": "dos"
+   },
+   "alertas": "T05_DIAS_NO_NUMERICO",
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento",
+    "El número de días leído no es un entero utilizable (=dos)"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-23",
+    "Numerodias": 3,
+    "fechafin_leida": "2026-08-22",
+    "dias_leidos": null
+   }
+  },
+  {
+   "caso": "B4 teclea fecha_inicio='2026-02-31'",
+   "overrides": {
+    "fecha_inicio": "2026-02-31"
+   },
+   "alertas": "T06_FECHA_INICIO_ILEGIBLE",
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento",
+    "La fecha de inicio leída no es una fecha válida (=2026-02-31): se detectó el dato pero no se puede usar"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-23",
+    "Numerodias": 3,
+    "fechafin_leida": "2026-08-22",
+    "dias_leidos": 3
+   }
+  },
+  {
+   "caso": "B5 teclea fecha_fin anterior al inicio",
+   "overrides": {
+    "fecha_fin": "2026-08-18"
+   },
+   "alertas": "T02_FIN_ANTES_DE_INICIO",
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento",
+    "La fecha fin leída (2026-08-18) es ANTERIOR a la de inicio (2026-08-20): el rango es imposible"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-23",
+    "Numerodias": 3,
+    "fechafin_leida": "2026-08-18",
+    "dias_leidos": 3
+   }
+  },
+  {
+   "caso": "B6 el papel dice TRES (3) y el OCR leyo 9; el auxiliar corrige dias=3",
+   "overrides": {
+    "dias": 3
+   },
+   "alertas": null,
+   "problemas": [
+    "No se detectó la cédula del paciente",
+    "No se detectó el código de diagnóstico (CIE-10)",
+    "EPS no identificada en el documento"
+   ],
+   "fila": {
+    "fechainicio": "2026-08-20",
+    "fechavencimiento": "2026-08-23",
+    "Numerodias": 3,
+    "fechafin_leida": "2026-08-22",
+    "dias_leidos": 3
+   }
+  }
+ ],
+ "C_sin_foto": [
+  {
+   "caso": "sin_foto_fin_recalculada",
+   "codigos": [
+    "T11_FIN_REESCRITO_SIN_EVIDENCIA"
+   ],
+   "severidad": "GRAVE"
+  },
+  {
+   "caso": "con_foto",
+   "codigos": [
+    "T01_DURACION_VS_RANGO"
+   ],
+   "severidad": "GRAVE"
+  },
+  {
+   "caso": "sin_foto_sin_marcas",
+   "codigos": []
+  }
+ ],
+ "D_config": [
+  {
+   "caso": "dias_futuro_max=30",
+   "codigos": [
+    "T09_INICIO_EN_FUTURO"
+   ]
+  },
+  {
+   "caso": "dias_futuro_max=120",
+   "codigos": []
+  },
+  {
+   "caso": "T09=LEVE",
+   "codigos": [
+    "T09_INICIO_EN_FUTURO"
+   ],
+   "exige_revision": false
+  },
+  {
+   "caso": "desfase_tolerado_dias=0",
+   "codigos": [
+    "T01_DURACION_VS_RANGO"
+   ]
+  },
+  {
+   "caso": "desfase_tolerado_dias=1",
+   "codigos": []
+  },
+  {
+   "caso": "dias_sin_respaldo_aviso=180",
+   "codigos": [
+    "T08_DURACION_SIN_RESPALDO"
+   ]
+  },
+  {
+   "caso": "dias_sin_respaldo_aviso=365",
+   "codigos": []
+  }
+ ]
+}

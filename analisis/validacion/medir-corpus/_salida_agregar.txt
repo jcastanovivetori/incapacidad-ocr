@@ -1,0 +1,43 @@
+universo evaluado: 26 = 12 falsas + 14 reales (excluidos 5 en cuarentena: F03, F11, F15, R01, R15)
+
+FALSAS con motivo TEMPORAL declarado (FECHAS_INCOHERENTES): 0/1  universo=['F04'] detectadas=[]
+FALSAS por OTROS motivos (firma/tipografia/DX/sin motivo): 11; marcadas por tiempos (extra): ['F09']
+REALES marcadas GRAVE/MEDIA (falsos positivos): 0/14 []
+REALES solo con aviso LEVE: []
+
+veredictos: COHERENTE=21  AVISOS=0  REVISAR=1  SIN_DATOS=4
+SIN_DATOS: ['F12', 'F13', 'R05', 'R16']
+T01 no evaluable (tripleta leida incompleta): 13/26 ['F02', 'F04', 'F06', 'F12', 'F13', 'F14', 'R02', 'R03', 'R04', 'R05', 'R10', 'R14', 'R16']
+tripleta leida COMPLETA: 13/26 ['F01', 'F05', 'F07', 'F08', 'F09', 'F10', 'R06', 'R07', 'R08', 'R09', 'R11', 'R12', 'R13']
+cobertura media: 0.577
+
+chequeo de REFERENCIA (aritmetica independiente del motor):
+  incoherentes=['F09']  invertidos=[]  dias fuera de rango=[]
+  post-condicion vencimiento (R-T05) incoherente: []
+
+por regla (documentos evaluables):
+  T01_DURACION_VS_RANGO              NO_CUMPLE= 1 ['F09']      CUMPLE=12  no_evaluable=13
+  T02_FIN_ANTES_DE_INICIO            NO_CUMPLE= 0 []           CUMPLE=13  no_evaluable=13
+  T03_DIAS_FUERA_DE_RANGO            NO_CUMPLE= 0 []           CUMPLE=19  no_evaluable= 7
+  T04_RANGO_MAYOR_AL_MAXIMO          NO_CUMPLE= 0 []           CUMPLE=13  no_evaluable=13
+  T05_DIAS_NO_NUMERICO               NO_CUMPLE= 0 []           CUMPLE=19  no_evaluable= 7
+  T06_FECHA_INICIO_ILEGIBLE          NO_CUMPLE= 0 []           CUMPLE=17  no_evaluable= 9
+  T07_FECHA_FIN_ILEGIBLE             NO_CUMPLE= 0 []           CUMPLE=15  no_evaluable=11
+  T08_DURACION_SIN_RESPALDO          NO_CUMPLE= 0 []           CUMPLE=19  no_evaluable= 7
+  T09_INICIO_EN_FUTURO               NO_CUMPLE= 0 []           CUMPLE=17  no_evaluable= 9
+  T10_INICIO_MUY_ANTIGUO             NO_CUMPLE= 0 []           CUMPLE=17  no_evaluable= 9
+  T11_FIN_REESCRITO_SIN_EVIDENCIA    NO_CUMPLE= 0 []           CUMPLE=26  no_evaluable= 0
+  T12_DIAS_LETRA_DISCREPA            NO_CUMPLE= 0 []           CUMPLE= 5  no_evaluable=21
+  T14_EXPEDICION_POSTERIOR_AL_INICIO NO_CUMPLE= 0 []           CUMPLE= 2  no_evaluable=24
+
+discrepancias pasada A (registro almacenado, sin foto) vs B (produccion): 4
+  F04 (falsa): A=SIN_DATOS/[] cob=0.077 leido=None→None/None  ||  B=COHERENTE/[] cob=0.385 leido=None→None/2
+  F09 (falsa): A=COHERENTE/[] cob=0.846 leido=2026-06-05→2026-06-06/2  ||  B=REVISAR/['T01_DURACION_VS_RANGO'] cob=0.923 leido=2026-06-05→2026-07-06/2
+  F14 (falsa): A=SIN_DATOS/[] cob=0.077 leido=None→None/None  ||  B=COHERENTE/[] cob=0.385 leido=None→None/2
+  R16 (real): A=REVISAR/['T08_DURACION_SIN_RESPALDO'] cob=0.308 leido=None→None/202  ||  B=SIN_DATOS/[] cob=0.077 leido=None→None/None
+
+canal al auxiliar: [{'id': 'F09', 'codigos': ['T01_DURACION_VS_RANGO'], 'severidad': 'GRAVE', 'en_alertas_tiempos': True, 'n_problemas_total': 4, 'problemas_temporales': ['Los tiempos del documento no cuadran: el rango 2026-06-05 → 2026-07-06 son 32 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2026-06-06; desfase de 30 día(s))']}]
+requiere_revision (por cualquier motivo, con LookupsNulos): 26/26
+
+Tabla: <dataset-falsedad>\validacion\medir-corpus\tabla_motor.md
+Metricas: <dataset-falsedad>\validacion\medir-corpus\metricas_motor.json

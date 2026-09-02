@@ -1,0 +1,224 @@
+[
+ {
+  "caso": "<NOMBRE> DE LA HOZ 02.09.2025 (falsa, motivo GT=FECHAS_INCOHERENTES) -- texto: 'MARTES 02 ... DE SEPTIEMBRE DE 2025' / 'Duracion -DOS' / 'JUEVES 04 DE SEPT1EMBRE DE2025'",
+  "leido": {
+   "inicio": "2025-09-02",
+   "fin": "2025-09-04",
+   "dias": 2
+  },
+  "tras_normalizar": {
+   "inicio": "2025-09-02",
+   "fin": "2025-09-03",
+   "dias": 2,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": true,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2025-09-02",
+   "Numerodias": 2,
+   "fechavencimiento": "2025-09-04",
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento"
+  }
+ },
+ {
+  "caso": "<NOMBRE> <NOMBRE> 05062026 (falsa) -- texto: 'Dias de incapacidad:02dosdia(s)' / 'Desde:05/06/2026-Hasta:06/07/2026'",
+  "leido": {
+   "inicio": "2026-06-05",
+   "fin": "2026-07-06",
+   "dias": 2
+  },
+  "tras_normalizar": {
+   "inicio": "2026-06-05",
+   "fin": "2026-06-06",
+   "dias": 2,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": true,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2026-06-05",
+   "Numerodias": 2,
+   "fechavencimiento": "2026-06-07",
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento"
+  }
+ },
+ {
+  "caso": "<NOMBRE> <NOMBRE> 29072026 (falsa, en cuarentena) -- texto: 'SE DA INCAPACIDAD MEDICA POR 4 DIAS DESDE EL 29-07-26 HASTA EL 01/07/29'",
+  "leido": {
+   "inicio": "2026-07-29",
+   "fin": "2029-07-01",
+   "dias": 4
+  },
+  "tras_normalizar": {
+   "inicio": "2026-07-29",
+   "fin": "2026-08-01",
+   "dias": 4,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": true,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2026-07-29",
+   "Numerodias": 4,
+   "fechavencimiento": "2026-08-02",
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento"
+  }
+ },
+ {
+  "caso": "control coherente (REAL-06, real)",
+  "leido": {
+   "inicio": "2026-06-09",
+   "fin": "2026-06-10",
+   "dias": 2
+  },
+  "tras_normalizar": {
+   "inicio": "2026-06-09",
+   "fin": "2026-06-10",
+   "dias": 2,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": false,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2026-06-09",
+   "Numerodias": 2,
+   "fechavencimiento": "2026-06-11",
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento"
+  }
+ },
+ {
+  "caso": "fin anterior al inicio, sin dias",
+  "leido": {
+   "inicio": "2026-06-10",
+   "fin": "2026-06-05",
+   "dias": null
+  },
+  "tras_normalizar": {
+   "inicio": null,
+   "fin": "2026-06-05",
+   "dias": null,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": false,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento",
+   "No se detectó la fecha de inicio",
+   "No se detectó el número de días"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": null,
+   "Numerodias": null,
+   "fechavencimiento": null,
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento; No se detectó la fecha de inicio; No se detectó el número de días"
+  }
+ },
+ {
+  "caso": "dias = 0 (fuera de rango)",
+  "leido": {
+   "inicio": "2026-06-09",
+   "fin": null,
+   "dias": 0
+  },
+  "tras_normalizar": {
+   "inicio": "2026-06-09",
+   "fin": null,
+   "dias": 0,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": false,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento",
+   "No se detectó el número de días"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2026-06-09",
+   "Numerodias": 0,
+   "fechavencimiento": null,
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento; No se detectó el número de días"
+  }
+ },
+ {
+  "caso": "dias = 600 (fuera de rango 1..540)",
+  "leido": {
+   "inicio": "2026-06-09",
+   "fin": null,
+   "dias": 600
+  },
+  "tras_normalizar": {
+   "inicio": "2026-06-09",
+   "fin": null,
+   "dias": 600,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": false,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento",
+   "Número de días fuera de rango (=600)"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": "2026-06-09",
+   "Numerodias": 600,
+   "fechavencimiento": null,
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento; Número de días fuera de rango (=600)"
+  }
+ },
+ {
+  "caso": "dias = 541 con fin coherente con 541",
+  "leido": {
+   "inicio": "2026-06-09",
+   "fin": "2027-12-02",
+   "dias": 541
+  },
+  "tras_normalizar": {
+   "inicio": null,
+   "fin": "2027-12-02",
+   "dias": 541,
+   "inicio_calculada": false
+  },
+  "fin_reescrito": false,
+  "problemas": [
+   "Cédula 1000000000 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento",
+   "No se detectó la fecha de inicio",
+   "Número de días fuera de rango (=541)"
+  ],
+  "requiere_revision": true,
+  "fila_al_auxiliar": {
+   "fechainicio": null,
+   "Numerodias": 541,
+   "fechavencimiento": null,
+   "problemas": "Cédula 1000000000 no encontrada en empleados; Diagnóstico M54.5 no está en el catálogo CIE-10; EPS no identificada en el documento; No se detectó la fecha de inicio; Número de días fuera de rango (=541)"
+  }
+ }
+]

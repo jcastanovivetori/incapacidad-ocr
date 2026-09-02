@@ -1,0 +1,181 @@
+{
+  "fuente": "Explicacion de archivos.jpeg",
+  "filas": [
+    {
+      "fila": 1,
+      "archivo": "FALSA-02.pdf",
+      "motivo_texto": "NO EXISTE EL DX R505",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_INEXISTENTE"
+      ]
+    },
+    {
+      "fila": 2,
+      "archivo": "FALSA-01.pdf",
+      "motivo_texto": "FIRMA DEL MEDICO",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "FIRMA_MEDICO"
+      ]
+    },
+    {
+      "fila": 3,
+      "archivo": "FALSA-03.pdf",
+      "motivo_texto": "VARIOS TIPOS DE LETRAS EN EL DOCUMENTO",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "TIPOGRAFIA_MIXTA"
+      ]
+    },
+    {
+      "fila": 4,
+      "archivo": "FALSA-04.pdf",
+      "motivo_texto": "ALTERACION EN FECHA DE INICIO, DURACION Y FECHA FIN, LOS DIAS NO CORRESPONDEN A LA FECHA DE FINALIZACION CALCULADA",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "FECHAS_INCOHERENTES"
+      ]
+    },
+    {
+      "fila": 5,
+      "archivo": "FALSA-05.pdf",
+      "motivo_texto": "NO CONCUERDA EL NUMERO DE DIAS CON EL DIAGNOSTICO",
+      "en_rojo": true,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DIAS_VS_DIAGNOSTICO"
+      ]
+    },
+    {
+      "fila": 6,
+      "archivo": "FALSA-06.pdf",
+      "motivo_texto": "",
+      "en_rojo": true,
+      "motivo_vacio": true,
+      "archivo_existe": true,
+      "senales": [
+        "SIN_MOTIVO_REGISTRADO"
+      ]
+    },
+    {
+      "fila": 7,
+      "archivo": "FALSA-07.pdf",
+      "motivo_texto": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_NOMBRE_DISTINTO"
+      ]
+    },
+    {
+      "fila": 8,
+      "archivo": "FALSA-08.pdf",
+      "motivo_texto": "FIRMA DEL MEDICO",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "FIRMA_MEDICO"
+      ]
+    },
+    {
+      "fila": 9,
+      "archivo": "FALSA-09.jpeg",
+      "motivo_texto": "NO EXISTE EL DX A09 - TODOS LOS DX SON DE 4 CARACTERES",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_INEXISTENTE",
+        "DX_FORMATO"
+      ]
+    },
+    {
+      "fila": 10,
+      "archivo": "FALSA-10.pdf",
+      "motivo_texto": "NO EXISTE EL DX A00",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_INEXISTENTE"
+      ]
+    },
+    {
+      "fila": 11,
+      "archivo": "FALSA-11.pdf",
+      "motivo_texto": "NO EXISTE EL DX G43",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_INEXISTENTE"
+      ]
+    },
+    {
+      "fila": 12,
+      "archivo": "FALSA-13.pdf",
+      "motivo_texto": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+      "en_rojo": true,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_NOMBRE_DISTINTO"
+      ]
+    },
+    {
+      "fila": 13,
+      "archivo": "FALSA-14.pdf",
+      "motivo_texto": "",
+      "en_rojo": true,
+      "motivo_vacio": true,
+      "archivo_existe": true,
+      "senales": [
+        "SIN_MOTIVO_REGISTRADO"
+      ]
+    },
+    {
+      "fila": 14,
+      "archivo": "FALSA-12.pdf",
+      "motivo_texto": "",
+      "en_rojo": true,
+      "motivo_vacio": true,
+      "archivo_existe": true,
+      "senales": [
+        "SIN_MOTIVO_REGISTRADO"
+      ]
+    },
+    {
+      "fila": 15,
+      "archivo": "FALSA-15.pdf",
+      "motivo_texto": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+      "en_rojo": false,
+      "motivo_vacio": false,
+      "archivo_existe": true,
+      "senales": [
+        "DX_NOMBRE_DISTINTO"
+      ]
+    }
+  ],
+  "taxonomia": {
+    "DX_INEXISTENTE": "El codigo CIE-10 reportado no existe en el catalogo oficial.",
+    "DX_FORMATO": "El codigo CIE-10 no cumple el formato/longitud esperada (p. ej. 3 caracteres en vez de 4).",
+    "DX_NOMBRE_DISTINTO": "La descripcion del diagnostico no coincide exactamente con la del catalogo para ese codigo.",
+    "FECHAS_INCOHERENTES": "Fecha de inicio, duracion en dias y fecha de fin no cuadran aritmeticamente.",
+    "DIAS_VS_DIAGNOSTICO": "La cantidad de dias de incapacidad no es plausible para el diagnostico reportado.",
+    "FIRMA_MEDICO": "La firma del medico es sospechosa (copiada, pegada o inconsistente).",
+    "TIPOGRAFIA_MIXTA": "Varios tipos de letra en el documento, indicio de texto anadido o reemplazado.",
+    "SIN_MOTIVO_REGISTRADO": "La celda de motivo venia vacia en la tabla del cliente; no hay motivo documentado."
+  }
+}

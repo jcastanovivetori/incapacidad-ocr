@@ -1,0 +1,22 @@
+[shard 1/4] documentos asignados: 8
+  i= 1 falsa FALSA-02.pdf
+  i= 5 falsa FALSA-06.pdf
+  i= 9 falsa FALSA-10.pdf
+  i=13 falsa FALSA-14.pdf
+  i=17 real  REAL-03.pdf
+  i=21 real  REAL-07.pdf
+  i=25 real  REAL-11.pdf
+  i=29 real  REAL-15.pdf
+[backend rapidocr listo en 9.5s]
+OK  [ 1] FALSA-02.pdf  chars=1179 paginas=1 fuentes=6 imgs=6 eof=2 (68.0s)
+OK  [ 5] FALSA-06.pdf  chars=1015 paginas=1 fuentes=0 imgs=1 eof=1 (72.1s)
+OK  [ 9] FALSA-10.pdf  chars=933 paginas=2 fuentes=3 imgs=8 eof=2 (71.1s)
+OK  [13] FALSA-14.pdf  chars=915 paginas=1 fuentes=0 imgs=2 eof=1 (62.0s)
+OK  [17] REAL-03.pdf  chars=1450 paginas=1 fuentes=0 imgs=1 eof=1 (79.7s)
+OK  [21] REAL-07.pdf  chars=1218 paginas=1 fuentes=3 imgs=2 eof=1 (99.6s)
+OK  [25] REAL-11.pdf  chars=1326 paginas=1 fuentes=3 imgs=5 eof=2 (84.6s)
+OK  [29] REAL-15.pdf  chars=1272 paginas=1 fuentes=6 imgs=12 eof=1 (74.9s)
+
+[fin] procesados=8 fallidos=0 sin_texto=0 en 621.3s
+[campos] {'cedula': 7, 'cie10': 8, 'fecha_inicio': 5, 'fecha_fin': 5, 'dias': 5}
+[resumen] <dataset-falsedad>\senales\_resumen_shard1.json

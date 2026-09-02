@@ -1,0 +1,69 @@
+### UNIVERSO
+manifest.csv                          : 31
+EXCLUIDOS por cuarentena              : 5  -> ['FALSA-03.pdf', 'FALSA-11.pdf', 'FALSA-15.pdf', 'REAL-01.pdf', 'REAL-15.pdf']
+evaluados                             : 26  (12 falsas / 14 reales)
+
+### DISPONIBILIDAD DE DATOS TEMPORALES (lector actual, valores crudos)
+falsas  n=12 | tripleta 3/3=6 | par 2/3=1 | NO EVALUABLE=5
+reales  n=14 | tripleta 3/3=7 | par 2/3=1 | NO EVALUABLE=6
+NO EVALUABLES totales                 : 11/26
+
+### MARCAS DEL MOTOR
+marca INCOHERENCIA temporal (falsas)  : 0/12
+marca INCOHERENCIA temporal (reales)  : 0/14  <- falsos positivos
+marca FALTA DATO temporal   (falsas)  : 5/12
+marca FALTA DATO temporal   (reales)  : 6/14
+requiere_revision           (falsas)  : 12/12
+requiere_revision           (reales)  : 14/14
+
+### METRICA QUE IMPORTA: falsas con motivo TEMPORAL declarado
+universo                              : 1  -> ['FALSA-04.pdf']
+detectadas como incoherencia temporal : 0/1
+marcadas solo por 'no lei el dato'    : 1/1
+falsas por OTROS motivos (fuera de alcance de este motor): 11
+  desglose: {'FIRMA_MEDICO': 2, 'DX_INEXISTENTE': 3, 'DIAS_VS_DIAGNOSTICO': 1, 'SIN_MOTIVO_REGISTRADO': 3, 'DX_NOMBRE_DISTINTO': 2, 'DX_FORMATO': 1}
+
+### INCOHERENCIAS REALES QUE EL MOTOR NO DIJO (ref=INCOHERENTE y sin marca)
+  [eval] FALSA-09.jpeg: inicio=2026-06-05 + 2 dias (inclusive) => fin esperado 2026-06-06, pero el documento dice fin=2026-07-06 (delta 30 dias)
+
+### EVIDENCIA DESTRUIDA POR normalizar_fechas()
+  FALSA-09.jpeg: crudo={'fecha_inicio': '2026-06-05', 'fecha_fin': '2026-07-06', 'dias': 2} -> norm={'fecha_inicio': '2026-06-05', 'fecha_fin': '2026-06-06', 'dias': 2} (fin_reescrito=True, inicio_descartado=False)
+
+### ROBUSTEZ
+excepciones del motor                 : ninguna
+violaciones de fechavencimiento=inicio+dias: ninguna
+
+### TABLA POR DOCUMENTO
+archivo                                            et    cuar gt                     lee  ref          inc  falta rev  dias  venc
+---------------------------------------------------------------------------------------------------------------------------------
+FALSA-01.pdf      falsa no   FIRMA_MEDICO           3/3  COHERENTE    no   no    SI   1     2026-07-15
+FALSA-02.pdf    falsa no   DX_INEXISTENTE         1/3  NO_EVALUABLE no   SI    SI   None  None
+FALSA-03.pdf           falsa si   TIPOGRAFIA_MIXTA       1/3  NO_EVALUABLE no   SI    SI   29    None
+INC <NOMBRE> DE LA HOZ <NOMBRE> <NOMBRE> 3 DÍAS 02.0 falsa no   FECHAS_INCOHERENTES    0/3  NO_EVALUABLE no   SI    SI   None  None
+FALSA-05.pdf    falsa no   DIAS_VS_DIAGNOSTICO    3/3  COHERENTE    no   no    SI   2     2025-11-12
+FALSA-06.pdf    falsa no   SIN_MOTIVO_REGISTRADO  2/3  COHERENTE    no   no    SI   2     2025-09-17
+FALSA-07.pdf    falsa no   DX_NOMBRE_DISTINTO     3/3  COHERENTE    no   no    SI   1     2026-04-21
+FALSA-08.pdf    falsa no   FIRMA_MEDICO           3/3  COHERENTE    no   no    SI   2     2025-11-02
+FALSA-09.jpeg      falsa no   DX_INEXISTENTE,DX_FORM 3/3  INCOHERENTE  no   no    SI   2     2026-06-07
+FALSA-10.pdf       falsa no   DX_INEXISTENTE         3/3  COHERENTE    no   no    SI   2     2026-06-11
+FALSA-11.pdf falsa si   DX_INEXISTENTE         2/3  COHERENTE    no   no    SI   2     2026-05-15
+FALSA-12.pdf falsa no   SIN_MOTIVO_REGISTRADO  0/3  NO_EVALUABLE no   SI    SI   None  None
+FALSA-13.pdf  falsa no   DX_NOMBRE_DISTINTO     0/3  NO_EVALUABLE no   SI    SI   None  None
+FALSA-14.pdf  falsa no   SIN_MOTIVO_REGISTRADO  0/3  NO_EVALUABLE no   SI    SI   None  None
+FALSA-15.pdf                       falsa si   DX_NOMBRE_DISTINTO     0/3  NO_EVALUABLE no   SI    SI   None  None
+REAL-01.pdf                         real  si   -                      2/3  COHERENTE    no   no    SI   2     2026-05-15
+REAL-02.pdf                         real  no   -                      1/3  NO_EVALUABLE no   SI    SI   None  None
+REAL-03.pdf                         real  no   -                      1/3  NO_EVALUABLE no   SI    SI   None  None
+REAL-04.pdf                         real  no   -                      1/3  NO_EVALUABLE no   SI    SI   None  None
+REAL-05.pdf                             real  no   -                      0/3  NO_EVALUABLE no   SI    SI   None  None
+REAL-06.pdf                         real  no   -                      3/3  COHERENTE    no   no    SI   2     2026-06-11
+REAL-07.pdf                         real  no   -                      3/3  COHERENTE    no   no    SI   14    2026-07-24
+REAL-08.pdf                             real  no   -                      3/3  COHERENTE    no   no    SI   1     2026-06-07
+REAL-09.pdf                         real  no   -                      3/3  COHERENTE    no   no    SI   126   2026-10-11
+REAL-10.pdf                            real  no   -                      1/3  NO_EVALUABLE no   SI    SI   2     None
+REAL-11.pdf                         real  no   -                      3/3  COHERENTE    no   no    SI   2     2026-07-20
+REAL-12.jpeg                        real  no   -                      3/3  COHERENTE    no   no    SI   3     2026-05-28
+REAL-13.pdf                         real  no   -                      3/3  COHERENTE    no   no    SI   30    2026-06-23
+REAL-14.pdf                         real  no   -                      2/3  COHERENTE    no   no    SI   3     2026-06-12
+REAL-15.pdf                         real  si   -                      1/3  NO_EVALUABLE no   SI    SI   29    None
+REAL-16.jpeg                          real  no   -                      1/3  NO_EVALUABLE no   SI    SI   202   None

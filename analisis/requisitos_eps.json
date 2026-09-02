@@ -1,0 +1,2876 @@
+[
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": []
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 5,
+    "nombre_eps": "ALIANZA SALUD",
+    "identificacion": "830113831",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 7,
+    "nombre_eps": "ASMET SALUD",
+    "identificacion": "900935126",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 11,
+    "nombre_eps": "CAPITAL SALUD",
+    "identificacion": "900298372",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 19,
+    "nombre_eps": "COMFENALCO VALLE",
+    "identificacion": "890303093",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 20,
+    "nombre_eps": "COMPENSAR",
+    "identificacion": "860066942",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 23,
+    "nombre_eps": "COOSALUD E.S.S.",
+    "identificacion": "900226715",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 26,
+    "nombre_eps": "EMSSANAR",
+    "identificacion": "901021565",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 27,
+    "nombre_eps": "FAMISANAR LTDA. CAFAM COLSUBSIDIO",
+    "identificacion": "830003564",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 32,
+    "nombre_eps": "MALLAMAS",
+    "identificacion": "837000084",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 5
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 36,
+    "nombre_eps": "NUEVA EPS S.A",
+    "identificacion": "900156264",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 40,
+    "nombre_eps": "SALUD TOTAL S.A. EPS ARS",
+    "identificacion": "800130907",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 45,
+    "nombre_eps": "SANITAS S.A.",
+    "identificacion": "800251440",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 46,
+    "nombre_eps": "SAVIA SALUDEPS",
+    "identificacion": "900604350",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 47,
+    "nombre_eps": "SERVICIO OCCIDENTAL DE SALUD S.A. S.O.S.",
+    "identificacion": "805001157",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 49,
+    "nombre_eps": "SURA",
+    "identificacion": "800088702",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 0
+      },
+      {
+        "iddocumento": 12,
+        "nombredocumento": "CERTICADO LABORAL",
+        "archivo": 0
+      }
+    ]
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 5
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 53,
+    "nombre_eps": "COMFAORIENTE",
+    "identificacion": "890500675",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 5
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 54,
+    "nombre_eps": "SALUDMIA",
+    "identificacion": "900914254",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      }
+    ]
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 62,
+    "nombre_eps": "PIJAOS SALUD EPSI",
+    "identificacion": "809008362",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 2,
+    "medioradicacion": 1,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 6
+      },
+      {
+        "iddocumento": 7,
+        "nombredocumento": "REPORTE ACCIDENTE DE TRANSITO RAT",
+        "archivo": 4
+      },
+      {
+        "iddocumento": 8,
+        "nombredocumento": "FORMATO DE DESCARTE EVENTO LABORAL",
+        "archivo": 3
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 5
+      }
+    ]
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 2,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 3,
+    "tipo_envio": 2,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 2
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 3
+      }
+    ]
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 5,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 8,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 9,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 4,
+        "nombredocumento": "CERTIFICADO NACIDO VIVO",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 5,
+        "nombredocumento": "REGISTRO CIVIL",
+        "archivo": 1
+      }
+    ]
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 10,
+    "tipo_envio": 0,
+    "medioradicacion": 0,
+    "documentos": []
+  },
+  {
+    "idlpeps": 64,
+    "nombre_eps": "MUTUAL SER ESS",
+    "identificacion": "806008394",
+    "idlptipoausentismo": 11,
+    "tipo_envio": 1,
+    "medioradicacion": 2,
+    "documentos": [
+      {
+        "iddocumento": 1,
+        "nombredocumento": "CERTIFICADO DE INCAPACIDAD",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 2,
+        "nombredocumento": "HISTORIA CLINICA",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 3,
+        "nombredocumento": "CEDULA DEL TRABAJADOR",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 6,
+        "nombredocumento": "SOAT",
+        "archivo": 1
+      },
+      {
+        "iddocumento": 11,
+        "nombredocumento": "FURIPS",
+        "archivo": 1
+      }
+    ]
+  }
+]

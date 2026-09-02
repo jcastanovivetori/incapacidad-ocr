@@ -1,0 +1,39 @@
+hoy fijado = 2026-09-02   reglas en catalogo = 17
+huellas: extract.py=27f5fc882b4e0c35  erp.py=fcd48b542046df80  reglas_tiempo.py=eb320f2a51641c50  validacion_temporal.py=aa13e158a828ff18  processor.py=8dc23242ed611dd6  numeros_es.py=48418a29b5a947b1
+config del entorno: fuentes = ('codigo',) avisos = ()
+
+ID    sha8     et cuar  tipo        | B: leido i/f/dias        ref span/desf | B veredicto  codigos                        | C rev alertas
+------------------------------------------------------------------------------------------------------------------------------------------
+F01  8b682a83 f        incapacidad | 2026-07-14 2026-07-14    1    1/   0 | COHERENTE                                 | SI  -
+F02  5c66d97e f        incapacidad | -          2026-05-18    1    -/   - | COHERENTE                                 | SI  -
+F03  28c4a946 f  CUAR  incapacidad | -          -             4    -/   - | COHERENTE                                 | SI  -
+F04  e0ee54fd f        incapacidad | -          -             2    -/   - | COHERENTE                                 | SI  -
+F05  8aeee4cd f        incapacidad | 2025-11-10 2025-11-11    2    2/   0 | COHERENTE                                 | SI  -
+F06  9dcb4e35 f        incapacidad | 2025-09-15 -             2    -/   - | COHERENTE                                 | SI  -
+F07  9603c77b f        incapacidad | 2026-04-20 2026-04-20    1    1/   0 | COHERENTE                                 | SI  -
+F08  ed2a4eeb f        incapacidad | 2025-10-31 2025-11-01    2    2/   0 | COHERENTE                                 | SI  -
+F09  d5b72739 f        incapacidad | 2026-06-05 2026-07-06    2   32/  30 | REVISAR    T01_DURACION_VS_RANGO          | SI  T01_DURACION_VS_RANGO
+F10  717d3aad f        incapacidad | 2026-06-09 2026-06-10    2    2/   0 | COHERENTE                                 | SI  -
+F11  d86ae595 f  CUAR  incapacidad | -          2026-05-14    2    -/   - | COHERENTE                                 | SI  -
+F12  d08cba3f f        incapacidad | -          -             -    -/   - | SIN_DATOS                                 | SI  -
+F13  99d74f47 f        incapacidad | -          -             -    -/   - | SIN_DATOS                                 | SI  -
+F14  758d3aff f        incapacidad | -          -             2    -/   - | COHERENTE                                 | SI  -
+F15  58c1e091 f  CUAR  incapacidad | -          -             -    -/   - | SIN_DATOS                                 | SI  -
+R01  d86ae595 r  CUAR  incapacidad | -          2026-05-14    2    -/   - | COHERENTE                                 | SI  -
+R02  f858510e r        incapacidad | 2026-06-10 -             -    -/   - | COHERENTE                                 | SI  -
+R03  b68fe146 r        incapacidad | 2026-06-10 -             -    -/   - | COHERENTE                                 | SI  -
+R04  38f40c48 r        incapacidad | 2026-07-12 -             -    -/   - | COHERENTE                                 | SI  -
+R05  087739e6 r        permiso     | -          -             -    -/   - | SIN_DATOS                                 | SI  -
+R06  eddf194a r        incapacidad | 2026-06-09 2026-06-10    2    2/   0 | COHERENTE                                 | SI  -
+R07  d6482e2a r        incapacidad | 2026-07-10 2026-07-23   14   14/   0 | COHERENTE                                 | SI  -
+R08  100e7770 r        permiso     | 2026-06-06 2026-06-06    1    1/   0 | COHERENTE                                 | SI  -
+R09  aa3512d4 r        incapacidad | 2026-06-07 2026-10-10  126  126/   0 | COHERENTE                                 | SI  -
+R10  e25d5211 r        incapacidad | -          -             2    -/   - | COHERENTE                                 | SI  -
+R11  c672e270 r        incapacidad | 2026-07-18 2026-07-19    2    2/   0 | COHERENTE                                 | SI  -
+R12  942de664 r        incapacidad | 2026-05-25 2026-05-27    3    3/   0 | COHERENTE                                 | SI  -
+R13  b6e8beb6 r        incapacidad | 2026-05-24 2026-06-22   30   30/   0 | COHERENTE                                 | SI  -
+R14  691e0af0 r        incapacidad | -          2026-06-11    3    -/   - | COHERENTE                                 | SI  -
+R15  28c4a946 r  CUAR  incapacidad | -          -             4    -/   - | COHERENTE                                 | SI  -
+R16  272d0d3d r        incapacidad | -          -             -    -/   - | SIN_DATOS                                 | SI  -
+
+Detalle maquina: <dataset-falsedad>\validacion\medir-corpus\resultados_motor.json

@@ -1,0 +1,139 @@
+{
+ "shard": 3,
+ "total_shards": 4,
+ "corpus": 31,
+ "asignados": 7,
+ "procesados": 7,
+ "docs": [
+  {
+   "indice": 3,
+   "archivo": "FALSA-04.pdf",
+   "etiqueta": "falsa",
+   "chars_ocr": 994,
+   "campos_no_nulos": {
+    "cedula": true,
+    "cie10": true,
+    "fecha_inicio": false,
+    "fecha_fin": false,
+    "dias": false
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 7,
+   "archivo": "FALSA-08.pdf",
+   "etiqueta": "falsa",
+   "chars_ocr": 899,
+   "campos_no_nulos": {
+    "cedula": true,
+    "cie10": true,
+    "fecha_inicio": true,
+    "fecha_fin": true,
+    "dias": true
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 11,
+   "archivo": "FALSA-12.pdf",
+   "etiqueta": "falsa",
+   "chars_ocr": 951,
+   "campos_no_nulos": {
+    "cedula": false,
+    "cie10": true,
+    "fecha_inicio": false,
+    "fecha_fin": false,
+    "dias": false
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 15,
+   "archivo": "REAL-01.pdf",
+   "etiqueta": "real",
+   "chars_ocr": 1127,
+   "campos_no_nulos": {
+    "cedula": false,
+    "cie10": true,
+    "fecha_inicio": true,
+    "fecha_fin": true,
+    "dias": true
+   },
+   "cuarentena": "si",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 19,
+   "archivo": "REAL-05.pdf",
+   "etiqueta": "real",
+   "chars_ocr": 1022,
+   "campos_no_nulos": {
+    "cedula": false,
+    "cie10": false,
+    "fecha_inicio": false,
+    "fecha_fin": false,
+    "dias": false
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 23,
+   "archivo": "REAL-09.pdf",
+   "etiqueta": "real",
+   "chars_ocr": 1179,
+   "campos_no_nulos": {
+    "cedula": true,
+    "cie10": true,
+    "fecha_inicio": true,
+    "fecha_fin": true,
+    "dias": true
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  },
+  {
+   "indice": 27,
+   "archivo": "REAL-13.pdf",
+   "etiqueta": "real",
+   "chars_ocr": 864,
+   "campos_no_nulos": {
+    "cedula": true,
+    "cie10": true,
+    "fecha_inicio": true,
+    "fecha_fin": true,
+    "dias": true
+   },
+   "cuarentena": "no",
+   "avisos_estructura": 0
+  }
+ ],
+ "fallidos": [],
+ "sin_texto": [],
+ "rutas": [
+  str(_DATASET / "ocr/falsas/FALSA-04.json"),
+  str(_DATASET / "ocr/falsas/FALSA-04.txt"),
+  str(_DATASET / "ocr/falsas/FALSA-08.json"),
+  str(_DATASET / "ocr/falsas/FALSA-08.txt"),
+  str(_DATASET / "ocr/falsas/FALSA-12.json"),
+  str(_DATASET / "ocr/falsas/FALSA-12.txt"),
+  str(_DATASET / "ocr/reales/REAL-01.json"),
+  str(_DATASET / "ocr/reales/REAL-01.txt"),
+  str(_DATASET / "ocr/reales/REAL-05.json"),
+  str(_DATASET / "ocr/reales/REAL-05.txt"),
+  str(_DATASET / "ocr/reales/REAL-09.json"),
+  str(_DATASET / "ocr/reales/REAL-09.txt"),
+  str(_DATASET / "ocr/reales/REAL-13.json"),
+  str(_DATASET / "ocr/reales/REAL-13.txt")
+ ],
+ "campos_leidos": {
+  "cedula": 4,
+  "cie10": 6,
+  "fecha_inicio": 4,
+  "fecha_fin": 4,
+  "dias": 4
+ }
+}

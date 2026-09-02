@@ -1,0 +1,661 @@
+[
+ {
+  "id": "R01",
+  "archivo": "REAL-01.pdf",
+  "sha8": "d86ae595",
+  "cuarentena": true,
+  "pipeline": {
+   "fecha_inicio": "2026-05-13",
+   "fecha_fin": "2026-05-14",
+   "dias": 2,
+   "fecha_inicio_calculada": true
+  },
+  "impresos": {
+   "inicio": null,
+   "fin": "2026-05-14",
+   "dias": 2,
+   "fuente_inicio": null,
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [
+    "dias+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    2
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:inicio",
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "No se detectó la cédula del paciente",
+   "Diagnóstico G43 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R02",
+  "archivo": "REAL-02.pdf",
+  "sha8": "f858510e",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-06-10",
+   "fin": null,
+   "dias": null,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": null,
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:fin+dias",
+  "problemas_tiempo": [
+   "No se detectó el número de días"
+  ],
+  "problemas_bd": [
+   "Cédula CED-02 no encontrada en empleados",
+   "Diagnóstico B04.0 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R03",
+  "archivo": "REAL-03.pdf",
+  "sha8": "b68fe146",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-10",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-06-10",
+   "fin": null,
+   "dias": null,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": null,
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:fin+dias",
+  "problemas_tiempo": [
+   "No se detectó el número de días"
+  ],
+  "problemas_bd": [
+   "Cédula CED-03 no encontrada en empleados",
+   "Diagnóstico A09.9 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R04",
+  "archivo": "REAL-04.pdf",
+  "sha8": "38f40c48",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-07-12",
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-07-12",
+   "fin": null,
+   "dias": null,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": null,
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:fin+dias",
+  "problemas_tiempo": [
+   "No se detectó el número de días"
+  ],
+  "problemas_bd": [
+   "Cédula CED-24 no encontrada en empleados",
+   "Diagnóstico S80.1 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R05",
+  "archivo": "REAL-05.pdf",
+  "sha8": "087739e6",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": null,
+   "fin": null,
+   "dias": null,
+   "fuente_inicio": null,
+   "fuente_fin": null,
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+  "problemas_tiempo": [
+   "No se identificó si el permiso es remunerado o no remunerado",
+   "No se detectó la fecha de inicio",
+   "No se detectó el número de días"
+  ],
+  "problemas_bd": [
+   "No se detectó la cédula del paciente"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "permiso"
+ },
+ {
+  "id": "R06",
+  "archivo": "REAL-06.pdf",
+  "sha8": "eddf194a",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-10",
+   "dias": 2,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-06-09",
+   "fin": "2026-06-10",
+   "dias": null,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:dias",
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-11 no encontrada en empleados",
+   "Diagnóstico M93.9 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R07",
+  "archivo": "REAL-07.pdf",
+  "sha8": "d6482e2a",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-07-10",
+   "fecha_fin": "2026-07-23",
+   "dias": 14,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-07-10",
+   "fin": "2026-07-23",
+   "dias": 14,
+   "fuente_inicio": "escrita_sura",
+   "fuente_fin": "escrita_sura",
+   "fuente_dias": [
+    "duracion+palabra_despues"
+   ],
+   "orden_incierto": true,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    14
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": null,
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-23 no encontrada en empleados",
+   "Diagnóstico 0039 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R08",
+  "archivo": "REAL-08.pdf",
+  "sha8": "100e7770",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-06",
+   "fecha_fin": "2026-06-06",
+   "dias": 1,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": null,
+   "fin": "2026-06-06",
+   "dias": null,
+   "fuente_inicio": null,
+   "fuente_fin": "prosa_hasta",
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:inicio+dias",
+  "problemas_tiempo": [
+   "No se identificó si el permiso es remunerado o no remunerado"
+  ],
+  "problemas_bd": [
+   "Cédula CED-13 no encontrada en empleados"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "permiso"
+ },
+ {
+  "id": "R09",
+  "archivo": "REAL-09.pdf",
+  "sha8": "aa3512d4",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-07",
+   "fecha_fin": "2026-10-10",
+   "dias": 126,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-06-07",
+   "fin": "2026-10-10",
+   "dias": 126,
+   "fuente_inicio": "emision_como_inicio",
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [
+    "duracion+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    126
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": null,
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-15 no encontrada en empleados",
+   "Diagnóstico O82.9 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R10",
+  "archivo": "REAL-10.pdf",
+  "sha8": "e25d5211",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 2,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": null,
+   "fin": null,
+   "dias": 2,
+   "fuente_inicio": null,
+   "fuente_fin": null,
+   "fuente_dias": [
+    "dias+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    2
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:inicio+fin",
+  "problemas_tiempo": [
+   "No se detectó la fecha de inicio"
+  ],
+  "problemas_bd": [
+   "Cédula CED-17 no encontrada en empleados",
+   "Diagnóstico J33.4 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R11",
+  "archivo": "REAL-11.pdf",
+  "sha8": "c672e270",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-07-18",
+   "fecha_fin": "2026-07-19",
+   "dias": 2,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-07-18",
+   "fin": "2026-07-19",
+   "dias": 2,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [
+    "dias+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    2
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": null,
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-17 no encontrada en empleados",
+   "Diagnóstico M54.5 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R12",
+  "archivo": "REAL-12.jpeg",
+  "sha8": "942de664",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-05-25",
+   "fecha_fin": "2026-05-27",
+   "dias": 3,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-05-25",
+   "fin": "2026-05-27",
+   "dias": null,
+   "fuente_inicio": "etiqueta_inicio",
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": []
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:dias",
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-16 no encontrada en empleados",
+   "Diagnóstico R07.4 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R13",
+  "archivo": "REAL-13.pdf",
+  "sha8": "b6e8beb6",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-05-24",
+   "fecha_fin": "2026-06-22",
+   "dias": 30,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-05-24",
+   "fin": "2026-06-22",
+   "dias": 30,
+   "fuente_inicio": "prosa_desde",
+   "fuente_fin": "prosa_hasta",
+   "fuente_dias": [
+    "dias+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    30
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": null,
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-07 no encontrada en empleados",
+   "Diagnóstico S52.0 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R14",
+  "archivo": "REAL-14.pdf",
+  "sha8": "691e0af0",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": "2026-06-09",
+   "fecha_fin": "2026-06-11",
+   "dias": 3,
+   "fecha_inicio_calculada": true
+  },
+  "impresos": {
+   "inicio": null,
+   "fin": "2026-06-11",
+   "dias": 3,
+   "fuente_inicio": null,
+   "fuente_fin": "etiqueta_fin",
+   "fuente_dias": [
+    "dias+digitos"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    3
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:inicio",
+  "problemas_tiempo": [],
+  "problemas_bd": [
+   "Cédula CED-20 no encontrada en empleados",
+   "Diagnóstico S83.6 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R15",
+  "archivo": "REAL-15.pdf",
+  "sha8": "28c4a946",
+  "cuarentena": true,
+  "pipeline": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": 4,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-07-29",
+   "fin": "2029-07-01",
+   "dias": 4,
+   "fuente_inicio": "prosa_desde",
+   "fuente_fin": "prosa_hasta",
+   "fuente_dias": [
+    "prosa_por_n_dias"
+   ],
+   "orden_incierto": false,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    4
+   ]
+  },
+  "checks": [
+   "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+   "AF06_ANIO_ATIPICO"
+  ],
+  "hallazgos": [
+   {
+    "check": "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+    "nivel": "ALTA",
+    "desfase_dias": 1065,
+    "esperado_fin_inclusivo": "2026-08-01",
+    "clase": "grueso",
+    "confirmable_sin_ocr": null
+   },
+   {
+    "check": "AF06_ANIO_ATIPICO",
+    "nivel": "MEDIA",
+    "anio_modal": 2026,
+    "n_patas": 1
+   }
+  ],
+  "motivo_no_aplica": null,
+  "problemas_tiempo": [
+   "No se detectó la fecha de inicio"
+  ],
+  "problemas_bd": [
+   "Cédula CED-21 no encontrada en empleados",
+   "Diagnóstico N23 no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ },
+ {
+  "id": "R16",
+  "archivo": "REAL-16.jpeg",
+  "sha8": "272d0d3d",
+  "cuarentena": false,
+  "pipeline": {
+   "fecha_inicio": null,
+   "fecha_fin": null,
+   "dias": null,
+   "fecha_inicio_calculada": false
+  },
+  "impresos": {
+   "inicio": "2026-06-09",
+   "fin": "2026-06-09",
+   "dias": null,
+   "fuente_inicio": "escrita_sura",
+   "fuente_fin": "escrita_sura",
+   "fuente_dias": [],
+   "orden_incierto": true,
+   "conflicto_dias": false,
+   "conflicto_fechas": [],
+   "dias_semana_malos": [],
+   "fechas_invalidas": [],
+   "dias_crudos": [
+    2026
+   ]
+  },
+  "checks": [],
+  "hallazgos": [],
+  "motivo_no_aplica": "falta_impreso:dias",
+  "problemas_tiempo": [
+   "No se detectó la fecha de inicio",
+   "No se detectó el número de días"
+  ],
+  "problemas_bd": [
+   "Cédula CED-14 no encontrada en empleados",
+   "Diagnóstico FECHA no está en el catálogo CIE-10",
+   "EPS no identificada en el documento"
+  ],
+  "requiere_revision": true,
+  "tipo_documento": "incapacidad"
+ }
+]

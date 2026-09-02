@@ -1,0 +1,2035 @@
+{
+ "hoy": "2026-09-02",
+ "filas": [
+  {
+   "archivo": "FALSA-01.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-01.json"),
+   "senales_gt": [
+    "FIRMA_MEDICO"
+   ],
+   "motivo_gt": "FIRMA DEL MEDICO",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-07-14",
+    "fecha_fin": "2026-07-14",
+    "dias": 1
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-14",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-07-15",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-07-14",
+    "fecha_fin": "2026-07-14",
+    "dias": 1
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-07-14 + 1 dias = fin 2026-07-14"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-07-14",
+    "fecha_fin": "2026-07-14",
+    "dias": 1
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-14",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-07-15",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-07-14 + 1 dias = fin 2026-07-14"
+   ]
+  },
+  {
+   "archivo": "FALSA-02.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-02.json"),
+   "senales_gt": [
+    "DX_INEXISTENTE"
+   ],
+   "motivo_gt": "NO EXISTE EL DX R505",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-18",
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico R50.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-18",
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=2026-05-18 dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-18",
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-04 no encontrada en empleados",
+     "Diagnóstico R50.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=2026-05-18 dias=None)"
+   ]
+  },
+  {
+   "archivo": "FALSA-03.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "si",
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Reales/REAL-15.pdf)",
+   "ocr_json": str(_DATASET / "ocr/falsa/FALSA-03.json"),
+   "senales_gt": [
+    "TIPOGRAFIA_MIXTA"
+   ],
+   "motivo_gt": "VARIOS TIPOS DE LETRAS EN EL DOCUMENTO",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 29,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 29,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)"
+   ]
+  },
+  {
+   "archivo": "FALSA-04.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-04.json"),
+   "senales_gt": [
+    "FECHAS_INCOHERENTES"
+   ],
+   "motivo_gt": "ALTERACION EN FECHA DE INICIO, DURACION Y FECHA FIN, LOS DIAS NO CORRESPONDEN A LA FECHA DE FINALIZACION CALCULADA",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-10 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-10 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "FALSA-05.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-05.json"),
+   "senales_gt": [
+    "DIAS_VS_DIAGNOSTICO"
+   ],
+   "motivo_gt": "NO CONCUERDA EL NUMERO DE DIAS CON EL DIAGNOSTICO",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2025-11-10",
+    "fecha_fin": "2025-11-11",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico Q07.3 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-11-10",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-11-12",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2025-11-10",
+    "fecha_fin": "2025-11-11",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2025-11-10 + 2 dias = fin 2025-11-11"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2025-11-10",
+    "fecha_fin": "2025-11-11",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico Q07.3 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-11-10",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-11-12",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2025-11-10 + 2 dias = fin 2025-11-11"
+   ]
+  },
+  {
+   "archivo": "FALSA-06.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-06.json"),
+   "senales_gt": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "motivo_gt": "",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2025-09-15",
+    "fecha_fin": "2025-09-16",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico N20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-09-15",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-09-17",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2025-09-15",
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "solo un par de datos: no hay tercer dato que pueda contradecir"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2025-09-15",
+    "fecha_fin": "2025-09-16",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico N20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-09-15",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-09-17",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2025-09-15 + 2 dias = fin 2025-09-16"
+   ]
+  },
+  {
+   "archivo": "FALSA-07.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsa/FALSA-07.json"),
+   "senales_gt": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "motivo_gt": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-04-20",
+    "fecha_fin": "2026-04-20",
+    "dias": 1
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-04-20",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-04-21",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-04-20",
+    "fecha_fin": "2026-04-20",
+    "dias": 1
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-04-20 + 1 dias = fin 2026-04-20"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-04-20",
+    "fecha_fin": "2026-04-20",
+    "dias": 1
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-04-20",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-04-21",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-04-20 + 1 dias = fin 2026-04-20"
+   ]
+  },
+  {
+   "archivo": "FALSA-08.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-08.json"),
+   "senales_gt": [
+    "FIRMA_MEDICO"
+   ],
+   "motivo_gt": "FIRMA DEL MEDICO",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2025-10-31",
+    "fecha_fin": "2025-11-01",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico O20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-10-31",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-11-02",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2025-10-31",
+    "fecha_fin": "2025-11-01",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2025-10-31 + 2 dias = fin 2025-11-01"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2025-10-31",
+    "fecha_fin": "2025-11-01",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-22 no encontrada en empleados",
+     "Diagnóstico O20.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2025-10-31",
+    "Numerodias": 2,
+    "fechavencimiento": "2025-11-02",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2025-10-31 + 2 dias = fin 2025-11-01"
+   ]
+  },
+  {
+   "archivo": "FALSA-09.jpeg",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-09.json"),
+   "senales_gt": [
+    "DX_INEXISTENTE",
+    "DX_FORMATO"
+   ],
+   "motivo_gt": "NO EXISTE EL DX A09 - TODOS LOS DX SON DE 4 CARACTERES",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-05",
+    "fecha_fin": "2026-06-06",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-05 no encontrada en empleados",
+     "Diagnóstico C10.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-05",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-07",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-05",
+    "fecha_fin": "2026-07-06",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "INCOHERENTE",
+    "inicio=2026-06-05 + 2 dias (inclusive) => fin esperado 2026-06-06, pero el documento dice fin=2026-07-06 (delta 30 dias)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-05",
+    "fecha_fin": "2026-06-06",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-05 no encontrada en empleados",
+     "Diagnóstico C10.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-05",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-07",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-05 + 2 dias = fin 2026-06-06"
+   ]
+  },
+  {
+   "archivo": "FALSA-10.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-10.json"),
+   "senales_gt": [
+    "DX_INEXISTENTE"
+   ],
+   "motivo_gt": "NO EXISTE EL DX A00",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-06 no encontrada en empleados",
+     "Diagnóstico IDENTI no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-11",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-06-09 + 2 dias = fin 2026-06-10"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-06 no encontrada en empleados",
+     "Diagnóstico IDENTI no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-11",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-09 + 2 dias = fin 2026-06-10"
+   ]
+  },
+  {
+   "archivo": "FALSA-11.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "si",
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Reales/REAL-01.pdf)",
+   "ocr_json": str(_DATASET / "ocr/falsa/FALSA-11.json"),
+   "senales_gt": [
+    "DX_INEXISTENTE"
+   ],
+   "motivo_gt": "NO EXISTE EL DX G43",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-05-13",
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-05-13",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-05-15",
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "solo un par de datos: no hay tercer dato que pueda contradecir"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-05-13",
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-05-13",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-05-15",
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-05-13 + 2 dias = fin 2026-05-14"
+   ]
+  },
+  {
+   "archivo": "FALSA-12.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-12.json"),
+   "senales_gt": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "motivo_gt": "",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico H10.2 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico H10.2 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "FALSA-13.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-13.json"),
+   "senales_gt": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "motivo_gt": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico S19.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico S19.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "FALSA-14.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/falsas/FALSA-14.json"),
+   "senales_gt": [
+    "SIN_MOTIVO_REGISTRADO"
+   ],
+   "motivo_gt": "",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico B34.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico B34.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.25
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "FALSA-15.pdf",
+   "etiqueta": "falsa",
+   "cuarentena": "si",
+   "motivo_cuarentena": "misma cedula, contenido distinto (pareja: Reales/REAL-15.pdf)",
+   "ocr_json": str(_DATASET / "ocr/falsa/FALSA-15.json"),
+   "senales_gt": [
+    "DX_NOMBRE_DISTINTO"
+   ],
+   "motivo_gt": "EL NOMBRE DEL DX NO ES EXACTAMENTE IGUAL",
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico S09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico S09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.5
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "REAL-01.pdf",
+   "etiqueta": "real",
+   "cuarentena": "si",
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Falsas/FALSA-11.pdf)",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-01.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-05-13",
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-05-13",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-05-15",
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "solo un par de datos: no hay tercer dato que pueda contradecir"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-05-13",
+    "fecha_fin": "2026-05-14",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "No se detectó la cédula del paciente",
+     "Diagnóstico G43 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-05-13",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-05-15",
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-05-13 + 2 dias = fin 2026-05-14"
+   ]
+  },
+  {
+   "archivo": "REAL-02.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-02.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-02 no encontrada en empleados",
+     "Diagnóstico B04.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-10",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-02 no encontrada en empleados",
+     "Diagnóstico B04.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-10",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "REAL-03.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-03.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-03 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-10",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-03 no encontrada en empleados",
+     "Diagnóstico A09.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-10",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-06-10 fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "REAL-04.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/real/REAL-04.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-24 no encontrada en empleados",
+     "Diagnóstico S80.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-12",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-07-12 fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-24 no encontrada en empleados",
+     "Diagnóstico S80.1 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-12",
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=2026-07-12 fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "REAL-05.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-05.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "permiso",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "stored": {
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "No se detectó la cédula del paciente",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "recalc": {
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "No se detectó la cédula del paciente",
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio",
+     "No se detectó el número de días"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": null,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.0
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 0/3 datos temporales leidos (inicio=None fin=None dias=None)"
+   ]
+  },
+  {
+   "archivo": "REAL-06.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-06.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-11 no encontrada en empleados",
+     "Diagnóstico M93.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-11",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-06-09 + 2 dias = fin 2026-06-10"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-10",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-11 no encontrada en empleados",
+     "Diagnóstico M93.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-06-11",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-09 + 2 dias = fin 2026-06-10"
+   ]
+  },
+  {
+   "archivo": "REAL-07.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-07.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-23 no encontrada en empleados",
+     "Diagnóstico 0039 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-10",
+    "Numerodias": 14,
+    "fechavencimiento": "2026-07-24",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-07-10 + 14 dias = fin 2026-07-23"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-23 no encontrada en empleados",
+     "Diagnóstico 0039 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-10",
+    "Numerodias": 14,
+    "fechavencimiento": "2026-07-24",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-07-10 + 14 dias = fin 2026-07-23"
+   ]
+  },
+  {
+   "archivo": "REAL-08.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/real/REAL-08.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "permiso",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-06",
+    "fecha_fin": "2026-06-06",
+    "dias": 1
+   },
+   "stored": {
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "Cédula CED-13 no encontrada en empleados"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-06",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-06-07",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-06",
+    "fecha_fin": "2026-06-06",
+    "dias": 1
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-06-06 + 1 dias = fin 2026-06-06"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-06",
+    "fecha_fin": "2026-06-06",
+    "dias": 1
+   },
+   "recalc": {
+    "problemas": [
+     "No se identificó si el permiso es remunerado o no remunerado",
+     "Cédula CED-13 no encontrada en empleados"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-06",
+    "Numerodias": 1,
+    "fechavencimiento": "2026-06-07",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-06 + 1 dias = fin 2026-06-06"
+   ]
+  },
+  {
+   "archivo": "REAL-09.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-09.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-07",
+    "fecha_fin": "2026-10-10",
+    "dias": 126
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-15 no encontrada en empleados",
+     "Diagnóstico O82.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-07",
+    "Numerodias": 126,
+    "fechavencimiento": "2026-10-11",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-06-07",
+    "fecha_fin": "2026-10-10",
+    "dias": 126
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-06-07 + 126 dias = fin 2026-10-10"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-07",
+    "fecha_fin": "2026-10-10",
+    "dias": 126
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-15 no encontrada en empleados",
+     "Diagnóstico O82.9 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-06-07",
+    "Numerodias": 126,
+    "fechavencimiento": "2026-10-11",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-07 + 126 dias = fin 2026-10-10"
+   ]
+  },
+  {
+   "archivo": "REAL-10.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-10.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico J33.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 2,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=2)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico J33.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 2,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=2)"
+   ]
+  },
+  {
+   "archivo": "REAL-11.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-11.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-07-18",
+    "fecha_fin": "2026-07-19",
+    "dias": 2
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-18",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-07-20",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-07-18",
+    "fecha_fin": "2026-07-19",
+    "dias": 2
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-07-18 + 2 dias = fin 2026-07-19"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-07-18",
+    "fecha_fin": "2026-07-19",
+    "dias": 2
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-17 no encontrada en empleados",
+     "Diagnóstico M54.5 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-07-18",
+    "Numerodias": 2,
+    "fechavencimiento": "2026-07-20",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-07-18 + 2 dias = fin 2026-07-19"
+   ]
+  },
+  {
+   "archivo": "REAL-12.jpeg",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/real/REAL-12.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-05-25",
+    "fecha_fin": "2026-05-27",
+    "dias": 3
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-16 no encontrada en empleados",
+     "Diagnóstico R07.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-05-25",
+    "Numerodias": 3,
+    "fechavencimiento": "2026-05-28",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-05-25",
+    "fecha_fin": "2026-05-27",
+    "dias": 3
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-05-25 + 3 dias = fin 2026-05-27"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-05-25",
+    "fecha_fin": "2026-05-27",
+    "dias": 3
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-16 no encontrada en empleados",
+     "Diagnóstico R07.4 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-05-25",
+    "Numerodias": 3,
+    "fechavencimiento": "2026-05-28",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-05-25 + 3 dias = fin 2026-05-27"
+   ]
+  },
+  {
+   "archivo": "REAL-13.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-13.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-05-24",
+    "fecha_fin": "2026-06-22",
+    "dias": 30
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-07 no encontrada en empleados",
+     "Diagnóstico S52.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-05-24",
+    "Numerodias": 30,
+    "fechavencimiento": "2026-06-23",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": "2026-05-24",
+    "fecha_fin": "2026-06-22",
+    "dias": 30
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "inicio=2026-05-24 + 30 dias = fin 2026-06-22"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-05-24",
+    "fecha_fin": "2026-06-22",
+    "dias": 30
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-07 no encontrada en empleados",
+     "Diagnóstico S52.0 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": "2026-05-24",
+    "Numerodias": 30,
+    "fechavencimiento": "2026-06-23",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-05-24 + 30 dias = fin 2026-06-22"
+   ]
+  },
+  {
+   "archivo": "REAL-14.pdf",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-14.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-11",
+    "dias": 3
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-20 no encontrada en empleados",
+     "Diagnóstico S83.6 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 3,
+    "fechavencimiento": "2026-06-12",
+    "confianza_ocr": 1.0
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-06-11",
+    "dias": 3
+   },
+   "ref_crudo": [
+    "COHERENTE",
+    "solo un par de datos: no hay tercer dato que pueda contradecir"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": "2026-06-09",
+    "fecha_fin": "2026-06-11",
+    "dias": 3
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-20 no encontrada en empleados",
+     "Diagnóstico S83.6 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento"
+    ],
+    "problemas_temporales": [],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": true,
+    "fechainicio": "2026-06-09",
+    "Numerodias": 3,
+    "fechavencimiento": "2026-06-12",
+    "confianza_ocr": 1.0
+   },
+   "ref_stored": [
+    "COHERENTE",
+    "inicio=2026-06-09 + 3 dias = fin 2026-06-11"
+   ]
+  },
+  {
+   "archivo": "REAL-15.pdf",
+   "etiqueta": "real",
+   "cuarentena": "si",
+   "motivo_cuarentena": "mismo sha256 en ambas clases (pareja: Falsas/FALSA-03.pdf); ademas misma cedula que Falsas/FALSA-15.pdf con contenido distinto",
+   "ocr_json": str(_DATASET / "ocr/reales/REAL-15.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 29,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 29
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-21 no encontrada en empleados",
+     "Diagnóstico N23 no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 29,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=29)"
+   ]
+  },
+  {
+   "archivo": "REAL-16.jpeg",
+   "etiqueta": "real",
+   "cuarentena": "no",
+   "motivo_cuarentena": "",
+   "ocr_json": str(_DATASET / "ocr/real/REAL-16.json"),
+   "senales_gt": [],
+   "motivo_gt": null,
+   "tipo_documento": "incapacidad",
+   "stored_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 202
+   },
+   "stored": {
+    "problemas": [
+     "Cédula CED-14 no encontrada en empleados",
+     "Diagnóstico FECHA no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 202,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "recalc_crudo": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 202
+   },
+   "ref_crudo": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=202)"
+   ],
+   "recalc_normalizado": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 202
+   },
+   "recalc": {
+    "problemas": [
+     "Cédula CED-14 no encontrada en empleados",
+     "Diagnóstico FECHA no está en el catálogo CIE-10",
+     "EPS no identificada en el documento",
+     "No se detectó la fecha de inicio"
+    ],
+    "problemas_temporales": [
+     "No se detectó la fecha de inicio"
+    ],
+    "requiere_revision": true,
+    "fecha_inicio_calculada": false,
+    "fechainicio": null,
+    "Numerodias": 202,
+    "fechavencimiento": null,
+    "confianza_ocr": 0.75
+   },
+   "ref_stored": [
+    "NO_EVALUABLE",
+    "solo 1/3 datos temporales leidos (inicio=None fin=None dias=202)"
+   ]
+  }
+ ]
+}

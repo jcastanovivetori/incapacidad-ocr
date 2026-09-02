@@ -1,0 +1,267 @@
+[
+  {
+    "caso": "D1 REFERENCIA sana",
+    "entrada": "inicio 2026-06-01, fin 2026-06-10, dias 10 (coherente)",
+    "esperado": "requiere_revision=False, venc=2026-06-11",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 10,
+      "fechavencimiento": "2026-06-11",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-10",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D2 fin IMPRESO no cuadra con dias (30 dias de span vs 3 dias)",
+    "entrada": "inicio 2026-06-01, fin 2026-06-30, dias 3",
+    "esperado": "requiere_revision=True + problema de coherencia de tiempos",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-04",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-03",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D3 fin ANTERIOR al inicio (con dias)",
+    "entrada": "inicio 2026-06-10, fin 2026-06-01, dias 3",
+    "esperado": "requiere_revision=True + problema 'fin anterior al inicio'",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-10",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-13",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-12",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D4 dias ENORME borrado por las fechas",
+    "entrada": "inicio 2026-06-01, fin 2026-06-10, dias 99999",
+    "esperado": "requiere_revision=True (el doc imprime 99999 dias)",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 10,
+      "fechavencimiento": "2026-06-11",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-10",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D5 mismo caso SIN fin (la regla de rango si existe en erp)",
+    "entrada": "inicio 2026-06-01, dias 99999",
+    "esperado": "requiere_revision=True 'fuera de rango' — contraste con D4",
+    "obtenido": {
+      "requiere_revision": true,
+      "problemas": [
+        "Número de días fuera de rango (=99999)"
+      ],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 99999,
+      "fechavencimiento": null,
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": null,
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D6 fin ANTERIOR al inicio, SIN dias",
+    "entrada": "inicio 2026-06-10, fin 2026-06-01",
+    "esperado": "problema 'fin anterior al inicio', NO 'no se detecto la fecha de inicio'",
+    "obtenido": {
+      "requiere_revision": true,
+      "problemas": [
+        "No se detectó la fecha de inicio",
+        "No se detectó el número de días"
+      ],
+      "fechainicio": null,
+      "Numerodias": null,
+      "fechavencimiento": null,
+      "confianza_ocr": 0.5,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-01",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D7 fecha de inicio IMPOSIBLE",
+    "entrada": "inicio 2026-02-30, dias 3",
+    "esperado": "problema 'fecha de inicio invalida', NO 'no se detecto'",
+    "obtenido": {
+      "requiere_revision": true,
+      "problemas": [
+        "No se detectó la fecha de inicio"
+      ],
+      "fechainicio": null,
+      "Numerodias": 3,
+      "fechavencimiento": null,
+      "confianza_ocr": 0.75,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": null,
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D8 dias = 0",
+    "entrada": "inicio 2026-06-01, fin 2026-06-01, dias 0",
+    "esperado": "problema explicito de dias invalidos (0 no es 1..540)",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 1,
+      "fechavencimiento": "2026-06-02",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-01",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D9 span de 541 dias (fuera del maximo legal)",
+    "entrada": "inicio 2026-01-01, fin 2027-06-25 (541 dias)",
+    "esperado": "problema de duracion fuera de rango",
+    "obtenido": {
+      "requiere_revision": true,
+      "problemas": [
+        "No se detectó el número de días"
+      ],
+      "fechainicio": "2026-01-01",
+      "Numerodias": null,
+      "fechavencimiento": null,
+      "confianza_ocr": 0.75,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2027-06-25",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D10 PROPIEDAD CLAVE: inicio CALCULADO no debe ser violacion",
+    "entrada": "fin 2026-06-10, dias 5 (sin inicio impreso)",
+    "esperado": "requiere_revision=False (aviso, no bloquea) pero confianza NO debe ser 1.0",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-06",
+      "Numerodias": 5,
+      "fechavencimiento": "2026-06-11",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": true,
+      "fecha_fin_tras_normalizar": "2026-06-10",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D11 el AUXILIAR teclea un fin anterior al inicio",
+    "entrada": "override fecha_fin=2026-05-01 sobre inicio 2026-06-10, dias 3",
+    "esperado": "problema 'fin anterior al inicio'",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-10",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-13",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": null,
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D12 el AUXILIAR teclea dias que no cuadran con el fin",
+    "entrada": "override dias=3 sobre inicio 2026-06-01 / fin 2026-06-30",
+    "esperado": "problema de coherencia (el fin del doc sigue siendo 06-30)",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-04",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-30",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D13 fecha de inicio en el FUTURO lejano",
+    "entrada": "inicio 2030-01-01, dias 5 (hoy 2026-09)",
+    "esperado": "problema: incapacidad que empieza en el futuro",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2030-01-01",
+      "Numerodias": 5,
+      "fechavencimiento": "2030-01-06",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2030-01-05",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D14 fecha de inicio absurdamente vieja",
+    "entrada": "inicio 1900-01-01, dias 5",
+    "esperado": "problema: fecha fuera de una ventana razonable",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "1900-01-01",
+      "Numerodias": 5,
+      "fechavencimiento": "1900-01-06",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "1900-01-05",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D15 formato ISO 'semana' aceptado como fecha",
+    "entrada": "inicio 2026-W23-1, dias 3",
+    "esperado": "problema: la fecha no es una fecha de documento",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-W23-1",
+      "Numerodias": 3,
+      "fechavencimiento": "2026-06-04",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-03",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  },
+  {
+    "caso": "D16 dias booleano True",
+    "entrada": "inicio 2026-06-01, fin 2026-06-10, dias True",
+    "esperado": "problema: dias no es un entero valido",
+    "obtenido": {
+      "requiere_revision": false,
+      "problemas": [],
+      "fechainicio": "2026-06-01",
+      "Numerodias": true,
+      "fechavencimiento": "2026-06-02",
+      "confianza_ocr": 1.0,
+      "fecha_inicio_calculada": false,
+      "fecha_fin_tras_normalizar": "2026-06-01",
+      "observaciones": "ENFERMEDAD GENERAL | DX J00 - RINOFARINGITIS AGUDA"
+    }
+  }
+]

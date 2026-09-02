@@ -1,0 +1,359 @@
+{
+ "P1_F04": {
+  "sha8": "e0ee54fd",
+  "como_llega_hoy": {
+   "veredicto": "COHERENTE",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2,
+    "dias_letra": 2,
+    "fecha_expedicion": null,
+    "prorroga_declarada": null,
+    "fecha_inicio_cruda": null,
+    "fecha_fin_cruda": null,
+    "dias_crudo": "2"
+   },
+   "codigos": [],
+   "cobertura": 0.385,
+   "t01": [
+    {
+     "codigo": "T01_DURACION_VS_RANGO",
+     "estado": "NO_EVALUABLE",
+     "severidad": "GRAVE",
+     "afirma": "los días declarados no coinciden con el rango de fechas impreso",
+     "campo": "dias",
+     "mensaje": null,
+     "motivo": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+     "faltan": [
+      "inicio_leido",
+      "fin_leido"
+     ]
+    }
+   ]
+  },
+  "con_la_tripleta_impresa": {
+   "veredicto": "REVISAR",
+   "codigos": [
+    "T01_DURACION_VS_RANGO"
+   ],
+   "severidad_max": "GRAVE",
+   "problemas": [
+    "Los tiempos del documento no cuadran: el rango 2025-09-02 → 2025-09-04 son 3 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2025-09-03; desfase de 1 día(s))"
+   ]
+  }
+ },
+ "P2_sensibilidad_hoy": {
+  "2025-01-01": {
+   "reales_marcadas": [
+    {
+     "id": "R02",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R03",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R04",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R06",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R07",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R08",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R09",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R11",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R12",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R13",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    }
+   ],
+   "reales_solo_aviso": [],
+   "falsas_marcadas": [
+    {
+     "id": "F01",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F05",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F06",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F07",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F08",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F09",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F10",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    }
+   ]
+  },
+  "2026-05-01": {
+   "reales_marcadas": [
+    {
+     "id": "R02",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R03",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R04",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R06",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R07",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R08",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R09",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "R11",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    }
+   ],
+   "reales_solo_aviso": [],
+   "falsas_marcadas": [
+    {
+     "id": "F01",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F09",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    },
+    {
+     "id": "F10",
+     "codigos": [
+      "T09_INICIO_EN_FUTURO"
+     ]
+    }
+   ]
+  },
+  "2026-09-02": {
+   "reales_marcadas": [],
+   "reales_solo_aviso": [],
+   "falsas_marcadas": []
+  },
+  "2027-06-01": {
+   "reales_marcadas": [],
+   "reales_solo_aviso": [],
+   "falsas_marcadas": []
+  },
+  "2028-09-02": {
+   "reales_marcadas": [],
+   "reales_solo_aviso": [
+    {
+     "id": "R02",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R03",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R04",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R06",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R07",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R08",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R09",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R11",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R12",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    },
+    {
+     "id": "R13",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    }
+   ],
+   "falsas_marcadas": [
+    {
+     "id": "F09",
+     "codigos": [
+      "T10_INICIO_MUY_ANTIGUO"
+     ]
+    }
+   ]
+  }
+ },
+ "P3_determinismo": [
+  {
+   "pareja": [
+    "F03",
+    "R15"
+   ],
+   "identico": true,
+   "veredicto": [
+    "COHERENTE",
+    "COHERENTE"
+   ]
+  },
+  {
+   "pareja": [
+    "F03",
+    "F03(2a corrida)"
+   ],
+   "identico": true,
+   "veredicto": [
+    "COHERENTE",
+    "COHERENTE"
+   ]
+  },
+  {
+   "pareja": [
+    "F11",
+    "R01"
+   ],
+   "identico": true,
+   "veredicto": [
+    "COHERENTE",
+    "COHERENTE"
+   ]
+  },
+  {
+   "pareja": [
+    "F11",
+    "F11(2a corrida)"
+   ],
+   "identico": true,
+   "veredicto": [
+    "COHERENTE",
+    "COHERENTE"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+P1 — F04 (unica falsa con motivo temporal declarado)
+   tal como llega hoy: veredicto=COHERENTE codigos=[] cobertura=0.385
+     leido = inicio=None fin=None dias=2 dias_letra=2
+     T01 = [{'codigo': 'T01_DURACION_VS_RANGO', 'estado': 'NO_EVALUABLE', 'severidad': 'GRAVE', 'afirma': 'los días declarados no coinciden con el rango de fechas impreso', 'campo': 'dias', 'mensaje': None, 'motivo': 'no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento', 'faltan': ['inicio_leido', 'fin_leido']}]
+   con la tripleta impresa (02→04 sept, 2 dias): veredicto=REVISAR ['T01_DURACION_VS_RANGO'] sev=GRAVE
+     → Los tiempos del documento no cuadran: el rango 2025-09-02 → 2025-09-04 son 3 día(s), pero declara 2 día(s) (con esos días la fecha fin sería 2025-09-03; desfase de 1 día(s))
+
+P2 — sensibilidad a la fecha de proceso (reglas de ventana temporal)
+   hoy=2025-01-01: reales marcadas=[{'id': 'R02', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R03', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R04', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R06', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R07', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R08', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R09', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R11', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R12', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R13', 'codigos': ['T09_INICIO_EN_FUTURO']}] reales solo aviso=[] falsas marcadas=7
+   hoy=2026-05-01: reales marcadas=[{'id': 'R02', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R03', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R04', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R06', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R07', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R08', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R09', 'codigos': ['T09_INICIO_EN_FUTURO']}, {'id': 'R11', 'codigos': ['T09_INICIO_EN_FUTURO']}] reales solo aviso=[] falsas marcadas=3
+   hoy=2026-09-02: reales marcadas=[] reales solo aviso=[] falsas marcadas=0
+   hoy=2027-06-01: reales marcadas=[] reales solo aviso=[] falsas marcadas=0
+   hoy=2028-09-02: reales marcadas=[] reales solo aviso=[{'id': 'R02', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R03', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R04', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R06', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R07', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R08', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R09', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R11', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R12', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}, {'id': 'R13', 'codigos': ['T10_INICIO_MUY_ANTIGUO']}] falsas marcadas=1
+
+P3 — determinismo (parejas byte-identicas del corpus, en cuarentena)
+   ['F03', 'R15']: identico=True veredictos=['COHERENTE', 'COHERENTE']
+   ['F03', 'F03(2a corrida)']: identico=True veredictos=['COHERENTE', 'COHERENTE']
+   ['F11', 'R01']: identico=True veredictos=['COHERENTE', 'COHERENTE']
+   ['F11', 'F11(2a corrida)']: identico=True veredictos=['COHERENTE', 'COHERENTE']
+
+Detalle: <dataset-falsedad>\validacion\medir-corpus\probes_motor.json

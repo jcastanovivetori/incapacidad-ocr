@@ -9,6 +9,8 @@ Convierte una **imagen/escaneo de una incapacidad médica** (Colombia) en **text
 > 🧪 **Probar con los documentos reales** (31 del cliente: 15 adulterados + 16 legítimos, repetible): [`PRUEBAS.md`](PRUEBAS.md).
 > ⏱️ **Validación de TIEMPOS** (qué valida y qué no, tabla de reglas, cómo añadir una regla, cómo cambiar una severidad o un umbral **sin desplegar**, medición sobre el corpus y preguntas abiertas): [`VALIDACION_TEMPORAL.md`](VALIDACION_TEMPORAL.md).
 > 🖥️ **Qué instalar y qué servidor hace falta** para producción: [`INSTALACION_CLIENTE.md`](INSTALACION_CLIENTE.md).
+> 📦 **Montarlo en otra máquina** (qué trae el `git pull`, qué hay que aportar aparte y en qué orden): [`REPLICAR.md`](REPLICAR.md).
+> 🔬 **El análisis del corpus** (sondas de detección, evidencia medida e informes, con seudónimos en vez de datos personales): [`analisis/`](analisis/).
 
 ```
 imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [mapeo ERP] ─► staging lp_ausentismos_ia (MySQL)

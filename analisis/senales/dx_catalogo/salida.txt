@@ -1,0 +1,65 @@
+SONDA familia dx_catalogo (Diagnostico vs catalogo CIE-10)
+catalogo CIE-10: AUSENTE (<dataset-falsedad>\senales\dx_catalogo\catalogo\lpdiagnosticos.csv) -> DX_INEXISTENTE y DX_NOMBRE_DISTINTO = no_verificable
+----------------------------------------------------------------------------------------------------------------------
+archivo                                              etiq    cuar dx      FORMATO     resultado
+----------------------------------------------------------------------------------------------------------------------
+FALSA-01.pdf        falsa   no   M545    ok          limpio (formato ok; catalogo no verificado)
+FALSA-02.pdf      falsa   no   R505    ok          limpio (formato ok; catalogo no verificado)  [+exp: DX_CAPITULO_INCOHERENTE]
+FALSA-03.pdf             falsa   SI   N23X    ok          limpio (formato ok; catalogo no verificado)
+INC <NOMBRE> DE LA HOZ <NOMBRE> <NOMBRE> 3 DÍAS 02.09. falsa   no   M545    ok          limpio (formato ok; catalogo no verificado)
+FALSA-05.pdf      falsa   no   -       no_verificable no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]
+FALSA-06.pdf      falsa   no   N2O0    ok          limpio (formato ok; catalogo no verificado)
+FALSA-07.pdf      falsa   no   AO99    ok          limpio (formato ok; catalogo no verificado)
+FALSA-08.pdf      falsa   no   O200    ok          limpio (formato ok; catalogo no verificado)
+FALSA-09.jpeg        falsa   no   A09     dispara     MARCA: DX_FORMATO_LONGITUD
+FALSA-10.pdf         falsa   no   Aoo     dispara     MARCA: DX_FORMATO_LONGITUD
+FALSA-11.pdf   falsa   SI   G43     dispara     MARCA: DX_FORMATO_LONGITUD
+FALSA-12.pdf   falsa   no   H1O2    ok          limpio (formato ok; catalogo no verificado)
+FALSA-13.pdf    falsa   no   r509    ok          limpio (formato ok; catalogo no verificado)
+FALSA-14.pdf    falsa   no   B349    ok          limpio (formato ok; catalogo no verificado)
+FALSA-15.pdf                         falsa   SI   S09.9   ok          limpio (formato ok; catalogo no verificado)
+REAL-01.pdf                           real    SI   G43     dispara     MARCA: DX_FORMATO_LONGITUD
+REAL-02.pdf                           real    no   R51X    ok          limpio (formato ok; catalogo no verificado)
+REAL-03.pdf                           real    no   A099    ok          limpio (formato ok; catalogo no verificado)
+REAL-04.pdf                           real    no   S80.1   ok          limpio (formato ok; catalogo no verificado)
+REAL-05.pdf                               real    no   -       no_verificable no_aplica (sin DX por tipo de documento)
+REAL-06.pdf                           real    no   M939    ok          limpio (formato ok; catalogo no verificado)
+REAL-07.pdf                           real    no   -       no_verificable no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]
+REAL-08.pdf                               real    no   -       no_verificable no_aplica (sin DX por tipo de documento)
+REAL-09.pdf                           real    no   O829    ok          limpio (formato ok; catalogo no verificado)
+REAL-10.pdf                              real    no   -       no_verificable no_aplica (sin DX por tipo de documento)
+REAL-11.pdf                           real    no   M54.5   ok          limpio (formato ok; catalogo no verificado)
+REAL-12.jpeg                          real    no   RO74    ok          limpio (formato ok; catalogo no verificado)
+REAL-13.pdf                           real    no   S520    ok          limpio (formato ok; catalogo no verificado)
+REAL-14.pdf                           real    no   S836    ok          limpio (formato ok; catalogo no verificado)
+REAL-15.pdf                           real    SI   N23X    ok          limpio (formato ok; catalogo no verificado)
+REAL-16.jpeg                            real    no   -       no_verificable no_verificable: DX_NO_LEIDO  [+exp: DX_SIN_PRINCIPAL]
+----------------------------------------------------------------------------------------------------------------------
+CUARENTENA excluida de los conteos: 5 documentos (INC <NOMBRE> <NOMBRE> <NOMBRE> <NOMBRE> 290720, INC <NOMBRE> <NOMBRE> <NOMBRE> CAMIL, FALSA-15.pdf, REAL-01.pdf, REAL-15.pdf)
+Validos: 12 falsas + 14 reales = 26
+
+[A] Solo checks DETERMINISTAS y AUTONOMOS (DX_FORMATO_LONGITUD)
+    falsas detectadas : 2 / 12
+    reales marcadas   : 0 / 14  (falsos positivos)
+      falsa   FALSA-09.jpeg  impreso 'A09' = 3 caracteres; el catalogo exige 4 (seria 'A09X' 
+      falsa   FALSA-10.pdf   impreso 'Aoo' = 3 caracteres; el catalogo exige 4 (seria 'A00X' 
+
+[B] Anadiendo los HEURISTICOS experimentales (DX_CAPITULO_INCOHERENTE, DX_SIN_PRINCIPAL)
+    falsas detectadas : 4 / 12
+    reales marcadas   : 2 / 14
+      falsa   FALSA-02.pd DX_CAPITULO_INCOHERENTE  MUELA -> capitulo(s) K, codigo es R
+      falsa   FALSA-05.pd DX_SIN_PRINCIPAL         hay etiqueta de DX relacionado/secundario pero ningu
+      real    REAL-07.pdf                     DX_SIN_PRINCIPAL         hay etiqueta de DX relacionado/secundario pero ningu
+      real    REAL-16.jpeg                      DX_SIN_PRINCIPAL         hay etiqueta de DX relacionado/secundario pero ningu
+
+[C] Checks que HOY no son evaluables (falta el catalogo lpdiagnosticos de ASTGU)
+    DX_INEXISTENTE      : detectadas 0 / 12  -> no_verificable en 31/31 documentos
+    DX_NOMBRE_DISTINTO  : detectadas 0 / 12  -> no_verificable en 31/31 documentos
+
+[D] Cobertura de lectura del DX (calidad del insumo, no acusa)
+    con codigo legible   : 25 / 28
+    DX_NO_LEIDO          : 3  (INC <NOMBRE> <NOMBRE> <NOMBRE> YISE, REAL-07.pdf, REAL-16.jpeg)
+    DX_AUSENTE_EN_DOC    : 0  ()
+    con descripcion      : 18 / 28
+
+resultados -> <dataset-falsedad>\senales\dx_catalogo\resultados.json

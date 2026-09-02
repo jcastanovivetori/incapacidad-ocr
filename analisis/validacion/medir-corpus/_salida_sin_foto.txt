@@ -1,0 +1,17 @@
+CASO 1 — el papel imprime inicio + dias, NO imprime fecha fin
+   entrada          : {'fecha_inicio': '2026-06-01', 'fecha_fin': None, 'dias': 5}
+   registro guardado: {'fecha_inicio': '2026-06-01', 'fecha_fin': '2026-06-05', 'dias': 5, 'fecha_inicio_calculada': False, 'fecha_fin_recalculada': False}
+   con foto  : veredicto=COHERENTE pts=100 cobertura=0.54 T01=NO_EVALUABLE T11=CUMPLE leido(inicio→fin/dias)=2026-06-01→None/5
+   sin foto  : veredicto=COHERENTE pts=100 cobertura=0.85 T01=CUMPLE       T11=CUMPLE leido(inicio→fin/dias)=2026-06-01→2026-06-05/5   <-- T01 CUMPLE sobre un fin que el papel no traia
+
+CASO 2 — el papel imprime inicio + fin + dias y NO cuadran (=F09 del corpus)
+   papel                       : {'fecha_inicio': '2026-06-05', 'fecha_fin': '2026-07-06', 'dias': 2}
+   con foto                    : veredicto=REVISAR   pts= 60 cobertura=0.85 T01=NO_CUMPLE    T11=CUMPLE leido(inicio→fin/dias)=2026-06-05→2026-07-06/2
+   sin foto, CON marca         : veredicto=REVISAR   pts= 60 cobertura=0.54 T01=NO_EVALUABLE T11=NO_CUMPLE leido(inicio→fin/dias)=2026-06-05→None/2
+   sin foto, SIN marca         : veredicto=COHERENTE pts=100 cobertura=0.85 T01=CUMPLE       T11=CUMPLE leido(inicio→fin/dias)=2026-06-05→2026-06-06/2   <-- COHERENTE: la contradiccion desaparecio
+
+CASO 3 — el JSON del corpus de F09 (d5b72739) tal como quedo guardado
+   bloque incapacidad: {"fecha_inicio": "2026-06-05", "fecha_fin": "2026-06-06", "dias": 2, "fecha_expedicion": null, "tipo": null, "origen": null, "tipo_licencia": null, "fecha_inicio_calculada": false}
+   veredicto=COHERENTE pts=100 cobertura=0.85 T01=CUMPLE       T11=CUMPLE leido(inicio→fin/dias)=2026-06-05→2026-06-06/2
+
+Detalle: <dataset-falsedad>\validacion\medir-corpus\probe_sin_foto.json

@@ -1,0 +1,1240 @@
+{
+  "familia": "aritmetica_fechas",
+  "convencion": "inclusiva: (fin - inicio) + 1 == dias  (== extract.normalizar_fechas)",
+  "medicion": {
+    "falsas_detectadas": 2,
+    "falsas_totales": 12,
+    "reales_marcadas": 0,
+    "reales_totales": 14,
+    "cuarentena_excluida": [
+      "F03",
+      "F11",
+      "F15",
+      "R01",
+      "R15"
+    ],
+    "cuarentena_que_dispara": [
+      "F03",
+      "R15"
+    ]
+  },
+  "documentos": [
+    {
+      "impresos": {
+        "inicio": "2026-07-14",
+        "fin": "2026-07-14",
+        "dias": 1,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          1
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F01",
+      "sha8": "8b682a83",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-01.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-07-14",
+        "fecha_fin": "2026-07-14",
+        "dias": 1,
+        "fecha_expedicion": null,
+        "tipo": "Prorroga: No",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-05-18",
+        "fin": "2026-05-18",
+        "dias": 1,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          1
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F02",
+      "sha8": "5c66d97e",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-02.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": "2026-05-18",
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": "Vinculacion: Cotizante",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-07-29",
+        "fin": "2029-07-01",
+        "dias": 4,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          4
+        ]
+      },
+      "hallazgos": [
+        {
+          "check": "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+          "nivel": "ALTA",
+          "desfase_dias": 1065,
+          "esperado_fin_inclusivo": "2026-08-01",
+          "clase": "grueso",
+          "confirmable_sin_ocr": null
+        },
+        {
+          "check": "AF06_ANIO_ATIPICO",
+          "nivel": "MEDIA",
+          "anio_modal": 2026,
+          "n_patas": 1
+        }
+      ],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F03",
+      "sha8": "28c4a946",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "archivo": "FALSA-03.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": 29,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2025-09-02",
+        "fin": "2025-09-04",
+        "dias": 2,
+        "fuente_inicio": "escrita_sura",
+        "fuente_fin": "escrita_sura",
+        "fuente_dias": [
+          "duracion+palabra_antes"
+        ],
+        "orden_incierto": true,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [
+        {
+          "check": "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+          "nivel": "ALTA",
+          "desfase_dias": 1,
+          "esperado_fin_inclusivo": "2025-09-03",
+          "clase": "off_by_one",
+          "confirmable_sin_ocr": true
+        }
+      ],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F04",
+      "sha8": "e0ee54fd",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-04.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": "Generacion",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2025-11-10",
+        "fin": "2025-11-11",
+        "dias": 2,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos",
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2,
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F05",
+      "sha8": "8aeee4cd",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-05.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2025-11-10",
+        "fecha_fin": "2025-11-11",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2025-09-15",
+        "fin": null,
+        "dias": 2,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": null,
+        "fuente_dias": [
+          "dias+digitos",
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2,
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:fin",
+      "id": "F06",
+      "sha8": "9dcb4e35",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-06.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2025-09-15",
+        "fecha_fin": "2025-09-16",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-04-20",
+        "fin": "2026-04-20",
+        "dias": 1,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos",
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          1,
+          1
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F07",
+      "sha8": "9603c77b",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-07.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-04-20",
+        "fecha_fin": "2026-04-20",
+        "dias": 1,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2025-10-31",
+        "fin": "2025-11-01",
+        "dias": 2,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F08",
+      "sha8": "ed2a4eeb",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-08.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2025-10-31",
+        "fecha_fin": "2025-11-01",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-05",
+        "fin": "2026-07-06",
+        "dias": 2,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [
+        {
+          "check": "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+          "nivel": "ALTA",
+          "desfase_dias": 30,
+          "esperado_fin_inclusivo": "2026-06-06",
+          "clase": "grueso",
+          "confirmable_sin_ocr": false
+        }
+      ],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F09",
+      "sha8": "d5b72739",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-09.jpeg",
+      "extension": "jpeg",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-05",
+        "fecha_fin": "2026-06-06",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-09",
+        "fin": "2026-06-10",
+        "dias": 2,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "F10",
+      "sha8": "717d3aad",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-10.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-09",
+        "fecha_fin": "2026-06-10",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": "2026-05-14",
+        "dias": 2,
+        "fuente_inicio": null,
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio",
+      "id": "F11",
+      "sha8": "d86ae595",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "archivo": "FALSA-11.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-05-13",
+        "fecha_fin": "2026-05-14",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": "Inicial",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": true
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+      "id": "F12",
+      "sha8": "d08cba3f",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-12.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+      "id": "F13",
+      "sha8": "99d74f47",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-13.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": "DECONSULTA",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+      "id": "F14",
+      "sha8": "758d3aff",
+      "etiqueta": "falsa",
+      "cuarentena": false,
+      "archivo": "FALSA-14.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+      "id": "F15",
+      "sha8": "58c1e091",
+      "etiqueta": "falsa",
+      "cuarentena": true,
+      "archivo": "FALSA-15.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": "Vinculacion: Subsidiado",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": "2026-05-14",
+        "dias": 2,
+        "fuente_inicio": null,
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio",
+      "id": "R01",
+      "sha8": "d86ae595",
+      "etiqueta": "real",
+      "cuarentena": true,
+      "archivo": "REAL-01.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-05-13",
+        "fecha_fin": "2026-05-14",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": "Inicial",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": true
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-10",
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:fin+dias",
+      "id": "R02",
+      "sha8": "f858510e",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-02.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-10",
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": "2026-06-10",
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-10",
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:fin+dias",
+      "id": "R03",
+      "sha8": "b68fe146",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-03.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-10",
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": "2026-06-10",
+        "tipo": "NO",
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-07-12",
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:fin+dias",
+      "id": "R04",
+      "sha8": "38f40c48",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-04.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-07-12",
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin+dias",
+      "id": "R05",
+      "sha8": "087739e6",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-05.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": null,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-09",
+        "fin": "2026-06-10",
+        "dias": null,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:dias",
+      "id": "R06",
+      "sha8": "eddf194a",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-06.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-09",
+        "fecha_fin": "2026-06-10",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": "Afiliado:Beneficiario",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-07-10",
+        "fin": "2026-07-23",
+        "dias": 14,
+        "fuente_inicio": "escrita_sura",
+        "fuente_fin": "escrita_sura",
+        "fuente_dias": [
+          "duracion+palabra_despues"
+        ],
+        "orden_incierto": true,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          14
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "R07",
+      "sha8": "d6482e2a",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-07.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-07-10",
+        "fecha_fin": "2026-07-23",
+        "dias": 14,
+        "fecha_expedicion": null,
+        "tipo": "Generacion",
+        "origen": null,
+        "tipo_licencia": "PARTO NO VIABLE",
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": "2026-06-06",
+        "dias": null,
+        "fuente_inicio": null,
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+dias",
+      "id": "R08",
+      "sha8": "100e7770",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-08.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-06",
+        "fecha_fin": "2026-06-06",
+        "dias": 1,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-07",
+        "fin": "2026-10-10",
+        "dias": 126,
+        "fuente_inicio": "emision_como_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "duracion+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          126
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "R09",
+      "sha8": "aa3512d4",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-09.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-07",
+        "fecha_fin": "2026-10-10",
+        "dias": 126,
+        "fecha_expedicion": null,
+        "tipo": "AFILIADO:",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": null,
+        "dias": 2,
+        "fuente_inicio": null,
+        "fuente_fin": null,
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio+fin",
+      "id": "R10",
+      "sha8": "e25d5211",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-10.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": "Usuario",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-07-18",
+        "fin": "2026-07-19",
+        "dias": 2,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "R11",
+      "sha8": "c672e270",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-11.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-07-18",
+        "fecha_fin": "2026-07-19",
+        "dias": 2,
+        "fecha_expedicion": null,
+        "tipo": "Medica",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-05-25",
+        "fin": "2026-05-27",
+        "dias": null,
+        "fuente_inicio": "etiqueta_inicio",
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": []
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:dias",
+      "id": "R12",
+      "sha8": "942de664",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-12.jpeg",
+      "extension": "jpeg",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-05-25",
+        "fecha_fin": "2026-05-27",
+        "dias": 3,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-05-24",
+        "fin": "2026-06-22",
+        "dias": 30,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          30
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "R13",
+      "sha8": "b6e8beb6",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-13.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-05-24",
+        "fecha_fin": "2026-06-22",
+        "dias": 30,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": "Comun",
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": null,
+        "fin": "2026-06-11",
+        "dias": 3,
+        "fuente_inicio": null,
+        "fuente_fin": "etiqueta_fin",
+        "fuente_dias": [
+          "dias+digitos"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          3
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:inicio",
+      "id": "R14",
+      "sha8": "691e0af0",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-14.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": "2026-06-09",
+        "fecha_fin": "2026-06-11",
+        "dias": 3,
+        "fecha_expedicion": null,
+        "tipo": "Enfermedad general",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": true
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-07-29",
+        "fin": "2029-07-01",
+        "dias": 4,
+        "fuente_inicio": "prosa_desde",
+        "fuente_fin": "prosa_hasta",
+        "fuente_dias": [
+          "prosa_por_n_dias"
+        ],
+        "orden_incierto": false,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          4
+        ]
+      },
+      "hallazgos": [
+        {
+          "check": "AF01_TRIPLE_IMPRESA_INCOHERENTE",
+          "nivel": "ALTA",
+          "desfase_dias": 1065,
+          "esperado_fin_inclusivo": "2026-08-01",
+          "clase": "grueso",
+          "confirmable_sin_ocr": null
+        },
+        {
+          "check": "AF06_ANIO_ATIPICO",
+          "nivel": "MEDIA",
+          "anio_modal": 2026,
+          "n_patas": 1
+        }
+      ],
+      "tripleta_completa": true,
+      "motivo_no_aplica": null,
+      "id": "R15",
+      "sha8": "28c4a946",
+      "etiqueta": "real",
+      "cuarentena": true,
+      "archivo": "REAL-15.pdf",
+      "extension": "pdf",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": 29,
+        "fecha_expedicion": null,
+        "tipo": null,
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    },
+    {
+      "impresos": {
+        "inicio": "2026-06-09",
+        "fin": "2026-06-09",
+        "dias": null,
+        "fuente_inicio": "escrita_sura",
+        "fuente_fin": "escrita_sura",
+        "fuente_dias": [],
+        "orden_incierto": true,
+        "conflicto_dias": false,
+        "conflicto_fechas": [],
+        "dias_semana_malos": [],
+        "fechas_invalidas": [],
+        "dias_crudos": [
+          2026
+        ]
+      },
+      "hallazgos": [],
+      "tripleta_completa": false,
+      "motivo_no_aplica": "falta_impreso:dias",
+      "id": "R16",
+      "sha8": "272d0d3d",
+      "etiqueta": "real",
+      "cuarentena": false,
+      "archivo": "REAL-16.jpeg",
+      "extension": "jpeg",
+      "campos_pipeline": {
+        "fecha_inicio": null,
+        "fecha_fin": null,
+        "dias": 202,
+        "fecha_expedicion": null,
+        "tipo": "Generacion",
+        "origen": null,
+        "tipo_licencia": null,
+        "fecha_inicio_calculada": false
+      }
+    }
+  ]
+}

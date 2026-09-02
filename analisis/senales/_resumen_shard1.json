@@ -1,0 +1,39 @@
+{
+  "procesados": [
+    "FALSA-02.pdf",
+    "FALSA-06.pdf",
+    "FALSA-10.pdf",
+    "FALSA-14.pdf",
+    "REAL-03.pdf",
+    "REAL-07.pdf",
+    "REAL-11.pdf",
+    "REAL-15.pdf"
+  ],
+  "fallidos": [],
+  "sin_texto": [],
+  "campos": {
+    "cedula": 7,
+    "cie10": 8,
+    "fecha_inicio": 5,
+    "fecha_fin": 5,
+    "dias": 5
+  },
+  "rutas": [
+    str(_DATASET / "ocr/falsas/FALSA-02.json"),
+    str(_DATASET / "ocr/falsas/FALSA-02.txt"),
+    str(_DATASET / "ocr/falsas/FALSA-06.json"),
+    str(_DATASET / "ocr/falsas/FALSA-06.txt"),
+    str(_DATASET / "ocr/falsas/FALSA-10.json"),
+    str(_DATASET / "ocr/falsas/FALSA-10.txt"),
+    str(_DATASET / "ocr/falsas/FALSA-14.json"),
+    str(_DATASET / "ocr/falsas/FALSA-14.txt"),
+    str(_DATASET / "ocr/reales/REAL-03.json"),
+    str(_DATASET / "ocr/reales/REAL-03.txt"),
+    str(_DATASET / "ocr/reales/REAL-07.json"),
+    str(_DATASET / "ocr/reales/REAL-07.txt"),
+    str(_DATASET / "ocr/reales/REAL-11.json"),
+    str(_DATASET / "ocr/reales/REAL-11.txt"),
+    str(_DATASET / "ocr/reales/REAL-15.json"),
+    str(_DATASET / "ocr/reales/REAL-15.txt")
+  ]
+}

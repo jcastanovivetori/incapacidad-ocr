@@ -1,0 +1,244 @@
+{
+ "parte1": [
+  {
+   "caso": "P5a_sin_pie_legal",
+   "nota": "control: sin ningun 'DE <anio>' extra",
+   "leido": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "fila": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14
+   },
+   "fila_correcta": true,
+   "codigos": [],
+   "exige_revision": false,
+   "mensajes": []
+  },
+  {
+   "caso": "P5b_resolucion_ANTES",
+   "nota": "el pie legal sale ANTES de las celdas: el anio del INICIO se toma de la resolucion",
+   "leido": {
+    "fecha_inicio": "2016-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": null,
+    "dias_letra": null
+   },
+   "fila": {
+    "fecha_inicio": "2016-07-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "fila_correcta": false,
+   "codigos": [
+    "T04_RANGO_MAYOR_AL_MAXIMO",
+    "T10_INICIO_MUY_ANTIGUO"
+   ],
+   "exige_revision": true,
+   "mensajes": [
+    "El rango de fechas leído (2016-07-10 → 2026-07-23) dura 3666 día(s), por encima del máximo de 540",
+    "La fecha de inicio (2016-07-10) es de hace más de 730 día(s) (hoy 2026-09-02)"
+   ]
+  },
+  {
+   "caso": "P5c_resolucion_DESPUES",
+   "nota": "el mismo pie DESPUES: no molesta (zip toma los dos primeros)",
+   "leido": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "fila": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14
+   },
+   "fila_correcta": true,
+   "codigos": [],
+   "exige_revision": false,
+   "mensajes": []
+  },
+  {
+   "caso": "P5d_dos_anios_ANTES",
+   "nota": "dos anios extra: las DOS fechas se van a 2016 y la tripleta queda coherente entre si -> ninguna regla puede verlo, la fila entra con 10 anios de error",
+   "leido": {
+    "fecha_inicio": "2016-07-10",
+    "fecha_fin": "2016-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "fila": {
+    "fecha_inicio": "2016-07-10",
+    "fecha_fin": "2016-07-23",
+    "dias": 14
+   },
+   "fila_correcta": false,
+   "codigos": [
+    "T10_INICIO_MUY_ANTIGUO"
+   ],
+   "exige_revision": false,
+   "mensajes": [
+    "La fecha de inicio (2016-07-10) es de hace más de 730 día(s) (hoy 2026-09-02)"
+   ]
+  }
+ ],
+ "parte2": [
+  {
+   "id": "R01",
+   "sha8": "d86ae595",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R02",
+   "sha8": "f858510e",
+   "ancla": true,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R03",
+   "sha8": "b68fe146",
+   "ancla": true,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R04",
+   "sha8": "38f40c48",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R05",
+   "sha8": "087739e6",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R06",
+   "sha8": "eddf194a",
+   "ancla": true,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R07",
+   "sha8": "d6482e2a",
+   "ancla": true,
+   "dm": 2,
+   "years": 2,
+   "usa_via": true,
+   "years_valores": [
+    "2026",
+    "2026"
+   ]
+  },
+  {
+   "id": "R08",
+   "sha8": "100e7770",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R09",
+   "sha8": "aa3512d4",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R10",
+   "sha8": "e25d5211",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R11",
+   "sha8": "c672e270",
+   "ancla": true,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R12",
+   "sha8": "942de664",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R13",
+   "sha8": "b6e8beb6",
+   "ancla": false,
+   "dm": 0,
+   "years": 1,
+   "usa_via": false,
+   "years_valores": [
+    "2026"
+   ]
+  },
+  {
+   "id": "R14",
+   "sha8": "691e0af0",
+   "ancla": true,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R15",
+   "sha8": "28c4a946",
+   "ancla": false,
+   "dm": 0,
+   "years": 0,
+   "usa_via": false,
+   "years_valores": []
+  },
+  {
+   "id": "R16",
+   "sha8": "272d0d3d",
+   "ancla": true,
+   "dm": 1,
+   "years": 2,
+   "usa_via": false,
+   "years_valores": [
+    "2026",
+    "2026"
+   ]
+  }
+ ]
+}

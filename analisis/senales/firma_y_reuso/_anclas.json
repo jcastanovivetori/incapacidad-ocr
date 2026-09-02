@@ -1,0 +1,558 @@
+{
+ "FALSA-01.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 61,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.68
+   }
+  ]
+ },
+ "FALSA-02.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 56,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.73
+   }
+  ]
+ },
+ "FALSA-03.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 57,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.83
+   }
+  ]
+ },
+ "FALSA-04.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 8011,
+    "H": 4992,
+    "n_boxes": 52,
+    "anclas": [],
+    "ink_fuera_texto_pct": 43.06
+   }
+  ]
+ },
+ "FALSA-05.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 35,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.64
+   }
+  ]
+ },
+ "FALSA-06.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2523,
+    "n_boxes": 34,
+    "anclas": [],
+    "ink_fuera_texto_pct": 1.22
+   }
+  ]
+ },
+ "FALSA-07.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 37,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.31
+   }
+  ]
+ },
+ "FALSA-08.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 2526,
+    "H": 1785,
+    "n_boxes": 33,
+    "anclas": [],
+    "ink_fuera_texto_pct": 4.87
+   }
+  ]
+ },
+ "FALSA-09.jpeg": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1272,
+    "H": 900,
+    "n_boxes": 29,
+    "anclas": [],
+    "ink_fuera_texto_pct": 86.06
+   }
+  ]
+ },
+ "FALSA-10.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 2529,
+    "H": 1791,
+    "n_boxes": 29,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.35
+   },
+   {
+    "pagina": 1,
+    "W": 2529,
+    "H": 1791,
+    "n_boxes": 0,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.0
+   }
+  ]
+ },
+ "FALSA-11.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 56,
+    "anclas": [
+     {
+      "txt": "FIRMA DEL PRESTADOR:",
+      "rel": [
+       0.075,
+       0.456,
+       0.21,
+       0.467
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 1.21
+   }
+  ]
+ },
+ "FALSA-12.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 53,
+    "anclas": [],
+    "ink_fuera_texto_pct": 2.05
+   }
+  ]
+ },
+ "FALSA-13.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 54,
+    "anclas": [],
+    "ink_fuera_texto_pct": 2.28
+   }
+  ]
+ },
+ "FALSA-14.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 55,
+    "anclas": [],
+    "ink_fuera_texto_pct": 2.11
+   }
+  ]
+ },
+ "FALSA-15.pdf": {
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 56,
+    "anclas": [],
+    "ink_fuera_texto_pct": 1.08
+   }
+  ]
+ },
+ "REAL-01.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 56,
+    "anclas": [
+     {
+      "txt": "FIRMA DEL PRESTADOR:",
+      "rel": [
+       0.075,
+       0.456,
+       0.21,
+       0.467
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 1.21
+   }
+  ]
+ },
+ "REAL-02.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 2376,
+    "H": 1836,
+    "n_boxes": 74,
+    "anclas": [],
+    "ink_fuera_texto_pct": 2.14
+   }
+  ]
+ },
+ "REAL-03.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 2526,
+    "H": 1785,
+    "n_boxes": 75,
+    "anclas": [],
+    "ink_fuera_texto_pct": 3.33
+   }
+  ]
+ },
+ "REAL-04.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 2376,
+    "H": 1836,
+    "n_boxes": 59,
+    "anclas": [],
+    "ink_fuera_texto_pct": 4.64
+   }
+  ]
+ },
+ "REAL-05.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 57,
+    "anclas": [
+     {
+      "txt": "FIRMA",
+      "rel": [
+       0.18,
+       0.787,
+       0.238,
+       0.801
+      ]
+     },
+     {
+      "txt": "FIRMA",
+      "rel": [
+       0.522,
+       0.789,
+       0.581,
+       0.802
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 5.1
+   },
+   {
+    "pagina": 1,
+    "W": 2526,
+    "H": 1785,
+    "n_boxes": 21,
+    "anclas": [],
+    "ink_fuera_texto_pct": 20.46
+   }
+  ]
+ },
+ "REAL-06.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2526,
+    "n_boxes": 54,
+    "anclas": [
+     {
+      "txt": "FIRMA PACIENTE",
+      "rel": [
+       0.603,
+       0.374,
+       0.689,
+       0.383
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 0.68
+   }
+  ]
+ },
+ "REAL-07.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 5319,
+    "H": 7519,
+    "n_boxes": 56,
+    "anclas": [],
+    "ink_fuera_texto_pct": 1.77
+   }
+  ]
+ },
+ "REAL-08.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 63,
+    "anclas": [
+     {
+      "txt": "FIRMA",
+      "rel": [
+       0.175,
+       0.841,
+       0.233,
+       0.855
+      ]
+     },
+     {
+      "txt": "FIRMA",
+      "rel": [
+       0.511,
+       0.846,
+       0.57,
+       0.861
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 7.57
+   }
+  ]
+ },
+ "REAL-09.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1785,
+    "H": 2442,
+    "n_boxes": 57,
+    "anclas": [],
+    "ink_fuera_texto_pct": 1.09
+   }
+  ]
+ },
+ "REAL-10.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 140,
+    "anclas": [],
+    "ink_fuera_texto_pct": 1.95
+   },
+   {
+    "pagina": 1,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 51,
+    "anclas": [
+     {
+      "txt": "FIRMA DELPACIENTE",
+      "rel": [
+       0.056,
+       0.348,
+       0.169,
+       0.356
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 0.81
+   }
+  ]
+ },
+ "REAL-11.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 72,
+    "anclas": [
+     {
+      "txt": "FIRMA DELPACIENTE",
+      "rel": [
+       0.055,
+       0.407,
+       0.17,
+       0.415
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 0.58
+   }
+  ]
+ },
+ "REAL-12.jpeg": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 720,
+    "H": 1280,
+    "n_boxes": 45,
+    "anclas": [
+     {
+      "txt": "FIRMA DELMEDICOOPERSONARESPO",
+      "rel": [
+       0.406,
+       0.516,
+       0.439,
+       0.695
+      ]
+     }
+    ],
+    "ink_fuera_texto_pct": 47.25
+   }
+  ]
+ },
+ "REAL-13.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1786,
+    "H": 2526,
+    "n_boxes": 48,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.78
+   }
+  ]
+ },
+ "REAL-14.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 68,
+    "anclas": [],
+    "ink_fuera_texto_pct": 40.17
+   }
+  ]
+ },
+ "REAL-15.pdf": {
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 1836,
+    "H": 2376,
+    "n_boxes": 57,
+    "anclas": [],
+    "ink_fuera_texto_pct": 0.83
+   }
+  ]
+ },
+ "REAL-16.jpeg": {
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "paginas": [
+   {
+    "pagina": 0,
+    "W": 900,
+    "H": 1600,
+    "n_boxes": 58,
+    "anclas": [],
+    "ink_fuera_texto_pct": 51.15
+   }
+  ]
+ }
+}

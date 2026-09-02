@@ -1,0 +1,2865 @@
+[
+ {
+  "id": "F00",
+  "archivo": "FALSA-01.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "8b682a8328cd3b14dc7eac3d5f080d4e30dd31342e4f654a43495ce2eaca5bbd",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "149 objetos de texto visibles, 3 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "2 familias tipograficas distintas: {'arial': 143, 'couriernew': 6} zonas={'couriernew': [56.8, 28.9, 359.3, 770.0], 'arial': [33.7, 254.0, 534.5, 761.2]}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'couriernew': 6} sobre 149 objetos de texto; zona ocupada (bbox pt) = {'couriernew': [56.8, 28.9, 359.3, 770.0]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 149}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "sin mezcla subset/completa"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word 2010",
+    "Producer": "Microsoft® Word 2010",
+    "CreationDate": "D:20260715210250-05'00'",
+    "ModDate": "D:20260715210250-05'00'",
+    "Author": "ROGER"
+   },
+   "n_paginas": 1,
+   "n_texto": 333,
+   "n_texto_visible": 149,
+   "n_texto_invisible": 0,
+   "n_imagenes": 5,
+   "fuentes": {
+    "Arial": 93,
+    "Arial,Bold": 50,
+    "Courier New,Bold": 6
+   },
+   "familias": {
+    "arial": 143,
+    "couriernew": 6
+   },
+   "familia_zona": {
+    "couriernew": [
+     56.8,
+     28.9,
+     359.3,
+     770.0
+    ],
+    "arial": [
+     33.7,
+     254.0,
+     534.5,
+     761.2
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 149
+   },
+   "alfas": {
+    "255": 149
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F01",
+  "archivo": "FALSA-02.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "5c66d97e191eef10197998204efc5266f243f8fe88a9b90ce3e7ad305dcfa8ac",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "178 objetos de texto visibles, 3 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "2 familias tipograficas distintas: {'arial': 160, 'couriernew': 18} zonas={'couriernew': [56.6, 31.9, 358.3, 770.3], 'arial': [34.1, 301.7, 533.6, 761.8]}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'couriernew': 18} sobre 178 objetos de texto; zona ocupada (bbox pt) = {'couriernew': [56.6, 31.9, 358.3, 770.3]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 178}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "sin mezcla subset/completa"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word 2016",
+    "Producer": "Microsoft® Word 2016",
+    "CreationDate": "D:20260519161349-05'00'",
+    "ModDate": "D:20260519161349-05'00'",
+    "Author": "Mayle"
+   },
+   "n_paginas": 1,
+   "n_texto": 377,
+   "n_texto_visible": 178,
+   "n_texto_invisible": 0,
+   "n_imagenes": 6,
+   "fuentes": {
+    "Arial": 95,
+    "Arial,Bold": 65,
+    "Courier New,Bold": 18
+   },
+   "familias": {
+    "arial": 160,
+    "couriernew": 18
+   },
+   "familia_zona": {
+    "couriernew": [
+     56.6,
+     31.9,
+     358.3,
+     770.3
+    ],
+    "arial": [
+     34.1,
+     301.7,
+     533.6,
+     761.8
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 178
+   },
+   "alfas": {
+    "255": 178
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F02",
+  "archivo": "FALSA-03.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha256": "28c4a946d84a402bce4877207c8ee89d8d4cac329ad7e6c368381fd69e4d339e",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA",
+   "TP_ALFA_TEXTO_NO_UNIFORME",
+   "TP_PARCHE_BLANCO"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "Creator!=Producer=True ModDate!=CreationDate=True"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "122 objetos de texto visibles, 5 fuentes, 3 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "3 familias tipograficas distintas: {'arial': 92, 'couriernew': 20, 'timesnewroman': 10}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'timesnewroman': 10} sobre 122 objetos de texto; zona ocupada (bbox pt) = {'timesnewroman': [72.3, 371.9, 545.3, 402.3]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "SOSPECHA",
+    "detalle": "el texto se pinta con 2 opacidades distintas {'255': 118, '191': 4}: un unico generador usa una sola; el texto semitransparente lo estampo otra herramienta"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "SOSPECHA",
+    "detalle": "15 rectangulo(s) blanco(s) opaco(s) pintados encima de contenido previo: [([82.0, 662.5, 123.2, 671.1], 'imagen'), ([80.0, 660.5, 125.2, 673.1], 'imagen'), ([74.5, 653.8, 186.5, 662.4], 'imagen'), ([72.5, 651.8, 188.5, 664.4], 'imagen'), ([72.3, 644.6, 115.4, 652.6], 'imagen'), ([70.3, 642.6, 117.4, 654.6], 'imagen')]"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['ArialMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word LTSC",
+    "Producer": "4-Heights™ PDF Library 3.4.0.6904 (http://www.pdf-tools.com)",
+    "CreationDate": "D:20260609164647-05'00'",
+    "ModDate": "D:20260729190454Z",
+    "Author": "HP 240 G9"
+   },
+   "n_paginas": 1,
+   "n_texto": 244,
+   "n_texto_visible": 122,
+   "n_texto_invisible": 0,
+   "n_imagenes": 12,
+   "fuentes": {
+    "ArialMT": 69,
+    "CourierNewPS-BoldMT": 20,
+    "Arial-BoldMT": 19,
+    "TimesNewRomanPS-BoldMT": 10,
+    "ACWIYO+ArialMT": 4
+   },
+   "familias": {
+    "arial": 92,
+    "couriernew": 20,
+    "timesnewroman": 10
+   },
+   "familia_zona": {
+    "couriernew": [
+     30.2,
+     3.5,
+     400.3,
+     774.3
+    ],
+    "arial": [
+     39.0,
+     443.9,
+     562.8,
+     764.5
+    ],
+    "timesnewroman": [
+     72.3,
+     371.9,
+     545.3,
+     402.3
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 118,
+    "(0, 0, 0, 191)": 4
+   },
+   "alfas": {
+    "255": 118,
+    "191": 4
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": [
+    {
+     "pagina": 0,
+     "bbox": [
+      82.0,
+      662.5,
+      123.2,
+      671.1
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      80.0,
+      660.5,
+      125.2,
+      673.1
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      74.5,
+      653.8,
+      186.5,
+      662.4
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      72.5,
+      651.8,
+      188.5,
+      664.4
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      72.3,
+      644.6,
+      115.4,
+      652.6
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      70.3,
+      642.6,
+      117.4,
+      654.6
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      79.3,
+      634.7,
+      126.8,
+      643.8
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      77.3,
+      632.7,
+      128.8,
+      645.8
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      110.2,
+      706.2,
+      167.3,
+      715.2
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      319.8,
+      706.2,
+      376.9,
+      715.2
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      274.8,
+      679.8,
+      373.9,
+      689.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      524.3,
+      562.0,
+      554.2,
+      571.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      86.4,
+      692.3,
+      248.6,
+      695.7
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      86.4,
+      695.9,
+      252.4,
+      698.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      152.4,
+      688.3,
+      252.4,
+      691.3
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    }
+   ]
+  }
+ },
+ {
+  "id": "F03",
+  "archivo": "FALSA-04.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "e0ee54fdbde7074592534094a5fe4a0dfd9c6e8b2ba45798f1f352aa71cb6b60",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=6 /Prev=5 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=True"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "la capa de texto la sintetizo un OCR (47 fuentes fabricadas por glifo; cadena='Adobe Acrobat Reader (iOS) Adobe Acrobat Mobile Paper Capture Plug-in with ClearScan'): las fuentes no son las del emisor"
+   }
+  },
+  "rasgos": {
+   "eof": 6,
+   "prev": 5,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Adobe Acrobat Reader (iOS)",
+    "Producer": "Adobe Acrobat Mobile Paper Capture Plug-in with ClearScan",
+    "CreationDate": "D:20250804174118-05'00'",
+    "ModDate": "D:20250902100134-05'00'",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 429,
+   "n_texto_visible": 428,
+   "n_texto_invisible": 0,
+   "n_imagenes": 31,
+   "fuentes": {
+    "*Arial-12402": 148,
+    "*Helvetica-Bold-12400": 114,
+    "*Verdana-Bold-12404": 38,
+    "*Helvetica-Bold-12399": 15,
+    "*Times New Roman-12358": 8,
+    "*Times New Roman-12396": 7,
+    "*Times New Roman-Italic-12360": 6,
+    "*Times New Roman-12389": 6,
+    "*Times New Roman-Bold-12382": 5,
+    "*Times New Roman-Italic-12381": 5,
+    "*Times New Roman-Italic-12375": 5,
+    "*Times New Roman-Italic-12385": 4,
+    "*Times New Roman-Italic-12380": 4,
+    "*Times New Roman-12372": 4,
+    "*Times New Roman-12391": 3,
+    "*Times New Roman-Italic-12386": 3,
+    "*Times New Roman-Italic-12373": 3,
+    "*Times New Roman-BoldItalic-12371": 3,
+    "*Times New Roman-Italic-12388": 3,
+    "*Times New Roman-Italic-12362": 3,
+    "*Helvetica-Bold-12401": 3,
+    "*Times New Roman-12370": 2,
+    "*Times New Roman-12361": 2,
+    "*Times New Roman-12363": 2,
+    "*Times New Roman-BoldItalic-12394": 2,
+    "*Times New Roman-12392": 2,
+    "*Arial-12403": 2,
+    "*Times New Roman-Italic-12369": 2,
+    "*Times New Roman-Bold-12383": 2,
+    "*Times New Roman-Bold-12365": 2,
+    "*Times New Roman-BoldItalic-12367": 2,
+    "*Times New Roman-Bold-12364": 2,
+    "*Times New Roman-12397": 1,
+    "*Source Sans Pro-12398": 1,
+    "*Times New Roman-BoldItalic-12395": 1,
+    "*Times New Roman-Italic-12393": 1,
+    "*Times New Roman-BoldItalic-12390": 1,
+    "*Times New Roman-Italic-12387": 1,
+    "*Times New Roman-Italic-12384": 1,
+    "*Times New Roman-12379": 1,
+    "*Times New Roman-12378": 1,
+    "*Times New Roman-12377": 1,
+    "*Times New Roman-Italic-12374": 1,
+    "*Times New Roman-BoldItalic-12376": 1,
+    "*Arial": 1,
+    "*Times New Roman-Italic-12368": 1,
+    "*Times New Roman-Bold-12366": 1,
+    "*Times New Roman-Bold-12359": 1
+   },
+   "familias": {
+    "*arial-12402": 148,
+    "*helvetica-bold-12400": 114,
+    "*verdana-bold-12404": 38,
+    "*helvetica-bold-12399": 15,
+    "*timesnewroman-12358": 8,
+    "*timesnewroman-12396": 7,
+    "*timesnewroman-italic-12360": 6,
+    "*timesnewroman-12389": 6,
+    "*timesnewroman-bold-12382": 5,
+    "*timesnewroman-italic-12381": 5,
+    "*timesnewroman-italic-12375": 5,
+    "*timesnewroman-italic-12385": 4,
+    "*timesnewroman-italic-12380": 4,
+    "*timesnewroman-12372": 4,
+    "*timesnewroman-12391": 3,
+    "*timesnewroman-italic-12386": 3,
+    "*timesnewroman-italic-12373": 3,
+    "*timesnewroman-bolditalic-12371": 3,
+    "*timesnewroman-italic-12388": 3,
+    "*timesnewroman-italic-12362": 3,
+    "*helvetica-bold-12401": 3,
+    "*timesnewroman-12370": 2,
+    "*timesnewroman-12361": 2,
+    "*timesnewroman-12363": 2,
+    "*timesnewroman-bolditalic-12394": 2,
+    "*timesnewroman-12392": 2,
+    "*arial-12403": 2,
+    "*timesnewroman-italic-12369": 2,
+    "*timesnewroman-bold-12383": 2,
+    "*timesnewroman-bold-12365": 2,
+    "*timesnewroman-bolditalic-12367": 2,
+    "*timesnewroman-bold-12364": 2,
+    "*timesnewroman-12397": 1,
+    "*sourcesanspro-12398": 1,
+    "*timesnewroman-bolditalic-12395": 1,
+    "*timesnewroman-italic-12393": 1,
+    "*timesnewroman-bolditalic-12390": 1,
+    "*timesnewroman-italic-12387": 1,
+    "*timesnewroman-italic-12384": 1,
+    "*timesnewroman-12379": 1,
+    "*timesnewroman-12378": 1,
+    "*timesnewroman-12377": 1,
+    "*timesnewroman-italic-12374": 1,
+    "*timesnewroman-bolditalic-12376": 1,
+    "*arial": 1,
+    "*timesnewroman-italic-12368": 1,
+    "*timesnewroman-bold-12366": 1,
+    "*timesnewroman-bold-12359": 1
+   },
+   "familia_zona": {
+    "*verdana-bold-12404": [
+     233.4,
+     874.4,
+     3007.2,
+     2440.3
+    ],
+    "*timesnewroman-12391": [
+     1221.0,
+     2137.1,
+     2532.0,
+     2407.2
+    ],
+    "*timesnewroman-italic-12386": [
+     1118.4,
+     1638.6,
+     2990.8,
+     2432.8
+    ],
+    "*timesnewroman-italic-12360": [
+     1481.8,
+     530.6,
+     3388.6,
+     2436.0
+    ],
+    "*timesnewroman-italic-12373": [
+     170.3,
+     1098.6,
+     2019.7,
+     2433.8
+    ],
+    "*timesnewroman-12396": [
+     1206.9,
+     2261.2,
+     3692.5,
+     2386.2
+    ],
+    "*timesnewroman-12397": [
+     1730.6,
+     2339.0,
+     1751.4,
+     2356.7
+    ],
+    "*timesnewroman-12389": [
+     1371.5,
+     1932.1,
+     2641.7,
+     2343.2
+    ],
+    "*sourcesanspro-12398": [
+     3140.2,
+     2316.0,
+     3264.7,
+     2374.9
+    ],
+    "*timesnewroman-12358": [
+     1175.2,
+     241.1,
+     3055.2,
+     2307.4
+    ],
+    "*timesnewroman-12370": [
+     1131.6,
+     776.3,
+     1219.9,
+     2243.3
+    ],
+    "*timesnewroman-italic-12385": [
+     1139.3,
+     1612.3,
+     2989.7,
+     2256.9
+    ],
+    "*timesnewroman-12361": [
+     2084.1,
+     541.5,
+     3248.4,
+     2267.5
+    ],
+    "*timesnewroman-bold-12382": [
+     1261.3,
+     1485.9,
+     2599.1,
+     2272.1
+    ],
+    "*timesnewroman-12363": [
+     2304.5,
+     541.5,
+     2694.0,
+     2277.4
+    ],
+    "*timesnewroman-bolditalic-12371": [
+     1231.9,
+     911.7,
+     3533.1,
+     2267.4
+    ],
+    "*timesnewroman-bolditalic-12394": [
+     1142.5,
+     2176.0,
+     1205.7,
+     2223.4
+    ],
+    "*timesnewroman-bolditalic-12395": [
+     1193.8,
+     2176.9,
+     1231.9,
+     2206.9
+    ],
+    "*arial-12402": [
+     226.4,
+     557.4,
+     3710.4,
+     2244.5
+    ],
+    "*timesnewroman-italic-12393": [
+     3173.0,
+     2178.4,
+     3197.0,
+     2218.2
+    ],
+    "*timesnewroman-12392": [
+     196.4,
+     1960.4,
+     3520.0,
+     2227.3
+    ],
+    "*timesnewroman-italic-12381": [
+     2036.2,
+     1504.4,
+     3509.1,
+     2190.1
+    ],
+    "*helvetica-bold-12399": [
+     1118.3,
+     241.1,
+     3486.2,
+     2159.7
+    ],
+    "*timesnewroman-italic-12388": [
+     1067.1,
+     1932.9,
+     3381.4,
+     1971.9
+    ],
+    "*timesnewroman-bolditalic-12390": [
+     1261.3,
+     1932.1,
+     1350.8,
+     2033.8
+    ],
+    "*timesnewroman-italic-12380": [
+     165.9,
+     1486.9,
+     2462.7,
+     1980.3
+    ],
+    "*timesnewroman-italic-12387": [
+     1945.5,
+     1895.0,
+     1991.3,
+     1930.4
+    ],
+    "*arial-12403": [
+     744.2,
+     1860.0,
+     836.9,
+     1895.0
+    ],
+    "*timesnewroman-italic-12375": [
+     1117.2,
+     1184.8,
+     3058.4,
+     1837.0
+    ],
+    "*timesnewroman-italic-12369": [
+     2013.2,
+     668.4,
+     2500.1,
+     1698.8
+    ],
+    "*helvetica-bold-12400": [
+     731.1,
+     553.9,
+     3640.6,
+     1580.0
+    ],
+    "*timesnewroman-bold-12383": [
+     1289.7,
+     1492.4,
+     1782.9,
+     1521.2
+    ],
+    "*timesnewroman-italic-12384": [
+     1065.1,
+     1506.3,
+     1138.1,
+     1550.9
+    ],
+    "*timesnewroman-12379": [
+     1522.1,
+     1448.4,
+     1541.8,
+     1475.1
+    ],
+    "*timesnewroman-12378": [
+     1718.5,
+     1416.0,
+     1770.9,
+     1462.4
+    ],
+    "*timesnewroman-12377": [
+     1626.7,
+     1298.2,
+     1688.0,
+     1344.7
+    ],
+    "*timesnewroman-italic-12374": [
+     1607.3,
+     1181.9,
+     1630.2,
+     1218.4
+    ],
+    "*timesnewroman-12372": [
+     1584.3,
+     1097.6,
+     1818.9,
+     1181.7
+    ],
+    "*timesnewroman-italic-12362": [
+     1972.6,
+     541.4,
+     2695.6,
+     1177.7
+    ],
+    "*timesnewroman-bold-12365": [
+     1674.9,
+     626.9,
+     2016.5,
+     943.0
+    ],
+    "*timesnewroman-bolditalic-12376": [
+     2553.2,
+     1275.1,
+     2580.5,
+     1290.8
+    ],
+    "*arial": [
+     3236.7,
+     1436.4,
+     3420.7,
+     1471.5
+    ],
+    "*helvetica-bold-12401": [
+     2206.9,
+     630.7,
+     3253.3,
+     708.8
+    ],
+    "*timesnewroman-italic-12368": [
+     1249.4,
+     643.0,
+     1269.1,
+     673.1
+    ],
+    "*timesnewroman-bolditalic-12367": [
+     1223.8,
+     557.4,
+     1325.8,
+     641.9
+    ],
+    "*timesnewroman-bold-12366": [
+     2014.4,
+     653.2,
+     2020.9,
+     669.8
+    ],
+    "*timesnewroman-bold-12364": [
+     2149.7,
+     553.9,
+     2250.1,
+     657.3
+    ],
+    "*timesnewroman-bold-12359": [
+     3026.8,
+     409.1,
+     3047.5,
+     424.6
+    ]
+   },
+   "colores": {
+    "(30, 26, 27, 255)": 33,
+    "(29, 25, 27, 255)": 29,
+    "(29, 27, 27, 255)": 22,
+    "(21, 18, 19, 255)": 19,
+    "(24, 20, 21, 255)": 12,
+    "(37, 33, 33, 255)": 10,
+    "(130, 129, 123, 255)": 9,
+    "(11, 9, 8, 255)": 9,
+    "(17, 14, 18, 255)": 9,
+    "(30, 29, 31, 255)": 9,
+    "(130, 127, 124, 255)": 9,
+    "(52, 47, 48, 255)": 9,
+    "(28, 27, 28, 255)": 8,
+    "(39, 37, 37, 255)": 7,
+    "(111, 108, 106, 255)": 6,
+    "(120, 118, 114, 255)": 6,
+    "(31, 26, 26, 255)": 6,
+    "(94, 90, 88, 255)": 5,
+    "(25, 22, 21, 255)": 5,
+    "(31, 31, 32, 255)": 5,
+    "(137, 133, 128, 255)": 5,
+    "(113, 110, 106, 255)": 4,
+    "(110, 106, 104, 255)": 4,
+    "(30, 29, 29, 255)": 4,
+    "(28, 26, 28, 255)": 4,
+    "(129, 125, 122, 255)": 4,
+    "(27, 24, 25, 255)": 4,
+    "(31, 29, 28, 255)": 4,
+    "(138, 136, 132, 255)": 3,
+    "(124, 121, 118, 255)": 3,
+    "(127, 123, 119, 255)": 3,
+    "(160, 156, 152, 255)": 3,
+    "(105, 104, 101, 255)": 3,
+    "(49, 49, 49, 255)": 3,
+    "(131, 129, 125, 255)": 3,
+    "(108, 104, 101, 255)": 3,
+    "(125, 122, 118, 255)": 3,
+    "(140, 137, 133, 255)": 3,
+    "(32, 31, 31, 255)": 3,
+    "(35, 34, 34, 255)": 3,
+    "(31, 30, 29, 255)": 3,
+    "(131, 128, 124, 255)": 3,
+    "(34, 33, 37, 255)": 3,
+    "(137, 134, 130, 255)": 3,
+    "(33, 33, 35, 255)": 3,
+    "(136, 132, 128, 255)": 3,
+    "(49, 46, 46, 255)": 3,
+    "(61, 60, 53, 255)": 3,
+    "(119, 116, 112, 255)": 3,
+    "(40, 37, 42, 255)": 2,
+    "(74, 72, 69, 255)": 2,
+    "(116, 112, 108, 255)": 2,
+    "(112, 108, 104, 255)": 2,
+    "(152, 148, 142, 255)": 2,
+    "(76, 72, 74, 255)": 2,
+    "(142, 145, 138, 255)": 2,
+    "(124, 122, 120, 255)": 2,
+    "(127, 124, 120, 255)": 2,
+    "(132, 130, 127, 255)": 2,
+    "(140, 136, 134, 255)": 2,
+    "(114, 110, 109, 255)": 2,
+    "(0, 0, 0, 255)": 2,
+    "(114, 111, 109, 255)": 2,
+    "(122, 120, 116, 255)": 2,
+    "(136, 133, 129, 255)": 2,
+    "(164, 160, 156, 255)": 2,
+    "(97, 95, 95, 255)": 2,
+    "(32, 31, 34, 255)": 2,
+    "(35, 31, 34, 255)": 2,
+    "(37, 33, 36, 255)": 2,
+    "(92, 90, 89, 255)": 2,
+    "(82, 80, 80, 255)": 2,
+    "(130, 126, 124, 255)": 2,
+    "(161, 153, 149, 255)": 2,
+    "(166, 165, 165, 255)": 1,
+    "(64, 68, 60, 255)": 1,
+    "(64, 60, 60, 255)": 1,
+    "(79, 79, 73, 255)": 1,
+    "(116, 116, 112, 255)": 1,
+    "(152, 148, 144, 255)": 1,
+    "(92, 88, 88, 255)": 1,
+    "(76, 76, 72, 255)": 1,
+    "(96, 96, 92, 255)": 1,
+    "(172, 164, 160, 255)": 1,
+    "(161, 150, 125, 255)": 1,
+    "(140, 140, 136, 255)": 1,
+    "(52, 48, 48, 255)": 1,
+    "(144, 148, 140, 255)": 1,
+    "(21, 19, 24, 255)": 1,
+    "(96, 92, 88, 255)": 1,
+    "(124, 124, 116, 255)": 1,
+    "(96, 92, 92, 255)": 1,
+    "(29, 27, 30, 255)": 1,
+    "(75, 75, 76, 255)": 1,
+    "(162, 158, 153, 255)": 1,
+    "(124, 123, 119, 255)": 1,
+    "(104, 100, 96, 255)": 1,
+    "(68, 64, 64, 255)": 1,
+    "(140, 136, 132, 255)": 1,
+    "(21, 18, 20, 255)": 1,
+    "(134, 130, 129, 255)": 1,
+    "(30, 29, 33, 255)": 1,
+    "(116, 113, 109, 255)": 1,
+    "(120, 116, 112, 255)": 1,
+    "(22, 18, 18, 255)": 1,
+    "(128, 126, 122, 255)": 1,
+    "(132, 128, 128, 255)": 1,
+    "(114, 114, 109, 255)": 1,
+    "(65, 64, 61, 255)": 1,
+    "(24, 20, 20, 255)": 1,
+    "(67, 63, 63, 255)": 1,
+    "(115, 114, 110, 255)": 1,
+    "(134, 130, 126, 255)": 1,
+    "(156, 152, 148, 255)": 1,
+    "(28, 24, 28, 255)": 1,
+    "(34, 30, 30, 255)": 1,
+    "(127, 119, 111, 255)": 1,
+    "(116, 112, 110, 255)": 1,
+    "(87, 83, 83, 255)": 1,
+    "(65, 61, 64, 255)": 1,
+    "(16, 12, 12, 255)": 1,
+    "(64, 60, 64, 255)": 1,
+    "(32, 28, 32, 255)": 1,
+    "(144, 140, 140, 255)": 1,
+    "(20, 16, 16, 255)": 1,
+    "(60, 56, 56, 255)": 1,
+    "(113, 109, 107, 255)": 1,
+    "(151, 147, 147, 255)": 1,
+    "(176, 168, 164, 255)": 1
+   },
+   "alfas": {
+    "255": 428
+   },
+   "texto_sobre_escaneo": 427,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F04",
+  "archivo": "FALSA-05.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "8aeee4cd8e03cc764158d7f4c164ccbfcc49fc33a400ed0cf7b24ba9cea1fa14",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "156 objetos de texto visibles, 4 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "2 familias tipograficas distintas: {'arial': 143, 'palatinolinotype': 13} zonas={'arial': [21.2, 360.1, 593.4, 768.1], 'palatinolinotype': [44.4, 574.0, 337.6, 651.0]}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'palatinolinotype': 13} sobre 156 objetos de texto; zona ocupada (bbox pt) = {'palatinolinotype': [44.4, 574.0, 337.6, 651.0]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 156}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['Arial-BoldMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word para Microsoft 365",
+    "Producer": "Microsoft® Word para Microsoft 365",
+    "CreationDate": "D:20251112140027-05'00'",
+    "ModDate": "D:20251112140027-05'00'",
+    "Author": "WinuE"
+   },
+   "n_paginas": 1,
+   "n_texto": 303,
+   "n_texto_visible": 156,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {
+    "Arial-BoldMT": 73,
+    "ArialMT": 69,
+    "PalatinoLinotype-Roman": 13,
+    "BCDGEE+Arial-BoldMT": 1
+   },
+   "familias": {
+    "arial": 143,
+    "palatinolinotype": 13
+   },
+   "familia_zona": {
+    "arial": [
+     21.2,
+     360.1,
+     593.4,
+     768.1
+    ],
+    "palatinolinotype": [
+     44.4,
+     574.0,
+     337.6,
+     651.0
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 156
+   },
+   "alfas": {
+    "255": 156
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F05",
+  "archivo": "FALSA-06.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "9dcb4e355129897d3e58bf993132cb89c22cf0132da91a1db8ef7580b477957f",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "EPSON Scan",
+    "CreationDate": "D:20250917084923-05'00'",
+    "ModDate": "D:20250917084923-05'00'",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F06",
+  "archivo": "FALSA-07.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "9603c77bcb7b89c301c955209c424ab3b3a2eea3f0cb5095457c3282c2f7a022",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "169 objetos de texto visibles, 4 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "2 familias tipograficas distintas: {'arial': 157, 'palatinolinotype': 12} zonas={'arial': [21.6, 360.1, 590.1, 768.1], 'palatinolinotype': [44.9, 574.7, 337.6, 650.6]}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'palatinolinotype': 12} sobre 169 objetos de texto; zona ocupada (bbox pt) = {'palatinolinotype': [44.9, 574.7, 337.6, 650.6]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 169}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['Arial-BoldMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word para Microsoft 365",
+    "Producer": "Microsoft® Word para Microsoft 365",
+    "CreationDate": "D:20260423140439-05'00'",
+    "ModDate": "D:20260423140439-05'00'",
+    "Author": "WinuE"
+   },
+   "n_paginas": 1,
+   "n_texto": 304,
+   "n_texto_visible": 169,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {
+    "ArialMT": 83,
+    "Arial-BoldMT": 73,
+    "PalatinoLinotype-Roman": 12,
+    "BCDGEE+Arial-BoldMT": 1
+   },
+   "familias": {
+    "arial": 157,
+    "palatinolinotype": 12
+   },
+   "familia_zona": {
+    "arial": [
+     21.6,
+     360.1,
+     590.1,
+     768.1
+    ],
+    "palatinolinotype": [
+     44.9,
+     574.7,
+     337.6,
+     650.6
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 169
+   },
+   "alfas": {
+    "255": 169
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F07",
+  "archivo": "FALSA-08.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "ed2a4eeb3a42b97c59df3291626053917d51818fa2d9eb37906bf805f1ef20dc",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F08",
+  "archivo": "FALSA-09.jpeg",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "d5b72739306f58f2d6953e9a76c9aeda37cc5952bd861c14dd7b0debf23fc9da",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "contenedor 'jpeg': una imagen suelta no tiene objetos de texto ni fuentes"
+   }
+  },
+  "rasgos": {}
+ },
+ {
+  "id": "F09",
+  "archivo": "FALSA-10.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "717d3aad87293e4ef75bfc83b9ea2f20e315d8944c4bcffd842e163f59285ab3",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=2 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "128 objetos de texto visibles, 3 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "2 familias tipograficas distintas: {'calibri': 103, 'arial': 25} zonas={'calibri': [24.4, 56.2, 765.5, 509.9], 'arial': [28.1, 110.6, 683.6, 526.5]}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "LIMPIO",
+    "detalle": "ninguna familia por debajo del 15%: {'calibri': 103, 'arial': 25}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 128}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['Calibri']"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 2,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft Word",
+    "Producer": "",
+    "CreationDate": "D:20260609162430+00'00'",
+    "ModDate": "D:20260609162430+00'00'",
+    "Author": "usuario"
+   },
+   "n_paginas": 2,
+   "n_texto": 245,
+   "n_texto_visible": 128,
+   "n_texto_invisible": 0,
+   "n_imagenes": 8,
+   "fuentes": {
+    "Calibri": 100,
+    "Arial-BoldMT": 25,
+    "BCDGEE+Calibri": 3
+   },
+   "familias": {
+    "calibri": 103,
+    "arial": 25
+   },
+   "familia_zona": {
+    "calibri": [
+     24.4,
+     56.2,
+     765.5,
+     509.9
+    ],
+    "arial": [
+     28.1,
+     110.6,
+     683.6,
+     526.5
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 128
+   },
+   "alfas": {
+    "255": 128
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F10",
+  "archivo": "FALSA-11.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha256": "d86ae595f5bbc8019cd3b1284eb975daf86ff24f5327c14d13f37bd84085cf6d",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (2 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F11",
+  "archivo": "FALSA-12.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "d08cba3fc5f343f44533f900522931ba8a20372c9498b505a260805e6ed10392",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (2 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F12",
+  "archivo": "FALSA-13.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "99d74f47f5f70e27ccaa9584db781aefcd1b5894cca591c45ff02e5873966449",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (2 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F13",
+  "archivo": "FALSA-14.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "no",
+  "sha256": "758d3aff65a21e484156afe5162ec4e0e27f3cfa1471f4dce6a761ff30fd4639",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (2 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "F14",
+  "archivo": "FALSA-15.pdf",
+  "etiqueta": "falsa",
+  "cuarentena": "si",
+  "sha256": "58c1e09123ab34a9727ebb176c54df11b793d778191bc982cf1b58e853368f4d",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "122 objetos de texto visibles, 4 fuentes, 3 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "3 familias tipograficas distintas: {'arial': 79, 'couriernew': 34, 'timesnewroman': 9}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'timesnewroman': 9} sobre 122 objetos de texto; zona ocupada (bbox pt) = {'timesnewroman': [84.3, 369.8, 528.9, 399.7]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 122}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "sin mezcla subset/completa"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word LTSC",
+    "Producer": "Microsoft® Word LTSC",
+    "CreationDate": "D:20260715072157-05'00'",
+    "ModDate": "D:20260715072157-05'00'",
+    "Author": "YUSETH"
+   },
+   "n_paginas": 1,
+   "n_texto": 255,
+   "n_texto_visible": 122,
+   "n_texto_invisible": 0,
+   "n_imagenes": 15,
+   "fuentes": {
+    "ArialMT": 50,
+    "CourierNewPS-BoldMT": 34,
+    "Arial-BoldMT": 29,
+    "TimesNewRomanPS-BoldMT": 9
+   },
+   "familias": {
+    "arial": 79,
+    "couriernew": 34,
+    "timesnewroman": 9
+   },
+   "familia_zona": {
+    "couriernew": [
+     30.2,
+     4.9,
+     399.5,
+     773.8
+    ],
+    "arial": [
+     39.2,
+     442.3,
+     497.6,
+     763.4
+    ],
+    "timesnewroman": [
+     84.3,
+     369.8,
+     528.9,
+     399.7
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 122
+   },
+   "alfas": {
+    "255": 122
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R15",
+  "archivo": "REAL-01.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "sha256": "d86ae595f5bbc8019cd3b1284eb975daf86ff24f5327c14d13f37bd84085cf6d",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (2 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R16",
+  "archivo": "REAL-02.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "f858510e975595a3128c33f5e9e81235e1f5df6c7d96ffe33d553cdc7b543e0c",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 1 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word 2021",
+    "Producer": "Microsoft® Word 2021",
+    "CreationDate": "D:20260611094220-05'00'",
+    "ModDate": "D:20260611094220-05'00'",
+    "Author": "silvia.carrizales"
+   },
+   "n_paginas": 1,
+   "n_texto": 1,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R17",
+  "archivo": "REAL-03.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "b68fe146b2910ee68b9949613adf28d870af0f4116164590a83e011cf9348774",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R18",
+  "archivo": "REAL-04.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "38f40c482a4adf62e5df2f955bb0c560b601556fa519fa56ed02e47f50554b3d",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "Creator!=Producer=True ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "pdftopdf filter",
+    "Producer": "iOS Version 26.2.1 (Build 23C71) Quartz PDFContext",
+    "CreationDate": "D:20260713014435Z00'00'",
+    "ModDate": "D:20260713014435Z00'00'",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R19",
+  "archivo": "REAL-05.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "087739e6aed98ed1edbcd0809b9b6e6caba0951cd514c40c88bcce2f8d7c42b4",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (4 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 2,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 4,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R20",
+  "archivo": "REAL-06.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "eddf194a66cf87468b155d2026b625db6c9f58da883f2191702d20dd83138e2b",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "intsig.com pdf producer",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": "CamScanner"
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R21",
+  "archivo": "REAL-07.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "d6482e2a150b95341d58dd948caee28ae4473fc33d8caee559fe2767a76e0fc5",
+  "estado": "LIMPIO",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "102 objetos de texto visibles, 3 fuentes, 1 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "LIMPIO",
+    "detalle": "una sola familia: {'arial': 102}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "LIMPIO",
+    "detalle": "ninguna familia por debajo del 15%: {'arial': 102}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 102}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "sin mezcla subset/completa"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "iText 2.0.8 (by lowagie.com)",
+    "CreationDate": "D:20260710110358-05'00'",
+    "ModDate": "D:20260710110358-05'00'",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 102,
+   "n_texto_visible": 102,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {
+    "Helvetica": 48,
+    "ArialMT": 27,
+    "Arial-BoldMT": 27
+   },
+   "familias": {
+    "arial": 102
+   },
+   "familia_zona": {
+    "arial": [
+     43.2,
+     39.6,
+     2310.9,
+     3225.8
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 54,
+    "(200, 200, 200, 255)": 48
+   },
+   "alfas": {
+    "255": 102
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R22",
+  "archivo": "REAL-08.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "100e77705203993261213f4a1dcefde005499f936d75ed858b684f4068fb9040",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "",
+    "CreationDate": "",
+    "ModDate": "",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R23",
+  "archivo": "REAL-09.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "aa3512d48630326eeecce0d6cc28aa0e1f8d6d1934d6417e98e1cb77aaf9fbc0",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 0 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "iLovePDF",
+    "CreationDate": "",
+    "ModDate": "D:20260717234722Z",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 0,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R24",
+  "archivo": "REAL-10.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "e25d52111513b3ac2a09c781307d60e4a5bc45691833880271d0cc3804a6728e",
+  "estado": "LIMPIO",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "473 objetos de texto visibles, 4 fuentes, 1 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "LIMPIO",
+    "detalle": "una sola familia: {'arial': 473}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "LIMPIO",
+    "detalle": "ninguna familia por debajo del 15%: {'arial': 473}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 473}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['ArialMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft Word",
+    "Producer": "",
+    "CreationDate": "D:20260722200648+00'00'",
+    "ModDate": "D:20260722200648+00'00'",
+    "Author": "E.S.E. HOSPITAL SAN <NOMBRE> DE DIOS DE LEBRIJA"
+   },
+   "n_paginas": 2,
+   "n_texto": 949,
+   "n_texto_visible": 473,
+   "n_texto_invisible": 0,
+   "n_imagenes": 2,
+   "fuentes": {
+    "ArialMT": 290,
+    "Arial-BoldMT": 178,
+    "Arial-BoldItalicMT": 4,
+    "BCDGEE+ArialMT": 1
+   },
+   "familias": {
+    "arial": 473
+   },
+   "familia_zona": {
+    "arial": [
+     32.0,
+     141.7,
+     583.8,
+     771.4
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 453,
+    "(192, 192, 192, 255)": 20
+   },
+   "alfas": {
+    "255": 473
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R25",
+  "archivo": "REAL-11.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "c672e2704b99d09c75420198efc2f4bc2680fa96a4b60c62414bdf1184e32928",
+  "estado": "LIMPIO",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=2 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "214 objetos de texto visibles, 3 fuentes, 1 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "LIMPIO",
+    "detalle": "una sola familia: {'arial': 214}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "LIMPIO",
+    "detalle": "ninguna familia por debajo del 15%: {'arial': 214}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 214}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['ArialMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 2,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft Word",
+    "Producer": "",
+    "CreationDate": "D:20260719004021+00'00'",
+    "ModDate": "D:20260719004021+00'00'",
+    "Author": "E.S.E. HOSPITAL SAN <NOMBRE> DE DIOS DE LEBRIJA"
+   },
+   "n_paginas": 1,
+   "n_texto": 416,
+   "n_texto_visible": 214,
+   "n_texto_invisible": 0,
+   "n_imagenes": 5,
+   "fuentes": {
+    "ArialMT": 125,
+    "Arial-BoldMT": 88,
+    "BCDGEE+ArialMT": 1
+   },
+   "familias": {
+    "arial": 214
+   },
+   "familia_zona": {
+    "arial": [
+     31.5,
+     418.4,
+     581.6,
+     756.0
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 196,
+    "(192, 192, 192, 255)": 18
+   },
+   "alfas": {
+    "255": 214
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R26",
+  "archivo": "REAL-12.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "942de664c6c80eeee8c7fa44e27d2ad7568183c26b319eb96e97530886c71026",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "contenedor 'jpeg': una imagen suelta no tiene objetos de texto ni fuentes"
+   }
+  },
+  "rasgos": {}
+ },
+ {
+  "id": "R27",
+  "archivo": "REAL-13.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "b6e8beb6d606c75e421fb2417d1fc77698bd4bab5a3a400adebaefb6f66b7d99",
+  "estado": "LIMPIO",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "45 objetos de texto visibles, 2 fuentes, 2 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "NO_EVALUABLE",
+    "detalle": "el productor anonimizo los nombres de fuente (['CIDFont+F1', 'CIDFont+F2']); la identidad de la letra no es recuperable y contar familias no significa nada"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "NO_EVALUABLE",
+    "detalle": "nombres de fuente anonimizados"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "LIMPIO",
+    "detalle": "opacidad uniforme {'255': 45}"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "LIMPIO",
+    "detalle": "sin rectangulos blancos tapando contenido"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "sin mezcla subset/completa"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "",
+    "Producer": "Microsoft: Print To PDF",
+    "CreationDate": "D:20260610140923-05'00'",
+    "ModDate": "D:20260610140923-05'00'",
+    "Author": ""
+   },
+   "n_paginas": 1,
+   "n_texto": 45,
+   "n_texto_visible": 45,
+   "n_texto_invisible": 0,
+   "n_imagenes": 3,
+   "fuentes": {
+    "CIDFont+F2": 24,
+    "CIDFont+F1": 21
+   },
+   "familias": {
+    "cidfont+f2": 24,
+    "cidfont+f1": 21
+   },
+   "familia_zona": {
+    "cidfont+f1": [
+     128.0,
+     527.3,
+     468.2,
+     819.6
+    ],
+    "cidfont+f2": [
+     128.0,
+     9.4,
+     481.3,
+     742.5
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 45
+   },
+   "alfas": {
+    "255": 45
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R28",
+  "archivo": "REAL-14.pdf",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "691e0af0a5981f89abef73d4350d38ddd9946819cbddb430933ee6ad215e00be",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "%%EOF=2 /Prev=1 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "Creator!=Producer=False ModDate!=CreationDate=False"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "ninguna pagina tiene capa de texto visible: escaneo/foto puro (1 imagenes, 1 objetos de texto, 0 invisibles)"
+   }
+  },
+  "rasgos": {
+   "eof": 2,
+   "prev": 1,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word 2021",
+    "Producer": "Microsoft® Word 2021",
+    "CreationDate": "D:20260610070813-05'00'",
+    "ModDate": "D:20260610070813-05'00'",
+    "Author": "silvia.carrizales"
+   },
+   "n_paginas": 1,
+   "n_texto": 1,
+   "n_texto_visible": 0,
+   "n_texto_invisible": 0,
+   "n_imagenes": 1,
+   "fuentes": {},
+   "familias": {},
+   "familia_zona": {},
+   "colores": {},
+   "alfas": {},
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": []
+  }
+ },
+ {
+  "id": "R29",
+  "archivo": "REAL-15.pdf",
+  "etiqueta": "real",
+  "cuarentena": "si",
+  "sha256": "28c4a946d84a402bce4877207c8ee89d8d4cac329ad7e6c368381fd69e4d339e",
+  "estado": "SOSPECHOSO",
+  "disparados": [
+   "TP_FAMILIAS_MULTIPLES",
+   "TP_FUENTE_MINORITARIA",
+   "TP_ALFA_TEXTO_NO_UNIFORME",
+   "TP_PARCHE_BLANCO"
+  ],
+  "leves": [],
+  "checks": {
+   "TP_GENERACIONES_MULTIPLES": {
+    "estado": "INFO_LIMPIO",
+    "detalle": "%%EOF=1 /Prev=0 linearizado=False"
+   },
+   "TP_CADENA_HERRAMIENTAS": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "Creator!=Producer=True ModDate!=CreationDate=True"
+   },
+   "TP_APLICABILIDAD": {
+    "estado": "APLICABLE",
+    "detalle": "122 objetos de texto visibles, 5 fuentes, 3 familias"
+   },
+   "TP_FAMILIAS_MULTIPLES": {
+    "estado": "SOSPECHA",
+    "detalle": "3 familias tipograficas distintas: {'arial': 92, 'couriernew': 20, 'timesnewroman': 10}"
+   },
+   "TP_FUENTE_MINORITARIA": {
+    "estado": "SOSPECHA",
+    "detalle": "familia(s) minoritaria(s) {'timesnewroman': 10} sobre 122 objetos de texto; zona ocupada (bbox pt) = {'timesnewroman': [72.3, 371.9, 545.3, 402.3]}"
+   },
+   "TP_ALFA_TEXTO_NO_UNIFORME": {
+    "estado": "SOSPECHA",
+    "detalle": "el texto se pinta con 2 opacidades distintas {'255': 118, '191': 4}: un unico generador usa una sola; el texto semitransparente lo estampo otra herramienta"
+   },
+   "TP_TEXTO_SOBRE_ESCANEO": {
+    "estado": "LIMPIO",
+    "detalle": "ningun texto encima de una imagen de pagina completa"
+   },
+   "TP_PARCHE_BLANCO": {
+    "estado": "SOSPECHA",
+    "detalle": "15 rectangulo(s) blanco(s) opaco(s) pintados encima de contenido previo: [([82.0, 662.5, 123.2, 671.1], 'imagen'), ([80.0, 660.5, 125.2, 673.1], 'imagen'), ([74.5, 653.8, 186.5, 662.4], 'imagen'), ([72.5, 651.8, 188.5, 664.4], 'imagen'), ([72.3, 644.6, 115.4, 652.6], 'imagen'), ([70.3, 642.6, 117.4, 654.6], 'imagen')]"
+   },
+   "TP_SUBSET_MAS_COMPLETA": {
+    "estado": "INFO_SOSPECHA",
+    "detalle": "raices con variante subset embebida y variante completa: ['ArialMT']"
+   }
+  },
+  "rasgos": {
+   "eof": 1,
+   "prev": 0,
+   "linearizado": false,
+   "meta": {
+    "Creator": "Microsoft® Word LTSC",
+    "Producer": "4-Heights™ PDF Library 3.4.0.6904 (http://www.pdf-tools.com)",
+    "CreationDate": "D:20260609164647-05'00'",
+    "ModDate": "D:20260729190454Z",
+    "Author": "HP 240 G9"
+   },
+   "n_paginas": 1,
+   "n_texto": 244,
+   "n_texto_visible": 122,
+   "n_texto_invisible": 0,
+   "n_imagenes": 12,
+   "fuentes": {
+    "ArialMT": 69,
+    "CourierNewPS-BoldMT": 20,
+    "Arial-BoldMT": 19,
+    "TimesNewRomanPS-BoldMT": 10,
+    "ACWIYO+ArialMT": 4
+   },
+   "familias": {
+    "arial": 92,
+    "couriernew": 20,
+    "timesnewroman": 10
+   },
+   "familia_zona": {
+    "couriernew": [
+     30.2,
+     3.5,
+     400.3,
+     774.3
+    ],
+    "arial": [
+     39.0,
+     443.9,
+     562.8,
+     764.5
+    ],
+    "timesnewroman": [
+     72.3,
+     371.9,
+     545.3,
+     402.3
+    ]
+   },
+   "colores": {
+    "(0, 0, 0, 255)": 118,
+    "(0, 0, 0, 191)": 4
+   },
+   "alfas": {
+    "255": 118,
+    "191": 4
+   },
+   "texto_sobre_escaneo": 0,
+   "parches_blancos": [
+    {
+     "pagina": 0,
+     "bbox": [
+      82.0,
+      662.5,
+      123.2,
+      671.1
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      80.0,
+      660.5,
+      125.2,
+      673.1
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      74.5,
+      653.8,
+      186.5,
+      662.4
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      72.5,
+      651.8,
+      188.5,
+      664.4
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      72.3,
+      644.6,
+      115.4,
+      652.6
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      70.3,
+      642.6,
+      117.4,
+      654.6
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      79.3,
+      634.7,
+      126.8,
+      643.8
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      77.3,
+      632.7,
+      128.8,
+      645.8
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      110.2,
+      706.2,
+      167.3,
+      715.2
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      319.8,
+      706.2,
+      376.9,
+      715.2
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      274.8,
+      679.8,
+      373.9,
+      689.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      524.3,
+      562.0,
+      554.2,
+      571.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      86.4,
+      692.3,
+      248.6,
+      695.7
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      86.4,
+      695.9,
+      252.4,
+      698.0
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    },
+    {
+     "pagina": 0,
+     "bbox": [
+      152.4,
+      688.3,
+      252.4,
+      691.3
+     ],
+     "cubre": "imagen",
+     "fraccion_cubierta": 1.0
+    }
+   ]
+  }
+ },
+ {
+  "id": "R30",
+  "archivo": "REAL-16.jpeg",
+  "etiqueta": "real",
+  "cuarentena": "no",
+  "sha256": "272d0d3dcd24cffc57f1bac4cc175922be909b9f6db68793766a5150482ab537",
+  "estado": "NO_APLICABLE",
+  "disparados": [],
+  "leves": [],
+  "checks": {
+   "TP_APLICABILIDAD": {
+    "estado": "NO_APLICABLE",
+    "detalle": "contenedor 'jpeg': una imagen suelta no tiene objetos de texto ni fuentes"
+   }
+  },
+  "rasgos": {}
+ }
+]

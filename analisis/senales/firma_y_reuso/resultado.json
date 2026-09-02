@@ -1,0 +1,1967 @@
+{
+ "umbrales": {
+  "std_min": 4.0,
+  "niveles_min": 8,
+  "lado_px_min": 12,
+  "area_px_min": 900,
+  "fondo_area_rel": 0.55,
+  "membrete_y": 0.88,
+  "pie_y": 0.06,
+  "firma_asp_min": 0.25,
+  "firma_asp_max": 14.0,
+  "firma_area_rel_min": 0.0008,
+  "firma_area_rel_max": 0.3,
+  "firma_ink_min": 0.005,
+  "phash_max": 6,
+  "dhash_max": 10,
+  "asp_tol": 0.1
+ },
+ "identidades_hash": {
+  "FALSA-01.pdf": {
+   "id_paciente": "pac#6ca65534",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#ddcaf302"
+   ],
+   "medico_registro": "1048290429",
+   "medico_nombre_h": "med#95e56230",
+   "fecha_inicio": "2026-07-14"
+  },
+  "FALSA-02.pdf": {
+   "id_paciente": "pac#6ca65534",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#ddcaf302"
+   ],
+   "medico_registro": "100946",
+   "medico_nombre_h": "med#19593d54",
+   "fecha_inicio": ""
+  },
+  "FALSA-03.pdf": {
+   "id_paciente": "pac#8fd12c3b",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#6bb8eaeb",
+    "k#c14fac5b"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "med#48bcf439",
+   "fecha_inicio": ""
+  },
+  "FALSA-04.pdf": {
+   "id_paciente": "pac#2de54683",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#ca48ed10"
+   ],
+   "medico_registro": "1129578731",
+   "medico_nombre_h": "med#d61a37c5",
+   "fecha_inicio": ""
+  },
+  "FALSA-05.pdf": {
+   "id_paciente": "pac#e5b28c48",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#1d9ed16b"
+   ],
+   "medico_registro": "1073168481",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2025-11-10"
+  },
+  "FALSA-06.pdf": {
+   "id_paciente": "pac#e5b28c48",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#1d9ed16b"
+   ],
+   "medico_registro": "6",
+   "medico_nombre_h": "med#91ea7230",
+   "fecha_inicio": "2025-09-15"
+  },
+  "FALSA-07.pdf": {
+   "id_paciente": "pac#e5b28c48",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#1d9ed16b"
+   ],
+   "medico_registro": "1073168481",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-04-20"
+  },
+  "FALSA-08.pdf": {
+   "id_paciente": "pac#e5b28c48",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#1d9ed16b"
+   ],
+   "medico_registro": "79280884",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2025-10-31"
+  },
+  "FALSA-09.jpeg": {
+   "id_paciente": "pac#c3720578",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#021e9701"
+   ],
+   "medico_registro": "1014239",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-05"
+  },
+  "FALSA-10.pdf": {
+   "id_paciente": "pac#c3720578",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#021e9701"
+   ],
+   "medico_registro": "1",
+   "medico_nombre_h": "med#68bc14d0",
+   "fecha_inicio": "2026-06-09"
+  },
+  "FALSA-11.pdf": {
+   "id_paciente": "pac#c597c0c2",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#b77ff74b"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-05-13"
+  },
+  "FALSA-12.pdf": {
+   "id_paciente": "pac#7c800c20",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#11c36d38"
+   ],
+   "medico_registro": "1140835195",
+   "medico_nombre_h": "med#08e52a3b",
+   "fecha_inicio": ""
+  },
+  "FALSA-13.pdf": {
+   "id_paciente": "pac#7c800c20",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#11c36d38"
+   ],
+   "medico_registro": "1045706679",
+   "medico_nombre_h": "",
+   "fecha_inicio": ""
+  },
+  "FALSA-14.pdf": {
+   "id_paciente": "pac#7c800c20",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#11c36d38"
+   ],
+   "medico_registro": "51884644",
+   "medico_nombre_h": "med#efda2540",
+   "fecha_inicio": ""
+  },
+  "FALSA-15.pdf": {
+   "id_paciente": "pac#8fd12c3b",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#c14fac5b"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "med#ff5b60db",
+   "fecha_inicio": ""
+  },
+  "REAL-01.pdf": {
+   "id_paciente": "pac#d0a1c798",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#4a4a725d"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-05-13"
+  },
+  "REAL-02.pdf": {
+   "id_paciente": "pac#ddfcfab0",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#e8b1520d"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-10"
+  },
+  "REAL-03.pdf": {
+   "id_paciente": "pac#5bcc1493",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#c95e57af"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-10"
+  },
+  "REAL-04.pdf": {
+   "id_paciente": "pac#99f44991",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#69f7d94e"
+   ],
+   "medico_registro": "272482014",
+   "medico_nombre_h": "med#39210558",
+   "fecha_inicio": "2026-07-12"
+  },
+  "REAL-05.pdf": {
+   "id_paciente": "pac#92c89204",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#c98bf38a"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": ""
+  },
+  "REAL-06.pdf": {
+   "id_paciente": "pac#2a6b6034",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#6ee93368"
+   ],
+   "medico_registro": "09",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-09"
+  },
+  "REAL-07.pdf": {
+   "id_paciente": "pac#a6229302",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#5d3ae923"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "med#b15f5847",
+   "fecha_inicio": "2026-07-10"
+  },
+  "REAL-08.pdf": {
+   "id_paciente": "pac#eb2f0791",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#e2646545"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-06"
+  },
+  "REAL-09.pdf": {
+   "id_paciente": "pac#21d94945",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#22788a00"
+   ],
+   "medico_registro": "1232389124",
+   "medico_nombre_h": "med#c0053e6d",
+   "fecha_inicio": "2026-06-07"
+  },
+  "REAL-10.pdf": {
+   "id_paciente": "pac#7ee42c1d",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#c28edf5f"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "med#6c04a091",
+   "fecha_inicio": ""
+  },
+  "REAL-11.pdf": {
+   "id_paciente": "pac#7ee42c1d",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#c28edf5f"
+   ],
+   "medico_registro": "00189",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-07-18"
+  },
+  "REAL-12.jpeg": {
+   "id_paciente": "pac#08f22d20",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#bbdff792"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-05-25"
+  },
+  "REAL-13.pdf": {
+   "id_paciente": "pac#2ae5733d",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#e1045add"
+   ],
+   "medico_registro": "CED-07",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-05-24"
+  },
+  "REAL-14.pdf": {
+   "id_paciente": "pac#559e4d95",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#4d561bda"
+   ],
+   "medico_registro": "1098743885",
+   "medico_nombre_h": "",
+   "fecha_inicio": "2026-06-09"
+  },
+  "REAL-15.pdf": {
+   "id_paciente": "pac#8fd12c3b",
+   "ced_ocr_corroborada": true,
+   "claves": [
+    "k#c14fac5b"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "med#48bcf439",
+   "fecha_inicio": ""
+  },
+  "REAL-16.jpeg": {
+   "id_paciente": "pac#484dbe38",
+   "ced_ocr_corroborada": false,
+   "claves": [
+    "k#479ba9e0"
+   ],
+   "medico_registro": "",
+   "medico_nombre_h": "",
+   "fecha_inicio": ""
+  }
+ },
+ "resultado": {
+  "FALSA-01.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=si, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-02.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=si, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-03.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=si"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-04.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=si, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-05.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": true,
+    "ev": [
+     {
+      "dp": 0,
+      "dd": 0,
+      "px1": [
+       552,
+       186
+      ],
+      "px2": [
+       552,
+       186
+      ],
+      "exacto": false,
+      "mismo_paciente": true,
+      "otro": "FALSA-07.pdf"
+     }
+    ]
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-06.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-07.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": true,
+    "ev": [
+     {
+      "dp": 0,
+      "dd": 0,
+      "px1": [
+       552,
+       186
+      ],
+      "px2": [
+       552,
+       186
+      ],
+      "exacto": false,
+      "mismo_paciente": true,
+      "otro": "FALSA-05.pdf"
+     }
+    ]
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-08.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-09.jpeg": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-10.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-11.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": true,
+    "ev": [
+     {
+      "hash": "d4f697976c32",
+      "rol": "FONDO_PAGINA",
+      "px": [
+       2166,
+       3000
+      ],
+      "n_docs": 2,
+      "otros_pacientes": 1,
+      "otros": [
+       "REAL-01.pdf"
+      ]
+     },
+     {
+      "hash": "4829fa4bada5",
+      "rol": "FONDO_PAGINA",
+      "px": [
+       2166,
+       3000
+      ],
+      "n_docs": 2,
+      "otros_pacientes": 1,
+      "otros": [
+       "REAL-01.pdf"
+      ]
+     }
+    ]
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       407,
+       56
+      ],
+      "marca_len": 13
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "escaneo/foto: la firma no es un XObject aislable"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-12.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       407,
+       56
+      ],
+      "marca_len": 13
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-13.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       407,
+       56
+      ],
+      "marca_len": 13
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-14.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       407,
+       56
+      ],
+      "marca_len": 13
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "FALSA-15.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-01.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": true,
+    "ev": [
+     {
+      "hash": "d4f697976c32",
+      "rol": "FONDO_PAGINA",
+      "px": [
+       2166,
+       3000
+      ],
+      "n_docs": 2,
+      "otros_pacientes": 1,
+      "otros": [
+       "FALSA-11.pdf"
+      ]
+     },
+     {
+      "hash": "4829fa4bada5",
+      "rol": "FONDO_PAGINA",
+      "px": [
+       2166,
+       3000
+      ],
+      "n_docs": 2,
+      "otros_pacientes": 1,
+      "otros": [
+       "FALSA-11.pdf"
+      ]
+     }
+    ]
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       407,
+       56
+      ],
+      "marca_len": 13
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "escaneo/foto: la firma no es un XObject aislable"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-02.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-03.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-04.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "escaneo/foto: la firma no es un XObject aislable"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-05.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": true,
+    "ev": [
+     {
+      "px": [
+       289,
+       40
+      ],
+      "marca_len": 10
+     }
+    ]
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-06.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-07.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-08.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-09.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-10.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=si"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-11.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-12.jpeg": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "escaneo/foto: la firma no es un XObject aislable"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-13.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=si, IDs leidos en el sello=no"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-14.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-15.pdf": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": []
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el documento no tiene imagen de pagina completa"
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "no hay par comparable: registro del texto=no, IDs leidos en el sello=si"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  },
+  "REAL-16.jpeg": {
+   "FIRMA_REUSO_EXACTO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_PERCEPTUAL_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FIRMA_REUSO_RECOMPRIMIDA": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "FONDO_REUSO_CROSS_PACIENTE": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_ID_INCOHERENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin XObject de firma/sello aislable (escaneo o foto de pagina completa)"
+   },
+   "MEMBRETE_COMPARTIDO": {
+    "hit": false,
+    "ev": []
+   },
+   "MARCA_HERRAMIENTA_CAPTURA": {
+    "hit": false,
+    "ev": []
+   },
+   "FIRMA_MEDICO_AUSENTE": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "sin etiqueta FIRMA DEL MEDICO en el texto"
+   },
+   "RECURSO_REUSO_CROSS_EMISOR": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "el extractor no entrega EPS/IPS fiable (devuelve fragmentos de direccion)"
+   },
+   "FIRMA_HISTORICO_ERP": {
+    "hit": false,
+    "ev": [],
+    "no_evaluable": "falta el indice de hashes del historico de radicaciones del ERP"
+   }
+  }
+ },
+ "medicion": {
+  "evaluables": 26,
+  "falsas_totales": 12,
+  "reales_totales": 14,
+  "falsas_detectadas": 2,
+  "reales_marcadas": 0,
+  "detectadas": [
+   "FALSA-05.pdf",
+   "FALSA-07.pdf"
+  ],
+  "falsos_positivos": []
+ }
+}

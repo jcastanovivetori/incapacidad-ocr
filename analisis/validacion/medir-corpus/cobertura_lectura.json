@@ -1,0 +1,278 @@
+{
+ "documentos": [
+  {
+   "id": "F02",
+   "etiqueta": "falsa",
+   "sha8": "5c66d97e",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-05-18",
+    "dias": 1
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+   "fechas_num_en_texto": [
+    "18/05/2026",
+    "18/05/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "apartirde",
+    "hasta"
+   ]
+  },
+  {
+   "id": "F04",
+   "etiqueta": "falsa",
+   "sha8": "e0ee54fd",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+   "fechas_num_en_texto": [],
+   "fechas_palabra_en_texto": [
+    "25SEPTIEMBRE"
+   ],
+   "rotulos": [
+    "duracion",
+    "fecha fin",
+    "fecha inicio",
+    "inicia"
+   ]
+  },
+  {
+   "id": "F06",
+   "etiqueta": "falsa",
+   "sha8": "9dcb4e35",
+   "leido": {
+    "fecha_inicio": "2025-09-15",
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "faltan": "no se pudo comprobar: falta la fecha fin impresa en el documento",
+   "fechas_num_en_texto": [
+    "15/09/2025",
+    "16/09/2025"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": []
+  },
+  {
+   "id": "F12",
+   "etiqueta": "falsa",
+   "sha8": "d08cba3f",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [
+    "5/12/25"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "apartirde",
+    "diasdeincapacidad",
+    "fechafin"
+   ]
+  },
+  {
+   "id": "F13",
+   "etiqueta": "falsa",
+   "sha8": "99d74f47",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [
+    "12/08/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "apartirde",
+    "desde",
+    "diasdeincapacidad",
+    "fecha fin"
+   ]
+  },
+  {
+   "id": "F14",
+   "etiqueta": "falsa",
+   "sha8": "758d3aff",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+   "fechas_num_en_texto": [
+    "25/02/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "apartirde",
+    "diasdeincapacidad",
+    "fechafin"
+   ]
+  },
+  {
+   "id": "R02",
+   "etiqueta": "real",
+   "sha8": "f858510e",
+   "leido": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [
+    "10/06/2026",
+    "10/06/2026",
+    "11/06/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "fecha inicio"
+   ]
+  },
+  {
+   "id": "R03",
+   "etiqueta": "real",
+   "sha8": "b68fe146",
+   "leido": {
+    "fecha_inicio": "2026-06-10",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [
+    "10/06/2026",
+    "10/06/2026",
+    "10/06/2026",
+    "11/06/2026",
+    "10/06/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "fecha inicio"
+   ]
+  },
+  {
+   "id": "R04",
+   "etiqueta": "real",
+   "sha8": "38f40c48",
+   "leido": {
+    "fecha_inicio": "2026-07-12",
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [
+    "11/7/2026",
+    "11/7/2026",
+    "11/7/2026",
+    "11/7/2026",
+    "12/7/2026"
+   ],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "dias de incapacidad",
+    "fecha fin"
+   ]
+  },
+  {
+   "id": "R05",
+   "etiqueta": "real",
+   "sha8": "087739e6",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "desde",
+    "duracion",
+    "hasta"
+   ]
+  },
+  {
+   "id": "R10",
+   "etiqueta": "real",
+   "sha8": "e25d5211",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": 2
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento",
+   "fechas_num_en_texto": [],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "dias de incapacidad"
+   ]
+  },
+  {
+   "id": "R14",
+   "etiqueta": "real",
+   "sha8": "691e0af0",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": "2026-06-11",
+    "dias": 3
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento",
+   "fechas_num_en_texto": [],
+   "fechas_palabra_en_texto": [],
+   "rotulos": [
+    "fecha fin",
+    "fecha inicio"
+   ]
+  },
+  {
+   "id": "R16",
+   "etiqueta": "real",
+   "sha8": "272d0d3d",
+   "leido": {
+    "fecha_inicio": null,
+    "fecha_fin": null,
+    "dias": null
+   },
+   "faltan": "no se pudo comprobar: falta la fecha de inicio impresa en el documento, la fecha fin impresa en el documento, el número de días impreso en el documento",
+   "fechas_num_en_texto": [],
+   "fechas_palabra_en_texto": [
+    "09JUNIO",
+    "09JUNIO"
+   ],
+   "rotulos": [
+    "duracion",
+    "fecha fin",
+    "fecha lnicio",
+    "inicia"
+   ]
+  }
+ ],
+ "recuperables": [
+  "F02",
+  "F04",
+  "F06",
+  "F12",
+  "F13",
+  "F14",
+  "R02",
+  "R03",
+  "R04",
+  "R16"
+ ],
+ "sin_fecha_en_texto": [
+  "R05",
+  "R10",
+  "R14"
+ ]
+}

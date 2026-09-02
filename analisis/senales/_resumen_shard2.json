@@ -1,0 +1,200 @@
+{
+  "procesados": 8,
+  "fallidos": [],
+  "sin_texto": [],
+  "rutas": [
+    str(_DATASET / "ocr/falsa/FALSA-03.json"),
+    str(_DATASET / "ocr/falsa/FALSA-03.txt"),
+    str(_DATASET / "ocr/falsa/FALSA-07.json"),
+    str(_DATASET / "ocr/falsa/FALSA-07.txt"),
+    str(_DATASET / "ocr/falsa/FALSA-11.json"),
+    str(_DATASET / "ocr/falsa/FALSA-11.txt"),
+    str(_DATASET / "ocr/falsa/FALSA-15.json"),
+    str(_DATASET / "ocr/falsa/FALSA-15.txt"),
+    str(_DATASET / "ocr/real/REAL-04.json"),
+    str(_DATASET / "ocr/real/REAL-04.txt"),
+    str(_DATASET / "ocr/real/REAL-08.json"),
+    str(_DATASET / "ocr/real/REAL-08.txt"),
+    str(_DATASET / "ocr/real/REAL-12.json"),
+    str(_DATASET / "ocr/real/REAL-12.txt"),
+    str(_DATASET / "ocr/real/REAL-16.json"),
+    str(_DATASET / "ocr/real/REAL-16.txt")
+  ],
+  "campos_leidos": {
+    "cedula": 7,
+    "cie10": 7,
+    "fecha_inicio": 5,
+    "fecha_fin": 4,
+    "dias": 6
+  },
+  "detalle": [
+    {
+      "archivo": "FALSA-03.pdf",
+      "etiqueta": "falsa",
+      "chars": 1272,
+      "lineas": 57,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": false,
+        "fecha_fin": false,
+        "dias": true
+      },
+      "n_campos": 3,
+      "cuarentena": "si",
+      "estructura_ok": true,
+      "es_escaneo_puro": false,
+      "n_fuentes": 6,
+      "n_imagenes": 12,
+      "eof_count": 1
+    },
+    {
+      "archivo": "FALSA-07.pdf",
+      "etiqueta": "falsa",
+      "chars": 1160,
+      "lineas": 37,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": true,
+        "fecha_fin": true,
+        "dias": true
+      },
+      "n_campos": 5,
+      "cuarentena": "no",
+      "estructura_ok": true,
+      "es_escaneo_puro": false,
+      "n_fuentes": 4,
+      "n_imagenes": 1,
+      "eof_count": 2
+    },
+    {
+      "archivo": "FALSA-11.pdf",
+      "etiqueta": "falsa",
+      "chars": 1127,
+      "lineas": 56,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": false,
+        "cie10": true,
+        "fecha_inicio": true,
+        "fecha_fin": true,
+        "dias": true
+      },
+      "n_campos": 4,
+      "cuarentena": "si",
+      "estructura_ok": true,
+      "es_escaneo_puro": true,
+      "n_fuentes": 0,
+      "n_imagenes": 2,
+      "eof_count": 1
+    },
+    {
+      "archivo": "FALSA-15.pdf",
+      "etiqueta": "falsa",
+      "chars": 1231,
+      "lineas": 56,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": false,
+        "fecha_fin": false,
+        "dias": false
+      },
+      "n_campos": 2,
+      "cuarentena": "si",
+      "estructura_ok": true,
+      "es_escaneo_puro": false,
+      "n_fuentes": 5,
+      "n_imagenes": 15,
+      "eof_count": 2
+    },
+    {
+      "archivo": "REAL-04.pdf",
+      "etiqueta": "real",
+      "chars": 964,
+      "lineas": 59,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": true,
+        "fecha_fin": false,
+        "dias": false
+      },
+      "n_campos": 3,
+      "cuarentena": "no",
+      "estructura_ok": true,
+      "es_escaneo_puro": true,
+      "n_fuentes": 0,
+      "n_imagenes": 1,
+      "eof_count": 1
+    },
+    {
+      "archivo": "REAL-08.pdf",
+      "etiqueta": "real",
+      "chars": 1113,
+      "lineas": 63,
+      "tipo_documento": "permiso",
+      "campos": {
+        "cedula": true,
+        "cie10": false,
+        "fecha_inicio": true,
+        "fecha_fin": true,
+        "dias": true
+      },
+      "n_campos": 4,
+      "cuarentena": "no",
+      "estructura_ok": true,
+      "es_escaneo_puro": true,
+      "n_fuentes": 0,
+      "n_imagenes": 1,
+      "eof_count": 1
+    },
+    {
+      "archivo": "REAL-12.jpeg",
+      "etiqueta": "real",
+      "chars": 801,
+      "lineas": 45,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": true,
+        "fecha_fin": true,
+        "dias": true
+      },
+      "n_campos": 5,
+      "cuarentena": "no",
+      "estructura_ok": true,
+      "es_escaneo_puro": null,
+      "n_fuentes": null,
+      "n_imagenes": null,
+      "eof_count": null
+    },
+    {
+      "archivo": "REAL-16.jpeg",
+      "etiqueta": "real",
+      "chars": 889,
+      "lineas": 58,
+      "tipo_documento": "incapacidad",
+      "campos": {
+        "cedula": true,
+        "cie10": true,
+        "fecha_inicio": false,
+        "fecha_fin": false,
+        "dias": true
+      },
+      "n_campos": 3,
+      "cuarentena": "no",
+      "estructura_ok": true,
+      "es_escaneo_puro": null,
+      "n_fuentes": null,
+      "n_imagenes": null,
+      "eof_count": null
+    }
+  ]
+}

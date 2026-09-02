@@ -1,0 +1,278 @@
+==============================================================================
+CAZA DE DURACIONES INVENTADAS — frente 'falsos-positivos'
+==============================================================================
+
+[H1] La UNIDAD pegada al valor no distingue la duracion de la incapacidad
+     de cualquier otra mencion de dias. El veto solo mira a la IZQUIERDA.
+  [FP  ] 'La incapacidad debe radicarse dentro de los 3 dias h...'
+          entrada  : 'La incapacidad debe radicarse dentro de los 3 dias habiles siguientes'
+          esperado : None   obtenido: 3   evidencia='3 dias'   pre-cambio=None
+  [FP  ] 'Debe radicarse dentro de los tres dias habiles sigui...'
+          entrada  : 'Debe radicarse dentro de los tres dias habiles siguientes'
+          esperado : None   obtenido: 3   evidencia='tres dias'   pre-cambio=None
+  [FP  ] 'Este certificado es valido por 30 dias...'
+          entrada  : 'Este certificado es valido por 30 dias'
+          esperado : None   obtenido: 30   evidencia='30 dias'   pre-cambio=None
+  [FP  ] 'RECOMENDACIONES: CONTROL EN 3 DIAS POR CONSULTA EXTE...'
+          entrada  : 'RECOMENDACIONES: CONTROL EN 3 DIAS POR CONSULTA EXTERNA'
+          esperado : None   obtenido: 3   evidencia='3 dias'   pre-cambio=None
+  [FP  ] 'RECOMENDACIONES: CONTROL EN TRES DIAS...'
+          entrada  : 'RECOMENDACIONES: CONTROL EN TRES DIAS'
+          esperado : None   obtenido: 3   evidencia='tres dias'   pre-cambio=None
+  [FP  ] 'CUADRO CLINICO DE 3 DIAS DE EVOLUCION...'
+          entrada  : 'CUADRO CLINICO DE 3 DIAS DE EVOLUCION'
+          esperado : None   obtenido: 3   evidencia='3 dias'   pre-cambio=None
+  [FP  ] 'CUADRO CLINICO DE TRES DIAS DE EVOLUCION...'
+          entrada  : 'CUADRO CLINICO DE TRES DIAS DE EVOLUCION'
+          esperado : None   obtenido: 3   evidencia='tres dias'   pre-cambio=None
+  [FP  ] 'SE RECOMIENDA REPOSO POR 2 DIAS...'
+          entrada  : 'SE RECOMIENDA REPOSO POR 2 DIAS'
+          esperado : None   obtenido: 2   evidencia='2 dias'   pre-cambio=None
+  [FP  ] 'Dada en Malambo a los 15 dias del mes de agosto de 2...'
+          entrada  : 'Dada en Malambo a los 15 dias del mes de agosto de 2026'
+          esperado : None   obtenido: 15   evidencia='15 dias'   pre-cambio=None
+  [FP  ] 'Dada en Malambo a los quince (15) dias del mes de ag...'
+          entrada  : 'Dada en Malambo a los quince (15) dias del mes de agosto de 2026'
+          esperado : None   obtenido: 15   evidencia='quince (15) dias'   pre-cambio=None
+  [FP  ] 'Dada en Malambo a los quince dias del mes de agosto...'
+          entrada  : 'Dada en Malambo a los quince dias del mes de agosto'
+          esperado : None   obtenido: 15   evidencia='quince dias'   pre-cambio=None
+
+     -- y end-to-end, sobre un rotulo SIN valor (forma A10 del corpus,
+        7 de los 31 textos): el dato inventado sustituye al ausente
+  [FP  ] A10 + 'valido por 30 dias'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: | Este certifi
+          esperado : dias=None   obtenido: dias=30 letra=None coin=None tipo=incapacidad ini=2026-06-10 fin=2026-07-09
+          pre-cambio (patrones viejos): dias=None   -> REGRESION (antes None/correcto)
+  [FP  ] A10 + 'CONTROL EN 3 DIAS'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: | RECOMENDACIO
+          esperado : dias=None   obtenido: dias=3 letra=None coin=None tipo=incapacidad ini=2026-06-10 fin=2026-06-12
+          pre-cambio (patrones viejos): dias=None   -> REGRESION (antes None/correcto)
+
+     -- lo PEOR: el falso positivo GANA al rotulo verdadero cuando aparece
+        antes en el orden de lectura del OCR (empate roto por nº de renglon)
+  [FP  ] boilerplate de cierre ANTES del rotulo real (correcto = 2)
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dada en Malambo a los 15 dias del m
+          esperado : dias=2   obtenido: dias=15 letra=None coin=None tipo=incapacidad ini=2026-06-10 fin=2026-06-24
+          pre-cambio (patrones viejos): dias=2   -> REGRESION (antes None/correcto)
+  [OK  ] el mismo texto con el boilerplate DESPUES (control: sale bien)
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: 2 | Fecha Inic
+          esperado : dias=2   obtenido: dias=2 letra=None coin=None tipo=incapacidad ini=2026-06-10 fin=2026-06-11
+
+[H2] El rotulo `duracion` es una palabra suelta y la ventana de 25 chars
+     alcanza el valor de una duracion que NO es la incapacidad.
+     (los patrones viejos usaban una ventana de 10 chars sin digitos)
+  [FP  ] 'DURACION DEL PERMISO: 4 HORAS'
+          entrada  : 'DURACION DEL PERMISO: 4 HORAS'
+          esperado : None   obtenido: 4   evidencia='duracion del permiso: 4'   pre-cambio=None
+  [FP  ] 'DURACION: CUATRO HORAS'
+          entrada  : 'DURACION: CUATRO HORAS'
+          esperado : None   obtenido: 4   evidencia='duracion: cuatro'   pre-cambio=None
+  [FP  ] 'Duracion del reposo en horas: 8'
+          entrada  : 'Duracion del reposo en horas: 8'
+          esperado : None   obtenido: 8   evidencia='duracion del reposo en horas: 8'   pre-cambio=None
+  [FP  ] 'DURACION DEL EMBARAZO: 40 SEMANAS'
+          entrada  : 'DURACION DEL EMBARAZO: 40 SEMANAS'
+          esperado : None   obtenido: 40   evidencia='duracion del embarazo: 40'   pre-cambio=None
+  [FP  ] 'Duracion gestacion: 39 semanas'
+          entrada  : 'Duracion gestacion: 39 semanas'
+          esperado : None   obtenido: 39   evidencia='duracion gestacion: 39'   pre-cambio=None
+  [FP  ] 'DURACION DE LA CONSULTA: 20 MINUTOS'
+          entrada  : 'DURACION DE LA CONSULTA: 20 MINUTOS'
+          esperado : None   obtenido: 20   evidencia='duracion de la consulta: 20'   pre-cambio=None
+  [FP  ] 'DURACION DEL TRATAMIENTO: 7 DIAS'
+          entrada  : 'DURACION DEL TRATAMIENTO: 7 DIAS'
+          esperado : None   obtenido: 7   evidencia='duracion del tratamiento: 7'   pre-cambio=None
+
+[H3] `_dias_de_celda` le REGALA el ancla ('Dias: ' + celda) y `normalizar`
+     separa letra de digito, asi que un CIE-10 sin punto (la forma que
+     emite el OCR: M544/R074/A099/S420, ver 01_evidencia.md §7) se lee
+     como duracion. Antes del cambio la celda exigia digitos puros: el
+     bloque entero no casaba (se perdia el dato, no se inventaba).
+  [FP  ] celda 'Dias Inc.' = 'J069'         esperado=None  obtenido=69
+  [FP  ] celda 'Dias Inc.' = 'A099'         esperado=None  obtenido=99
+  [FP  ] celda 'Dias Inc.' = 'R074'         esperado=None  obtenido=74
+  [FP  ] celda 'Dias Inc.' = 'S420'         esperado=None  obtenido=420
+  [FP  ] celda 'Dias Inc.' = 'R509'         esperado=None  obtenido=509
+  [FP  ] celda 'Dias Inc.' = 'K429'         esperado=None  obtenido=429
+  [FP  ] celda 'Dias Inc.' = 'O039'         esperado=None  obtenido=39
+  [FP  ] celda 'Dias Inc.' = 'B349'         esperado=None  obtenido=349
+  [FP  ] celda 'Dias Inc.' = 'X 500 MG'     esperado=None  obtenido=500
+  [FP  ] celda 'Dias Inc.' = '1 de 1'       esperado=None  obtenido=1
+  [OK  ] celda 'Dias Inc.' = '3'            esperado=3  obtenido=3
+  [OK  ] celda 'Dias Inc.' = 'TRES'         esperado=3  obtenido=3
+  [OK  ] celda 'Dias Inc.' = '3 (TRES)'     esperado=3  obtenido=3
+
+[H4] `es_formato_vacaciones` tolera la tilde de 'notificacion' pero NO la
+     de 'periodo'. Si el OCR la conserva (7 de los 31 textos del corpus
+     traen tildes: 'Medico', 'Telefono', 'Termino'), la carta se procesa
+     como INCAPACIDAD y el respaldo historico lee el DIA DEL MES.
+  [OK  ] titulo canonico (control: la regla de dominio funciona)
+          entrada  : NOTIFICACION DE PERIODO DE VACACIONES + 'dia siete (07) de julio ... hasta el veinte (20)'
+          esperado : dias=14   obtenido: dias=14 letra=None coin=None tipo=vacaciones ini=2026-07-07 fin=2026-07-20
+  [fp- ] titulo con TILDE en 'Periodo'
+          entrada  : Notificacion Período de Vacaciones + la misma prosa
+          esperado : dias=14   obtenido: dias=7 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=7   -> PREEXISTENTE
+  [fp- ] titulo variante: 'NOTIFICACION DE VACACIONES'
+          entrada  : NOTIFICACION DE VACACIONES + la misma prosa
+          esperado : dias=14   obtenido: dias=7 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=7   -> PREEXISTENTE
+  [fp- ] titulo variante: 'PERIODO DE VACACIONES'
+          entrada  : PERIODO DE VACACIONES + la misma prosa
+          esperado : dias=14   obtenido: dias=7 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=7   -> PREEXISTENTE
+  [fp- ] titulo variante: 'CARTA DE VACACIONES'
+          entrada  : CARTA DE VACACIONES + la misma prosa
+          esperado : dias=14   obtenido: dias=7 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=7   -> PREEXISTENTE
+
+[H5] El respaldo historico (`extract._dias_por_etiqueta`, patron 2) lee el
+     DIA DEL MES de 'el dia NN de <mes>'. PREEXISTENTE (misma lectura antes
+     del cambio) e inerte en los 31 textos cacheados, pero es el vector de H4.
+  [fp- ] A10 + 'Se expide en Malambo el dia 15 de agosto de 20...'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: | Se expide en
+          esperado : dias=None   obtenido: dias=15 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=15   -> PREEXISTENTE
+  [fp- ] A10 + 'Certifico que el dia primero (01) de julio se ...'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: | Certifico qu
+          esperado : dias=None   obtenido: dias=1 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=1   -> PREEXISTENTE
+  [fp- ] A10 + 'Firmado el dia 21 de mayo de 2026...'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Dias de Incapacidad: | Firmado el d
+          esperado : dias=None   obtenido: dias=21 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=21   -> PREEXISTENTE
+
+[H6] `_RE_UNIDAD` acepta 'dias' de 'DIASDEINCAPACIDAD' como UNIDAD (por la
+     continuacion `(?=de)`), y la guarda `(?![ \t]*[:\-])` que protege
+     '1 DIAS: 30 (TREINTA)' (falso positivo nº9) no aplica al rotulo pegado.
+     Texto REAL de falsas/INC <NOMBRE> ... 12082026.txt (dias correctos = 1,
+     12/08 -> 12/08), con un indice de fila '3' delante del rotulo.
+  [OK  ] texto real tal cual (control: no inventa nada)
+          entrada  : falsas/INC <NOMBRE> ... 12082026.txt (sin tocar)
+          esperado : dias=None   obtenido: dias=None letra=None coin=None tipo=incapacidad ini=None fin=None
+  [FP  ] mismo texto con indice de fila: '3 DIASDEINCAPACIDAD'
+          entrada  : el mismo, con 'DIASDEINCAPACIDAD' -> '3 DIASDEINCAPACIDAD'
+          esperado : dias=None   obtenido: dias=3 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=None   -> REGRESION (antes None/correcto)
+  [OK  ] control: con dos puntos ('3 DIAS:') la guarda SI protege
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | 3 DIAS: | APARTIRDELAFECHA | 
+          esperado : dias=None   obtenido: dias=None letra=None coin=None tipo=incapacidad ini=None fin=None
+
+[H7] `_ETIQUETAS_DURACION` incluye `dias?\s*[:\-]`, que casa con el SINGULAR
+     'DIA:' — un rotulo de FECHA en los formularios de rejilla DIA/MES/ANO
+     (falso positivo nº7). Preexistente por el respaldo, ahora tambien por
+     el modulo. No aparece con ':' en los 31 textos (construccion plausible).
+  [fp- ] rejilla en una linea: 'DIA: 12 MES: 08 ANO: 2026'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | FECHA DE INICIO | DIA: 12 MES: 08 A
+          esperado : dias=None   obtenido: dias=12 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=12   -> PREEXISTENTE
+  [fp- ] rejilla sin dos puntos: 'DIA 12 MES 08 ANO 2026'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | FECHA DE INICIO | DIA 12 MES 08 ANO
+          esperado : dias=None   obtenido: dias=12 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=12   -> PREEXISTENTE
+  [fp- ] rejilla en renglones: 'Dia: 12' / 'Mes: 08' / 'Ano: 2026'
+          entrada  : CERTIFICADO DE INCAPACIDAD MEDICA | Paciente: <NOMBRE> PEREZ | CC 1098765432 | Fecha de expedicion | Dia: 12 | Mes
+          esperado : dias=None   obtenido: dias=12 letra=None coin=None tipo=incapacidad ini=None fin=None
+          pre-cambio (patrones viejos): dias=12   -> PREEXISTENTE
+
+[H8] `numerales_en_texto` (guarda de anclaje del LLM) extrae 2 y 26 de
+     'dos mil veintiseis (2026)': el ANO en palabras basta para que una
+     duracion del modelo pase por anclada. El camino de REGLAS es inmune
+     ('mil' no esta en el lexico), el del LLM no.
+  numerales_en_texto('de dos mil veintiseis (2026)') = [2, 26]
+  [FP  ] LLM devuelve dias=  2 -> se acepta como dias=2 (esperado None)
+  [FP  ] LLM devuelve dias= 26 -> se acepta como dias=26 (esperado None)
+  [OK  ] LLM devuelve dias= 20 -> se acepta como dias=None (esperado None)
+
+[FILA DE STAGING] que se escribiria en lp_ausentismos_ia (el auxiliar la ve asi)
+  Documento real: 10/06/2026 -> 11/06/2026 = 2 dias.
+  2 dias, texto limpio (referencia)              Numerodias=2    fechainicio=2026-06-10 fechavencimiento=2026-06-12 aviso_fin_recalculada=False
+  + 'dentro de los 3 dias habiles'               Numerodias=3    fechainicio=2026-06-10 fechavencimiento=2026-06-13 aviso_fin_recalculada=True
+  + 'valido por 30 dias' (con fecha fin)         Numerodias=30   fechainicio=2026-06-10 fechavencimiento=2026-07-10 aviso_fin_recalculada=True
+  Documento SIN fecha fin (forma A10): no hay contradiccion que avisar ->
+  + 'valido por 30 dias' (SIN fecha fin)         Numerodias=30   fechainicio=2026-06-10 fechavencimiento=2026-07-10 aviso_fin_recalculada=False
+  + 'a los 15 dias del mes' (SIN fecha fin)      Numerodias=15   fechainicio=2026-06-10 fechavencimiento=2026-06-25 aviso_fin_recalculada=False
+
+[LIMPIO] construcciones atacadas donde NO se inventa duracion (todas OK)
+  [OK  ] horas: 'CADA 8 HORAS'                                      -> None
+  [OK  ] horas: 'NUMERO TOTAL DE HORAS' + '4 irs'                   -> None
+  [OK  ] horas: nota real 'antes de 72 horas'                       -> None
+  [OK  ] horas: 'CUADRO CLINICO DE 3 HORAS DE EVOLUCION'            -> None
+  [OK  ] horas: 'permiso de dos (2) horas'                          -> None
+  [OK  ] horas desde/hasta: bloque real del permiso                 -> None
+  [OK  ] ano en palabras (reglas): 'dos mil veintiseis'             -> None
+  [OK  ] ano en palabras: 'a los dos mil veintiseis (2026) dias'    -> None
+  [OK  ] edad: 'Edad: 33 Ano(s), 1 mes(es), 8 dia(s)'               -> None
+  [OK  ] edad: '24 anos 05 meses'                                   -> None
+  [OK  ] edad: 'Rango de edad: 25-34'                               -> None
+  [OK  ] gestacion: 'EDADGESTASIONAL:' / '40.00 Semanas'            -> None
+  [OK  ] vigencia de dosis: 'Vig: 1 dia'                            -> None
+  [OK  ] insumo: 'ACETAMINOFEN 1 (Uno)'                             -> None
+  [OK  ] sintoma del paciente: 'hacetresdias'                       -> None
+  [OK  ] articulo: 'una fuerza mayor'                               -> None
+  [OK  ] articulo: 'una cuenta bancaria'                            -> None
+  [OK  ] medicamento: 'CADA 8 HORAS POR 5 DIAS'                     -> None
+  [OK  ] medicamento en letras: 'CADA 8 HORAS POR CINCO DIAS'       -> None
+  [OK  ] tramite: 'IncapacidadN:362.355'                            -> None
+  [OK  ] tramite: 'Consecutivo:' / '0081523489'                     -> None
+  [OK  ] tramite: 'INC15247'                                        -> None
+  [OK  ] registro medico: 'Registro Medico: 123'                    -> None
+  [OK  ] registro medico: 'R.M. 100946'                             -> None
+  [OK  ] registro medico: 'Reg.Medico:1030539622'                   -> None
+  [OK  ] registro medico: 'R.M14035.1'                              -> None
+  [OK  ] signos vitales: 'glasgow 15/15'                            -> None
+  [OK  ] regimen/nivel/pagina                                       -> None
+  [OK  ] CIE-10 en texto libre: 'M545 LUMBAGO'                      -> None
+  [OK  ] A5: POR 4 DIAS DESDE EL 29-07-2026 -> 4, no 29             -> 4
+  [OK  ] permiso real reales (tal cual                ) -> None
+  [OK  ] permiso real reales (ancla PERMISO destruida ) -> None
+  [OK  ] permiso real real   (tal cual                ) -> None
+  [OK  ] permiso real real   (ancla PERMISO destruida ) -> None
+
+------------------------------------------------------------------------------
+casos: 86   con duracion INVENTADA / perdida: 44
+   - 'La incapacidad debe radicarse dentro de los 3 dias h...'
+   - 'Debe radicarse dentro de los tres dias habiles sigui...'
+   - 'Este certificado es valido por 30 dias...'
+   - 'RECOMENDACIONES: CONTROL EN 3 DIAS POR CONSULTA EXTE...'
+   - 'RECOMENDACIONES: CONTROL EN TRES DIAS...'
+   - 'CUADRO CLINICO DE 3 DIAS DE EVOLUCION...'
+   - 'CUADRO CLINICO DE TRES DIAS DE EVOLUCION...'
+   - 'SE RECOMIENDA REPOSO POR 2 DIAS...'
+   - 'Dada en Malambo a los 15 dias del mes de agosto de 2...'
+   - 'Dada en Malambo a los quince (15) dias del mes de ag...'
+   - 'Dada en Malambo a los quince dias del mes de agosto...'
+   - A10 + 'valido por 30 dias'
+   - A10 + 'CONTROL EN 3 DIAS'
+   - boilerplate de cierre ANTES del rotulo real (correcto = 2)
+   - 'DURACION DEL PERMISO: 4 HORAS'
+   - 'DURACION: CUATRO HORAS'
+   - 'Duracion del reposo en horas: 8'
+   - 'DURACION DEL EMBARAZO: 40 SEMANAS'
+   - 'Duracion gestacion: 39 semanas'
+   - 'DURACION DE LA CONSULTA: 20 MINUTOS'
+   - 'DURACION DEL TRATAMIENTO: 7 DIAS'
+   - celda 'J069'
+   - celda 'A099'
+   - celda 'R074'
+   - celda 'S420'
+   - celda 'R509'
+   - celda 'K429'
+   - celda 'O039'
+   - celda 'B349'
+   - celda 'X 500 MG'
+   - celda '1 de 1'
+   - titulo con TILDE en 'Periodo'
+   - titulo variante: 'NOTIFICACION DE VACACIONES'
+   - titulo variante: 'PERIODO DE VACACIONES'
+   - titulo variante: 'CARTA DE VACACIONES'
+   - A10 + 'Se expide en Malambo el dia 15 de agosto de 20...'
+   - A10 + 'Certifico que el dia primero (01) de julio se ...'
+   - A10 + 'Firmado el dia 21 de mayo de 2026...'
+   - mismo texto con indice de fila: '3 DIASDEINCAPACIDAD'
+   - rejilla en una linea: 'DIA: 12 MES: 08 ANO: 2026'
+   - rejilla sin dos puntos: 'DIA 12 MES 08 ANO 2026'
+   - rejilla en renglones: 'Dia: 12' / 'Mes: 08' / 'Ano: 2026'
+   - LLM dias=2 anclado por el ano en palabras
+   - LLM dias=26 anclado por el ano en palabras

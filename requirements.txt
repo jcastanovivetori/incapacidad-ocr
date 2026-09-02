@@ -26,3 +26,4 @@ tzdata>=2024.1      # base de zonas horarias (America/Bogota) en imágenes slim
 
 # --- Utilidades de scripts/ (se ejecutan en el HOST: no van dentro de la imagen) ---
 fpdf2>=2.7          # scripts/guia_a_pdf.py → GUIA_RECEPCION_INCAPACIDADES.pdf
+psutil>=5.9         # analisis/requisitos/bench_ocr.py → RAM por worker (dimensionar el servidor)

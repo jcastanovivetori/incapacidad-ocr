@@ -1,0 +1,291 @@
+{
+ "parte1_duracion": [
+  {
+   "caso": "A_como_el_corpus",
+   "nota": "el rotulo y el dia del mes quedan a 11 caracteres: el respaldo NO dispara (suerte)",
+   "dias_etiqueta": null,
+   "foto": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "codigos": [],
+   "exige_revision": false,
+   "fila_dias": 14,
+   "fila_fin": "2026-07-23"
+  },
+  {
+   "caso": "B_un_char_menos",
+   "nota": "el OCR pega 'FechaFin' (una celda menos): 10 caracteres y el respaldo lee el dia del mes",
+   "dias_etiqueta": null,
+   "foto": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "codigos": [],
+   "exige_revision": false,
+   "fila_dias": 14,
+   "fila_fin": "2026-07-23"
+  },
+  {
+   "caso": "C_rotulo_pegado",
+   "nota": "variante con espacios",
+   "dias_etiqueta": null,
+   "foto": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 14,
+    "dias_letra": null
+   },
+   "codigos": [],
+   "exige_revision": false,
+   "fila_dias": 14,
+   "fila_fin": "2026-07-23"
+  },
+  {
+   "caso": "D_solo_rotulo",
+   "nota": "el OCR omite el rotulo 'Fecha Fin': el dia del mes queda pegado a 'Duracion'",
+   "dias_etiqueta": 23,
+   "foto": {
+    "fecha_inicio": "2026-07-10",
+    "fecha_fin": "2026-07-23",
+    "dias": 23,
+    "dias_letra": null
+   },
+   "codigos": [
+    "T01_DURACION_VS_RANGO"
+   ],
+   "exige_revision": true,
+   "fila_dias": 23,
+   "fila_fin": "2026-08-01"
+  }
+ ],
+ "parte2_autenticidad": {
+  "reales": [
+   {
+    "id": "R01",
+    "sha8": "d86ae595",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R02",
+    "sha8": "f858510e",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R03",
+    "sha8": "b68fe146",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R04",
+    "sha8": "38f40c48",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R05",
+    "sha8": "087739e6",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R06",
+    "sha8": "eddf194a",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R07",
+    "sha8": "d6482e2a",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R08",
+    "sha8": "100e7770",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R09",
+    "sha8": "aa3512d4",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R10",
+    "sha8": "e25d5211",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R11",
+    "sha8": "c672e270",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R12",
+    "sha8": "942de664",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R13",
+    "sha8": "b6e8beb6",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R14",
+    "sha8": "691e0af0",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R15",
+    "sha8": "28c4a946",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R16",
+    "sha8": "272d0d3d",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   }
+  ],
+  "falsas": [
+   {
+    "id": "F01",
+    "sha8": "8b682a83",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F02",
+    "sha8": "5c66d97e",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F04",
+    "sha8": "e0ee54fd",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F05",
+    "sha8": "8aeee4cd",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F06",
+    "sha8": "9dcb4e35",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F07",
+    "sha8": "9603c77b",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F08",
+    "sha8": "ed2a4eeb",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F09",
+    "sha8": "d5b72739",
+    "authenticity": false,
+    "motivo": null,
+    "motor": [
+     "T01_DURACION_VS_RANGO"
+    ]
+   },
+   {
+    "id": "F10",
+    "sha8": "717d3aad",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F12",
+    "sha8": "d08cba3f",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F13",
+    "sha8": "99d74f47",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F14",
+    "sha8": "758d3aff",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "F15",
+    "sha8": "58c1e091",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R01",
+    "sha8": "d86ae595",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   },
+   {
+    "id": "R15",
+    "sha8": "28c4a946",
+    "authenticity": false,
+    "motivo": null,
+    "motor": []
+   }
+  ]
+ }
+}
