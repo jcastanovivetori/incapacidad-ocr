@@ -19,9 +19,11 @@ try:  # consola Windows (cp1252) → forzar UTF-8 para acentos
 except Exception:  # noqa: BLE001
     pass
 
+from datetime import date  # noqa: E402
+
+from incapacidad_ocr import authenticity, reglas_tiempo as rt  # noqa: E402
 from incapacidad_ocr.authenticity import (  # noqa: E402
     analizar_autenticidad,
-    _revisar_consistencia_fechas_dias,
     _revisar_periodos_multiples,
 )
 
@@ -250,48 +252,32 @@ def test_no_pdf_ni_jpeg_no_aplica() -> None:
 # Caso real reportado: "Días de incapacidad: 02" con "Desde: 05/06/2026 - Hasta:
 # 06/07/2026" (32 días reales según las fechas).
 RECORD_FECHAS_INCONSISTENTES = {
-    "paciente": {"documento_numero": "1013096147", "nombre": "JUAN ESTEBAN ROJAS GONZALEZ"},
+    "paciente": {"documento_numero": "1013096147", "nombre": "PACIENTE DE PRUEBA"},
     "incapacidad": {"dias": 2, "fecha_inicio": "2026-06-05", "fecha_fin": "2026-07-06"},
     "diagnostico": {"cie10": "A09"},
 }
 
 
-def test_fechas_dias_inconsistentes_dispara() -> None:
-    print("[13] Días declarados no coinciden con el rango de fechas -> dispara (caso real)")
-    r = _revisar_consistencia_fechas_dias(RECORD_FECHAS_INCONSISTENTES)
-    check("sospechosa=True", r["sospechosa"] is True, str(r))
-    check("detalle trae ambos conteos",
-          r["detalle"].get("dias_declarados") == 2 and r["detalle"].get("dias_por_fechas") == 32, str(r))
+def test_coherencia_fechas_dias_no_vive_aqui() -> None:
+    print("[13] La aritmética días↔rango de fechas NO está en este módulo (una sola verdad)")
+    # Aquí VIVÍA una segunda implementación del cruce días↔fechas, con OTRA tolerancia (±1)
+    # y otro canal (`sospecha_manipulacion`). Se eliminó: la verdad única es
+    # T01_DURACION_VS_RANGO en `reglas_tiempo`, que además juzga los valores LEÍDOS y tiene
+    # la tolerancia como umbral configurable. Esta prueba impide que vuelva por descuido.
+    check("el módulo ya no expone la comprobación duplicada",
+          not hasattr(authenticity, "_revisar_consistencia_fechas_dias"),
+          str([n for n in dir(authenticity) if "consistencia" in n]))
+    check("y `analizar_autenticidad` no marca el documento por ese motivo",
+          analizar_autenticidad(Path("no_existe.jpg"), "", RECORD_FECHAS_INCONSISTENTES
+                                )["sospechosa"] is False)
 
-
-def test_fechas_dias_consistentes_no_dispara() -> None:
-    print("[14] Días declarados SÍ coinciden con el rango de fechas -> no dispara")
-    record = {"incapacidad": {"dias": 5, "fecha_inicio": "2026-06-10", "fecha_fin": "2026-06-14"}}
-    r = _revisar_consistencia_fechas_dias(record)
-    check("sospechosa=False", r["sospechosa"] is False, str(r))
-
-
-def test_fechas_dias_tolerancia_un_dia_no_dispara() -> None:
-    print("[15] Diferencia de 1 día (conteo no-inclusivo de algunos formatos) -> no dispara")
-    record = {"incapacidad": {"dias": 4, "fecha_inicio": "2026-06-10", "fecha_fin": "2026-06-14"}}
-    r = _revisar_consistencia_fechas_dias(record)
-    check("sospechosa=False", r["sospechosa"] is False, str(r))
-
-
-def test_fechas_dias_incompleto_no_opina() -> None:
-    print("[16] Falta fecha_fin o dias no es int -> no opina, sin excepción")
-    check("sin fecha_fin", _revisar_consistencia_fechas_dias(
-        {"incapacidad": {"dias": 2, "fecha_inicio": "2026-06-05"}})["sospechosa"] is False)
-    check("dias como string (ya normalizado a otra cosa)", _revisar_consistencia_fechas_dias(
-        {"incapacidad": {"dias": "2", "fecha_inicio": "2026-06-05", "fecha_fin": "2026-07-06"}})["sospechosa"] is False)
-    check("record None", _revisar_consistencia_fechas_dias(None)["sospechosa"] is False)
-
-
-def test_fechas_dias_integrado_en_analizar_autenticidad() -> None:
-    print("[17] Integrado en analizar_autenticidad (combinado con otras señales)")
-    r = analizar_autenticidad(Path("no_existe.jpg"), "", RECORD_FECHAS_INCONSISTENTES)
-    check("sospechosa=True", r["sospechosa"] is True, str(r))
-    check("motivo menciona los días", "no coinciden con el rango de fechas" in (r["motivo"] or ""), r["motivo"])
+    # El MISMO caso sí lo marca el motor de tiempos, con su código de regla y su severidad.
+    inca = dict(RECORD_FECHAS_INCONSISTENTES["incapacidad"])
+    inca[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(inca)
+    veredicto = rt.evaluar(rt.construir_contexto(inca, hoy=date(2026, 9, 2)))
+    check("T01_DURACION_VS_RANGO lo marca como GRAVE",
+          veredicto.codigos == ["T01_DURACION_VS_RANGO"] and veredicto.severidad_max == rt.GRAVE,
+          str(veredicto.codigos))
 
 
 # Texto real (extraído con fitz) del documento 1124053450_INCAPACIDAD.pdf reportado
@@ -353,11 +339,7 @@ def main() -> int:
     test_periodos_repetidos_iguales_no_dispara()
     test_periodo_unico_no_dispara()
     test_periodos_multiples_integrado_en_pdf()
-    test_fechas_dias_inconsistentes_dispara()
-    test_fechas_dias_consistentes_no_dispara()
-    test_fechas_dias_tolerancia_un_dia_no_dispara()
-    test_fechas_dias_incompleto_no_opina()
-    test_fechas_dias_integrado_en_analizar_autenticidad()
+    test_coherencia_fechas_dias_no_vive_aqui()
     print("-" * 64)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")
     return 1 if _fail else 0

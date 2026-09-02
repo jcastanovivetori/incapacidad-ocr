@@ -33,7 +33,24 @@
     "T05_DIAS_NO_NUMERICO":           { "severidad": "MEDIA", "activa": true },
     "T06_FECHA_INICIO_ILEGIBLE":      { "severidad": "MEDIA", "activa": true },
     "T07_FECHA_FIN_ILEGIBLE":         { "severidad": "MEDIA", "activa": true },
-    "T08_DURACION_SIN_RESPALDO":      { "severidad": "MEDIA", "activa": true },
+
+    "_T08": [
+      "LEVE a proposito (medido sobre el corpus): una duracion larga sin fecha fin NO es una",
+      "contradiccion del documento, es una plausibilidad, y era la unica regla que marcaba un",
+      "documento REAL. Una prorroga legitima de 210 dias impresa solo con inicio + dias",
+      "quedaba bloqueada sin que nada estuviera mal. Como LEVE avisa y no bloquea.",
+      "Si el cliente prefiere que bloquee: subirla a MEDIA aqui (o por SQL) — no hace falta",
+      "desplegar. Mover el umbral es la otra palanca, pero 180 es dominio, no calibracion."
+    ],
+    "T08_DURACION_SIN_RESPALDO":      { "severidad": "LEVE",  "activa": true },
+
+    "_T09": [
+      "MEDIA: bloquea. No dispara en VACACIONES (tipo 13) ni en PRELICENCIA de maternidad",
+      "(tipo 10), donde empezar en el futuro es el proposito del documento — esa exencion es",
+      "por TIPO y esta en el codigo, no es un umbral. Se mide contra la fecha de PROCESO:",
+      "si se reprocesa un lote historico o el reloj del contenedor esta mal, sube el ruido;",
+      "las palancas son bajarla a LEVE o subir dias_futuro_max."
+    ],
     "T09_INICIO_EN_FUTURO":           { "severidad": "MEDIA", "activa": true },
     "T10_INICIO_MUY_ANTIGUO":         { "severidad": "LEVE",  "activa": true },
     "T11_FIN_REESCRITO_SIN_EVIDENCIA": { "severidad": "GRAVE", "activa": true },

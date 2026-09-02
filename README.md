@@ -7,6 +7,7 @@ Convierte una **imagen/escaneo de una incapacidad médica** (Colombia) en **text
 > 📄 **Contexto completo** (origen, decisiones, evidencia de pruebas, cómo encaja en nómina, pendientes): [`CONTEXT.md`](CONTEXT.md). Guía para trabajar el repo: [`CLAUDE.md`](CLAUDE.md).
 >
 > 🧪 **Probar con los documentos reales** (31 del cliente: 15 adulterados + 16 legítimos, repetible): [`PRUEBAS.md`](PRUEBAS.md).
+> ⏱️ **Validación de TIEMPOS** (qué valida y qué no, tabla de reglas, cómo añadir una regla, cómo cambiar una severidad o un umbral **sin desplegar**, medición sobre el corpus y preguntas abiertas): [`VALIDACION_TEMPORAL.md`](VALIDACION_TEMPORAL.md).
 > 🖥️ **Qué instalar y qué servidor hace falta** para producción: [`INSTALACION_CLIENTE.md`](INSTALACION_CLIENTE.md).
 
 ```

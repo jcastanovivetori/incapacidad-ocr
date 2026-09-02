@@ -29,8 +29,8 @@ import re
 import shutil
 import sys
 import tempfile
-from dataclasses import replace
-from datetime import date, timedelta
+from dataclasses import fields as dataclass_fields, replace
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -185,6 +185,9 @@ def test_catalogo() -> None:
     check("todas apuntan a un campo del formulario",
           all(r.campo in {"dias", "fecha_inicio", "fecha_fin"} for r in rt.CATALOGO))
 
+    check("el catálogo que se despliega pasa su propia verificación",
+          rt.verificar_catalogo() == [], str(rt.verificar_catalogo()))
+
     # LA invariante: una regla solo puede EXIGIR evidencia. Ningún `*_efectivo` (valor que
     # salió de la reconciliación) es exigible → por construcción no se puede escribir una
     # regla que dependa de un dato derivado.
@@ -192,6 +195,12 @@ def test_catalogo() -> None:
     check("`requiere` solo nombra campos exigibles (evidencia)", not fuera, str(fuera))
     check("ningún campo exigible es un valor efectivo",
           not any(c.endswith("_efectivo") for c in rt.CAMPOS_EXIGIBLES))
+    # Y la vista que reciben las reglas TAMPOCO tiene por dónde llegar a uno: eso es lo que
+    # convierte la frontera en una restricción de ejecución y no en una convención.
+    check("la vista de evidencia no expone ningún valor reconciliado",
+          not any(f.name.endswith("_efectivo") for f in dataclass_fields(rt.EvidenciaTiempos)))
+    check("CAMPOS_EXIGIBLES se deriva de esa vista (una sola fuente de verdad)",
+          rt.CAMPOS_EXIGIBLES == frozenset(f.name for f in dataclass_fields(rt.EvidenciaTiempos)))
 
     # Y el cuerpo de las reglas tampoco puede leer un valor efectivo: se comprueba en el
     # CÓDIGO FUENTE, que es lo que impide que la siguiente regla lo haga por descuido.
@@ -924,6 +933,317 @@ def test_integracion_erp() -> None:
           and not any("cuadran" in p for p in m4["problemas"]), str(m4["problemas"]))
 
 
+# --------------------------------------------------------------------------- #
+# [12] Regresiones del ATAQUE ADVERSARIO al motor (frente romper-reglas)
+# --------------------------------------------------------------------------- #
+# Cada bloque reproduce un hallazgo real de la verificación y falla si se revierte el
+# arreglo. El orden es el del informe (H1..H13).
+def test_regresiones_ataque() -> None:
+    print("[12] Regresiones del ataque adversario (H1..H13)")
+
+    # --- H1 (GRAVE): el formulario reenvía el valor que se le PINTÓ (que puede ser el
+    #     derivado) en cada llamada. Eso no es evidencia: mapear dos veces no puede cambiar
+    #     el veredicto ni resucitar un valor calculado como si lo imprimiera el papel.
+    rec = {"incapacidad": {"fecha_inicio": None, "fecha_fin": "2026-11-30", "dias": 5}}
+    inca = rec["incapacidad"]
+    inca[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(inca)
+    normalizar_fechas(rec)                       # inicio = fin − (días − 1) = 2026-11-26
+    m1 = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
+    # Exactamente lo que manda `overrides()` de index.html con el formulario relleno por
+    # `fillForm()`: los valores de la FILA, y como texto (el input es un <input>).
+    eco = {"fecha_inicio": m1["row"]["fechainicio"], "dias": str(m1["row"]["Numerodias"])}
+    m2 = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                              overrides=eco)
+    check("H1 reenviar el formulario sin tocar nada NO cambia el veredicto",
+          m2["problemas"] == m1["problemas"] and m2["requiere_revision"] is False,
+          str(m2["problemas"]))
+    check("H1 el inicio DERIVADO no se vuelve evidencia (T09 sigue no evaluable)",
+          _estado(rt.construir_contexto(inca, hoy=HOY, overrides=eco), "T09_INICIO_EN_FUTURO")
+          == rt.NO_EVALUABLE)
+    check("H1 T01 sigue no evaluable (no hay inicio impreso que cruzar)",
+          _estado(rt.construir_contexto(inca, hoy=HOY, overrides=eco), "T01_DURACION_VS_RANGO")
+          == rt.NO_EVALUABLE)
+    check("H1 la marca '(calculada: fin − días)' no desaparece de la pantalla",
+          m2["fecha_inicio_calculada"] is True)
+    check("H1 la confianza no sube por un dato que nadie leyó",
+          m2["row"]["confianza_ocr"] == m1["row"]["confianza_ocr"],
+          f"{m1['row']['confianza_ocr']} -> {m2['row']['confianza_ocr']}")
+    check("H1 la cobertura del informe tampoco se infla",
+          m2["tiempos"]["resumen"]["cobertura"] == m1["tiempos"]["resumen"]["cobertura"])
+    # Y lo que NO se puede perder: una corrección de verdad SÍ es evidencia.
+    m3 = erp.mapear_a_staging(_resultado(inca), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                              overrides={"fecha_inicio": "2026-11-20"})
+    check("H1 una fecha DISTINTA tecleada a mano sí se juzga",
+          any("no cuadran" in p for p in m3["problemas"])
+          and m3["fecha_inicio_calculada"] is False, str(m3["problemas"]))
+
+    # --- H2 (GRAVE): una errata en la severidad de una regla nueva no puede tumbar el mapeo
+    #     de TODOS los documentos (antes: KeyError desde `evaluar` y desde `mapear_a_staging`).
+    def _t90(ctx, u):                            # noqa: ARG001
+        return "algo que reportar" if ctx.inicio_leido else None
+
+    with _catalogo_con(rt.ReglaTiempo("T90_SEVERIDAD_MAL_ESCRITA",
+                                      "una regla nueva con la severidad mal escrita",
+                                      "ALTA", _t90, requiere=("inicio_leido",), campo="dias")):
+        ctx = _ctx(inicio="2026-06-01", fin="2026-06-05", dias=5)
+        res = rt.evaluar(ctx)
+        check("H2 severidad inexistente en el catálogo → se usa la de respaldo",
+              _regla(ctx, "T90_SEVERIDAD_MAL_ESCRITA").severidad == rt.SEVERIDAD_RESPALDO)
+        check("H2 el puntaje se calcula igual (no revienta)", res.puntaje == 80, str(res.puntaje))
+        check("H2 y la errata se explica en los avisos de configuración",
+              any("T90_SEVERIDAD_MAL_ESCRITA" in a and "no existe" in a for a in res.avisos_config),
+              str(res.avisos_config))
+        m = erp.mapear_a_staging(_resultado({"fecha_inicio": "2026-06-01", "dias": 5}),
+                                 "WHATSAPP", _LookupsFalsos(), hoy=HOY)
+        check("H2 el documento se mapea igual (no hay 500 ni documento perdido)",
+              m["row"]["estado"] == "PENDIENTE_REVISION")
+    a_mano = rt.ConfigReglas(severidades={"T01_DURACION_VS_RANGO": "CRITICA"}, activas={},
+                             umbrales=dict(rt.UMBRALES_DEFAULT))
+    check("H2 una ConfigReglas construida a mano con basura tampoco revienta",
+          a_mano.severidad_de("T01_DURACION_VS_RANGO") == rt.GRAVE
+          and rt.evaluar(_ctx(inicio="2026-06-01", fin="2026-07-06", dias=5), a_mano).puntaje == 60)
+
+    # --- H3 (MEDIA): la frontera leído/calculado es una RESTRICCIÓN, no documentación.
+    for requiere, etiqueta in ((("dias_efectivo",), "un valor reconciliado"),
+                               (("fin_leidoo",), "una errata")):
+        try:
+            rt.ReglaTiempo("T91_DECLARACION_MALA", "declara mal lo que necesita", rt.MEDIA,
+                           _t90, requiere=requiere, campo="dias")
+            check(f"H3 `requiere` con {etiqueta} se rechaza al declararla", False, str(requiere))
+        except ValueError as exc:
+            check(f"H3 `requiere` con {etiqueta} se rechaza al declararla",
+                  requiere[0] in str(exc), str(exc)[:80])
+    dup = rt.ReglaTiempo("T01_DURACION_VS_RANGO", "un código repetido por descuido", rt.LEVE,
+                         _t90, campo="dias")
+    check("H3 un código repetido lo detecta verificar_catalogo()",
+          any("repetido" in p for p in rt.verificar_catalogo(rt.CATALOGO + (dup,))))
+    check("H3 el catálogo que se despliega está sano", rt.verificar_catalogo() == [])
+
+    def _t92_espia(ctx, u):                      # noqa: ARG001
+        return f"el fin efectivo es {ctx.fin_efectivo}"      # no debería poder leerlo
+
+    with _catalogo_con(rt.ReglaTiempo("T92_ESPIA", "intenta leer un valor reconciliado",
+                                      rt.MEDIA, _t92_espia, requiere=("inicio_leido",),
+                                      campo="dias")):
+        espiado = rt.construir_contexto({rt.CLAVE_SNAPSHOT: {"fecha_inicio": "2026-06-01"}},
+                                        hoy=HOY, fin_efectivo="2026-06-05")
+        r = _regla(espiado, "T92_ESPIA")
+        check("H3 una regla NO puede leer un valor efectivo (queda no evaluable)",
+              r.estado == rt.NO_EVALUABLE and "AttributeError" in (r.motivo or ""),
+              f"{r.estado} / {r.motivo}")
+        check("H3 y el valor reconciliado no aparece en ningún mensaje",
+              "2026-06-05" not in (r.mensaje or ""), str(r.mensaje))
+
+    # --- H4 (MEDIA): un entero de 12 cifras llegaba verbatim a `dias_leidos INT` y MySQL
+    #     estricto rechazaba el INSERT completo (1264): el documento no llegaba a staging.
+    check("H4 un entero de 12 cifras no es un número de días utilizable",
+          rt.entero_dias(999999999999) is None and rt.entero_dias(10 ** 10) is None)
+    check("H4 y se explica como 'se detectó y no sirve' (T05)",
+          _estado(_ctx(overrides={"dias": 999999999999}), "T05_DIAS_NO_NUMERICO") == rt.NO_CUMPLE)
+    m = erp.mapear_a_staging(_resultado({"fecha_inicio": "2026-06-01"}), "WHATSAPP",
+                             _LookupsFalsos(), hoy=HOY, overrides={"dias": 999999999999})
+    check("H4 no viaja a la columna INT de la fila",
+          m["row"]["dias_leidos"] is None and m["row"]["Numerodias"] is None,
+          str(m["row"]["dias_leidos"]))
+    check("H4 pero sigue habiendo 6 cifras de margen para un valor real",
+          rt.entero_dias(999999) == 999999)
+
+    # --- H5 (MEDIA): un override de solo espacios no es "leí un dato y no sirve".
+    r = _regla(_ctx(overrides={"fecha_inicio": "   "}), "T06_FECHA_INICIO_ILEGIBLE")
+    check("H5 un override en blanco NO se declara ilegible", r.estado == rt.NO_EVALUABLE, r.estado)
+    m = erp.mapear_a_staging(_resultado({}), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                             overrides={"fecha_inicio": "   ", "dias": " "})
+    check("H5 y erp vuelve a decir lo que sí se entiende",
+          any("No se detectó la fecha de inicio" in p for p in m["problemas"]),
+          str(m["problemas"]))
+
+    # --- H6 (MEDIA): un `datetime` es una fecha con hora (driver de BD, llamador de la API):
+    #     antes dejaba muda a la regla estrella (TypeError) o le hacía dar un GRAVE falso.
+    ctx = rt.ContextoTiempos(hoy=HOY, inicio_leido=rt.fecha_iso(datetime(2026, 6, 1, 10, 0)),
+                             fin_leido=rt.fecha_iso(date(2026, 6, 5)), dias_leido=9)
+    check("H6 datetime + date: T01 opina (no muere comparando tipos)",
+          _estado(ctx, "T01_DURACION_VS_RANGO") == rt.NO_CUMPLE)
+    ctx = rt.ContextoTiempos(hoy=HOY, inicio_leido=rt.fecha_iso(datetime(2026, 6, 1, 10, 0)),
+                             fin_leido=rt.fecha_iso(datetime(2026, 6, 3, 9, 0)), dias_leido=3)
+    check("H6 y las horas no inventan un desfase (1,2 y 3 de junio son 3 días)",
+          _estado(ctx, "T01_DURACION_VS_RANGO") == rt.CUMPLE)
+
+    # --- H7 (MEDIA): con un año al límite del calendario, T01 quedaba muda justo cuando
+    #     los tiempos NO cuadran (OverflowError al calcular la fecha fin esperada).
+    r = _regla(_ctx(inicio="9999-12-31", fin="9999-12-31", dias=5), "T01_DURACION_VS_RANGO")
+    check("H7 T01 sigue marcando con fechas al final del calendario",
+          r.estado == rt.NO_CUMPLE, f"{r.estado} / {r.motivo}")
+    check("H7 y el mensaje trae el desfase (lo accionable)", "desfase" in (r.mensaje or ""),
+          r.mensaje or "")
+
+    # --- H8 (LEVE): T01 y T04 no pueden emitir dos GRAVES por el MISMO span (el puntaje
+    #     ordena la cola de ~7000 casos/mes: castigar dos veces la distorsiona).
+    res = rt.evaluar(_ctx(inicio="2020-01-01", fin="2026-01-01", dias=5))
+    check("H8 un solo mensaje para la misma contradicción",
+          res.codigos == ["T01_DURACION_VS_RANGO", "T10_INICIO_MUY_ANTIGUO"], str(res.codigos))
+    check("H8 y el puntaje no se castiga dos veces", res.puntaje == 55, str(res.puntaje))
+    check("H8 T04 sigue marcando cuando NO hay días con los que cruzar",
+          _estado(_ctx(inicio="2020-01-01", fin="2026-01-01"), "T04_RANGO_MAYOR_AL_MAXIMO")
+          == rt.NO_CUMPLE)
+
+    # --- H9 (LEVE): un override None/vacío no es una corrección: no borra lo impreso.
+    check("H9 un override None no borra la evidencia del papel",
+          _estado(_ctx(inicio="2026-06-01", fin="2026-06-20", dias=5,
+                       overrides={"fecha_fin": None}), "T01_DURACION_VS_RANGO") == rt.NO_CUMPLE)
+
+    # --- H10 (LEVE): sin fecha de proceso el informe degrada, no revienta.
+    informe = rt.validar_tiempos(rt.construir_contexto({"fecha_inicio": "2026-06-01", "dias": 5},
+                                                       hoy=None))
+    check("H10 hoy=None: informe completo sin excepción",
+          informe["evidencia"]["hoy"] is None
+          and _estado(rt.construir_contexto({"fecha_inicio": "2026-06-01"}, hoy=None),
+                      "T09_INICIO_EN_FUTURO") == rt.NO_EVALUABLE)
+
+    # --- H11 (LEVE): un hallazgo es TEXTO. Cualquier otra cosa es un bug de la regla.
+    def _t93_raro(ctx, u):                       # noqa: ARG001
+        return True
+
+    with _catalogo_con(rt.ReglaTiempo("T93_DEVUELVE_RARO", "devuelve algo que no es un mensaje",
+                                      rt.MEDIA, _t93_raro, campo="dias")):
+        r = _regla(_ctx(inicio="2026-06-01"), "T93_DEVUELVE_RARO")
+        check("H11 lo que no es texto no acaba en la pantalla del auxiliar",
+              r.estado == rt.NO_EVALUABLE and r.mensaje is None, f"{r.estado} / {r.mensaje}")
+
+    # --- H12 (LEVE): `alertas_tiempos` es VARCHAR(255) y el catálogo está hecho para crecer.
+    largos = [f"T{i:02d}_CODIGO_DE_REGLA_LARGO_COMO_LOS_QUE_YA_HAY" for i in range(1, 18)]
+    texto = erp._lista_acotada(largos, erp.LARGO_ALERTAS_TIEMPOS)
+    check("H12 la columna nunca se desborda (el INSERT no se cae)",
+          len(texto) <= erp.LARGO_ALERTAS_TIEMPOS, str(len(texto)))
+    check("H12 y se ve que hay más códigos (no un código cortado a medias)",
+          texto.endswith(")") and "+" in texto, texto[-20:])
+    check("H12 con pocos códigos no cambia nada",
+          erp._lista_acotada(["T01_DURACION_VS_RANGO"], 255) == "T01_DURACION_VS_RANGO")
+
+    # --- H13 (LEVE): la cobertura mide LECTURA. Un documento del que no se leyó nada no
+    #     puede tener cobertura > 0 (es el número que evita leer COHERENTE como "verificado").
+    res = rt.validar_tiempos(_ctx())["resumen"]
+    check("H13 sin ningún tiempo leído, cobertura 0.0", res["cobertura"] == 0.0, str(res))
+    solo_expedicion = rt.validar_tiempos(_ctx(fecha_expedicion="2026-06-01"))
+    check("H13 con solo la expedición leída la cobertura sigue siendo baja",
+          solo_expedicion["resumen"]["cobertura"] < 0.15,
+          str(solo_expedicion["resumen"]["cobertura"]))
+
+
+# --------------------------------------------------------------------------- #
+# [13] FALSOS POSITIVOS sobre documentos LEGÍTIMOS (frentes falsos-positivos y medir-corpus)
+# --------------------------------------------------------------------------- #
+def test_falsos_positivos() -> None:
+    print("[13] Falsos positivos sobre documentos legítimos")
+
+    # --- Tipos cuyo inicio en el futuro es el PROPÓSITO del documento: la notificación de
+    #     vacaciones (13) y la prelicencia de maternidad (10). Era el falso positivo más caro
+    #     medido: 100% de esos documentos, sin que el OCR fallara.
+    vacaciones = {"fecha_inicio": "2026-10-17", "fecha_fin": "2026-11-01", "dias": 16}
+    vacaciones[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(vacaciones)
+    m = erp.mapear_a_staging(_resultado(vacaciones, tipo_documento="vacaciones"), "WHATSAPP",
+                             _LookupsFalsos(), hoy=HOY)
+    check("vacaciones con 45 días de antelación: sin alerta de tiempos",
+          m["row"]["alertas_tiempos"] is None and not m["problemas"], str(m["problemas"]))
+    prelicencia = {"fecha_inicio": "2026-10-17", "dias": 126}
+    prelicencia[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(prelicencia)
+    m = erp.mapear_a_staging(_resultado(prelicencia), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                             overrides={"tipo": "10"})
+    check("prelicencia de maternidad (tipo 10): sin alerta de tiempos",
+          m["row"]["alertas_tiempos"] is None and m["row"]["idlptipoausentismo"] == 10,
+          str(m["row"]["alertas_tiempos"]))
+    # Y la exención es por TIPO: para una incapacidad corriente la regla sigue viva.
+    normal = {"fecha_inicio": "2026-10-17", "dias": 5}
+    normal[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(normal)
+    m = erp.mapear_a_staging(_resultado(normal), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
+    check("una incapacidad que empieza en el futuro SIGUE marcada (no se debilitó la regla)",
+          m["row"]["alertas_tiempos"] == "T09_INICIO_EN_FUTURO", str(m["row"]["alertas_tiempos"]))
+
+    # --- Un año al límite del calendario no puede perder el documento con un 500 (erp
+    #     calculaba `fechavencimiento = inicio + días` sin protección).
+    m = erp.mapear_a_staging(_resultado({"fecha_inicio": "9999-12-30", "fecha_fin": "9999-12-31",
+                                         "dias": 2}), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
+    check("año 9999: la fila entra a staging (nunca se rechaza solo)",
+          m["row"]["estado"] == "PENDIENTE_REVISION" and m["row"]["fechavencimiento"] is None)
+    check("y se explica por qué falta el vencimiento",
+          any("fuera del calendario" in p for p in m["problemas"]), str(m["problemas"]))
+
+    # --- Los días DERIVADOS por el lector de las dos fechas no son evidencia del papel: si
+    #     el auxiliar corrige SOLO la fecha fin, T01 acusaría de GRAVE una incoherencia que
+    #     produjo el pipeline, y la fila se quedaría con los días del rango viejo.
+    derivados = {"fecha_inicio": "2026-08-20", "fecha_fin": "2026-08-28", "dias": 9}
+    derivados[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(derivados)
+    m = erp.mapear_a_staging(_resultado(derivados), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                             overrides={"fecha_fin": "2026-08-22"})
+    check("corregir solo el fin: sin hallazgo GRAVE contra un documento coherente",
+          m["row"]["alertas_tiempos"] is None and not m["problemas"], str(m["problemas"]))
+    check("y la fila no se contradice con su propia evidencia",
+          (m["row"]["Numerodias"], m["row"]["fechavencimiento"], m["row"]["fechafin_leida"])
+          == (3, "2026-08-23", "2026-08-22"), str(m["row"]))
+    # Con la PROCEDENCIA declarada por el lector (contrato `dias_calculado`, que hoy el
+    # extractor todavía no publica) el motor recupera la precisión en los dos sentidos.
+    impresos = dict(derivados, dias_calculado=False)
+    impresos[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(impresos)
+    m = erp.mapear_a_staging(_resultado(impresos), "WHATSAPP", _LookupsFalsos(), hoy=HOY,
+                             overrides={"fecha_fin": "2026-08-22"})
+    check("si el lector dice que los días eran IMPRESOS, el fin corregido sí se contrasta",
+          m["row"]["alertas_tiempos"] == "T01_DURACION_VS_RANGO" and m["row"]["Numerodias"] == 9,
+          str(m["row"]["alertas_tiempos"]))
+    calculados = dict(derivados, dias_calculado=True)
+    calculados[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(calculados)
+    informe = vt.validar_registro({"incapacidad": calculados}, hoy=HOY)
+    check("y si dice que los DERIVÓ, T01 no finge haber cruzado nada (tautología)",
+          [r["estado"] for r in informe["reglas"] if r["codigo"] == "T01_DURACION_VS_RANGO"]
+          == [rt.NO_EVALUABLE], str(informe["resumen"]))
+
+    # --- Una duración larga sin fecha fin NO es una contradicción: avisa, no bloquea.
+    larga = {"fecha_inicio": "2026-02-01", "dias": 210}
+    larga[rt.CLAVE_SNAPSHOT] = rt.snapshot_leidos(larga)
+    m = erp.mapear_a_staging(_resultado(larga), "WHATSAPP", _LookupsFalsos(), hoy=HOY)
+    check("prórroga legítima de 210 días: avisa pero NO bloquea la aprobación",
+          m["requiere_revision"] is False and m["row"]["severidad_tiempos"] == rt.LEVE,
+          str(m["problemas"]))
+    check("el aviso sigue llegando al auxiliar por su canal",
+          any("Duración larga" in a for a in m["avisos_tiempos"]), str(m["avisos_tiempos"]))
+
+    # --- Registro SIN la foto de `processor`: una fecha fin que cuadra exactamente con
+    #     inicio + días no se distingue de la que COMPLETA la reconciliación. Tomarla por
+    #     leída hacía que el informe dijera haber cruzado duración↔rango sobre un papel que
+    #     no imprimía ningún rango (y en un documento adulterado, con cobertura de 0.85).
+    reg = {"fecha_inicio": "2026-06-01", "fecha_fin": None, "dias": 5}
+    normalizar_fechas({"incapacidad": reg})
+    informe = vt.validar_registro({"incapacidad": reg}, hoy=HOY)
+    check("sin foto: el fin COMPLETADO no cuenta como evidencia",
+          [r["estado"] for r in informe["reglas"] if r["codigo"] == "T01_DURACION_VS_RANGO"]
+          == [rt.NO_EVALUABLE], str(informe["evidencia"]["leido"]))
+    check("y el informe dice que ese fin no es verificable",
+          informe["evidencia"]["derivado"]["fecha_fin_indistinguible_de_calculada"] is True)
+    con_foto = _ctx(inicio="2026-06-01", dias=5)
+    check("la cobertura coincide con la del MISMO caso con la foto puesta",
+          informe["resumen"]["cobertura"] == rt.validar_tiempos(con_foto)["resumen"]["cobertura"],
+          f"{informe['resumen']['cobertura']} vs {rt.validar_tiempos(con_foto)['resumen']['cobertura']}")
+    # Y esa degradación no puede crear un falso positivo nuevo: si el fin deja de ser
+    # evidencia, T08 NO puede decir "duración larga SIN fecha fin" (el registro trae una).
+    larga_sin_foto = rt.construir_contexto({"fecha_inicio": "2026-01-01",
+                                            "fecha_fin": "2026-07-29", "dias": 210}, hoy=HOY)
+    check("el fin redundante se descarta como evidencia",
+          larga_sin_foto.fin_leido is None and larga_sin_foto.fin_indistinguible is True)
+    check("y T08 no lo confunde con 'no hay fecha fin'",
+          _estado(larga_sin_foto, "T08_DURACION_SIN_RESPALDO") == rt.CUMPLE)
+
+    # --- Contrato con el lector (hoy NO lo publica): si conserva la cadena que rechazó, el
+    #     motor puede decir "leí esto y no sirve" en vez de "no se detectó" — el auxiliar no
+    #     tiene que salir a buscar un dato que está impreso.
+    crudos = {rt.CLAVE_SNAPSHOT: {"fecha_inicio": None, "fecha_fin": None, "dias": None,
+                                  "dias_letra": None,
+                                  rt.CLAVE_INICIO_CRUDO: "31/02/2026",
+                                  rt.CLAVE_FIN_CRUDO: "2026-05-13", rt.CLAVE_DIAS_CRUDO: "tres"}}
+    ctx = rt.construir_contexto(crudos, hoy=HOY)
+    check("el crudo rechazado por el lector se explica como ilegible (T06)",
+          _estado(ctx, "T06_FECHA_INICIO_ILEGIBLE") == rt.NO_CUMPLE)
+    check("y la duración ilegible también (T05)",
+          _estado(ctx, "T05_DIAS_NO_NUMERICO") == rt.NO_CUMPLE)
+
+
 def main() -> int:
     print("=" * 72)
     print("PRUEBAS del motor de validación temporal (incapacidad_ocr/reglas_tiempo.py)")
@@ -940,6 +1260,8 @@ def main() -> int:
     test_regla_nueva()
     test_informe()
     test_integracion_erp()
+    test_regresiones_ataque()
+    test_falsos_positivos()
     print("-" * 72)
     print("RESULTADO:", "TODO OK" if _fail == 0 else f"{_fail} fallo(s)")
     return 1 if _fail else 0

@@ -21,7 +21,7 @@ imagen/PDF ─► [OCR] ─► texto ─► [extractor] ─► JSON ─► [erp.
 | `preprocess.py` | carga imagen/PDF, **PDF→imágenes (PDFium, sin Poppler)**, resize, base64 |
 | `ocr.py` | backends OCR: `RapidOCRBackend` (ONNX/CPU), `OllamaVisionOCR` (visión local), `StubOCR` (tests). `OllamaError` + `translate_ollama_error` |
 | `extract.py` | extractores: `RuleBasedExtractor`, `OllamaLLMExtractor`, `HybridExtractor`; `normalizar_fechas()` (regla de fecha de inicio); `_split_glued_name()` (nombres pegados) |
-| `reglas_tiempo.py` | **motor de reglas de coherencia TEMPORAL**: `CATALOGO` declarativo (T01…T17; T13/T15/T16/T17 declaradas y **apagadas** por falta de dato o de acceso al histórico), `construir_contexto`, `evaluar` (veredicto operativo), `evaluar_reglas`/`validar_tiempos` (informe CUMPLE/NO_CUMPLE/NO_EVALUABLE), configuración en caliente `cargar_config` (BD > JSON del volumen > defaults) |
+| `reglas_tiempo.py` | **motor de reglas de coherencia TEMPORAL**: `CATALOGO` declarativo (T01…T17; T13/T15/T16/T17 declaradas y **apagadas** por falta de dato o de acceso al histórico), `construir_contexto`, `EvidenciaTiempos` (**vista de solo-evidencia: lo único que ve una regla**), `evaluar` (veredicto operativo), `evaluar_reglas`/`validar_tiempos` (informe CUMPLE/NO_CUMPLE/NO_EVALUABLE), `verificar_catalogo` (la declaración se valida al importar), configuración en caliente `cargar_config` (BD > JSON del volumen > defaults). Doc completa: **`VALIDACION_TEMPORAL.md`** |
 | `validacion_temporal.py` | **API pública** del motor (re-exporta `reglas_tiempo`, sin lógica propia): `validar_registro(registro)` → informe serializable · `python -m incapacidad_ocr.validacion_temporal` imprime el catálogo y la config efectiva |
 | `numeros_es.py` | numerales en español: `normalizar` (saneo OCR), `texto_a_entero`, `duracion_en_texto` (días en **números, letras o las dos**; exige ANCLA y veta por los dos lados), `duracion_de_celda` (celda de tabla: ancla POSICIONAL, la celda solo puede traer el valor), `numerales_en_texto` (enteros presentes → anclaje del LLM). Lector puro: no aplica reglas de dominio (ni el rango 1..540) |
 | `processor.py` | `IncapacidadProcessor` une OCR+extractor y llama `normalizar_fechas()`. Guarda `MIN_OCR_CHARS` (no estructurar texto vacío → anti-fabricación de PII) |
@@ -155,15 +155,25 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   `dataset-falsedad/duraciones/01_evidencia.md`; los ataques al anclaje y su resultado, en
   `tests/test_numeros_es.py` secciones [10]-[13].
 - **Validación de TIEMPOS — validar NO es reconciliar** (`reglas_tiempo.py`, API pública en
-  `validacion_temporal.py`): `extract.normalizar_fechas()` sigue siendo el ÚNICO sitio que decide qué
+  `validacion_temporal.py`, doc completa en **`VALIDACION_TEMPORAL.md`**):
+  `extract.normalizar_fechas()` sigue siendo el ÚNICO sitio que decide qué
   dato queda (rellena/deriva/sanea); el motor de reglas solo **opina sobre lo que traía el papel**
-  (lee, compara, califica y explica) y **nunca escribe** `fecha_inicio`/`fecha_fin`/`dias`. Por eso una
-  regla solo puede EXIGIR campos `*_leido`/`*_crudo` del contexto (`CAMPOS_EXIGIBLES`, verificado en
-  `tests/test_validacion_temporal.py` incluso sobre el código fuente de cada regla): opinar sobre un
-  valor DERIVADO marcaría documentos legítimos a los que el pipeline solo les completó un hueco.
+  (lee, compara, califica y explica) y **nunca escribe** `fecha_inicio`/`fecha_fin`/`dias`.
+  **Una regla de coherencia solo puede dispararse con valores LEÍDOS, nunca calculados** — y eso está
+  garantizado por construcción, no por disciplina: a la regla no se le pasa el contexto, se le pasa la
+  vista `EvidenciaTiempos`, que **no tiene ningún campo `*_efectivo`** (`CAMPOS_EXIGIBLES` se DERIVA de
+  esa vista y `ReglaTiempo` rechaza al importar un `requiere` que nombre otra cosa). Opinar sobre un
+  valor DERIVADO marcaría documentos legítimos a los que el pipeline solo les completó un hueco, o daría
+  un CUMPLE tautológico que parece una verificación.
+  Corolarios que también son invariantes: **un override del auxiliar es evidencia solo si CAMBIA algo**
+  (el formulario reenvía el valor que se le pintó —que puede ser el derivado— en cada llamada:
+  `es_correccion_humana`), y un `dias` que es exactamente el span de las dos fechas leídas **no** es
+  evidencia independiente (`dias_derivable_del_rango`).
   La evidencia se conserva porque `processor` guarda una **foto** de los tiempos leídos
   (`reglas_tiempo.CLAVE_SNAPSHOT`) ANTES de reconciliar, y llega al ERP en `fechafin_leida`/`dias_leidos`.
-  Tres estados por regla: **CUMPLE / NO_CUMPLE / NO_EVALUABLE** (un dato ausente NO es una violación).
+  Tres estados por regla: **CUMPLE / NO_CUMPLE / NO_EVALUABLE** (un dato ausente NO es una violación);
+  `resumen.cobertura` dice qué parte se pudo comprobar de verdad, para no leer un COHERENTE de cobertura
+  0,33 como "documento verificado".
   Severidades: **GRAVE/MEDIA** entran en `problemas` (→ `requiere_revision`, la aprobación pide
   confirmación como siempre), **LEVE** solo avisa. El motor **jamás rechaza solo**: marca y explica.
   **Añadir una regla = añadir un objeto a `reglas_tiempo.CATALOGO`** (receta paso a paso justo encima de
@@ -173,6 +183,15 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   `config/reglas_tiempo.example.json`, ruta alterna por `REGLAS_TIEMPO_CONFIG`) — prioridad **BD >
   archivo > defaults del código**, se relee en cada corrida y una config mal escrita se ignora entrada
   por entrada con aviso (nunca apaga una regla en silencio ni tumba el mapeo).
+  **Falso positivo sobre un documento legítimo = bajar la severidad o exigir más evidencia, NUNCA
+  ajustar el umbral hasta que acierte en el corpus** (31 documentos: sobreajustar ahí es peor que no
+  validar). Dos decisiones ya tomadas así, con la medición detrás: `T09_INICIO_EN_FUTURO` **no aplica**
+  a vacaciones (tipo 13) ni a prelicencia de maternidad (tipo 10) —empezar en el futuro es el propósito
+  de esos documentos, y la exención es por TIPO para no debilitar la regla en las incapacidades—, y
+  `T08_DURACION_SIN_RESPALDO` es **LEVE** (una duración larga sin fecha fin no es una contradicción del
+  papel; bloqueaba prórrogas legítimas de 210 días). La aritmética duración↔rango vive SOLO aquí (T01):
+  la comprobación duplicada que había en `authenticity.py` se eliminó (tenía otra tolerancia y otro
+  canal → dos veredictos del mismo hecho).
 - **Nombres pegados** (`HERNANDEZSANDOVAL`): el **nombre del catálogo** (vía cédula→empleado) es
   autoritativo; `_split_glued_name()` es solo respaldo genérico. Si la cédula no resuelve, intentar por nombre.
 - **Lookups:** cédula→`idlpempleado`, CIE-10→`idlpdiagnosticos` (compara **sin punto**), EPS→`idlpentidad`

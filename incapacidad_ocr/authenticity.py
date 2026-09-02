@@ -21,6 +21,22 @@ solo alertan al auxiliar para que revise con más cuidado):
     fechas alteradas sin recalcular el resto. No depende del tipo de archivo ni de
     dependencias opcionales — corre siempre, es solo un regex sobre `texto_plano`.
 
+Qué NO se comprueba aquí (una sola verdad)
+------------------------------------------
+La coherencia entre los días declarados y el rango de fechas ("02 días" con "05/06 a
+06/07") NO es de este módulo: es `T01_DURACION_VS_RANGO` en `incapacidad_ocr/reglas_tiempo.py`,
+que la evalúa sobre los valores LEÍDOS (la foto que toma `processor` antes de reconciliar) y
+no sobre el registro ya reconciliado. Aquí existió una segunda implementación y se ELIMINÓ,
+no se movió, por tres motivos medidos sobre el corpus:
+  • estaba MUERTA — `processor.run()` reconcilia ANTES de llamar a este módulo, así que
+    recibía el registro con la contradicción ya borrada (0 de 31 documentos la disparaban);
+  • discrepaba justo en el caso que importa — toleraba ±1 día y el motor no, así que el único
+    documento adulterado del corpus con desfase +1 salía "no sospechoso" aquí y GRAVE allí;
+  • si despertara, el auxiliar leería DOS mensajes del mismo hecho, por dos canales.
+La tolerancia sigue existiendo, pero como umbral configurable en un solo sitio
+(`desfase_tolerado_dias`, hoy 0). Si hace falta añadir una señal temporal nueva, va al
+CATÁLOGO de `reglas_tiempo`, no aquí.
+
 Fail-open: cualquier excepción interna se traduce en `sospechosa=False`, nunca se
 propaga (un error en la heurística no debe tumbar el procesamiento del documento).
 """
@@ -28,7 +44,6 @@ from __future__ import annotations
 
 import os
 import re
-from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -89,49 +104,6 @@ def _revisar_periodos_multiples(texto_plano: str) -> dict[str, Any]:
         "sospechosa": True,
         "motivo": f"Se detectaron periodos de incapacidad distintos en el mismo documento: {resumen}",
         "detalle": {"periodos": distintos},
-    }
-
-
-def _safe_date(s: Any) -> date | None:
-    if not isinstance(s, str):
-        return None
-    try:
-        return date.fromisoformat(s)
-    except ValueError:
-        return None
-
-
-def _revisar_consistencia_fechas_dias(record: dict[str, Any] | None) -> dict[str, Any]:
-    """Los días declarados deben coincidir con `fecha_fin − fecha_inicio + 1` (inclusive).
-
-    Aritmética exacta, no depende de OCR de fuentes ni de imagen — barata y muy confiable:
-    un documento legítimo nunca tiene esta discrepancia (si el auxiliar corrige un campo a
-    mano, `erp.mapear_a_staging` recalcula el otro; esta señal es sobre lo que trae CRUDO
-    el documento). Caso real que la motivó: "Días de incapacidad: 02" con
-    "Desde: 05/06/2026 - Hasta: 06/07/2026" (32 días reales) — típico de una fecha fin
-    alterada sin tocar el campo de días, o viceversa.
-    """
-    if not record:
-        return {"sospechosa": False, "motivo": None, "detalle": {}}
-    inca = record.get("incapacidad") or {}
-    fecha_inicio = _safe_date(inca.get("fecha_inicio"))
-    fecha_fin = _safe_date(inca.get("fecha_fin"))
-    dias = inca.get("dias")
-    if not (fecha_inicio and fecha_fin and isinstance(dias, int)):
-        return {"sospechosa": False, "motivo": None, "detalle": {}}
-    dias_por_fechas = (fecha_fin - fecha_inicio).days + 1
-    # Tolerancia de 1 día: algunos formatos cuentan el rango de forma no inclusiva.
-    if abs(dias_por_fechas - dias) <= 1:
-        return {"sospechosa": False, "motivo": None,
-                "detalle": {"dias_declarados": dias, "dias_por_fechas": dias_por_fechas}}
-    motivo = (
-        f"Los días declarados ({dias}) no coinciden con el rango de fechas del documento "
-        f"({fecha_inicio.isoformat()} a {fecha_fin.isoformat()} = {dias_por_fechas} días)"
-    )
-    return {
-        "sospechosa": True,
-        "motivo": motivo,
-        "detalle": {"dias_declarados": dias, "dias_por_fechas": dias_por_fechas},
     }
 
 
@@ -400,12 +372,12 @@ def analizar_autenticidad(
     except Exception:
         resultado = {"sospechosa": False, "motivo": None, "detalle": {}}
 
-    # Señales de texto/record (periodos múltiples, fechas↔días inconsistentes):
-    # independientes del tipo de archivo, corren siempre y se COMBINAN (no
-    # reemplazan) con la señal anterior — cualquiera que dispare, dispara el total.
+    # Señales de TEXTO (hoy: periodos múltiples): independientes del tipo de archivo, corren
+    # siempre y se COMBINAN (no reemplazan) con la señal anterior — cualquiera que dispare,
+    # dispara el total. La coherencia días↔rango de fechas NO está aquí: es del motor de
+    # tiempos (T01), ver la NOTA "una sola verdad" de este archivo.
     for revisor, arg in (
         (_revisar_periodos_multiples, texto_plano),
-        (_revisar_consistencia_fechas_dias, record),
     ):
         try:
             extra = revisor(arg)

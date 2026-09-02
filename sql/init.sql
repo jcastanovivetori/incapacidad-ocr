@@ -121,7 +121,12 @@ CREATE TABLE IF NOT EXISTS lp_ausentismos_ia (
   -- (evidencia): sin ellas, la reconciliación re-deriva el fin y la contradicción
   -- temporal —la señal de alteración más barata de detectar— desaparece del registro.
   fechafin_leida               DATE          NULL,
+  -- `dias_leidos` es INT: el motor acota el valor leído a 6 cifras (`entero_dias`), así que
+  -- una cadena de basura del OCR o un tecleo largo NO puede tumbar el INSERT (error 1264).
   dias_leidos                  INT           NULL,
+  -- El catálogo de reglas está hecho para CRECER: `erp._lista_acotada` recorta los códigos
+  -- a este ancho (constante `erp.LARGO_ALERTAS_TIEMPOS`) porque encender las reglas apagadas
+  -- por configuración ya pasa de 255 caracteres. Si se amplía la columna, mover la constante.
   alertas_tiempos              VARCHAR(255)  NULL,   -- códigos de regla disparados
   severidad_tiempos            VARCHAR(10)   NULL,   -- GRAVE / MEDIA / LEVE (la peor)
   -- sub-bandera "DUDOSA" (no es un estado nuevo): señal de posible manipulación del

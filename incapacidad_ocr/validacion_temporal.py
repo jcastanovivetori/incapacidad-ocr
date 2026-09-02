@@ -46,14 +46,20 @@ from typing import Any, Optional
 from .reglas_tiempo import (  # noqa: F401 — re-exportado a propósito (API pública)
     # --- severidades y estados
     GRAVE, MEDIA, LEVE, ORDEN_SEVERIDAD, SEVERIDADES_QUE_EXIGEN_REVISION,
+    SEVERIDAD_RESPALDO, severidad_valida,
     CUMPLE, NO_CUMPLE, NO_EVALUABLE, DESACTIVADA, ESTADOS,
     V_COHERENTE, V_AVISOS, V_REVISAR, V_SIN_DATOS,
     # --- declaración de reglas (lo que se amplía)
-    CATALOGO, CATALOGO_POR_CODIGO, CAMPOS_EXIGIBLES, ReglaTiempo, tabla_reglas,
+    CATALOGO, CATALOGO_POR_CODIGO, CAMPOS_EXIGIBLES, CAMPOS_DEL_FORMULARIO,
+    ReglaTiempo, tabla_reglas, verificar_catalogo,
     # --- contexto y evidencia
-    ContextoTiempos, construir_contexto, valores_leidos, resumen_evidencia,
-    hay_evidencia_temporal,
-    CLAVE_SNAPSHOT, snapshot_leidos, fecha_iso, entero_dias,
+    ContextoTiempos, EvidenciaTiempos, evidencia_de, construir_contexto, valores_leidos,
+    resumen_evidencia, hay_evidencia_temporal,
+    CLAVE_SNAPSHOT, snapshot_leidos, fecha_iso, entero_dias, sin_dato,
+    es_correccion_humana, dias_derivable_del_rango,
+    # --- contrato con el lector (claves de evidencia que `extract` puede publicar)
+    CLAVE_INICIO_CRUDO, CLAVE_FIN_CRUDO, CLAVE_DIAS_CRUDO,
+    CLAVE_DIAS_CALCULADO, CLAVE_FIN_CALCULADO,
     # --- configuración en caliente
     ConfigReglas, cargar_config, config_por_defecto, UMBRALES_DEFAULT, LIMITES_UMBRAL,
     ENV_RUTA_CONFIG,
@@ -63,9 +69,10 @@ from .reglas_tiempo import (  # noqa: F401 — re-exportado a propósito (API p�
 
 __all__ = [
     "validar_tiempos", "validar_registro", "construir_contexto", "cargar_config",
-    "evaluar", "evaluar_reglas", "tabla_reglas", "resumen_evidencia",
-    "CATALOGO", "ReglaTiempo", "ContextoTiempos", "ConfigReglas",
+    "evaluar", "evaluar_reglas", "tabla_reglas", "resumen_evidencia", "verificar_catalogo",
+    "CATALOGO", "ReglaTiempo", "ContextoTiempos", "EvidenciaTiempos", "ConfigReglas",
     "ResultadoRegla", "ResultadoTiempos", "Hallazgo",
+    "es_correccion_humana", "dias_derivable_del_rango", "sin_dato",
     "CUMPLE", "NO_CUMPLE", "NO_EVALUABLE", "DESACTIVADA",
     "GRAVE", "MEDIA", "LEVE",
     "V_COHERENTE", "V_AVISOS", "V_REVISAR", "V_SIN_DATOS",
@@ -131,6 +138,8 @@ def _main() -> int:
     print("Configuración de reglas de tiempos — fuentes aplicadas:", " > ".join(cfg.fuentes))
     for aviso in cfg.avisos:
         print("  AVISO de configuración:", aviso)
+    for problema in verificar_catalogo():   # no debería imprimir nada: el import ya falla
+        print("  ERROR de declaración del catálogo:", problema)
     print("\nUmbrales efectivos:")
     for nombre, valor in sorted(cfg.umbrales.items()):
         lo, hi = LIMITES_UMBRAL[nombre]

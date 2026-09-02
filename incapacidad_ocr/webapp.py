@@ -20,7 +20,7 @@ from pathlib import Path
 from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 
-from . import batch, db, erp
+from . import batch, db, erp, reglas_tiempo
 from .extract import HybridExtractor, OllamaLLMExtractor, RuleBasedExtractor
 from .ocr import OllamaError, OllamaVisionOCR, get_ocr_backend
 from .processor import IncapacidadProcessor
@@ -107,7 +107,14 @@ def _limpiar_overrides(campos) -> dict:
         return {}
     limpio, ignorados = {}, []
     for k, v in campos.items():
-        if k not in CAMPOS_OVERRIDE or v is None or v == "":
+        if k not in CAMPOS_OVERRIDE:
+            continue
+        if isinstance(v, str):
+            # Los espacios se recortan ANTES de decidir si está vacío: "   " no es una
+            # corrección, y dejarlo pasar hacía que el motor reportara "leí este dato y no
+            # sirve" citando espacios (el JS ya hace .trim(), la API directa no).
+            v = v.strip()
+        if reglas_tiempo.sin_dato(v):
             continue
         if isinstance(v, bool) or not isinstance(v, (str, int, float)):
             ignorados.append(k)

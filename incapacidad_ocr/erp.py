@@ -593,6 +593,36 @@ def _num_dias(v: Any) -> Optional[int]:
     return reglas_tiempo.entero_dias(v)
 
 
+# Ancho de `lp_ausentismos_ia.alertas_tiempos` (ver sql/init.sql). Si algún día se amplía
+# la columna, este número es lo único que hay que mover.
+LARGO_ALERTAS_TIEMPOS = 255
+
+
+def _lista_acotada(valores, tope: int) -> Optional[str]:
+    """``['T01','T09'] → 'T01; T09'`` sin pasarse del ancho de la columna.
+
+    Si no caben todos, se conservan los primeros (vienen ordenados de más grave a menos) y
+    se cierra con ``(+N)`` para que se vea que hay más — nunca un texto cortado a medias que
+    parezca un código de regla inexistente.
+    """
+    codigos = [str(v) for v in (valores or []) if v]
+    if not codigos:
+        return None
+    texto = "; ".join(codigos)
+    if len(texto) <= tope:
+        return texto
+    incluidos: list[str] = []
+    for i, codigo in enumerate(codigos):
+        sufijo = f" (+{len(codigos) - i - 1})" if i < len(codigos) - 1 else ""
+        candidato = "; ".join(incluidos + [codigo]) + sufijo
+        if len(candidato) > tope:
+            break
+        incluidos.append(codigo)
+    restantes = len(codigos) - len(incluidos)
+    texto = "; ".join(incluidos) + (f" (+{restantes})" if restantes else "")
+    return texto[:tope]
+
+
 def mapear_a_staging(
     resultado: dict[str, Any],
     estado_recepcion: str = "WHATSAPP",
@@ -619,7 +649,7 @@ def mapear_a_staging(
     # el mensaje claro de "No se detectó la fecha de inicio").
     overrides = {k: (v.strip() if isinstance(v, str) else v)
                  for k, v in (overrides or {}).items()
-                 if not reglas_tiempo._sin_dato(v)}
+                 if not reglas_tiempo.sin_dato(v)}
     inc = _dic(resultado, "incapacidad")
     pac = _dic(inc, "paciente")
     ent = _dic(inc, "entidad")
@@ -640,7 +670,14 @@ def mapear_a_staging(
     fecha_fin = overrides.get("fecha_fin") or inca.get("fecha_fin")
     num_dias = _num_dias(overrides.get("dias")) if "dias" in overrides else _num_dias(inca.get("dias"))
     nombre_ocr = overrides.get("paciente") or pac.get("nombre")
-    fecha_inicio_calculada = bool(inca.get("fecha_inicio_calculada")) and "fecha_inicio" not in overrides
+    # La fecha de inicio DERIVADA deja de serlo solo si el auxiliar tecleó OTRA: el
+    # formulario de revisión se rellena con el valor que se le pintó (que puede ser el
+    # derivado) y lo reenvía en cada llamada, así que un override idéntico no es una
+    # corrección. Sin esto, el simple hecho de volver a mapear borraba el aviso
+    # "(calculada: fin − días)" de la pantalla y subía `confianza_ocr` al 100% sobre una
+    # fecha que el documento no imprime — y esa confianza se GUARDA en la fila.
+    fecha_inicio_calculada = (bool(inca.get("fecha_inicio_calculada"))
+                              and not reglas_tiempo.es_correccion_humana(inca, "fecha_inicio", overrides))
 
     # Configuración de las reglas de tiempos (severidades/umbrales). Se relee por corrida:
     # BD > archivo del volumen > defaults del código. Aquí ya se necesita porque el rango
@@ -665,12 +702,28 @@ def mapear_a_staging(
 
     # Regla del cliente (también al corregir a mano): si NO hay fecha de inicio pero sí
     # fecha final + días → inicio = fin − (días − 1). Recalcula al editar los días/el fin.
+    # El try protege el borde del calendario: con un año leído al límite (9999) la resta
+    # lanza OverflowError, y una excepción aquí es un 500 y un documento que NO llega a
+    # staging — contra la invariante "nunca se rechaza solo". Sin fecha derivada, el campo
+    # se le pide al auxiliar por el canal de siempre.
     if not fecha_inicio and _df_ef and num_dias and dias_min <= num_dias <= dias_max:
-        fecha_inicio = (_df_ef - timedelta(days=num_dias - 1)).isoformat()
-        fecha_inicio_calculada = True
+        try:
+            fecha_inicio = (_df_ef - timedelta(days=num_dias - 1)).isoformat()
+            fecha_inicio_calculada = True
+        except OverflowError:
+            log.warning("No se pudo derivar la fecha de inicio (fuera del calendario): "
+                        "fin=%s dias=%s", fecha_fin, num_dias)
     # Simétrico: si hay inicio + fin pero NO días, se calculan por diferencia (inclusive).
     # Cubre p.ej. vacaciones donde el inicio vino del nombre del archivo y el fin del OCR.
-    if fecha_inicio and fecha_fin and not num_dias:
+    # También cuando el auxiliar corrige UNA de las dos fechas y los días que había eran
+    # justo el span del rango anterior (los deriva el propio lector): esos días quedaron
+    # obsoletos, y dejarlos haría que la fila se contradijera con su propia columna de
+    # evidencia (`Numerodias` y `fechavencimiento` del rango viejo).
+    dias_obsoletos = (any(reglas_tiempo.es_correccion_humana(inca, c, overrides)
+                          for c in ("fecha_inicio", "fecha_fin"))
+                      and not reglas_tiempo.es_correccion_humana(inca, "dias", overrides)
+                      and reglas_tiempo.dias_derivable_del_rango(inca))
+    if fecha_inicio and fecha_fin and (not num_dias or dias_obsoletos):
         _di, _df = _safe_date(fecha_inicio), _safe_date(fecha_fin)
         if _di and _df and dias_min <= (_df - _di).days + 1 <= dias_max:
             num_dias = (_df - _di).days + 1
@@ -877,7 +930,13 @@ def mapear_a_staging(
     fecha_venc = None
     di = _safe_date(fecha_inicio)
     if di and num_dias and dias_min <= num_dias <= dias_max:
-        fecha_venc = (di + timedelta(days=num_dias)).isoformat()  # inicio + dias
+        try:
+            fecha_venc = (di + timedelta(days=num_dias)).isoformat()  # inicio + dias
+        except OverflowError:
+            # Año al límite del calendario (9999): la columna queda NULL y se le pide al
+            # auxiliar. Un 500 aquí perdería el documento entero.
+            problemas.append(f"No se pudo calcular la fecha de vencimiento desde "
+                             f"{fecha_inicio} + {num_dias} día(s): fecha fuera del calendario")
     # Un valor de días inutilizable no viaja a la fila (la columna es INT y el ERP lo
     # promueve tal cual): queda NULL y el auxiliar lo teclea.
     dias_fila = num_dias if (num_dias is not None and dias_min <= num_dias <= dias_max) else None
@@ -965,8 +1024,11 @@ def mapear_a_staging(
         "fechafin_leida": ctx_tiempos.fin_leido.isoformat() if ctx_tiempos.fin_leido else None,
         "dias_leidos": ctx_tiempos.dias_leido,
         # Canal propio del veredicto temporal: permite ordenar la cola por gravedad y
-        # distinguir "los tiempos no cuadran" de "no encontré la cédula".
-        "alertas_tiempos": ("; ".join(veredicto.codigos) or None),
+        # distinguir "los tiempos no cuadran" de "no encontré la cédula". Se acota al ancho
+        # de la columna (VARCHAR(255)): el catálogo está pensado para CRECER y encender por
+        # configuración las reglas apagadas ya pasa de 255 caracteres, lo que en MySQL
+        # estricto tumba el INSERT (1406). La lista completa viaja íntegra en `tiempos`.
+        "alertas_tiempos": _lista_acotada(veredicto.codigos, LARGO_ALERTAS_TIEMPOS),
         "severidad_tiempos": veredicto.severidad_max,
         "sospecha_manipulacion": 1 if sospecha_manipulacion else 0,
         "motivo_sospecha": motivo_sospecha,

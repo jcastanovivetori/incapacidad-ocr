@@ -435,6 +435,11 @@ def entero_dias(valor: Any) -> Optional[int]:
     return None
 
 
+def _span_inclusivo(desde: date, hasta: date) -> int:
+    """Días que dura un rango contando los dos extremos (convención del repo)."""
+    return (hasta - desde).days + 1
+
+
 def recortar(valor: Any, tope: int = 40) -> str:
     """Valor → texto acotado para un mensaje (una cadena de 10.000 dígitos del OCR no
     puede acabar en la columna `problemas` ni en la pantalla del auxiliar)."""
@@ -442,7 +447,7 @@ def recortar(valor: Any, tope: int = 40) -> str:
     return s if len(s) <= tope else s[:tope] + "…"
 
 
-def _sin_dato(valor: Any) -> bool:
+def sin_dato(valor: Any) -> bool:
     """¿Este valor es "no hay dato"? None, False, "" y "   " (solo espacios).
 
     Los espacios cuentan como vacío a propósito: un override en blanco llegado por la API
@@ -494,8 +499,8 @@ def _mismo_valor(a: Any, b: Any) -> bool:
     ``'2026-06-01'`` == ``date(2026,6,1)`` y ``'5'`` == ``5``: hace falta para saber si un
     override trae un dato nuevo o solo devuelve el que se le pintó en el formulario.
     """
-    if _sin_dato(a) or _sin_dato(b):
-        return _sin_dato(a) and _sin_dato(b)
+    if sin_dato(a) or sin_dato(b):
+        return sin_dato(a) and sin_dato(b)
     fa, fb = fecha_iso(a), fecha_iso(b)
     if fa is not None or fb is not None:
         return fa == fb
@@ -526,26 +531,35 @@ def es_correccion_humana(inca: Optional[dict[str, Any]], campo: str,
     if not isinstance(overrides, dict) or campo not in overrides:
         return False
     valor = overrides[campo]
-    if _sin_dato(valor):
+    if sin_dato(valor):
         return False
     return not _mismo_valor(valor, (inca or {}).get(campo))
 
 
 def dias_derivable_del_rango(inca: Optional[dict[str, Any]]) -> bool:
-    """¿Los días del registro son EXACTAMENTE el span de sus dos fechas?
+    """¿Los días PUDO calcularlos el lector a partir de las dos fechas que leyó?
 
-    Cuando lo son, ese número no aporta evidencia independiente: pudo derivarlo el propio
-    lector (``extract`` calcula los días de las dos fechas cuando el papel no los imprime)
-    y cruzarlo contra el rango del que salió sería una tautología. Se usa para no acusar de
-    GRAVE a un documento legítimo cuando el auxiliar corrige UNA de las dos fechas y los
-    días viejos —derivados del rango anterior— dejan de cuadrar.
+    True cuando las tres patas están y los días son exactamente el span del rango: ese
+    número no aporta evidencia independiente, porque ``extract`` calcula los días de las dos
+    fechas cuando el papel no los imprime. Se usa para no acusar de GRAVE a un documento
+    legítimo cuando el auxiliar corrige UNA de las dos fechas y los días viejos —derivados
+    del rango anterior— dejan de cuadrar.
+
+    Se mira la FOTO (lo que el lector leyó) si está, no el registro reconciliado: ahí las
+    tres patas SIEMPRE cuadran (``normalizar_fechas`` las hace cuadrar), así que preguntárselo
+    al registro daría True siempre y descartaría unos días que sí venían impresos.
     """
     inca = inca if isinstance(inca, dict) else {}
-    di, df = fecha_iso(inca.get("fecha_inicio")), fecha_iso(inca.get("fecha_fin"))
-    n = entero_dias(inca.get("dias"))
+    snap = inca.get(CLAVE_SNAPSHOT)
+    fuente = snap if isinstance(snap, dict) else inca
+    if CLAVE_DIAS_CALCULADO in fuente:
+        # El lector DICE de dónde salieron: no hay nada que deducir (ni bien ni mal).
+        return bool(fuente[CLAVE_DIAS_CALCULADO])
+    di, df = fecha_iso(fuente.get("fecha_inicio")), fecha_iso(fuente.get("fecha_fin"))
+    n = entero_dias(fuente.get("dias"))
     if not (di and df and n is not None):
         return False
-    return (df - di).days + 1 == n
+    return _span_inclusivo(di, df) == n
 
 
 def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = None) -> dict[str, Any]:
@@ -564,9 +578,6 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
     fin_perdido = fin_indistinguible = False
     fuente = snap if isinstance(snap, dict) else inca
     dias_calculado = bool(fuente.get(CLAVE_DIAS_CALCULADO))
-    # ¿El lector dice de dónde salieron los días, o hay que deducirlo? Con la marca no se
-    # deduce nada (es el dato bueno); sin ella se aplica la aritmética, que es conservadora.
-    marca_dias = CLAVE_DIAS_CALCULADO in fuente
     if isinstance(snap, dict):
         inicio_crudo, fin_crudo = snap.get("fecha_inicio"), snap.get("fecha_fin")
         dias_crudo, dias_letra = snap.get("dias"), snap.get("dias_letra")
@@ -591,11 +602,11 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
             fin_crudo, fin_indistinguible = None, True
     # Evidencia CRUDA que el lector rechazó, si la publica: permite decir "leí esto y no
     # sirve" en vez de "no se detectó" (ver las CLAVE_* de arriba).
-    if _sin_dato(inicio_crudo):
+    if sin_dato(inicio_crudo):
         inicio_crudo = fuente.get(CLAVE_INICIO_CRUDO, inicio_crudo)
-    if _sin_dato(fin_crudo) and not fin_indistinguible:
+    if sin_dato(fin_crudo) and not fin_indistinguible:
         fin_crudo = fuente.get(CLAVE_FIN_CRUDO, fin_crudo)
-    if _sin_dato(dias_crudo):
+    if sin_dato(dias_crudo):
         dias_crudo = fuente.get(CLAVE_DIAS_CRUDO, dias_crudo)
     # --- Correcciones del auxiliar (solo las que aportan un dato nuevo) ---------------
     corrigio_fecha = False
@@ -606,8 +617,7 @@ def valores_leidos(inca: dict[str, Any], overrides: Optional[dict[str, Any]] = N
         fin_indistinguible, corrigio_fecha = False, True
     if es_correccion_humana(inca, "dias", overrides):
         dias_crudo, dias_calculado = overrides["dias"], False
-    elif (corrigio_fecha and not marca_dias and _sin_dato(dias_letra)
-          and dias_derivable_del_rango(inca)):
+    elif corrigio_fecha and sin_dato(dias_letra) and dias_derivable_del_rango(inca):
         # Se corrigió una FECHA y los días que había eran justo el span del rango ANTERIOR:
         # pueden ser un valor derivado (el lector los calcula cuando el papel no los
         # imprime) y además obsoleto. Juzgar el rango nuevo contra ellos acusaría de GRAVE
@@ -777,11 +787,6 @@ class ReglaTiempo:
 #   4. Añádela a ``config/reglas_tiempo.example.json`` y a
 #      ``tests/test_validacion_temporal.py`` (un caso que CUMPLE y otro que NO CUMPLE).
 #   No hay paso 5: ``evaluar()`` y ``validar_tiempos()`` la recogen solas.
-def _span_inclusivo(desde: date, hasta: date) -> int:
-    """Días que dura un rango contando los dos extremos (convención del repo)."""
-    return (hasta - desde).days + 1
-
-
 def _contradiccion_duracion(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[tuple[int, int]]:
     """(span, desfase) si la duración leída contradice el rango leído; None si no.
 
@@ -853,21 +858,21 @@ def _t04_rango_mayor_al_maximo(ctx: EvidenciaTiempos, u: dict[str, int]) -> Opti
 
 
 def _t05_dias_no_numerico(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
-    if _sin_dato(ctx.dias_crudo) or ctx.dias_leido is not None:
+    if sin_dato(ctx.dias_crudo) or ctx.dias_leido is not None:
         return None
     return (f"El número de días leído no es un entero utilizable "
             f"(={recortar(ctx.dias_crudo)!s})")
 
 
 def _t06_fecha_inicio_ilegible(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
-    if _sin_dato(ctx.inicio_crudo) or ctx.inicio_leido is not None:
+    if sin_dato(ctx.inicio_crudo) or ctx.inicio_leido is not None:
         return None
     return (f"La fecha de inicio leída no es una fecha válida "
             f"(={recortar(ctx.inicio_crudo)!s}): se detectó el dato pero no se puede usar")
 
 
 def _t07_fecha_fin_ilegible(ctx: EvidenciaTiempos, u: dict[str, int]) -> Optional[str]:
-    if _sin_dato(ctx.fin_crudo) or ctx.fin_leido is not None:
+    if sin_dato(ctx.fin_crudo) or ctx.fin_leido is not None:
         return None
     return (f"La fecha fin leída no es una fecha válida (={recortar(ctx.fin_crudo)!s})")
 
@@ -1409,7 +1414,7 @@ def evaluar_reglas(ctx: ContextoTiempos,
             salida.append(ResultadoRegla(estado=DESACTIVADA, motivo="desactivada por configuración",
                                          **base))
             continue
-        faltan = tuple(c for c in regla.requiere if _sin_dato(getattr(evidencia, c, None)))
+        faltan = tuple(c for c in regla.requiere if sin_dato(getattr(evidencia, c, None)))
         if faltan:
             detalle = ", ".join(ETIQUETA_DATO.get(c, c) for c in faltan)
             salida.append(ResultadoRegla(estado=NO_EVALUABLE, faltan=faltan,
@@ -1515,9 +1520,9 @@ def hay_evidencia_temporal(ctx: ContextoTiempos) -> bool:
     return any([
         ctx.inicio_leido is not None, ctx.fin_leido is not None,
         ctx.dias_leido is not None, ctx.dias_letra is not None,
-        not _sin_dato(ctx.inicio_crudo), not _sin_dato(ctx.fin_crudo),
-        not _sin_dato(ctx.dias_crudo), ctx.fin_perdido,
-        not _sin_dato(ctx.expedicion_cruda),
+        not sin_dato(ctx.inicio_crudo), not sin_dato(ctx.fin_crudo),
+        not sin_dato(ctx.dias_crudo), ctx.fin_perdido,
+        not sin_dato(ctx.expedicion_cruda),
     ])
 
 
