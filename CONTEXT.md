@@ -287,7 +287,9 @@ subdividida** (la edición pública no subdivide 276 de sus 2.070 categorías �
 un hueco, no una falsificación).
 
 **Medido sobre el corpus:** de las 9 casos adulterados usables, el sistema señala **4**, con **0
-falsos positivos sobre los 16 legítimos** — subió de 2 a 4 al cargar el catálogo, y sin la guarda de
+falsos positivos sobre los 13 casos legítimos** (14 documentos; los otros 2 caen en casos en
+cuarentena, que sí se marcan y por eso no cuentan a favor ni en contra) — subió de 2 a 4 al cargar
+el catálogo, y sin la guarda de
 subdivisión aparecían 2 falsas alarmas. Los 5 que no señala: **4 son trabajo nuestro** (el más
 frecuente, 2 casos, es que el extractor toma el **rótulo de la columna** `CIE10` como descripción del
 diagnóstico, así que no hay texto que comparar) y 1 depende del catálogo del cliente.

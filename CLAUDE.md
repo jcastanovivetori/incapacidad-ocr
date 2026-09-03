@@ -56,6 +56,9 @@ docker exec ocr-db mysql -uocr -pocr ASTGU -e "SELECT id,estado,paciente_leido,f
 python scripts/cargar_catalogos.py            # genera sql/catalogos_publicos.sql y lo aplica (~3 s)
 python scripts/cargar_catalogos.py --solo-sql # solo regenera el .sql (se versiona: lo monta initdb)
 
+# Deteccion de adulteradas: NO derivar la cifra a mano (hay DOS canales de señal y se cuenta por CASO):
+python scripts/medir_deteccion.py             # cruza la BD contra MAPEO.csv; sale 1 si hay falsos positivos
+
 # Pruebas (local, fuera de Docker):
 python tests/test_processor.py           # unitarias deterministas (StubOCR + RapidOCR si está)
 python tests/test_numeros_es.py          # numerales en español ("DOS", "DOS (2)") y sus falsos positivos
@@ -310,8 +313,13 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   **subdivide** la categoría de 3 (`categoria_subdividida`): la edición pública no subdivide 276 de
   sus 2070 categorías, así que un `A09.9` ausente es un hueco de la edición, no un fraude. Medido
   sobre el corpus: la detección pasó de 2 a 4 de 9 adulteradas manteniendo 0 falsos positivos
-  sobre las 16 legítimas; sin la condición (3) aparecían 2. Al llegar `lpdiagnosticos` de ASTGU
-  solo hay que cargarlo: el código no cambia.
+  sobre los 13 casos legítimos (14 documentos); sin la condición (3) aparecían 2. **La cifra se
+  cuenta por CASO, no por documento**, y sobre los 22 casos usables: los otros 2 documentos
+  legítimos caen en casos en CUARENTENA (etiqueta en disputa) que sí se marcan, así que decir «0
+  falsos positivos sobre los 16 legítimos» sobrestima. Y **la detección tiene DOS canales** —
+  `sospecha_manipulacion` y `alertas_tiempos`—: contar solo el primero da 3 de 9 en vez de 4 y
+  parece una regresión que no existe. Al llegar `lpdiagnosticos` de ASTGU solo hay que cargarlo:
+  el código no cambia.
 - **Validación documental por tipo** (`erp.validar_documentacion`): el conjunto de `TIPODOC` presentes del caso
   se cruza contra los requeridos por el tipo — `lprequisitos_eps` (por `idlpentidad+idlptipoausentismo`,
   `obligatorio=1`) prevalece; si no hay filas, `erp.REQUISITOS_DEFAULT`. Se aplican **grupos de equivalencia**

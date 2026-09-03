@@ -87,7 +87,9 @@ En la sesión los abrimos y los ves con su nombre.)*
 Un detalle que vale la pena: el del desfase de 30 días lo tenías marcado por el diagnóstico, no
 por las fechas. El sistema encontró ahí un problema **distinto** al que habías anotado, y es real.
 
-Y —esto importa igual o más— **no marcó ni una sola de las 16 legítimas**. Con 7000 casos al mes,
+Y —esto importa igual o más— **no marcó ni uno solo de los 13 casos legítimos** (14 de tus 16
+documentos buenos; los otros 2 son de los que tienen la etiqueta cruzada, así que no los contamos
+ni a favor ni en contra). Con 7000 casos al mes,
 un sistema que sospecha de documentos buenos ahoga al auxiliar y hace que deje de mirar las
 alertas; preferimos detectar menos y no gritar en falso.
 
