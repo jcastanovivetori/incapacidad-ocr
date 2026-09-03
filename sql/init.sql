@@ -245,13 +245,25 @@ INSERT INTO lprequisitos_eps (idlpentidad, idlptipoausentismo, documento, obliga
 
 -- ------------------------------------------------------------------ migración
 -- `init.sql` SOLO corre en el PRIMER init de un volumen vacío (ver CLAUDE.md,
--- "Gotchas del entorno"). Para una BD ya inicializada antes de agregar la sub-bandera
--- de sospecha de manipulación, corre este bloque a mano (idempotente, requiere
--- MySQL 8.0.29+, ya cumplido por la imagen `mysql:8` del docker-compose):
+-- "Gotchas del entorno"). Para una BD ya inicializada ANTES de que existieran las
+-- columnas de sospecha de manipulación, este bloque las añade; sobre un volumen
+-- nuevo (donde el CREATE TABLE de arriba ya las trae) no hace nada:
 --   docker exec -i ocr-db mysql -uroot -proot ASTGU < sql/init.sql
--- (repetir el CREATE TABLE no falla por el IF NOT EXISTS; el ALTER de abajo sí
--- aplica sobre una tabla ya existente sin estas columnas).
-ALTER TABLE lp_ausentismos_ia
-  ADD COLUMN IF NOT EXISTS sospecha_manipulacion TINYINT(1) NOT NULL DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS motivo_sospecha VARCHAR(500) NULL,
-  ADD COLUMN IF NOT EXISTS sospecha_revisada TINYINT(1) NOT NULL DEFAULT 0;
+--
+-- OJO con la sintaxis: `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` **no existe en
+-- MySQL** (es de MariaDB). Aquí había justamente eso, y como este archivo es un
+-- script de `docker-entrypoint-initdb.d`, el error 1064 ABORTABA el init entero:
+-- en una máquina nueva el contenedor `db` moría al arrancar y no se creaba nada.
+-- Se comprobó con un MySQL desechable y volumen vacío. Por eso la condición va
+-- contra `information_schema` y el ALTER se arma como sentencia preparada, que es
+-- SQL estándar de MySQL y no necesita `DELIMITER` (una directiva del CLIENTE, que
+-- rompería si este archivo se aplicara con el conector de Python).
+SET @faltan_sospecha := (SELECT COUNT(*) = 0 FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'lp_ausentismos_ia'
+    AND COLUMN_NAME = 'sospecha_manipulacion');
+SET @sql_sospecha := IF(@faltan_sospecha,
+  'ALTER TABLE lp_ausentismos_ia ADD COLUMN sospecha_manipulacion TINYINT(1) NOT NULL DEFAULT 0, ADD COLUMN motivo_sospecha VARCHAR(500) NULL, ADD COLUMN sospecha_revisada TINYINT(1) NOT NULL DEFAULT 0',
+  'DO 0');
+PREPARE _mig_sospecha FROM @sql_sospecha;
+EXECUTE _mig_sospecha;
+DEALLOCATE PREPARE _mig_sospecha;

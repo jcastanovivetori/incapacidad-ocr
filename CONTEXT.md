@@ -1,6 +1,8 @@
 # CONTEXT — incapacidad-ocr (fuente única de contexto)
 
-**Última actualización:** 2026-09-01 · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1), Ollama (IA local) para casos difíciles (§5.2), integración a BD/staging (§5.4), **flujo de revisión humana — completar/aprobar/rechazar** (§5.5), **ingesta masiva por lotes (carpetas + nomenclatura) con corrida programada** (§5.6) y **estructura de ingesta en tres zonas numeradas** (§5.7).
+**Última actualización:** 2026-09-02 · **Estado:** PoC funcional con soporte PDF, servicio web + UI dockerizado, evaluado sobre incapacidades reales (§5.1), Ollama (IA local) para casos difíciles (§5.2), integración a BD/staging (§5.4), **flujo de revisión humana — completar/aprobar/rechazar** (§5.5), **ingesta masiva por lotes (carpetas + nomenclatura) con corrida programada** (§5.6), **estructura de ingesta en tres zonas numeradas** (§5.7), **duraciones en letras** (§5.8), **motor de reglas de tiempos** (§5.9), **detección de adulteración medida sobre el corpus del cliente** (§5.10) y **repositorio autosuficiente: `git clone` + `docker compose up` y opera** (§5.11).
+
+**Listo para que el cliente pruebe** con [`MANUAL_PRUEBA.md`](MANUAL_PRUEBA.md) (15 min, solo necesita Docker). **Producción está fuera de alcance por ahora** — falta servidor, BD ASTGU real y los datos que solo el cliente tiene; el inventario completo está en [`PENDIENTES.md`](PENDIENTES.md).
 
 Este documento es el **contexto completo** del proyecto: por qué existe, qué se construyó, cómo se probó y cómo encaja en la plataforma de nómina. Para *cómo usarlo* → [`README.md`](README.md); para *cómo trabajar el repo* → [`CLAUDE.md`](CLAUDE.md).
 
@@ -261,6 +263,65 @@ ingesta/
 
 ---
 
+### 5.10 Detección de documentos ADULTERADOS y corpus del cliente (2026-09-02)
+
+El cliente entregó **31 documentos reales** (15 marcados como adulterados, 16 legítimos) con una
+tabla de motivos, y ese corpus pasó a ser la base de la evaluación. Vive **fuera del árbol de git**
+(`../dataset-falsedad/`, PII de salud); lo versionado es el análisis con **seudónimos**
+(`analisis/`, ver `analisis/LEEME.md`) y los generadores.
+
+**Etiquetas del corpus.** 5 de los 15 «falsos» tienen la etiqueta en disputa: dos parejas son el
+**mismo archivo byte a byte** entregado a la vez como falso y como legítimo, y uno más comparte
+cédula con un legítimo → quedan en **cuarentena** y no se usan para medir. La regla de las filas
+rojas la aclaró el cliente (2026-09-02): *el rojo significa que el documento está mal y que la
+razón es la de la fila inmediatamente anterior*. Las rojas van en **rachas** y solo la primera trae
+el motivo escrito, así que se propaga en cascada (`scripts/resolver_motivos_heredados.py`). Con eso
+desapareció la etiqueta `SIN_MOTIVO_REGISTRADO` y se pudieron evaluar 3 documentos más.
+
+**Catálogo CIE-10 como dato de referencia versionado** (`datos/cie10.csv`, 14.484 códigos; detalle y
+procedencia en [`datos/LEEME.md`](datos/LEEME.md)). Resuelve «este diagnóstico no existe» **sin
+ninguna API** ni clave: descarga única al construir, validada contra hechos que el cliente confirmó,
+y en runtime un `SELECT` local. Tres guardas, ninguna opcional: catálogo cargado, código con **forma**
+de CIE-10 (un `FECHA` u `0039` del OCR es una lectura fallida, no un fraude) y **categoría
+subdividida** (la edición pública no subdivide 276 de sus 2.070 categorías → un `A09.9` ausente es
+un hueco, no una falsificación).
+
+**Medido sobre el corpus:** de las 9 casos adulterados usables, el sistema señala **4**, con **0
+falsos positivos sobre los 16 legítimos** — subió de 2 a 4 al cargar el catálogo, y sin la guarda de
+subdivisión aparecían 2 falsas alarmas. Los 5 que no señala: **4 son trabajo nuestro** (el más
+frecuente, 2 casos, es que el extractor toma el **rótulo de la columna** `CIE10` como descripción del
+diagnóstico, así que no hay texto que comparar) y 1 depende del catálogo del cliente.
+Criterio fijado: **un falso positivo sobre un documento legítimo se paga bajando la severidad o
+exigiendo más evidencia, nunca moviendo el umbral hasta acertar en 31 documentos.**
+
+### 5.11 El repositorio opera por sí solo (2026-09-02)
+
+Un `git clone` + `docker compose up -d --build` deja el sistema **funcionando**, sin corpus y sin
+más pasos. Llegar ahí destapó dos defectos que estaban tapados por el estado local:
+
+1. **`sql/init.sql` no podía inicializar una BD nueva.** Usaba `ALTER TABLE … ADD COLUMN IF NOT
+   EXISTS`, que es **sintaxis de MariaDB y no existe en MySQL** (el comentario afirmaba lo
+   contrario). Al ser un script de `docker-entrypoint-initdb.d`, el error 1064 **abortaba el init
+   completo** y el contenedor `db` moría al arrancar: en una máquina nueva no se creaba ni una tabla.
+   Aquí no se veía porque el volumen `db-data` era anterior a ese `ALTER`. Sustituido por una
+   migración condicional contra `information_schema` con sentencia preparada. Verificado con un
+   MySQL desechable y volumen vacío.
+2. **El catálogo CIE-10 viajaba en el repo pero no había forma de cargarlo sin el corpus:** el único
+   cargador era `sembrar_bd_prueba.py`, que exige `MAPEO.csv`. Y `init.sql` **no crea `lpeps`**, así
+   que el checklist de radicación degradaba a `[]` **en silencio**. Nuevo
+   `scripts/cargar_catalogos.py` (sin corpus, sin PII: catálogo + `lpeps` + palabras clave de EPS +
+   una **EPS DEMO ficticia** para ejercitar la radicación), cuyo SQL se monta además como
+   `02_catalogos.sql` en initdb → **una BD nueva queda con el catálogo cargado sin ejecutar nada**.
+   Funciona con **solo Docker**: aplica el SQL con el cliente `mysql` vía `docker exec`, sin exigir
+   `mysql-connector-python` en el host. Insertar en lotes de 500 bajó la carga de **>120 s a 3 s**.
+
+Lo que **sigue fuera** del repositorio, a propósito: los documentos (PII) y los **empleados** — una
+cédula es un dato personal y no se inventa, así que sin el volcado de ASTGU los casos salen con
+«cédula no encontrada», que es la verdad y no un error. Manual de prueba para el cliente:
+[`MANUAL_PRUEBA.md`](MANUAL_PRUEBA.md); réplica completa: [`REPLICAR.md`](REPLICAR.md).
+
+---
+
 ## 6. Cómo encaja en el flujo de nómina / ERP
 
 ```
@@ -277,7 +338,7 @@ ingesta/
 
 ## 7. Estado y pendientes
 
-**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido + **híbrido (reglas+LLM)**; **evaluación con 8 incapacidades reales = 80% campos núcleo** (§5.1); **integración a BD/staging** (§5.4); **flujo de revisión humana — completar/aprobar/rechazar + bandeja** (§5.5); **ingesta masiva por lotes (carpetas + nomenclatura), organización por persona/fecha, corrida programada y robustez con documentos pesados** (§5.6); regla de fecha de inicio y separación de nombres pegados; CLI, README, CLAUDE.md, tests.
+**Hecho:** PoC funcional; **soporte de PDF (PDFium, multipágina)**; extractor por reglas endurecido + **híbrido (reglas+LLM)**; **evaluación con 8 incapacidades reales** (§5.1 — **76 % en el venv actual, 82 % en el stack de Docker**; la cifra suelta del «80 %» es de la medición de junio y **no corresponde a ninguna configuración vigente**: citar siempre §5.1 con su fecha); **integración a BD/staging** (§5.4); **flujo de revisión humana — completar/aprobar/rechazar + bandeja** (§5.5); **ingesta masiva por lotes (carpetas + nomenclatura), organización por persona/fecha, corrida programada y robustez con documentos pesados** (§5.6); **tres zonas de ingesta + reinicio de la prueba** (§5.7); **duraciones en letras** (§5.8); **motor de reglas de tiempos** (§5.9); **detección de adulteración medida sobre el corpus del cliente, 4/9 con 0 falsos positivos** (§5.10); **el repositorio opera con solo `git clone` + `docker compose up`** (§5.11); regla de fecha de inicio y separación de nombres pegados; CLI, README, CLAUDE.md, 8 baterías de tests que no necesitan corpus ni BD.
 
 **Pendiente / próximos pasos:**
 - ✅ *(hecho)* Probar con **incapacidades reales** → ver §5.1 (80% con reglas, 100% en CIE-10/documento legibles).
@@ -285,6 +346,12 @@ ingesta/
 - ✅ *(hecho)* **Integración a BD + revisión humana** (§5.4, §5.5): mapeo a staging, completar a mano, aprobar/rechazar.
 - ✅ *(hecho)* **Entrada por carpetas (ingesta por lotes) + nomenclatura + corrida programada** (§5.6). Guía ejecutiva para el punto de recepción: [`GUIA_RECEPCION_INCAPACIDADES.md`](GUIA_RECEPCION_INCAPACIDADES.md).
 - ✅ *(hecho)* **Duración en números y en letras** (`numeros_es.py`, §5.8) con su ronda de verificación adversaria. **Pendiente de este cambio:** correr `tests/test_ejemplos_reales.py` (necesita RapidOCR sobre los escaneos) y **validar el camino híbrido con Ollama vivo** — hoy solo está probado con `StubLLM`; y decidir si la discrepancia palabra↔dígito se le muestra al auxiliar (etiqueta en la UI) o se persiste (columna/observación en staging).
+- ✅ *(hecho)* **Validación del CIE-10 contra un catálogo completo** sin API ni clave (§5.10) y **repositorio autosuficiente** (§5.11).
+- **Lo más puntual, y es NUESTRO** (por orden de rendimiento; inventario completo en [`PENDIENTES.md`](PENDIENTES.md)):
+  1. El extractor toma el **rótulo `CIE10` como descripción del diagnóstico** → sin texto que comparar. **Arregla 2 de los 5 casos** que hoy no se detectan; esfuerzo bajo.
+  2. Registrar la **procedencia LEÍDO vs CALCULADO** por campo → habilita 1 caso más y varias reglas de tiempos hoy apagadas.
+  3. Subir el tope de **500 casos por corrida** (un día pico son ~875 documentos → hoy exige dos corridas).
+- **Lo que hay que pedirle al cliente para probar** (nada de esto es de producción): cuál es la etiqueta correcta de los **5 documentos en cuarentena**; el **catálogo de diagnósticos de ASTGU** (código + descripción) para comparar el nombre del DX; y el **`.xlsx` de la tabla de motivos** en vez del pantallazo. Mensaje y guía listos: [`MANUAL_PRUEBA.md`](MANUAL_PRUEBA.md).
 - **Acordar con el negocio la nomenclatura y el punto de recepción** (WhatsApp/correo → carpeta): compartir la guía de recepción y validar con una muestra que los archivos llegan bien nombrados.
 - Apuntar a la **BD ASTGU real** (catálogos reales de empleados/CIE/EPS) en vez de los datos de prueba; `numero_orden` y score de confianza OCR real.
 - **Corrida programada en Windows headless** (modo B: Programador de tareas del SO) si el servidor no mantiene Docker activo sin login (§5.6 / plan §5). Escalar concurrencia (ledger/lock en BD) si el volumen lo exige.

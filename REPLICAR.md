@@ -50,13 +50,23 @@ más (usa una imagen sintética generada al vuelo).
 ### 2. Levantar la base de datos
 
 ```bash
-docker compose up -d db          # MySQL en 127.0.0.1:3306, con el esquema de sql/init.sql
+docker compose up -d db          # MySQL en 127.0.0.1:3306
 docker compose ps db             # esperar a que diga (healthy)
 ```
 
-> `sql/init.sql` **solo corre en el primer arranque de un volumen vacío**. Si el volumen ya
-> existía, el esquema puede estar viejo: `docker compose down -v && docker compose up -d db`
-> (ojo, eso borra también el volumen de modelos de Ollama).
+En un volumen vacío esto deja la BD **operativa sola**: `sql/init.sql` crea el esquema y
+`sql/catalogos_publicos.sql` carga el **catálogo CIE-10 completo** (14.484 códigos) y la tabla
+`lpeps`. Los dos van montados en `docker-entrypoint-initdb.d` (ver `docker-compose.yml`).
+Comprobación: `docker exec ocr-db mysql -uocr -pocr ASTGU -e "SELECT COUNT(*) FROM lpdiagnosticos;"`
+debe dar **14484**.
+
+> **`init.sql` solo corre en el primer arranque de un volumen vacío.** Si el volumen ya existía, el
+> esquema puede estar viejo; volver a aplicarlo es idempotente:
+> `docker exec -i ocr-db mysql -uroot -proot ASTGU < sql/init.sql`, y para los catálogos
+> `python scripts/cargar_catalogos.py` (paso 5). Recrear el volumen desde cero es
+> `docker compose rm -sf db && docker volume rm incapacidad-ocr_db-data`. **No uses
+> `docker compose down -v`**: eso borra también el volumen `ollama-models` y hay que volver a
+> descargar ~6,5 GB de modelos.
 
 ### 3. Poner el corpus en su sitio
 
@@ -85,10 +95,20 @@ funcionan el sistema y las pruebas, pero **no** las sondas de `analisis/`, que l
 
 ### 5. Sembrar los catálogos de la BD
 
-El catálogo CIE-10 (`datos/cie10.csv`, 14.484 códigos) **ya viene en el repositorio**, así que no
-hay que descargar nada. Si alguna vez hace falta refrescarlo:
+**Si el volumen de la BD era nuevo, el catálogo ya quedó cargado en el paso 2** y este paso solo
+añade los datos que dependen del corpus. Sobre una BD que ya existía, o para recargar el catálogo:
+
+```bash
+python scripts/cargar_catalogos.py     # catálogo CIE-10 + tabla lpeps + EPS. NO necesita el corpus.
+```
+
+Funciona con **solo Docker** (aplica el SQL con el cliente `mysql` dentro del contenedor, no
+necesita `mysql-connector-python` en el host) y tarda ~3 s. El catálogo CIE-10
+(`datos/cie10.csv`) **ya viene en el repositorio**; si alguna vez hace falta refrescarlo:
 `python scripts/descargar_cie10.py --forzar` (una sola descarga, valida lo que baja y aborta si no
 cuadra — ver [`datos/LEEME.md`](datos/LEEME.md)).
+
+Y ahora sí, lo que **sí** depende del corpus (empleados y las EPS reales con su checklist):
 
 ```bash
 python scripts/sembrar_bd_prueba.py
@@ -136,7 +156,12 @@ python scripts/exportar_analisis.py
 El sistema **funciona igual**: es un pipeline de OCR, no un modelo entrenado. Lo que no puedes
 hacer sin los documentos es reproducir las mediciones. Con solo el `git pull` ya tienes:
 
-- las **7 baterías de pruebas** (`tests/`), que no necesitan corpus ni base de datos —
+- el sistema **operativo con dos comandos** (`git clone` + `docker compose up -d --build`), con el
+  catálogo CIE-10 completo cargado solo — verificado arrancando un MySQL con el volumen vacío. Lo
+  único que falta son los **empleados**: una cédula es un dato personal y no se inventa, así que sin
+  el volcado de ASTGU los casos salen con «cédula no encontrada». Guía de prueba para el cliente:
+  [`MANUAL_PRUEBA.md`](MANUAL_PRUEBA.md);
+- las **8 baterías de pruebas** (`tests/`), que no necesitan corpus ni base de datos —
   verificado sobre un clon limpio;
 - el escenario de demo: `python scripts/sembrar_demo.py`. Sin `../Ejemplos` genera los **3 casos
   sintéticos** (accidente de trabajo, vacaciones y permiso) y avisa de los 2 que omite, que son

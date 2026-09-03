@@ -52,6 +52,10 @@ docker compose exec ollama ollama pull qwen2.5vl:3b   # modelo visión/OCR (lent
 # BD (catálogos + staging):
 docker exec ocr-db mysql -uocr -pocr ASTGU -e "SELECT id,estado,paciente_leido,fechainicio,Numerodias FROM lp_ausentismos_ia ORDER BY id;"
 
+# Catálogos SIN corpus (CIE-10 completo + tabla lpeps + palabras clave de EPS). Solo necesita Docker:
+python scripts/cargar_catalogos.py            # genera sql/catalogos_publicos.sql y lo aplica (~3 s)
+python scripts/cargar_catalogos.py --solo-sql # solo regenera el .sql (se versiona: lo monta initdb)
+
 # Pruebas (local, fuera de Docker):
 python tests/test_processor.py           # unitarias deterministas (StubOCR + RapidOCR si está)
 python tests/test_numeros_es.py          # numerales en español ("DOS", "DOS (2)") y sus falsos positivos
@@ -60,6 +64,7 @@ python tests/test_reinicio_prueba.py     # reinicio de la prueba + invariantes d
 python tests/test_radicacion.py          # checklist de radicación (parseo del JSON del ERP, sin BD)
 python tests/test_authenticity.py        # señales de manipulación del documento
 python tests/test_erp_diagnostico.py     # validación del diagnóstico contra el catálogo
+python tests/test_catalogos.py           # cargar_catalogos.py: sin PII, checklist demo NO inerte, SQL de MySQL
 python tests/test_ejemplos_reales.py     # evalúa los 8 documentos reales de ../Ejemplos
 
 # Reglas de tiempos: ver el catálogo y la configuración EFECTIVA (comprobar un cambio en caliente):
@@ -354,7 +359,21 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
 
 - Hoy es **2026** en este proyecto: las fechas de los ejemplos son `2026-06-xx` (no asumir años pasados).
 - El **volumen `db-data` persiste** entre reinicios; `sql/init.sql` solo corre en el **primer** init de un
-  volumen vacío. Para recargar el esquema: `docker compose down -v` (borra datos) o `ALTER`/`DELETE` manual.
+  volumen vacío. Para recargar el esquema, aplicarlo de nuevo es idempotente:
+  `docker exec -i ocr-db mysql -uroot -proot ASTGU < sql/init.sql`. Para recrear el volumen:
+  `docker compose rm -sf db && docker volume rm incapacidad-ocr_db-data` — **nunca
+  `docker compose down -v`**, que además borra `ollama-models` (~6,5 GB de modelos que hay que rebajar).
+- **`sql/init.sql` es un script de `docker-entrypoint-initdb.d`: si una sentencia falla, el init ABORTA y el
+  contenedor `db` muere.** No se ve en una máquina con volumen viejo, así que **todo cambio en ese archivo
+  hay que probarlo con volumen vacío** (un MySQL desechable con los mismos montajes basta y no toca `db-data`).
+  Así se encontró que tenía `ALTER TABLE … ADD COLUMN IF NOT EXISTS`, que es de **MariaDB y no existe en
+  MySQL**: en una máquina nueva no se creaba ni una tabla. La migración condicional va contra
+  `information_schema` + sentencia preparada, **sin `DELIMITER`** (es una directiva del CLIENTE `mysql` y
+  rompería si el archivo se aplicara con el conector de Python).
+- **Los catálogos de una BD nueva se cargan solos**: `docker-compose.yml` monta también
+  `sql/catalogos_publicos.sql` como `02_catalogos.sql` (CIE-10 completo + `lpeps`, que `init.sql` **no**
+  crea). Ese archivo **se versiona aunque sea generado** — es lo que hace que un `git clone` opere sin
+  ejecutar nada; se regenera con `python scripts/cargar_catalogos.py --solo-sql` si cambia `datos/cie10.csv`.
 - Tras editar Python/HTML hay que **reconstruir la imagen web** (`up -d --build incapacidad-ocr`) — el código
   va dentro de la imagen, no montado.
 - Los datos de `sql/init.sql` (cédulas/CIE/EPS) **coinciden con `../Ejemplos`** para que la demo resuelva lookups.

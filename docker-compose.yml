@@ -80,6 +80,13 @@ services:
       - db-data:/var/lib/mysql
       # Carga catálogos + tabla staging + datos de prueba en el PRIMER arranque.
       - ./sql/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+      # Catálogo CIE-10 completo (14.484 códigos) + tabla `lpeps`, que init.sql no crea. Se
+      # monta aquí para que un `docker compose up` en una máquina nueva quede OPERATIVO sin
+      # ejecutar nada más: sin este archivo la señal «el diagnóstico no existe» queda apagada
+      # y el checklist de radicación degrada a [] en silencio. Lo genera
+      # `scripts/cargar_catalogos.py` a partir de datos/cie10.csv, y ese mismo script lo
+      # aplica sobre una BD que YA existía (initdb solo corre con el volumen vacío).
+      - ./sql/catalogos_publicos.sql:/docker-entrypoint-initdb.d/02_catalogos.sql:ro
     ports:
       # Enlazado SOLO a localhost, nunca a la LAN (contiene PII de salud). Se publica para
       # poder (a) inspeccionar con un cliente MySQL y (b) correr la app FUERA de Docker
