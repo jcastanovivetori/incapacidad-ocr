@@ -5,7 +5,7 @@ Fecha de corte: 2026-09-02. Proyecto: middleware local de lectura de incapacidad
 Cómo leer este documento:
 
 - **Sección 1** es lo que hay que pedirle al cliente. Está escrita para que Diana la entienda sin
-  jerga técnica y agrupada en 6 peticiones, no en 22 mensajes.
+  jerga técnica y agrupada en **5 peticiones** (A a E), no en 45 mensajes.
 - **Sección 2** son decisiones que necesitan a las dos partes; cada una lleva nuestra recomendación
   y qué pasa si se decide lo contrario.
 - **Sección 3** es nuestro trabajo, ordenado por impacto.
@@ -15,6 +15,10 @@ Cómo leer este documento:
 
 Conteo: **22 del cliente · 13 conjuntos · 36 nuestros** (71 abiertos). 1 candidato se verificó como
 ya cerrado y está en la sección 5.
+
+Ojo al contar: los **22 del cliente** son *asuntos*; la sección 1 los desglosa en **45 peticiones
+concretas** (A1 a E7) porque un asunto suele necesitar varios datos distintos. Las dos cifras son
+correctas y cuentan cosas distintas — al citarlas fuera, decir cuál de las dos es.
 
 Sin datos personales: los documentos del corpus se citan por seudónimo (FALSA-nn / REAL-nn) o por su
 hallazgo. Nunca por nombre ni cédula.

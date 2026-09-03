@@ -111,6 +111,41 @@ for archivo in ("init.sql", "catalogos_publicos.sql"):
                if l.startswith("--") and l.rstrip() != "--" and not l.startswith("-- ")]
     check(not malos_a, f"sql/{archivo}: comentarios válidos en MySQL", str(malos_a[:3]))
 
+print("[7] La huella del codigo detecta una imagen de Docker desfasada")
+# El codigo va DENTRO de la imagen. Si no se reconstruye, el contenedor sirve la version
+# anterior y la API responde 200 con datos plausibles y equivocados -- paso de verdad, con
+# /api/lote/pendientes contestando 0 archivos mientras en disco habia 31.
+import tempfile  # noqa: E402
+from incapacidad_ocr import version as _ver  # noqa: E402
+
+h1 = _ver.huella_codigo()
+check(len(h1) == 12 and all(c in "0123456789abcdef" for c in h1),
+      "la huella es un hash corto (12 hex)", h1)
+check(_ver.huella_codigo() == h1, "es estable dentro del proceso (esta cacheada)")
+
+with tempfile.TemporaryDirectory() as d:
+    tmp = Path(d)
+    (tmp / "a.py").write_text("x = 1", encoding="utf-8")
+    _ver.huella_codigo.cache_clear()
+    _ver.PAQUETE = tmp
+    antes = _ver.huella_codigo()
+    (tmp / "a.py").write_text("x = 2", encoding="utf-8")   # cambia el CONTENIDO
+    _ver.huella_codigo.cache_clear()
+    contenido = _ver.huella_codigo()
+    (tmp / "b.py").write_text("y = 0", encoding="utf-8")   # anade un MODULO
+    _ver.huella_codigo.cache_clear()
+    anadido = _ver.huella_codigo()
+    check(antes != contenido, "cambia si cambia el contenido de un modulo")
+    check(contenido != anadido, "cambia si se anade o se quita un modulo")
+_ver.PAQUETE = Path(_ver.__file__).resolve().parent
+_ver.huella_codigo.cache_clear()
+check(_ver.huella_codigo() == h1, "vuelve al valor real tras restaurar la ruta")
+
+# El endpoint tiene que publicarla: es lo unico que hace la comprobacion posible en caliente.
+wa = (REPO / "incapacidad_ocr" / "webapp.py").read_text(encoding="utf-8")
+check("huella_codigo()" in wa and '"codigo"' in wa,
+      "/api/health publica la huella")
+
 print()
 if fallos:
     print(f"FALLARON {len(fallos)}: {', '.join(fallos)}")

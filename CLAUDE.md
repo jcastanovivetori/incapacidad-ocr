@@ -67,7 +67,8 @@ python tests/test_reinicio_prueba.py     # reinicio de la prueba + invariantes d
 python tests/test_radicacion.py          # checklist de radicación (parseo del JSON del ERP, sin BD)
 python tests/test_authenticity.py        # señales de manipulación del documento
 python tests/test_erp_diagnostico.py     # validación del diagnóstico contra el catálogo
-python tests/test_catalogos.py           # cargar_catalogos.py: sin PII, checklist demo NO inerte, SQL de MySQL
+python tests/test_catalogos.py           # cargar_catalogos.py: sin PII, checklist demo NO inerte, SQL de
+                                         # MySQL, y la huella que delata una imagen desfasada
 python tests/test_ejemplos_reales.py     # evalúa los 8 documentos reales de ../Ejemplos
 
 # Reglas de tiempos: ver el catálogo y la configuración EFECTIVA (comprobar un cambio en caliente):
@@ -383,7 +384,19 @@ curl.exe -s http://localhost:8000/api/lote/estado                # {programado, 
   crea). Ese archivo **se versiona aunque sea generado** — es lo que hace que un `git clone` opere sin
   ejecutar nada; se regenera con `python scripts/cargar_catalogos.py --solo-sql` si cambia `datos/cie10.csv`.
 - Tras editar Python/HTML hay que **reconstruir la imagen web** (`up -d --build incapacidad-ocr`) — el código
-  va dentro de la imagen, no montado.
+  va dentro de la imagen, no montado. **Si no se reconstruye, el fallo es SILENCIOSO:** el contenedor sigue
+  sirviendo la versión anterior y la API responde `200` con una carga plausible y equivocada. Pasó de verdad —
+  una imagen previa a la reestructuración de la ingesta contestaba `{"archivos": 0, …}` a
+  `/api/lote/pendientes` mientras en disco había 31 documentos, porque ese código buscaba el `inbox/` viejo, y
+  se lee igual que «la bandeja está vacía y todo bien». Por eso `/api/health` publica ahora la **huella del
+  código** (`incapacidad_ocr/version.py`: hash de los `.py` del paquete, cambia con cualquier edición).
+  **Comprobar antes de creerle a cualquier medición hecha contra el contenedor:**
+
+```bash
+curl.exe -s http://localhost:8000/api/health   # -> {"status":"ok","service":...,"codigo":"e24316aec983"}
+python -c "from incapacidad_ocr.version import huella_codigo; print(huella_codigo())"
+# distintas -> docker compose up -d --build incapacidad-ocr
+```
 - Los datos de `sql/init.sql` (cédulas/CIE/EPS) **coinciden con `../Ejemplos`** para que la demo resuelva lookups.
 - **Documentos pesados:** subida hasta **50 MB** (`MAX_UPLOAD_BYTES`). El PDF se rasteriza **página a página en
   streaming** (`preprocess.load_pages` es un GENERADOR → una página en RAM a la vez), hasta `MAX_PDF_PAGES` (30);

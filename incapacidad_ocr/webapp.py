@@ -190,7 +190,12 @@ app = FastAPI(
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "incapacidad-ocr"}
+    # `codigo` es la huella de los .py del paquete (ver version.py). Sirve para comprobar que
+    # el contenedor NO está sirviendo una imagen desfasada: si no coincide con la del host, hay
+    # que reconstruir. Sin esto, un contenedor viejo responde 200 con datos plausibles y
+    # equivocados, que es indistinguible de que todo esté bien.
+    from .version import huella_codigo
+    return {"status": "ok", "service": "incapacidad-ocr", "codigo": huella_codigo()}
 
 
 @app.post("/api/procesar")
